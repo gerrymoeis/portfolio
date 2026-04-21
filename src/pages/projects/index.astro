@@ -1,0 +1,98 @@
+---
+/**
+ * Projects Listing Page
+ * 
+ * Displays all projects as scroll-based scenes with parallax effects and HD-2D aesthetic.
+ * Each project is rendered as a full-viewport scene with layered parallax.
+ */
+
+import { getCollection } from 'astro:content';
+import PageContainer from '../../components/ui/PageContainer.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import ProjectScene from '../../components/projects/ProjectScene.astro';
+
+// Query all projects from content collection
+const projects = await getCollection('projects');
+
+// Sort projects by year (newest first)
+const sortedProjects = projects.sort((a, b) => b.data.year - a.data.year);
+---
+
+<PageContainer 
+  title="Projects | HD-2D Portfolio"
+  description="Explore my portfolio of web development projects, featuring modern technologies, creative solutions, and innovative design approaches."
+  ogType="website"
+  class="projects-page"
+>
+  <PageHero 
+    title="Projects"
+    description="A collection of projects showcasing web development, design, and creative problem-solving."
+  />
+
+  <div class="projects-scenes depth-mid" role="list" aria-label="Project portfolio">
+    {sortedProjects.map((project) => (
+      <ProjectScene
+        title={project.data.title}
+        summary={project.data.summary}
+        year={project.data.year}
+        status={project.data.status}
+        techStack={project.data.techStack}
+        heroImage={project.data.heroImage}
+        links={project.data.links}
+        slug={project.slug}
+      />
+    ))}
+  </div>
+
+  <!-- Initialize parallax effects with lazy loading -->
+  <script>
+    // Lazy load parallax script on first scroll or when scenes are visible
+    // This reduces initial JavaScript payload for the projects page
+    let isInitialized = false;
+
+    async function lazyInitParallax() {
+      if (isInitialized) return;
+      isInitialized = true;
+
+      // Dynamic import - only loads when needed
+      const { initParallax } = await import('../../scripts/parallax');
+      initParallax();
+    }
+
+    // Initialize on first scroll event (lazy loading)
+    function handleFirstScroll() {
+      lazyInitParallax();
+      window.removeEventListener('scroll', handleFirstScroll);
+    }
+
+    // Also use Intersection Observer to detect when first scene is visible
+    const firstScene = document.querySelector('.project-scene');
+    
+    if (firstScene && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            lazyInitParallax();
+            observer.disconnect();
+          }
+        });
+      }, { rootMargin: '100px' });
+
+      observer.observe(firstScene);
+    }
+
+    // Fallback: Initialize on first scroll
+    window.addEventListener('scroll', handleFirstScroll, { passive: true, once: true });
+
+    // Also initialize if user has already scrolled
+    if (window.scrollY > 0) {
+      lazyInitParallax();
+    }
+  </script>
+</PageContainer>
+
+<style>
+  .projects-scenes {
+    position: relative;
+  }
+</style>

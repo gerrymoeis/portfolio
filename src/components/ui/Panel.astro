@@ -1,0 +1,64 @@
+---
+/**
+ * Panel - HD-2D inspired UI panel component
+ * Provides authentic JRPG-style framed UI panels with ornate borders and atmospheric effects
+ * 
+ * Props:
+ * - variant: Panel style variant ('default' | 'elevated' | 'atmospheric')
+ * - depth: Depth layer for tilt-shift effects ('near' | 'mid' | 'far')
+ * - glow: Add atmospheric glow effect (boolean)
+ * - class: Additional CSS classes (optional)
+ */
+
+interface Props {
+  variant?: 'default' | 'elevated' | 'atmospheric';
+  depth?: 'near' | 'mid' | 'far';
+  glow?: boolean;
+  class?: string;
+}
+
+const { 
+  variant = 'default', 
+  depth,
+  glow = false,
+  class: className = '' 
+} = Astro.props;
+
+const panelClasses = [
+  'panel',
+  variant === 'elevated' && 'panel--elevated',
+  variant === 'atmospheric' && 'panel--atmospheric',
+  depth && `depth-${depth}`,
+  glow && 'atmospheric-glow',
+  className
+].filter(Boolean).join(' ');
+---
+
+<div class={panelClasses}>
+  <slot />
+</div>
+
+<style>
+  /* Additional atmospheric variant */
+  .panel--atmospheric {
+    background: linear-gradient(
+      135deg,
+      var(--color-surface-base) 0%,
+      var(--color-surface-dark) 100%
+    );
+    border-color: var(--color-accent-tertiary);
+    box-shadow: 
+      var(--panel-shadow-base),
+      var(--subtle-glow);
+  }
+
+  .panel--atmospheric::before {
+    border-color: var(--color-border-accent);
+  }
+
+  .panel--atmospheric::after {
+    background: 
+      radial-gradient(circle at 30% 30%, var(--color-particle-warm) 0%, transparent 60%),
+      radial-gradient(circle at 70% 70%, var(--color-particle-cool) 0%, transparent 60%);
+  }
+</style>

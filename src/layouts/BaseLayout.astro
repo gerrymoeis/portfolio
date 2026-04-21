@@ -1,0 +1,87 @@
+---
+/**
+ * BaseLayout - Base layout component for all pages
+ * Provides consistent head metadata, style imports, and page structure
+ * 
+ * Props:
+ * - title: Page title (required)
+ * - description: Meta description for SEO (optional)
+ * - noScroll: Disable scrolling (for home page) (optional)
+ * - ogImage: Open Graph image URL (optional, defaults to favicon)
+ * - ogType: Open Graph type (optional, defaults to 'website')
+ */
+
+// Import CSS files so Astro can process them
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../styles/typography.css';
+import '../styles/motion.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  noScroll?: boolean;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+}
+
+const { 
+  title, 
+  description, 
+  noScroll = false,
+  ogImage,
+  ogType = 'website'
+} = Astro.props;
+
+// Get canonical URL for this page
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
+
+// Default Open Graph image (use favicon if no image provided)
+const defaultOgImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
+const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : defaultOgImage;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    {description && <meta name="description" content={description} />}
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL.href} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={ogImageURL.href} />
+    <meta property="og:site_name" content="HD-2D Portfolio" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL.href} />
+    <meta property="twitter:title" content={title} />
+    {description && <meta property="twitter:description" content={description} />}
+    <meta property="twitter:image" content={ogImageURL.href} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- FontAwesome Icons -->
+    <script src="https://kit.fontawesome.com/3f7347f781.js" crossorigin="anonymous"></script>
+  </head>
+  <body class:list={[{ 'no-scroll': noScroll }]}>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-to-content">
+      Skip to main content
+    </a>
+    
+    <slot />
+  </body>
+</html>

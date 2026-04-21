@@ -1,0 +1,322 @@
+---
+/**
+ * SemiCylindricalNav - Semi-cylindrical/half-arc navigation bar
+ * Centered horizontally at the top of the home page
+ * Contains Home, Projects, Blogs links with no dropdowns
+ */
+
+interface NavigationLink {
+  label: string;
+  href: string;
+  target?: string;
+}
+
+interface Props {
+  links: NavigationLink[];
+  currentPath?: string;
+}
+
+const { links, currentPath = '/' } = Astro.props;
+---
+
+<nav class="semi-cylindrical-nav" aria-label="Main navigation">
+  <div class="semi-cylindrical-nav__container">
+    <ul class="semi-cylindrical-nav__list">
+      {links.map((link) => (
+        <li class="semi-cylindrical-nav__item">
+          <a 
+            href={link.href} 
+            class={`semi-cylindrical-nav__link ${currentPath === link.href ? 'semi-cylindrical-nav__link--active' : ''}`}
+            aria-label={`Navigate to ${link.label}`}
+            aria-current={currentPath === link.href ? 'page' : undefined}
+            target={link.target}
+            rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .semi-cylindrical-nav {
+    position: fixed;
+    top: var(--space-6);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: var(--layer-navigation);
+    width: 100%;
+    max-width: calc(100vw - var(--space-4));
+    display: flex;
+    justify-content: center;
+  }
+
+  .semi-cylindrical-nav__container {
+    background: var(--color-surface-elevated);
+    border: var(--panel-border-width) var(--panel-border-style) var(--color-accent-primary);
+    border-radius: 50px; /* Semi-cylindrical shape */
+    box-shadow: 
+      var(--panel-shadow-elevated),
+      var(--atmospheric-glow);
+    backdrop-filter: blur(10px);
+    padding: var(--space-3) var(--space-6);
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  /* HD-2D atmospheric overlay */
+  .semi-cylindrical-nav__container::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 1px solid rgba(246, 224, 94, 0.3);
+    border-radius: 48px;
+    pointer-events: none;
+  }
+
+  .semi-cylindrical-nav__container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 30% 30%, rgba(246, 224, 94, 0.08) 0%, transparent 60%),
+      radial-gradient(circle at 70% 70%, rgba(237, 137, 54, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+    border-radius: 50px;
+  }
+
+  .semi-cylindrical-nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .semi-cylindrical-nav__item {
+    margin: 0;
+  }
+
+  .semi-cylindrical-nav__link {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding: var(--space-2) var(--space-4);
+    border-radius: 20px;
+    transition: 
+      color var(--duration-medium) var(--ease-out),
+      background-color var(--duration-medium) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-medium) var(--ease-out);
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .semi-cylindrical-nav__link:hover {
+    color: var(--color-text-primary);
+    background-color: rgba(246, 224, 94, 0.1);
+    transform: translateY(-1px);
+    box-shadow: var(--subtle-glow);
+  }
+
+  .semi-cylindrical-nav__link:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+
+  .semi-cylindrical-nav__link--active {
+    color: var(--color-text-primary);
+    background-color: rgba(246, 224, 94, 0.15);
+    font-weight: var(--weight-semibold);
+    box-shadow: var(--subtle-glow);
+  }
+
+  .semi-cylindrical-nav__link--active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background-color: var(--color-accent-primary);
+    border-radius: 1px;
+    box-shadow: 0 0 4px var(--color-accent-primary);
+  }
+
+  /* Responsive adjustments - Mobile first approach */
+  
+  /* Extra small devices - very compact navigation */
+  @media (max-width: var(--breakpoint-xs)) {
+    .semi-cylindrical-nav {
+      top: var(--space-2);
+      max-width: calc(100vw - var(--space-2));
+    }
+
+    .semi-cylindrical-nav__container {
+      padding: var(--space-1) var(--space-3);
+    }
+
+    .semi-cylindrical-nav__list {
+      gap: var(--space-1);
+    }
+
+    .semi-cylindrical-nav__link {
+      font-size: var(--text-xs);
+      padding: var(--space-1) var(--space-2);
+      border-radius: 12px;
+    }
+  }
+
+  /* Small devices - compact but readable */
+  @media (min-width: var(--breakpoint-xs)) and (max-width: var(--breakpoint-sm)) {
+    .semi-cylindrical-nav {
+      top: var(--space-3);
+      max-width: calc(100vw - var(--space-3));
+    }
+
+    .semi-cylindrical-nav__container {
+      padding: var(--space-2) var(--space-4);
+    }
+
+    .semi-cylindrical-nav__list {
+      gap: var(--space-2);
+    }
+
+    .semi-cylindrical-nav__link {
+      font-size: var(--text-sm);
+      padding: var(--space-1) var(--space-3);
+      border-radius: 16px;
+    }
+  }
+
+  /* Medium devices - balanced sizing */
+  @media (min-width: var(--breakpoint-sm)) and (max-width: var(--breakpoint-lg)) {
+    .semi-cylindrical-nav {
+      top: var(--space-4);
+      max-width: calc(100vw - var(--space-4));
+    }
+
+    .semi-cylindrical-nav__container {
+      padding: var(--space-2) var(--space-4);
+    }
+
+    .semi-cylindrical-nav__list {
+      gap: var(--space-4);
+    }
+
+    .semi-cylindrical-nav__link {
+      font-size: var(--text-sm);
+      padding: var(--space-1) var(--space-3);
+    }
+  }
+
+  /* Large devices - full sizing */
+  @media (min-width: var(--breakpoint-lg)) {
+    .semi-cylindrical-nav {
+      top: var(--space-6);
+      max-width: calc(100vw - var(--space-6));
+    }
+
+    .semi-cylindrical-nav__container {
+      padding: var(--space-3) var(--space-6);
+    }
+
+    .semi-cylindrical-nav__list {
+      gap: var(--space-8);
+    }
+
+    .semi-cylindrical-nav__link {
+      font-size: var(--text-base);
+      padding: var(--space-2) var(--space-4);
+    }
+  }
+
+  /* Ultra-wide screens - prevent over-expansion */
+  @media (min-width: var(--breakpoint-2xl)) {
+    .semi-cylindrical-nav__container {
+      max-width: 500px;
+    }
+  }
+
+  /* Landscape orientation on mobile - adjust for limited height */
+  @media (max-height: 600px) and (orientation: landscape) and (max-width: var(--breakpoint-lg)) {
+    .semi-cylindrical-nav {
+      top: var(--space-2);
+    }
+
+    .semi-cylindrical-nav__container {
+      padding: var(--space-1) var(--space-3);
+    }
+
+    .semi-cylindrical-nav__list {
+      gap: var(--space-2);
+    }
+
+    .semi-cylindrical-nav__link {
+      padding: var(--space-1) var(--space-2);
+      font-size: var(--text-xs);
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .semi-cylindrical-nav__container {
+      border-width: 2px;
+      border-color: var(--color-accent-primary);
+    }
+
+    .semi-cylindrical-nav__link {
+      border: 1px solid transparent;
+    }
+
+    .semi-cylindrical-nav__link:hover,
+    .semi-cylindrical-nav__link--active {
+      border-color: var(--color-accent-primary);
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .semi-cylindrical-nav__link {
+      transition: none;
+    }
+
+    .semi-cylindrical-nav__link:hover {
+      transform: none;
+    }
+  }
+
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .semi-cylindrical-nav__link {
+      padding: var(--space-3) var(--space-4);
+      min-height: 44px; /* Minimum touch target size */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .semi-cylindrical-nav__list {
+      gap: var(--space-2);
+    }
+  }
+
+  /* Safe area adjustments for devices with notches */
+  @supports (padding: max(0px)) {
+    .semi-cylindrical-nav {
+      padding-left: max(var(--space-2), env(safe-area-inset-left));
+      padding-right: max(var(--space-2), env(safe-area-inset-right));
+      padding-top: max(var(--space-2), env(safe-area-inset-top));
+    }
+  }
+</style>

@@ -1,0 +1,298 @@
+---
+/**
+ * Navigation - Site navigation component
+ * Provides accessible navigation with keyboard support
+ * 
+ * Props:
+ * - class: Additional CSS classes (optional)
+ */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+// Navigation links - Consistent order: Home, Projects, Blogs
+const navLinks = [
+  { label: 'Home', href: '/', target: undefined },
+  { label: 'Projects', href: '/projects', target: '_blank' },
+  { label: 'Blogs', href: '/blogs', target: '_blank' },
+];
+
+// Get current path for active state
+const currentPath = Astro.url.pathname;
+---
+
+<nav class={`navigation ${className}`} aria-label="Main navigation">
+  <ul class="navigation__list">
+    {navLinks.map((link) => {
+      const isActive = currentPath === link.href || 
+                      (link.href !== '/' && currentPath.startsWith(link.href));
+      
+      return (
+        <li class="navigation__item">
+          <a 
+            href={link.href} 
+            class:list={['navigation__link', { 'navigation__link--active': isActive }]}
+            aria-current={isActive ? 'page' : undefined}
+            target={link.target}
+            rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+          >
+            {link.label}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<style>
+  .navigation {
+    width: 100%;
+  }
+
+  .navigation__list {
+    display: flex;
+    gap: var(--space-8);
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    background: var(--color-surface-elevated);
+    border: var(--panel-border-width) var(--panel-border-style) var(--color-accent-primary);
+    border-radius: var(--radius-pill);
+    box-shadow: 
+      var(--panel-shadow-elevated),
+      var(--atmospheric-glow);
+    backdrop-filter: blur(var(--blur-backdrop-light));
+    padding: var(--space-3) var(--space-6);
+    position: relative;
+    overflow: hidden;
+    max-width: var(--nav-max-width);
+    margin: 0 auto;
+  }
+
+  /* HD-2D atmospheric overlay */
+  .navigation__list::before {
+    content: '';
+    position: absolute;
+    inset: var(--space-1);
+    border: 1px solid var(--color-border-accent);
+    border-radius: var(--radius-nav-pill);
+    pointer-events: none;
+  }
+
+  .navigation__list::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 30% 30%, var(--color-particle-warm) 0%, transparent 60%),
+      radial-gradient(circle at 70% 70%, var(--color-particle-cool) 0%, transparent 60%);
+    pointer-events: none;
+    border-radius: var(--radius-pill);
+  }
+
+  .navigation__item {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .navigation__link {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-nav-link);
+    transition: 
+      color var(--duration-medium) var(--ease-out),
+      background-color var(--duration-medium) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-medium) var(--ease-out);
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .navigation__link:hover {
+    color: var(--color-contrast-high);
+    background-color: var(--color-nav-hover-bg);
+    transform: var(--transform-hover-lift);
+    box-shadow: var(--subtle-glow);
+  }
+
+  .navigation__link:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+
+  .navigation__link--active {
+    color: var(--color-contrast-high);
+    background-color: var(--color-nav-active-bg);
+    font-weight: var(--weight-semibold);
+    box-shadow: var(--subtle-glow);
+  }
+
+  .navigation__link--active::after {
+    content: '';
+    position: absolute;
+    bottom: calc(-1 * var(--space-1));
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--nav-indicator-width);
+    height: var(--nav-indicator-height);
+    background-color: var(--color-nav-active-indicator);
+    border-radius: var(--radius-xs);
+    box-shadow: 0 0 var(--space-1) var(--color-nav-active-indicator);
+  }
+
+  /* Responsive adjustments - Mobile first approach */
+  
+  /* Extra small devices - compact navigation */
+  @media (max-width: var(--breakpoint-xs)) {
+    .navigation__list {
+      gap: var(--space-1);
+      padding: var(--space-2) var(--space-3);
+      max-width: 90vw;
+    }
+
+    .navigation__link {
+      font-size: var(--text-xs);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+    }
+  }
+
+  /* Small devices - slightly larger but still compact */
+  @media (min-width: var(--breakpoint-xs)) and (max-width: var(--breakpoint-sm)) {
+    .navigation__list {
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      max-width: 85vw;
+    }
+
+    .navigation__link {
+      font-size: var(--text-sm);
+      padding: var(--space-1) var(--space-3);
+    }
+  }
+
+  /* Medium devices - balanced sizing */
+  @media (min-width: var(--breakpoint-sm)) and (max-width: var(--breakpoint-lg)) {
+    .navigation__list {
+      gap: var(--space-4);
+      padding: var(--space-2) var(--space-4);
+      max-width: 80vw;
+    }
+
+    .navigation__link {
+      font-size: var(--text-sm);
+      padding: var(--space-1) var(--space-3);
+    }
+  }
+
+  /* Large devices - full sizing */
+  @media (min-width: var(--breakpoint-lg)) {
+    .navigation__list {
+      gap: var(--space-8);
+      padding: var(--space-3) var(--space-6);
+      max-width: var(--nav-max-width);
+    }
+
+    .navigation__link {
+      font-size: var(--text-base);
+      padding: var(--space-2) var(--space-4);
+    }
+  }
+
+  /* Ultra-wide screens - prevent over-expansion */
+  @media (min-width: var(--breakpoint-2xl)) {
+    .navigation__list {
+      max-width: 500px;
+    }
+  }
+
+  /* Landscape orientation on mobile - adjust for limited height */
+  @media (max-height: 600px) and (orientation: landscape) and (max-width: var(--breakpoint-lg)) {
+    .navigation__list {
+      padding: var(--space-1) var(--space-3);
+      gap: var(--space-2);
+    }
+
+    .navigation__link {
+      padding: var(--space-1) var(--space-2);
+      font-size: var(--text-xs);
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .navigation__list {
+      border-width: 2px;
+      border-color: var(--color-accent-primary);
+    }
+
+    .navigation__link {
+      border: 1px solid transparent;
+    }
+
+    .navigation__link:hover,
+    .navigation__link--active {
+      border-color: var(--color-accent-primary);
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .navigation__link {
+      transition: none;
+    }
+
+    .navigation__link:hover {
+      transform: none;
+    }
+  }
+
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .navigation__link {
+      padding: var(--space-3) var(--space-4);
+      min-height: 44px; /* Minimum touch target size */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .navigation__list {
+      gap: var(--space-2);
+    }
+  }
+
+  /* Container queries for adaptive behavior */
+  @container (max-width: 400px) {
+    .navigation__list {
+      gap: var(--space-1);
+      padding: var(--space-2) var(--space-3);
+    }
+
+    .navigation__link {
+      font-size: var(--text-xs);
+      padding: var(--space-1) var(--space-2);
+    }
+  }
+
+  @container (min-width: 400px) and (max-width: 600px) {
+    .navigation__list {
+      gap: var(--space-4);
+      padding: var(--space-2) var(--space-4);
+    }
+
+    .navigation__link {
+      font-size: var(--text-sm);
+      padding: var(--space-2) var(--space-3);
+    }
+  }
+</style>

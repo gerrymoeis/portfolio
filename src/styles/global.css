@@ -1,0 +1,353 @@
+/* Global Styles */
+/* CSS Reset and base styles for HD-2D Portfolio */
+
+/* ============================================
+   CSS RESET
+   Modern CSS reset for consistent baseline
+   ============================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  line-height: var(--leading-normal);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-primary);
+}
+
+/* Remove default list styles */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Remove default button styles */
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Remove default link styles */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Improve media defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Remove built-in form typography styles */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text-primary);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+}
+
+h1 {
+  font-size: var(--text-4xl);
+}
+
+h2 {
+  font-size: var(--text-3xl);
+}
+
+h3 {
+  font-size: var(--text-2xl);
+}
+
+h4 {
+  font-size: var(--text-xl);
+}
+
+h5 {
+  font-size: var(--text-lg);
+}
+
+h6 {
+  font-size: var(--text-base);
+}
+
+/* Links */
+a {
+  color: var(--color-link);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Code blocks */
+code,
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+pre {
+  padding: var(--space-4);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+code {
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-bg-secondary);
+  border-radius: 2px;
+}
+
+pre code {
+  padding: 0;
+  background-color: transparent;
+}
+
+/* Blockquotes */
+blockquote {
+  padding-left: var(--space-6);
+  border-left: 3px solid var(--color-accent-primary);
+  font-style: italic;
+  color: var(--color-text-tertiary);
+}
+
+/* Horizontal rules */
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-8) 0;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* No scroll - for special cases where scrolling should be disabled */
+.no-scroll {
+  overflow: hidden;
+  /* Remove fixed height to allow flexibility */
+}
+
+/* Visually hidden but accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Skip to content link for accessibility */
+.skip-to-content {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+  font-weight: var(--weight-semibold);
+  border: 2px solid var(--color-accent-primary);
+  border-radius: 4px;
+  z-index: 9999;
+  transform: translateY(-200%);
+  transition: transform var(--duration-fast) var(--ease-out);
+  text-decoration: none;
+}
+
+.skip-to-content:focus {
+  transform: translateY(0);
+  outline: 3px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+/* Enhanced focus styles for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Specific focus styles for interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Focus styles for custom interactive elements */
+[role="button"]:focus-visible,
+[role="link"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Remove default focus outline for mouse users (only show for keyboard) */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ============================================
+   HD-2D PANEL FRAMING SYSTEM
+   Authentic JRPG-style UI panels with ornate borders
+   ============================================ */
+
+.panel {
+  background: var(--color-surface-base);
+  border: var(--panel-border-width) var(--panel-border-style) var(--panel-border-color);
+  box-shadow: var(--panel-shadow-base);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+/* Inner border for layered depth effect */
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: var(--panel-inner-border);
+  border-radius: calc(var(--radius-md) - 4px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Grain texture overlay for authentic pixel-art feel */
+.panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(246, 224, 94, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(139, 149, 109, 0.03) 0%, transparent 50%);
+  opacity: 0.6;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  z-index: 2;
+}
+
+/* Elevated variant with stronger effects */
+.panel--elevated {
+  background: var(--color-surface-elevated);
+  border-color: var(--color-accent-primary);
+  box-shadow: var(--panel-shadow-elevated);
+  filter: var(--tilt-shift-near);
+  padding: 2em;
+}
+
+.panel--elevated::before {
+  border-color: rgba(246, 224, 94, 0.3);
+}
+
+.panel--elevated::after {
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(246, 224, 94, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(139, 149, 109, 0.05) 0%, transparent 50%),
+    var(--atmospheric-glow);
+}
+
+/* Ensure content is above overlays */
+.panel > :global(*) {
+  position: relative;
+  z-index: 3;
+}
+
+/* ============================================
+   HD-2D DEPTH LAYERS
+   Tilt-shift and atmospheric effects
+   ============================================ */
+
+/* Near layer - sharp focus, bright */
+.depth-near {
+  filter: var(--tilt-shift-near);
+  z-index: var(--layer-elevated);
+}
+
+/* Mid layer - slight blur, normal brightness */
+.depth-mid {
+  filter: var(--tilt-shift-mid);
+  z-index: var(--layer-content);
+}
+
+/* Far layer - more blur, darker */
+.depth-far {
+  filter: var(--tilt-shift-far);
+  z-index: var(--layer-base);
+}
+
+/* Atmospheric glow effects */
+.atmospheric-glow {
+  box-shadow: var(--atmospheric-glow);
+}
+
+.subtle-glow {
+  box-shadow: var(--subtle-glow);
+}

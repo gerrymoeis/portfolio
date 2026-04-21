@@ -1,0 +1,257 @@
+/* HD-2D Motion System */
+/* Cinematic animation and transition utilities inspired by Octopath Traveler */
+
+:root {
+  /* ============================================
+     HD-2D DURATIONS
+     Slower, more cinematic timing
+     ============================================ */
+  
+  --duration-fast: 200ms;
+  --duration-medium: 400ms;
+  --duration-slow: 600ms;
+  --duration-slower: 1000ms;
+  --duration-cinematic: 1500ms;
+  
+  /* ============================================
+     HD-2D EASING FUNCTIONS
+     Smooth, atmospheric curves
+     ============================================ */
+  
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-atmospheric: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-cinematic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  /* ============================================
+     HD-2D PARALLAX SPEEDS
+     Layered depth movement
+     ============================================ */
+  
+  --parallax-far: 0.2;
+  --parallax-mid: 0.5;
+  --parallax-near: 0.8;
+  --parallax-foreground: 1.0;
+}
+
+/* ============================================
+   HD-2D ANIMATION KEYFRAMES
+   Atmospheric and cinematic movements
+   ============================================ */
+
+/* Atmospheric fade with depth */
+@keyframes atmospheric-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+    filter: blur(1px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+/* Gentle floating for particles */
+@keyframes gentle-float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-3px) translateX(1px);
+  }
+  50% {
+    transform: translateY(-6px) translateX(-1px);
+  }
+  75% {
+    transform: translateY(-3px) translateX(1px);
+  }
+}
+
+/* Atmospheric glow pulse */
+@keyframes atmospheric-glow {
+  0%, 100% {
+    box-shadow: var(--subtle-glow);
+  }
+  50% {
+    box-shadow: var(--atmospheric-glow);
+  }
+}
+
+/* Depth layer entrance */
+@keyframes depth-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.95);
+    filter: var(--tilt-shift-far);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: var(--tilt-shift-near);
+  }
+}
+
+/* Panel frame shimmer */
+@keyframes panel-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ============================================
+   HD-2D ANIMATION CLASSES
+   ============================================ */
+
+.animate-atmospheric-fade {
+  animation: atmospheric-fade-in var(--duration-slow) var(--ease-atmospheric);
+}
+
+.animate-gentle-float {
+  animation: gentle-float 4s var(--ease-smooth) infinite;
+}
+
+.animate-atmospheric-glow {
+  animation: atmospheric-glow 3s var(--ease-smooth) infinite;
+}
+
+.animate-depth-entrance {
+  animation: depth-entrance var(--duration-cinematic) var(--ease-cinematic);
+}
+
+.animate-panel-shimmer::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(246, 224, 94, 0.1),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: panel-shimmer 2s ease-in-out infinite;
+}
+
+/* Staggered entrance animations */
+.animate-stagger-1 {
+  animation-delay: 0.1s;
+}
+
+.animate-stagger-2 {
+  animation-delay: 0.2s;
+}
+
+.animate-stagger-3 {
+  animation-delay: 0.3s;
+}
+
+.animate-stagger-4 {
+  animation-delay: 0.4s;
+}
+
+/* ============================================
+   HD-2D TRANSITION UTILITIES
+   ============================================ */
+
+.transition-atmospheric {
+  transition: 
+    opacity var(--duration-medium) var(--ease-atmospheric),
+    transform var(--duration-medium) var(--ease-atmospheric),
+    filter var(--duration-medium) var(--ease-atmospheric);
+}
+
+.transition-depth {
+  transition: 
+    filter var(--duration-slow) var(--ease-cinematic),
+    transform var(--duration-slow) var(--ease-cinematic);
+}
+
+.transition-glow {
+  transition: 
+    box-shadow var(--duration-medium) var(--ease-smooth),
+    text-shadow var(--duration-medium) var(--ease-smooth);
+}
+
+.transition-panel {
+  transition: 
+    background-color var(--duration-medium) var(--ease-atmospheric),
+    border-color var(--duration-medium) var(--ease-atmospheric),
+    box-shadow var(--duration-medium) var(--ease-atmospheric);
+}
+
+/* ============================================
+   HD-2D HOVER EFFECTS
+   ============================================ */
+
+.hover-lift {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-glow {
+  transition: 
+    box-shadow var(--duration-medium) var(--ease-smooth),
+    filter var(--duration-medium) var(--ease-smooth);
+}
+
+.hover-glow:hover {
+  box-shadow: var(--atmospheric-glow);
+  filter: brightness(1.05);
+}
+
+.hover-depth {
+  transition: filter var(--duration-medium) var(--ease-atmospheric);
+}
+
+.hover-depth:hover {
+  filter: var(--tilt-shift-near);
+}
+
+/* ============================================
+   REDUCED MOTION SUPPORT
+   Respect user preferences for reduced motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable HD-2D effects */
+  [data-parallax] {
+    transform: none !important;
+  }
+  
+  [data-mouse-reactive] {
+    transform: none !important;
+  }
+  
+  .animate-gentle-float {
+    animation: none !important;
+  }
+  
+  .animate-atmospheric-glow {
+    animation: none !important;
+  }
+  
+  /* Maintain accessibility while reducing motion */
+  .hover-lift:hover {
+    transform: none;
+  }
+  
+  .hover-glow:hover {
+    box-shadow: var(--subtle-glow);
+  }
+}

@@ -1,0 +1,8 @@
+# Handle SPA routing for HTML pages only
+/blogs/*   /blogs/index.html   200
+/projects/*   /projects/index.html   200
+
+# Ensure assets are served with correct MIME types
+/assets/*  /assets/:splat  200
+/chunks/*  /chunks/:splat  200
+/entry/*   /entry/:splat   200

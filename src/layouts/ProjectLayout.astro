@@ -1,0 +1,650 @@
+---
+/**
+ * ProjectLayout - Layout for individual project detail pages
+ * Features parallax scrolling for immersive storytelling
+ * 
+ * Props:
+ * - title: Project title (required)
+ * - description: Project summary for SEO (required)
+ * - year: Project year (required)
+ * - status: Project status (required)
+ * - techStack: Array of technologies (required)
+ * - heroImage: Path to hero image (required)
+ * - links: Optional links object (github, live, demo)
+ * - slug: Project slug for canonical URL (required)
+ */
+
+import Navigation from '../components/ui/Navigation.astro';
+import Footer from '../components/ui/Footer.astro';
+import ParallaxLayer from '../components/projects/ParallaxLayer.astro';
+import Panel from '../components/ui/Panel.astro';
+import Icon from '../components/ui/Icon.astro';
+import { Picture } from 'astro:assets';
+
+// Import CSS files so Astro can process them
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../styles/typography.css';
+import '../styles/motion.css';
+
+interface Props {
+  title: string;
+  description: string;
+  year: number;
+  status: 'completed' | 'in-progress' | 'archived';
+  techStack: string[];
+  heroImage: string;
+  links?: {
+    github?: string;
+    live?: string;
+    demo?: string;
+  };
+  slug: string;
+}
+
+const { title, description, year, status, techStack, heroImage, links, slug } = Astro.props;
+
+// Format status for display
+const statusDisplay = status === 'in-progress' ? 'In Progress' : 
+                      status === 'completed' ? 'Completed' : 
+                      'Archived';
+
+// Get canonical URL
+const canonicalURL = new URL(`/projects/${slug}`, Astro.site || Astro.url.origin);
+
+// Open Graph image
+const ogImage = new URL(heroImage, Astro.site || Astro.url.origin);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL.href} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage.href} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL.href} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage.href} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-to-content">
+      Skip to main content
+    </a>
+    
+    <div class="page-layout depth-mid">
+      <!-- Fixed navigation -->
+      <header class="project-header depth-near">
+        <Navigation />
+      </header>
+      
+      <main id="main-content" class="project-detail">
+        <!-- Hero section with parallax background -->
+        <section class="project-hero">
+          <!-- Background layer - slowest movement -->
+          <ParallaxLayer speed={0.3} class="hero-background" zIndex={1}>
+            <div class="hero-gradient"></div>
+          </ParallaxLayer>
+          
+          <!-- Visual layer - medium movement -->
+          <ParallaxLayer speed={0.5} class="hero-visual" zIndex={2}>
+            <div class="hero-image-container">
+              <Picture 
+                src={heroImage} 
+                alt={`${title} hero image`}
+                class="hero-image"
+                width={1000}
+                height={563}
+                widths={[400, 800, 1000]}
+                sizes="(max-width: 768px) 100vw, 1000px"
+                formats={['webp', 'jpg']}
+                loading="eager"
+              />
+            </div>
+          </ParallaxLayer>
+          
+          <!-- Text layer - minimal movement for readability -->
+          <ParallaxLayer speed={0.9} class="hero-content" zIndex={3}>
+            <div class="hero-text">
+              <h1 class="project-title">{title}</h1>
+              <div class="project-meta">
+                <span class="project-year">{year}</span>
+                <span class="project-status" data-status={status}>{statusDisplay}</span>
+              </div>
+              <p class="project-summary">{description}</p>
+            </div>
+          </ParallaxLayer>
+        </section>
+        
+        <!-- Project info panel -->
+        <section class="project-info-section">
+          <Panel variant="elevated" class="project-info">
+            <div class="info-grid">
+              <div class="info-block">
+                <h3 class="info-label">Tech Stack</h3>
+                <ul class="tech-list">
+                  {techStack.map(tech => (
+                    <li class="tech-item">{tech}</li>
+                  ))}
+                </ul>
+              </div>
+              
+              {links && (
+                <div class="info-block">
+                  <h3 class="info-label">Links</h3>
+                  <div class="project-links">
+                    {links.github && (
+                      <a href={links.github} class="project-link" target="_blank" rel="noopener noreferrer">
+                        <Icon name="github" size="sm" />
+                        GitHub
+                      </a>
+                    )}
+                    {links.live && (
+                      <a href={links.live} class="project-link" target="_blank" rel="noopener noreferrer">
+                        <Icon name="live" size="sm" />
+                        Live Site
+                      </a>
+                    )}
+                    {links.demo && (
+                      <a href={links.demo} class="project-link" target="_blank" rel="noopener noreferrer">
+                        <Icon name="demo" size="sm" />
+                        Demo
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </Panel>
+        </section>
+        
+        <!-- Project content with parallax storytelling -->
+        <article class="project-content">
+          <ParallaxLayer speed={0.95} class="content-layer">
+            <div class="content-wrapper">
+              <slot />
+            </div>
+          </ParallaxLayer>
+        </article>
+      </main>
+
+      <Footer currentPath={Astro.url.pathname} />
+    </div>
+    
+    <!-- Initialize parallax effects -->
+    <script>
+      import { initParallax } from '../scripts/parallax';
+      
+      // Initialize parallax when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initParallax);
+      } else {
+        initParallax();
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .page-layout {
+    min-height: 100vh;
+    background: 
+      linear-gradient(
+        180deg,
+        var(--color-bg-mid) 0%,
+        var(--color-bg-dark) 50%,
+        var(--color-bg-deep) 100%
+      ),
+      /* Atmospheric depth layers */
+      radial-gradient(circle at 20% 30%, rgba(246, 224, 94, 0.03) 0%, transparent 60%),
+      radial-gradient(circle at 80% 70%, rgba(139, 149, 109, 0.02) 0%, transparent 60%);
+  }
+
+  .project-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--layer-navigation);
+    padding: var(--space-4) var(--space-6);
+    background: linear-gradient(
+      180deg,
+      var(--color-surface-elevated) 0%,
+      rgba(42, 47, 54, 0.95) 100%
+    );
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--color-border-accent);
+    box-shadow: var(--panel-shadow-elevated);
+  }
+
+  .project-header :global(.navigation) {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .project-detail {
+    padding-top: 80px;
+  }
+  
+  /* Hero section with parallax */
+  .project-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    
+    /* DEFAULT: Mobile layout - stack vertically */
+    flex-direction: column;
+    gap: var(--space-8);
+    padding: var(--space-8) var(--space-6); /* Reduced from var(--space-12) */
+    min-height: 70vh; /* Reduced from 100vh */
+  }
+  
+  .hero-background {
+    position: absolute;
+    inset: 0;
+  }
+  
+  .hero-gradient {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      var(--color-bg-mid) 0%,
+      var(--color-bg-dark) 50%,
+      var(--color-bg-deep) 100%
+    );
+  }
+  
+  .hero-visual {
+    position: relative; /* Changed from absolute for mobile layout */
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1; /* Full opacity for mobile */
+    order: 1; /* Image first on mobile */
+  }
+  
+  .hero-image-container {
+    max-width: 100%;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: none; /* Remove blur for mobile */
+  }
+  
+  .hero-content {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    max-width: 800px;
+    padding: var(--space-6);
+    order: 2; /* Text second on mobile */
+  }
+  
+  .hero-text {
+    text-align: center; /* Center text on mobile */
+  }
+  
+  .project-title {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-4) 0;
+    line-height: var(--leading-tight);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+  
+  .project-meta {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+    font-size: var(--text-sm);
+  }
+  
+  .project-year {
+    color: var(--color-text-secondary);
+    font-weight: var(--weight-medium);
+  }
+  
+  .project-status {
+    padding: var(--space-2) var(--space-4);
+    border-radius: 4px;
+    font-weight: var(--weight-medium);
+    background: var(--color-surface-dark);
+    border: 1px solid var(--color-border-medium);
+    backdrop-filter: blur(4px);
+  }
+  
+  .project-status[data-status="completed"] {
+    color: #8bc34a;
+    border-color: rgba(139, 195, 74, 0.3);
+  }
+  
+  .project-status[data-status="in-progress"] {
+    color: #ffc107;
+    border-color: rgba(255, 193, 7, 0.3);
+  }
+  
+  .project-status[data-status="archived"] {
+    color: var(--color-text-tertiary);
+  }
+  
+  .project-summary {
+    font-size: var(--text-xl);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+    margin: 0;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Project info section */
+  .project-info-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-6);
+  }
+  
+  .project-info {
+    backdrop-filter: blur(8px);
+  }
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-8);
+  }
+  
+  .info-label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 var(--space-4) 0;
+  }
+  
+  .tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .tech-item {
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface-dark);
+    border: 1px solid var(--color-border-medium);
+    border-radius: 4px;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--weight-medium);
+  }
+  
+  .project-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .project-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    font-weight: var(--weight-medium);
+    font-size: var(--text-base);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  
+  .project-link:hover {
+    color: var(--color-accent-secondary);
+  }
+  
+  .project-link:focus {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  
+  /* Project content with storytelling */
+  .project-content {
+    position: relative;
+    background: var(--color-bg-deep);
+  }
+  
+  .content-layer {
+    position: relative;
+  }
+  
+  .content-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-16) var(--space-6);
+  }
+  
+  /* Markdown content styling */
+  .content-wrapper :global(h1),
+  .content-wrapper :global(h2),
+  .content-wrapper :global(h3),
+  .content-wrapper :global(h4),
+  .content-wrapper :global(h5),
+  .content-wrapper :global(h6) {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    color: var(--color-text-primary);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-6);
+  }
+  
+  .content-wrapper :global(h1) {
+    font-size: var(--text-4xl);
+  }
+  
+  .content-wrapper :global(h2) {
+    font-size: var(--text-3xl);
+  }
+  
+  .content-wrapper :global(h3) {
+    font-size: var(--text-2xl);
+  }
+  
+  .content-wrapper :global(p) {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-6);
+  }
+  
+  .content-wrapper :global(a) {
+    color: var(--color-link);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-medium);
+    text-underline-offset: 2px;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  
+  .content-wrapper :global(a:hover) {
+    color: var(--color-link-hover);
+    text-decoration-color: var(--color-link-hover);
+  }
+  
+  .content-wrapper :global(ul),
+  .content-wrapper :global(ol) {
+    margin-bottom: var(--space-6);
+    padding-left: var(--space-8);
+  }
+  
+  .content-wrapper :global(li) {
+    margin-bottom: var(--space-3);
+    line-height: var(--leading-relaxed);
+  }
+  
+  .content-wrapper :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-surface-base);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 3px;
+    border: 1px solid var(--color-border-medium);
+  }
+  
+  .content-wrapper :global(pre) {
+    background: var(--color-surface-base);
+    padding: var(--space-4);
+    border-radius: 6px;
+    border: 1px solid var(--color-border-medium);
+    overflow-x: auto;
+    margin-bottom: var(--space-6);
+  }
+  
+  .content-wrapper :global(pre code) {
+    background: none;
+    padding: 0;
+    border: none;
+  }
+  
+  .content-wrapper :global(blockquote) {
+    border-left: 3px solid var(--color-accent-primary);
+    padding-left: var(--space-6);
+    margin-left: 0;
+    margin-bottom: var(--space-6);
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+  
+  .content-wrapper :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: var(--space-10) 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  .content-wrapper :global(hr) {
+    border: none;
+    border-top: 1px solid var(--color-border-medium);
+    margin: var(--space-16) 0;
+  }
+  
+  /* Responsive adjustments */
+  
+  /* DESKTOP LAYOUT STARTS AT 901px - Side by side layout */
+  @media (min-width: 901px) {
+    .project-hero {
+      flex-direction: row; /* Side by side layout */
+      gap: var(--space-16);
+      padding: var(--space-12) var(--space-8); /* Reduced from var(--space-20) */
+      min-height: 80vh; /* Reduced from 100vh */
+    }
+    
+    .hero-visual {
+      position: absolute; /* Back to absolute positioning */
+      inset: 0;
+      opacity: 0.3; /* Background image effect */
+      order: unset;
+    }
+    
+    .hero-image {
+      filter: blur(3px) brightness(0.6); /* Restore blur effect */
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      order: unset;
+    }
+    
+    .hero-text {
+      text-align: center; /* Keep center alignment */
+    }
+  }
+  
+  @media (max-width: var(--breakpoint-lg)) {
+    .project-header {
+      padding: var(--space-3) var(--space-4);
+    }
+    
+    .project-detail {
+      padding-top: 60px;
+    }
+    
+    .project-title {
+      font-size: var(--text-3xl);
+    }
+    
+    .project-summary {
+      font-size: var(--text-base);
+    }
+    
+    .project-info-section {
+      padding: var(--space-8) var(--space-4);
+    }
+    
+    .info-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+    
+    .content-wrapper {
+      padding: var(--space-12) var(--space-4);
+    }
+    
+    .content-wrapper :global(h1) {
+      font-size: var(--text-3xl);
+    }
+    
+    .content-wrapper :global(h2) {
+      font-size: var(--text-2xl);
+    }
+    
+    .content-wrapper :global(p) {
+      font-size: var(--text-base);
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-visual {
+      opacity: 0.15;
+    }
+  }
+</style>

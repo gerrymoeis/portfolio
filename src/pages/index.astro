@@ -1,0 +1,265 @@
+---
+/**
+ * Home Page - Redesigned Layout
+ * Single-screen layout with semi-cylindrical nav, 3-block grid, and particle effects
+ * Minimalist aesthetic with subtle fantasy influences
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Panel from '../components/ui/Panel.astro';
+import SemiCylindricalNav from '../components/ui/SemiCylindricalNav.astro';
+import Hero from '../components/home/Hero.astro';
+import SocialPanel from '../components/home/SocialPanel.astro';
+import SpotifyPlaylistCarousel from '../components/home/SpotifyPlaylistCarousel.astro';
+import AudioVisualizer from '../components/home/AudioVisualizer.astro';
+import { homeConfig } from '../config/home';
+
+const { hero, social, navigation } = homeConfig;
+---
+
+<BaseLayout 
+  title="HD-2D Portfolio | Frontend Engineer & Designer" 
+  description="Building calm, beautiful web experiences with modern technologies. Explore my portfolio of web development projects and blog posts."
+  noScroll={false}
+  ogType="website"
+>
+  <!-- Semi-cylindrical navigation at top -->
+  <SemiCylindricalNav links={navigation} currentPath="/" />
+
+  <!-- Main content with radial gradient background -->
+  <main id="main-content" class="home depth-mid" role="main">
+    <!-- Row 1: One long horizontal block (Hero) -->
+    <section class="home__hero-block" aria-label="Introduction">
+      <Panel variant="elevated" depth="near" glow={true} class="content-block content-block--hero">
+        <Hero 
+          title={hero.title}
+          subtitle={hero.subtitle}
+          description={hero.description}
+        />
+      </Panel>
+    </section>
+
+    <!-- Row 2: Two blocks - Social (left, smaller) + Music (right, larger) -->
+    <div class="home__bottom-row">
+      <aside class="home__social-block" aria-label="Social media links">
+        <Panel variant="atmospheric" depth="mid" class="content-block content-block--social">
+          <SocialPanel social={social} />
+        </Panel>
+      </aside>
+
+      <aside class="home__music-block" aria-label="Spotify music player">
+        <Panel variant="atmospheric" depth="mid" class="content-block content-block--music">
+          <SpotifyPlaylistCarousel />
+        </Panel>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Audio Visualizer BEFORE main content in DOM for proper stacking -->
+  <AudioVisualizer height={120} />
+</BaseLayout>
+
+<style>
+  /* HD-2D Radial gradient background with atmospheric depth */
+  .home {
+    min-height: 100vh;
+    background: 
+      radial-gradient(
+        ellipse at center,
+        var(--color-bg-radial-center) 0%,
+        var(--color-bg-radial-mid) 40%,
+        var(--color-bg-radial-outer) 80%,
+        var(--color-bg-radial-edge) 100%
+      ),
+      radial-gradient(circle at 20% 80%, rgba(246, 224, 94, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(139, 149, 109, 0.02) 0%, transparent 50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: var(--layer-content);
+    
+    /* DEFAULT MOBILE FIRST - MUCH MORE SPACE */
+    padding: var(--space-8);
+    gap: var(--space-8);
+    padding-top: 200px; /* HUGE top padding for mobile */
+    padding-bottom: 120px; /* HUGE bottom padding for mobile */
+  }
+
+  /* Hero block - Row 1 (long horizontal) */
+  .home__hero-block {
+    width: 100%;
+    max-width: var(--home-max-width);
+    flex: 0 0 auto;
+    position: relative;
+    z-index: var(--layer-elevated);
+  }
+
+  /* Bottom row - Row 2 (two blocks) - DEFAULT MOBILE STACK */
+  .home__bottom-row {
+    display: flex;
+    flex-direction: column; /* MOBILE FIRST - STACK VERTICALLY */
+    gap: var(--space-8);
+    width: 100%;
+    max-width: var(--home-max-width);
+    flex: 0 0 auto;
+    position: relative;
+    z-index: var(--layer-elevated);
+  }
+
+  .home__social-block {
+    flex: 1;
+    min-width: auto; /* MOBILE FIRST */
+    order: 1;
+  }
+
+  .home__music-block {
+    flex: 1; /* MOBILE FIRST - EQUAL SIZE */
+    min-width: auto; /* MOBILE FIRST */
+    min-height: 400px; /* BIGGER ON MOBILE */
+    order: 2;
+  }
+
+  /* Content block styling overrides for HD-2D panels */
+  :global(.content-block--hero) {
+    text-align: center;
+    padding: var(--panel-padding-xl);
+    isolation: isolate;
+    z-index: 1;
+  }
+
+  :global(.content-block--social) {
+    padding: var(--panel-padding-md);
+    isolation: isolate;
+    z-index: 1;
+  }
+
+  :global(.content-block--music) {
+    padding: var(--panel-padding-md);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    isolation: isolate;
+    z-index: 1;
+  }
+
+  /* Responsive design - Mobile first approach */
+  
+  /* ALL DEVICES 900px AND BELOW = MOBILE LAYOUT (COLUMN/STACK) */
+  /* Default is already mobile - just override specific sizes */
+  
+  /* Small phones */
+  @media (max-width: 480px) {
+    .home {
+      padding: var(--space-6);
+      gap: var(--space-6);
+      padding-top: 180px;
+      padding-bottom: 100px;
+    }
+    
+    .home__music-block {
+      min-height: 350px;
+    }
+  }
+  
+  /* Medium phones and small tablets - STILL MOBILE LAYOUT */
+  @media (min-width: 481px) and (max-width: 900px) {
+    .home {
+      padding: var(--space-8);
+      gap: var(--space-10);
+      padding-top: 160px;
+      padding-bottom: 80px;
+    }
+    
+    /* FORCE COLUMN LAYOUT - DON'T CHANGE TO ROW */
+    .home__bottom-row {
+      flex-direction: column !important;
+    }
+    
+    .home__music-block {
+      min-height: 380px;
+    }
+  }
+  
+  /* DESKTOP STARTS AT 901px - NOW USE ROW LAYOUT */
+  @media (min-width: 901px) {
+    .home {
+      padding: var(--space-12);
+      gap: var(--space-8); /* Reduced gap between components */
+      /* Reasonable space between navbar and content */
+      padding-top: 180px; /* Reduced from 300px */
+      padding-bottom: 80px; /* Reduced from 150px */
+    }
+    
+    /* NOW SWITCH TO ROW LAYOUT FOR DESKTOP */
+    .home__bottom-row {
+      flex-direction: row !important; /* FORCE ROW LAYOUT */
+      gap: var(--space-8); /* Reasonable gap between social and music */
+    }
+    
+    .home__social-block {
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    .home__music-block {
+      flex: 2; /* DESKTOP - MUSIC BLOCK BIGGER */
+      min-width: 400px;
+      min-height: 402px;
+    }
+  }
+  
+  /* Large desktop - EVEN MORE SPACE */
+  @media (min-width: 1200px) {
+    .home {
+      padding-top: 200px; /* Reduced from 350px */
+      padding-bottom: 100px; /* Reduced from 200px */
+      gap: var(--space-10); /* Reasonable gap for large desktop */
+    }
+    
+    .home__bottom-row {
+      gap: var(--space-10); /* Reasonable gap between social and music */
+    }
+  }
+
+  /* High DPI displays - enhance visual quality */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    :global(.content-block--hero),
+    :global(.content-block--social),
+    :global(.content-block--music) {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .home {
+      background: var(--color-bg-primary);
+    }
+  }
+
+  /* Dark mode adjustments */
+  @media (prefers-color-scheme: dark) {
+    .home {
+      background: 
+        radial-gradient(
+          ellipse at center,
+          var(--color-bg-radial-center) 0%,
+          var(--color-bg-radial-mid) 40%,
+          var(--color-bg-radial-outer) 80%,
+          var(--color-bg-radial-edge) 100%
+        );
+    }
+  }
+
+  /* Ensure smooth scrolling */
+  @media (prefers-reduced-motion: no-preference) {
+    .home {
+      scroll-behavior: smooth;
+    }
+  }
+</style>

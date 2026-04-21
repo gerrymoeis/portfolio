@@ -1,0 +1,89 @@
+---
+/**
+ * PageContainer - Unified page container for consistent structural elements
+ * Provides standardized background, navigation, and layout structure
+ * 
+ * Props:
+ * - title: Page title for SEO
+ * - description: Page description for SEO
+ * - ogType: Open Graph type (default: "website")
+ * - class: Additional CSS classes (optional)
+ */
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navigation from './Navigation.astro';
+import Footer from './Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogType?: string;
+  class?: string;
+}
+
+const { 
+  title, 
+  description, 
+  ogType = "website",
+  class: className = '' 
+} = Astro.props;
+---
+
+<BaseLayout 
+  title={title}
+  description={description}
+  ogType={ogType}
+>
+  <div class={`page-container depth-mid ${className}`}>
+    <header class="page-nav depth-near" role="banner">
+      <Navigation />
+    </header>
+    
+    <main id="main-content" class="page-main" role="main">
+      <slot />
+    </main>
+
+    <Footer currentPath={Astro.url.pathname} />
+  </div>
+</BaseLayout>
+
+<style>
+  .page-container {
+    min-height: 100vh;
+    background: 
+      radial-gradient(
+        ellipse at center top,
+        var(--color-bg-light) 0%,
+        var(--color-bg-mid) 30%,
+        var(--color-bg-dark) 70%,
+        var(--color-bg-deep) 100%
+      ),
+      /* Atmospheric texture overlay */
+      radial-gradient(circle at 30% 20%, var(--color-particle-warm) 0%, transparent 50%),
+      radial-gradient(circle at 70% 80%, var(--color-particle-cool) 0%, transparent 50%);
+  }
+
+  .page-nav {
+    position: sticky;
+    top: 0;
+    z-index: var(--layer-navigation);
+    background: linear-gradient(
+      180deg,
+      var(--color-surface-elevated) 0%,
+      var(--color-surface-base) 100%
+    );
+    backdrop-filter: blur(var(--blur-backdrop));
+    border-bottom: var(--space-1) solid var(--color-border-accent);
+    padding: var(--space-4) var(--space-6);
+    box-shadow: var(--panel-shadow-elevated);
+  }
+
+  .page-nav :global(.navigation) {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+  }
+
+  .page-main {
+    position: relative;
+  }
+</style>

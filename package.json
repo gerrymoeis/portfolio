@@ -1,0 +1,34 @@
+{
+  "name": "octoporto",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:dev": "cross-env NODE_ENV=development DEPLOYMENT_ENVIRONMENT=development astro build",
+    "build:staging": "cross-env NODE_ENV=production DEPLOYMENT_ENVIRONMENT=staging astro build",
+    "build:prod": "cross-env NODE_ENV=production DEPLOYMENT_ENVIRONMENT=production astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "analyze": "npm run build && node scripts/analyze-bundles.js",
+    "analyze:bundles": "node scripts/analyze-bundles.js",
+    "validate:spotify": "node scripts/validate-spotify-config.js"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
+    "@tsparticles/engine": "^3.9.1",
+    "@tsparticles/preset-fire": "^3.2.0",
+    "astro": "^5.16.10",
+    "gsap": "^3.14.2"
+  },
+  "devDependencies": {
+    "@vitest/ui": "^4.0.17",
+    "cross-env": "^7.0.3",
+    "fast-check": "^4.5.3",
+    "vitest": "^4.0.17",
+    "wrangler": "^4.59.3"
+  }
+}

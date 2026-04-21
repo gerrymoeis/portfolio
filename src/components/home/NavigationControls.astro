@@ -1,0 +1,442 @@
+---
+/**
+ * NavigationControls - Carousel navigation buttons component
+ * Provides left/right navigation buttons with proper ARIA labels and keyboard support
+ * Implements HD-2D design system styling with hover effects
+ */
+
+export interface Props {
+  /** Current active playlist index */
+  currentIndex: number;
+  /** Total number of playlists */
+  totalPlaylists: number;
+  /** Whether to show navigation controls */
+  showControls?: boolean;
+  /** Additional CSS class names */
+  className?: string;
+  /** Custom labels for accessibility */
+  labels?: {
+    previous: string;
+    next: string;
+  };
+}
+
+const { 
+  currentIndex = 0,
+  totalPlaylists = 0,
+  showControls = true,
+  className = '',
+  labels = {
+    previous: 'Previous playlist',
+    next: 'Next playlist'
+  }
+} = Astro.props;
+
+// Calculate button states based on position
+const canGoPrevious = currentIndex > 0;
+const canGoNext = currentIndex < totalPlaylists - 1;
+
+// Only render if we have multiple playlists and controls are enabled
+const shouldRender = showControls && totalPlaylists > 1;
+---
+
+{shouldRender && (
+  <div 
+    class={`navigation-controls ${className}`}
+    role="group" 
+    aria-label="Playlist navigation controls"
+  >
+    <!-- Previous Button -->
+    <button 
+      class="nav-button nav-button--previous"
+      aria-label={labels.previous}
+      data-carousel-nav="previous"
+      disabled={!canGoPrevious}
+      type="button"
+    >
+      <svg 
+        class="nav-button__icon" 
+        width="24" 
+        height="24" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path 
+          d="M15 18L9 12L15 6" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span class="nav-button__label">{labels.previous}</span>
+    </button>
+    
+    <!-- Next Button -->
+    <button 
+      class="nav-button nav-button--next"
+      aria-label={labels.next}
+      data-carousel-nav="next"
+      disabled={!canGoNext}
+      type="button"
+    >
+      <svg 
+        class="nav-button__icon" 
+        width="24" 
+        height="24" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path 
+          d="M9 18L15 12L9 6" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span class="nav-button__label">{labels.next}</span>
+    </button>
+  </div>
+)}
+
+<style>
+  .navigation-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: var(--space-2); /* Reduced padding */
+    right: var(--space-2); /* Reduced padding */
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: var(--layer-elevated);
+    padding: 0;
+  }
+
+  .nav-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px; /* Back to original size */
+    height: 48px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-base);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: 
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+    
+    /* HD-2D design system styling */
+    border: var(--panel-border-width) var(--panel-border-style) var(--panel-border-color);
+    box-shadow: var(--panel-shadow-base);
+    
+    /* Enhanced hover effects */
+    &:hover:not(:disabled) {
+      background: var(--color-surface-elevated);
+      transform: var(--transform-hover-lift);
+      box-shadow: var(--panel-shadow-elevated);
+      border-color: var(--color-accent-primary);
+    }
+    
+    /* Active state */
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: var(--panel-shadow-base);
+    }
+    
+    /* Disabled state */
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+      background: var(--color-surface-dark);
+      border-color: var(--color-border-light);
+    }
+    
+    /* Focus state for accessibility */
+    &:focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      outline-offset: var(--focus-outline-offset);
+    }
+
+    /* Keyboard interaction states */
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+  }
+
+  .nav-button__icon {
+    width: 24px; /* Back to original size */
+    height: 24px;
+    flex-shrink: 0;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  /* Icon animation on hover */
+  .nav-button:hover:not(:disabled) .nav-button__icon {
+    transform: scale(1.1);
+  }
+
+  .nav-button--previous:hover:not(:disabled) .nav-button__icon {
+    transform: scale(1.1) translateX(-1px);
+  }
+
+  .nav-button--next:hover:not(:disabled) .nav-button__icon {
+    transform: scale(1.1) translateX(1px);
+  }
+
+  /* Screen reader only labels */
+  .nav-button__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: var(--breakpoint-md)) {
+    .navigation-controls {
+      padding: 0 var(--space-3);
+    }
+    
+    .nav-button {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .nav-button__icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media (max-width: var(--breakpoint-sm)) {
+    .navigation-controls {
+      padding: 0 var(--space-2);
+    }
+    
+    .nav-button {
+      width: 36px;
+      height: 36px;
+    }
+    
+    .nav-button__icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  /* Dark mode adjustments */
+  @media (prefers-color-scheme: dark) {
+    .nav-button {
+      background: var(--color-surface-dark);
+      border-color: var(--color-border-medium);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-surface-elevated);
+        border-color: var(--color-accent-primary);
+      }
+      
+      &:disabled {
+        background: var(--color-bg-dark);
+        border-color: var(--color-border-light);
+      }
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .nav-button,
+    .nav-button__icon {
+      transition: none;
+    }
+    
+    .nav-button:hover:not(:disabled) {
+      transform: none;
+    }
+    
+    .nav-button:hover:not(:disabled) .nav-button__icon,
+    .nav-button--previous:hover:not(:disabled) .nav-button__icon,
+    .nav-button--next:hover:not(:disabled) .nav-button__icon {
+      transform: none;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .nav-button {
+      border-width: 3px;
+      
+      &:focus-visible {
+        outline-width: 3px;
+      }
+    }
+    
+    .nav-button__icon {
+      stroke-width: 2.5;
+    }
+  }
+
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .nav-button {
+      min-width: 44px;
+      min-height: 44px;
+    }
+    
+    .nav-button:hover {
+      transform: none;
+      background: var(--color-surface-base);
+      border-color: var(--panel-border-color);
+    }
+  }
+</style>
+
+<script>
+  /**
+   * NavigationControls Client-side Enhancement
+   * Adds keyboard support and enhanced interaction handling
+   */
+  
+  class NavigationControlsHandler {
+    private container: HTMLElement;
+    private buttons: NodeListOf<HTMLButtonElement>;
+    
+    constructor(container: HTMLElement) {
+      this.container = container;
+      this.buttons = container.querySelectorAll('.nav-button');
+      this.init();
+    }
+    
+    private init() {
+      this.setupKeyboardHandlers();
+      this.setupButtonHandlers();
+    }
+    
+    private setupKeyboardHandlers() {
+      // Add keyboard support for Enter, Space, and Arrow keys
+      this.container.addEventListener('keydown', this.handleKeydown.bind(this));
+    }
+    
+    private setupButtonHandlers() {
+      this.buttons.forEach(button => {
+        // Enhanced click handling
+        button.addEventListener('click', this.handleButtonClick.bind(this));
+        
+        // Keyboard activation (Enter and Space)
+        button.addEventListener('keydown', this.handleButtonKeydown.bind(this));
+      });
+    }
+    
+    private handleKeydown(event: KeyboardEvent) {
+      // Only handle if the navigation controls container or its children have focus
+      if (!this.container.contains(event.target as Node)) {
+        return;
+      }
+      
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          this.triggerNavigation('previous');
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          this.triggerNavigation('next');
+          break;
+      }
+    }
+    
+    private handleButtonKeydown(event: KeyboardEvent) {
+      const button = event.currentTarget as HTMLButtonElement;
+      
+      switch (event.key) {
+        case 'Enter':
+        case ' ': // Space key
+          event.preventDefault();
+          if (!button.disabled) {
+            button.click();
+          }
+          break;
+      }
+    }
+    
+    private handleButtonClick(event: Event) {
+      const button = event.currentTarget as HTMLButtonElement;
+      const direction = button.dataset.carouselNav as 'previous' | 'next';
+      
+      if (!button.disabled) {
+        this.triggerNavigation(direction);
+      }
+    }
+    
+    private triggerNavigation(direction: 'previous' | 'next') {
+      // Dispatch custom event for carousel to handle
+      const navigationEvent = new CustomEvent('carousel:navigate', {
+        detail: { direction },
+        bubbles: true
+      });
+      
+      // Also dispatch to document for visualizer integration
+      document.dispatchEvent(navigationEvent);
+      this.container.dispatchEvent(navigationEvent);
+    }
+    
+    /**
+     * Update button states based on current carousel position
+     */
+    public updateButtonStates(currentIndex: number, totalPlaylists: number) {
+      const prevButton = this.container.querySelector('[data-carousel-nav="previous"]') as HTMLButtonElement;
+      const nextButton = this.container.querySelector('[data-carousel-nav="next"]') as HTMLButtonElement;
+      
+      if (prevButton) {
+        prevButton.disabled = currentIndex === 0;
+        prevButton.setAttribute('aria-label', 
+          currentIndex === 0 
+            ? 'Previous playlist (unavailable)' 
+            : `Previous playlist (${currentIndex} of ${totalPlaylists})`
+        );
+      }
+      
+      if (nextButton) {
+        nextButton.disabled = currentIndex === totalPlaylists - 1;
+        nextButton.setAttribute('aria-label', 
+          currentIndex === totalPlaylists - 1 
+            ? 'Next playlist (unavailable)' 
+            : `Next playlist (${currentIndex + 2} of ${totalPlaylists})`
+        );
+      }
+    }
+  }
+  
+  // Auto-initialize navigation controls when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const navigationControls = document.querySelectorAll('.navigation-controls');
+    
+    navigationControls.forEach(container => {
+      const handler = new NavigationControlsHandler(container as HTMLElement);
+      // Store handler instance on element for external access
+      (container as any).navigationHandler = handler;
+    });
+  });
+  
+  // Export for external use
+  if (typeof window !== 'undefined') {
+    (window as any).NavigationControlsHandler = NavigationControlsHandler;
+  }
+</script>

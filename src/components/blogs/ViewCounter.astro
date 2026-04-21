@@ -1,0 +1,148 @@
+---
+/**
+ * ViewCounter Component
+ * Client-side island for tracking and displaying blog post views
+ * 
+ * Features:
+ * - Tracks view on component mount
+ * - Displays current view count
+ * - Graceful error handling (fails silently)
+ * - Non-blocking to page content
+ * - Isolated from core rendering logic
+ * - Lazy loaded for performance
+ * 
+ * Props:
+ * - slug: Blog post slug (required)
+ * - showCount: Whether to display the count (default: true)
+ */
+
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  slug: string;
+  showCount?: boolean;
+}
+
+const { slug, showCount = true } = Astro.props;
+
+// Get API URL from environment variables
+const apiUrl = import.meta.env.VIEW_COUNTER_API_URL || '';
+---
+
+<div 
+  class="view-counter" 
+  data-view-counter
+  data-slug={slug} 
+  data-api-url={apiUrl} 
+  data-show-count={showCount}
+  role="status"
+  aria-live="polite"
+  aria-label="View count"
+>
+  {showCount && (
+    <span class="view-count">
+      <Icon name="view" size="sm" class="view-count-icon" />
+      <span class="view-count-text">
+        <span class="view-count-number" aria-label="Loading view count">—</span>
+        <span aria-hidden="true">views</span>
+      </span>
+    </span>
+  )}
+</div>
+
+<script>
+  // Lazy load view counter on idle or when visible
+  // This reduces initial JavaScript payload for blog pages
+  let isInitialized = false;
+
+  async function lazyInitViewCounter() {
+    if (isInitialized) return;
+    isInitialized = true;
+
+    // Dynamic import - only loads when needed
+    const { initViewCounters } = await import('./ViewCounterClient');
+    initViewCounters();
+  }
+
+  // Use Intersection Observer to load when component is visible
+  const viewCounterElement = document.querySelector('[data-view-counter]');
+  
+  if (viewCounterElement) {
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            lazyInitViewCounter();
+            observer.disconnect();
+          }
+        });
+      }, { rootMargin: '50px' });
+
+      observer.observe(viewCounterElement);
+    } else {
+      // Fallback for browsers without IntersectionObserver
+      lazyInitViewCounter();
+    }
+  }
+</script>
+
+<style>
+  .view-counter {
+    display: inline-block;
+  }
+  
+  .view-count {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    font-weight: var(--weight-medium);
+  }
+  
+  .view-count-icon {
+    color: var(--color-text-tertiary);
+    opacity: 0.7;
+  }
+  
+  .view-count-text {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-1);
+  }
+  
+  .view-count-number {
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-secondary);
+  }
+  
+  /* Loading state - subtle pulse */
+  .view-count-number:empty::before,
+  .view-count-number:contains("—")::before {
+    content: '';
+    display: inline-block;
+    width: 2ch;
+    height: 1em;
+    background: var(--color-surface);
+    border-radius: var(--radius-xs);
+    animation: pulse var(--duration-slow) var(--ease-in-out) infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .view-count-number:empty::before,
+    .view-count-number:contains("—")::before {
+      animation: none;
+      opacity: 0.5;
+    }
+  }
+</style>

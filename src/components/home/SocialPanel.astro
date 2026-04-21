@@ -1,0 +1,269 @@
+---
+/**
+ * SocialPanel - Social media links panel
+ * Updated for minimalist design - no Panel wrapper needed
+ * 
+ * Props:
+ * - social: Array of social link objects with name, url, and icon
+ */
+
+import Icon from '../ui/Icon.astro';
+
+interface SocialLink {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+interface Props {
+  social: SocialLink[];
+}
+
+const { social } = Astro.props;
+---
+
+<div class="social-panel">
+  <h2 class="social-panel__title">Connect</h2>
+  <ul class="social-panel__list">
+    {social.map((link) => (
+      <li class="social-panel__item">
+        <a 
+          href={link.url} 
+          class="social-panel__link"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Visit ${link.name}`}
+        >
+          <Icon name={link.icon} class="social-panel__icon" />
+          <span class="social-panel__name">{link.name}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .social-panel {
+    width: 100%;
+  }
+
+  .social-panel__title {
+    font-family: var(--font-display); /* Serif for headings */
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-4) 0;
+    text-align: center;
+  }
+
+  .social-panel__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .social-panel__item {
+    margin: 0;
+  }
+
+  .social-panel__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-social);
+    transition: 
+      background-color var(--duration-medium) ease,
+      color var(--duration-medium) ease,
+      transform var(--duration-fast) ease;
+  }
+
+  .social-panel__link:hover {
+    background-color: var(--color-social-hover-bg);
+    color: var(--color-contrast-high);
+    transform: var(--transform-hover-lift);
+  }
+
+  .social-panel__link:focus-visible {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .social-panel__icon {
+    font-size: var(--text-xl);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .social-panel__name {
+    font-family: var(--font-body); /* Sans-serif for body */
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+  }
+
+  /* Responsive adjustments - Mobile first approach */
+  
+  /* Extra small devices - stack vertically with smaller text */
+  @media (max-width: var(--breakpoint-xs)) {
+    .social-panel__title {
+      font-size: var(--text-base);
+      margin-bottom: var(--space-3);
+    }
+
+    .social-panel__list {
+      gap: var(--space-2);
+    }
+
+    .social-panel__link {
+      padding: var(--space-2);
+      gap: var(--space-2);
+    }
+
+    .social-panel__icon {
+      font-size: var(--text-lg);
+    }
+
+    .social-panel__name {
+      font-size: var(--text-sm);
+    }
+  }
+
+  /* Small devices - maintain vertical layout */
+  @media (min-width: var(--breakpoint-xs)) and (max-width: var(--breakpoint-sm)) {
+    .social-panel__list {
+      gap: var(--space-3);
+    }
+
+    .social-panel__link {
+      padding: var(--space-3);
+    }
+  }
+
+  /* Medium devices - consider horizontal layout for wider containers */
+  @media (min-width: var(--breakpoint-sm)) and (max-width: var(--breakpoint-md)) {
+    .social-panel__list {
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .social-panel__link {
+      flex-direction: column;
+      text-align: center;
+      padding: var(--space-2);
+      min-width: 80px;
+    }
+
+    .social-panel__name {
+      font-size: var(--text-sm);
+    }
+  }
+
+  /* Large devices - back to vertical for better readability */
+  @media (min-width: var(--breakpoint-md)) {
+    .social-panel__list {
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .social-panel__link {
+      flex-direction: row;
+      text-align: left;
+      padding: var(--space-3);
+    }
+
+    .social-panel__name {
+      font-size: var(--text-base);
+    }
+  }
+
+  /* Container-based responsive behavior */
+  @container (max-width: 300px) {
+    .social-panel__list {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .social-panel__link {
+      flex-direction: row;
+      padding: var(--space-2);
+      gap: var(--space-2);
+    }
+
+    .social-panel__icon {
+      font-size: var(--text-lg);
+    }
+
+    .social-panel__name {
+      font-size: var(--text-sm);
+    }
+  }
+
+  @container (min-width: 300px) and (max-width: 400px) {
+    .social-panel__list {
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+  }
+
+  /* Landscape orientation on mobile - horizontal layout */
+  @media (max-height: 600px) and (orientation: landscape) and (max-width: var(--breakpoint-md)) {
+    .social-panel__list {
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .social-panel__link {
+      flex-direction: column;
+      text-align: center;
+      padding: var(--space-2);
+      min-width: 70px;
+    }
+
+    .social-panel__name {
+      font-size: var(--text-xs);
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .social-panel__link {
+      border: 1px solid var(--color-border-medium);
+    }
+
+    .social-panel__link:hover {
+      border-color: var(--color-accent-primary);
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .social-panel__link {
+      transition: none;
+    }
+
+    .social-panel__link:hover {
+      transform: none;
+    }
+  }
+
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .social-panel__link {
+      padding: var(--space-4);
+      min-height: 44px; /* Minimum touch target size */
+    }
+
+    .social-panel__icon {
+      font-size: var(--text-xl);
+    }
+  }
+</style>

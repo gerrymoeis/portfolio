@@ -1,0 +1,396 @@
+---
+/**
+ * PaginationIndicator - Dot-based navigation for Spotify Playlist Carousel
+ * Provides visual indication of current position and direct navigation to specific playlists
+ */
+
+import type { SpotifyPlaylist } from '../../config/spotify';
+
+export interface Props {
+  /** Array of playlists to create dots for */
+  playlists: SpotifyPlaylist[];
+  /** Current active playlist index */
+  currentIndex?: number;
+  /** Whether dots are clickable for direct navigation */
+  clickable?: boolean;
+  /** Additional CSS class names */
+  className?: string;
+  /** ARIA label for the pagination group */
+  ariaLabel?: string;
+}
+
+const { 
+  playlists,
+  currentIndex = 0,
+  clickable = true,
+  className = '',
+  ariaLabel = 'Playlist indicators'
+} = Astro.props;
+
+// Don't render if there's only one playlist or no playlists
+if (playlists.length <= 1) {
+  // Return empty fragment - component won't render
+}
+
+const totalPlaylists = playlists.length;
+---
+
+{playlists.length > 1 && (
+  <div 
+    class={`pagination-indicator ${className}`}
+    role="group" 
+    aria-label={ariaLabel}
+    data-pagination-indicator
+    data-total-playlists={totalPlaylists}
+  >
+    {playlists.map((playlist, index) => (
+      <button
+        class={`pagination-dot ${index === currentIndex ? 'pagination-dot--active' : ''}`}
+        aria-label={`Go to playlist ${index + 1} of ${totalPlaylists}: ${playlist.title}`}
+        aria-current={index === currentIndex ? 'true' : 'false'}
+        data-carousel-dot={index}
+        data-playlist-id={playlist.id}
+        data-playlist-title={playlist.title}
+        disabled={!clickable}
+        type="button"
+      >
+        <span class="pagination-dot__indicator" aria-hidden="true"></span>
+        <span class="sr-only">
+          {index === currentIndex ? 'Current playlist: ' : ''}
+          {playlist.title}
+        </span>
+      </button>
+    ))}
+  </div>
+)}
+
+<style>
+  .pagination-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-1); /* Very small gap between dots */
+    padding: 2px 0; /* Minimal padding - reduced from var(--space-1) */
+    margin: 0;
+  }
+
+  .pagination-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; /* Reduced from 44px */
+    height: 32px; /* Reduced from 44px */
+    border: none;
+    border-radius: var(--radius-full);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    transition: 
+      transform var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+    
+    /* Focus styles for accessibility */
+    &:focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      outline-offset: var(--focus-outline-offset);
+      background-color: rgba(246, 224, 94, 0.1);
+    }
+    
+    /* Hover effects */
+    &:hover:not(:disabled) {
+      transform: scale(1.1);
+      background-color: rgba(246, 224, 94, 0.05);
+    }
+    
+    /* Active/pressed state */
+    &:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+    
+    /* Disabled state */
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  .pagination-dot__indicator {
+    width: 12px; /* Bigger dots */
+    height: 12px;
+    border-radius: var(--radius-full);
+    background: var(--color-text-tertiary);
+    transition: 
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+    position: relative;
+    
+    /* Subtle inner glow for HD-2D effect */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: var(--radius-full);
+      background: radial-gradient(circle, transparent 60%, rgba(246, 224, 94, 0.1) 100%);
+      opacity: 0;
+      transition: opacity var(--duration-fast) var(--ease-out);
+    }
+  }
+
+  /* Active state styling using primary accent color */
+  .pagination-dot--active .pagination-dot__indicator {
+    background: var(--color-accent-primary);
+    transform: scale(1.25);
+    box-shadow: 
+      0 0 8px rgba(246, 224, 94, 0.4),
+      0 0 16px rgba(246, 224, 94, 0.2);
+    
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  /* Enhanced hover state for active dot */
+  .pagination-dot--active:hover:not(:disabled) .pagination-dot__indicator {
+    box-shadow: 
+      0 0 12px rgba(246, 224, 94, 0.6),
+      0 0 24px rgba(246, 224, 94, 0.3);
+  }
+
+  /* Screen reader only text */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: var(--breakpoint-md)) {
+    .pagination-indicator {
+      gap: var(--space-2);
+      padding: var(--space-3);
+    }
+    
+    .pagination-dot {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .pagination-dot__indicator {
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  /* Dark mode adjustments */
+  @media (prefers-color-scheme: dark) {
+    .pagination-dot__indicator {
+      background: var(--color-text-muted);
+    }
+    
+    .pagination-dot--active .pagination-dot__indicator {
+      background: var(--color-accent-primary);
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .pagination-dot,
+    .pagination-dot__indicator,
+    .pagination-dot__indicator::before {
+      transition: none;
+    }
+    
+    .pagination-dot:hover:not(:disabled) {
+      transform: none;
+    }
+    
+    .pagination-dot--active .pagination-dot__indicator {
+      transform: scale(1.1); /* Reduced scale change */
+      box-shadow: none; /* Remove animated glow */
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .pagination-dot__indicator {
+      border: 2px solid currentColor;
+      background: transparent;
+    }
+    
+    .pagination-dot--active .pagination-dot__indicator {
+      background: var(--color-accent-primary);
+      border-color: var(--color-accent-primary);
+    }
+    
+    .pagination-dot:focus-visible {
+      outline-width: 3px;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .pagination-indicator {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * PaginationIndicator client-side functionality
+   * Handles click events for direct navigation to specific playlists
+   */
+  
+  class PaginationIndicatorHandler {
+    private container: HTMLElement;
+    private dots: NodeListOf<HTMLButtonElement>;
+    private currentIndex: number = 0;
+    private totalPlaylists: number;
+    
+    constructor(container: HTMLElement) {
+      this.container = container;
+      this.dots = container.querySelectorAll('[data-carousel-dot]');
+      this.totalPlaylists = parseInt(container.dataset.totalPlaylists || '0', 10);
+      
+      this.init();
+    }
+    
+    private init() {
+      this.setupEventListeners();
+      this.updateAccessibility();
+    }
+    
+    private setupEventListeners() {
+      // Add click handlers to each dot
+      this.dots.forEach((dot, index) => {
+        dot.addEventListener('click', (event) => {
+          event.preventDefault();
+          this.handleDotClick(index);
+        });
+        
+        // Add keyboard support for Enter and Space
+        dot.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            this.handleDotClick(index);
+          }
+        });
+      });
+      
+      // Listen for external navigation events to update state
+      document.addEventListener('carousel:navigate', (event: Event) => {
+        const customEvent = event as CustomEvent;
+        if (customEvent.detail.carouselId === this.getCarouselId()) {
+          this.updateActiveState(customEvent.detail.index);
+        }
+      });
+    }
+    
+    private handleDotClick(index: number) {
+      if (index === this.currentIndex || index < 0 || index >= this.totalPlaylists) {
+        return;
+      }
+      
+      // Immediately dispatch stop event BEFORE changing playlist
+      const stopEvent = new CustomEvent('pagination:navigate', {
+        detail: { 
+          index,
+          fromIndex: this.currentIndex,
+          toIndex: index
+        },
+        bubbles: true
+      });
+      document.dispatchEvent(stopEvent);
+      
+      // Update internal state immediately
+      this.currentIndex = index;
+      this.updateActiveState(index);
+      
+      // Dispatch navigation event for carousel
+      const navigationEvent = new CustomEvent('pagination:navigate', {
+        detail: { index },
+        bubbles: true
+      });
+      
+      this.container.dispatchEvent(navigationEvent);
+    }
+    
+    private updateActiveState(index: number) {
+      this.currentIndex = index;
+      
+      // Update visual state of dots
+      this.dots.forEach((dot, dotIndex) => {
+        const isActive = dotIndex === index;
+        dot.classList.toggle('pagination-dot--active', isActive);
+        dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+        
+        // Update screen reader text
+        const srText = dot.querySelector('.sr-only');
+        if (srText) {
+          const playlistTitle = dot.dataset.playlistTitle || `Playlist ${dotIndex + 1}`;
+          srText.textContent = isActive ? `Current playlist: ${playlistTitle}` : playlistTitle;
+        }
+      });
+      
+      this.updateAccessibility();
+    }
+    
+    private updateAccessibility() {
+      // Update ARIA labels with current state
+      this.dots.forEach((dot, index) => {
+        const playlistTitle = dot.dataset.playlistTitle || `Playlist ${index + 1}`;
+        const isActive = index === this.currentIndex;
+        const label = `${isActive ? 'Current playlist: ' : 'Go to playlist '}${index + 1} of ${this.totalPlaylists}: ${playlistTitle}`;
+        
+        dot.setAttribute('aria-label', label);
+      });
+    }
+    
+    private getCarouselId(): string {
+      // Find parent carousel to get its ID
+      const carousel = this.container.closest('[data-carousel-id]');
+      return carousel?.getAttribute('data-carousel-id') || 'default';
+    }
+    
+    /**
+     * Public method to update pagination state from external sources
+     */
+    public updateState(index: number) {
+      if (index >= 0 && index < this.totalPlaylists) {
+        this.updateActiveState(index);
+      }
+    }
+    
+    /**
+     * Public method to get current state
+     */
+    public getCurrentIndex(): number {
+      return this.currentIndex;
+    }
+  }
+  
+  // Initialize pagination indicators when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const paginationIndicators = document.querySelectorAll('[data-pagination-indicator]');
+    
+    paginationIndicators.forEach(indicator => {
+      const handler = new PaginationIndicatorHandler(indicator as HTMLElement);
+      
+      // Store handler reference for external access
+      (indicator as any).paginationHandler = handler;
+    });
+  });
+  
+  // Export handler class for external use
+  if (typeof window !== 'undefined') {
+    (window as any).PaginationIndicatorHandler = PaginationIndicatorHandler;
+  }
+</script>

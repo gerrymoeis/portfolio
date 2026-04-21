@@ -1,0 +1,6 @@
+PLACEHOLDER: Replace this file with an actual grain texture image (PNG format, ~200x200px)
+This file is referenced in src/styles/global.css for the panel texture overlay effect.
+You can generate a grain texture using tools like:
+- Photoshop/GIMP with noise filters
+- Online grain texture generators
+- CSS filter effects at build time

@@ -1,0 +1,38 @@
+---
+/**
+ * Project Detail Page - Dynamic route for individual projects
+ * Renders project content with parallax storytelling and full metadata
+ */
+
+import { getCollection } from 'astro:content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+
+// Generate static paths for all projects at build time
+export async function getStaticPaths() {
+  const projectEntries = await getCollection('projects');
+  
+  return projectEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+// Get the project entry from props
+const { entry } = Astro.props;
+
+// Render the markdown content to HTML
+const { Content } = await entry.render();
+---
+
+<ProjectLayout
+  title={entry.data.title}
+  description={entry.data.summary}
+  year={entry.data.year}
+  status={entry.data.status}
+  techStack={entry.data.techStack}
+  heroImage={entry.data.heroImage}
+  links={entry.data.links}
+  slug={entry.slug}
+>
+  <Content />
+</ProjectLayout>

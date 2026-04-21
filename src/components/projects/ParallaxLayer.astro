@@ -1,0 +1,49 @@
+---
+/**
+ * ParallaxLayer - Layered parallax component for scroll-based effects
+ * 
+ * Props:
+ * - speed: Parallax speed multiplier (0 = no movement, 1 = normal scroll speed)
+ * - class: Additional CSS classes (optional)
+ * - zIndex: Z-index for layer stacking (optional)
+ */
+
+interface Props {
+  speed: number;
+  class?: string;
+  zIndex?: number;
+}
+
+const { speed, class: className = '', zIndex } = Astro.props;
+
+const layerClasses = [
+  'parallax-layer',
+  className
+].filter(Boolean).join(' ');
+
+const layerStyle = zIndex !== undefined ? `z-index: ${zIndex};` : '';
+---
+
+<div 
+  class={layerClasses}
+  data-parallax-speed={speed}
+  style={layerStyle}
+>
+  <slot />
+</div>
+
+<style>
+  .parallax-layer {
+    position: relative;
+    will-change: transform;
+    transition: transform var(--duration-medium) var(--ease-smooth);
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .parallax-layer {
+      transition: none;
+      transform: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,648 @@
+---
+/**
+ * ProjectScene - Individual project scene with parallax layers
+ * 
+ * Props:
+ * - title: Project title
+ * - summary: Project summary
+ * - year: Project year
+ * - status: Project status
+ * - techStack: Array of technologies used
+ * - heroImage: Path to hero image
+ * - links: Optional links object (github, live, demo)
+ * - slug: Project slug for linking
+ */
+
+import ParallaxLayer from './ParallaxLayer.astro';
+import Panel from '../ui/Panel.astro';
+import Icon from '../ui/Icon.astro';
+import { Picture } from 'astro:assets';
+
+interface Props {
+  title: string;
+  summary: string;
+  year: number;
+  status: 'completed' | 'in-progress' | 'archived';
+  techStack: string[];
+  heroImage: string;
+  links?: {
+    github?: string;
+    live?: string;
+    demo?: string;
+  };
+  slug: string;
+}
+
+const { title, summary, year, status, techStack, heroImage, links, slug } = Astro.props;
+
+// Format status for display
+const statusDisplay = status === 'in-progress' ? 'In Progress' : 
+                      status === 'completed' ? 'Completed' : 
+                      'Archived';
+---
+
+<section class="project-scene" data-project-slug={slug} role="listitem" aria-label={`Project: ${title}`}>
+  <!-- Background layer - slowest movement -->
+  <ParallaxLayer speed={0.3} class="scene-background" zIndex={1}>
+    <div class="background-gradient" aria-hidden="true"></div>
+  </ParallaxLayer>
+
+  <!-- Visual layer - medium movement -->
+  <ParallaxLayer speed={0.6} class="scene-visual" zIndex={2}>
+    <div class="hero-image-container">
+      <Picture 
+        src={heroImage} 
+        alt={`${title} project screenshot`}
+        loading="lazy"
+        class="hero-image"
+        width={800}
+        height={450}
+        widths={[400, 600, 800]}
+        sizes="(max-width: var(--breakpoint-lg)) 100vw, var(--project-image-max-width)"
+        formats={['webp', 'jpg']}
+      />
+    </div>
+  </ParallaxLayer>
+
+  <!-- Text layer - minimal/stable movement -->
+  <ParallaxLayer speed={0.9} class="scene-text" zIndex={3}>
+    <Panel variant="elevated" class="project-content">
+      <header class="project-header">
+        <h2 class="project-title">{title}</h2>
+        <div class="project-meta">
+          <span class="project-year" aria-label={`Year: ${year}`}>{year}</span>
+          <span class="project-status" data-status={status} aria-label={`Status: ${statusDisplay}`}>{statusDisplay}</span>
+        </div>
+      </header>
+
+      <p class="project-summary">{summary}</p>
+
+      <div class="project-tech">
+        <h3 class="tech-label">Tech Stack</h3>
+        <ul class="tech-list" role="list" aria-label="Technologies used">
+          {techStack.map(tech => (
+            <li class="tech-item" role="listitem">{tech}</li>
+          ))}
+        </ul>
+      </div>
+
+      {links && (
+        <nav class="project-links" aria-label="Project links">
+          {links.github && (
+            <a 
+              href={links.github} 
+              class="project-link" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label={`View ${title} on GitHub (opens in new tab)`}
+            >
+              <Icon name="github" size="sm" />
+              GitHub
+            </a>
+          )}
+          {links.live && (
+            <a 
+              href={links.live} 
+              class="project-link" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label={`Visit ${title} live site (opens in new tab)`}
+            >
+              <Icon name="live" size="sm" />
+              Live Site
+            </a>
+          )}
+          {links.demo && (
+            <a 
+              href={links.demo} 
+              class="project-link" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label={`View ${title} demo (opens in new tab)`}
+            >
+              <Icon name="demo" size="sm" />
+              Demo
+            </a>
+          )}
+        </nav>
+      )}
+      
+      <a 
+        href={`/projects/${slug}`} 
+        class="project-detail-link"
+        aria-label={`View full details for ${title}`}
+      >
+        View Full Details <Icon name="arrow" size="sm" />
+      </a>
+    </Panel>
+  </ParallaxLayer>
+</section>
+
+<style>
+  .project-scene {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-20) var(--space-6);
+    overflow: hidden;
+    gap: var(--space-8);
+    
+    /* DEFAULT: Mobile layout - stack vertically */
+    flex-direction: column;
+  }
+
+  /* Background layer */
+  .scene-background {
+    position: absolute;
+    inset: 0;
+  }
+
+  .background-gradient {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      var(--color-bg-secondary) 0%,
+      var(--color-bg-primary) 50%,
+      var(--color-bg-tertiary) 100%
+    );
+  }
+
+  /* Visual layer */
+  .scene-visual {
+    position: relative; /* Changed from absolute for mobile */
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1; /* Full opacity for mobile */
+    order: 1; /* Image first on mobile */
+  }
+
+  .hero-image-container {
+    max-width: var(--project-image-max-width);
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: none; /* Remove blur for mobile */
+  }
+
+  /* Text layer */
+  .scene-text {
+    position: relative;
+    max-width: var(--project-scene-max-width);
+    width: 100%;
+    flex: 1;
+    order: 2; /* Text second on mobile */
+  }
+
+  .project-content {
+    backdrop-filter: blur(var(--blur-backdrop-medium));
+    padding: var(--panel-padding-xl);
+  }
+
+  /* Project header */
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    flex-wrap: wrap;
+  }
+
+  .project-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
+    line-height: var(--leading-tight);
+  }
+
+  .project-meta {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .project-year {
+    font-weight: var(--weight-medium);
+  }
+
+  .project-status {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-weight: var(--weight-medium);
+    background: var(--color-bg-tertiary);
+    border: var(--panel-border-width) solid var(--color-border);
+  }
+
+  .project-status[data-status="completed"] {
+    color: var(--color-accent-primary);
+    border-color: var(--color-border-accent);
+  }
+
+  .project-status[data-status="in-progress"] {
+    color: var(--color-accent-secondary);
+    border-color: var(--color-border-accent);
+  }
+
+  .project-status[data-status="archived"] {
+    color: var(--color-text-tertiary);
+  }
+
+  /* Project summary */
+  .project-summary {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-8) 0;
+  }
+
+  /* Tech stack */
+  .project-tech {
+    margin-bottom: var(--space-8);
+  }
+
+  .tech-label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 var(--space-3) 0;
+  }
+
+  .tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tech-item {
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-bg-tertiary);
+    border: var(--panel-border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--weight-medium);
+  }
+
+  /* Project links */
+  .project-links {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-6);
+  }
+
+  .project-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-sm);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+
+  .project-link:hover {
+    background: var(--color-accent-secondary);
+  }
+
+  .project-link:focus {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+  
+  /* Project detail link */
+  .project-detail-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-8);
+    padding: var(--space-3) var(--space-5);
+    background: transparent;
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    border: var(--panel-border-width) solid var(--color-accent-primary);
+    border-radius: var(--radius-sm);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-sm);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+  
+  .project-detail-link:hover {
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+  }
+  
+  .project-detail-link:focus {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--space-1);
+  }
+
+  /* Responsive adjustments - Mobile first approach */
+  
+  /* DESKTOP LAYOUT STARTS AT 901px - Side by side layout */
+  @media (min-width: 901px) {
+    .project-scene {
+      flex-direction: row; /* Side by side layout */
+    }
+    
+    .scene-visual {
+      position: absolute; /* Back to absolute positioning */
+      inset: 0;
+      opacity: 0.4; /* Background image effect */
+      order: unset;
+    }
+    
+    .hero-image {
+      filter: blur(var(--blur-project-image)) brightness(0.7); /* Restore blur effect */
+    }
+    
+    .scene-text {
+      position: relative;
+      z-index: 3;
+      order: unset;
+      flex: unset;
+    }
+  }
+  
+  /* Extra small devices */
+  @media (max-width: var(--breakpoint-xs)) {
+    .project-scene {
+      padding: var(--space-12) var(--space-3);
+      gap: var(--space-4);
+    }
+
+    .project-content {
+      padding: var(--panel-padding-md);
+    }
+
+    .project-title {
+      font-size: var(--text-xl);
+    }
+
+    .project-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
+      margin-bottom: var(--space-6);
+    }
+
+    .project-summary {
+      font-size: var(--text-base);
+      margin-bottom: var(--space-6);
+    }
+
+    .project-tech {
+      margin-bottom: var(--space-6);
+    }
+
+    .tech-item {
+      padding: var(--space-1) var(--space-3);
+      font-size: var(--text-xs);
+    }
+
+    .project-links {
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+
+    .project-link,
+    .project-detail-link {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-xs);
+    }
+  }
+
+  /* Small devices */
+  @media (min-width: var(--breakpoint-xs)) and (max-width: var(--breakpoint-sm)) {
+    .project-scene {
+      padding: var(--space-16) var(--space-4);
+      gap: var(--space-6);
+    }
+
+    .project-content {
+      padding: var(--panel-padding-lg);
+    }
+
+    .project-title {
+      font-size: var(--text-2xl);
+    }
+
+    .project-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    .project-summary {
+      margin-bottom: var(--space-6);
+    }
+
+    .project-tech {
+      margin-bottom: var(--space-6);
+    }
+
+    .project-links {
+      gap: var(--space-2);
+    }
+
+    .project-link,
+    .project-detail-link {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-xs);
+    }
+  }
+
+  /* Medium devices */
+  @media (min-width: var(--breakpoint-sm)) and (max-width: var(--breakpoint-lg)) {
+    .project-scene {
+      padding: var(--space-16) var(--space-4);
+      gap: var(--space-6);
+    }
+
+    .project-content {
+      padding: var(--panel-padding-lg);
+    }
+
+    .project-title {
+      font-size: var(--text-2xl);
+    }
+
+    .project-header {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+    }
+
+    .hero-image-container {
+      max-width: 100%;
+    }
+
+    .project-links {
+      gap: var(--space-2);
+    }
+
+    .project-link,
+    .project-detail-link {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+    }
+  }
+
+  /* Large devices */
+  @media (min-width: var(--breakpoint-lg)) and (max-width: var(--breakpoint-xl)) {
+    .project-scene {
+      padding: var(--space-20) var(--space-6);
+      gap: var(--space-8);
+    }
+
+    .project-content {
+      padding: var(--panel-padding-xl);
+    }
+
+    .project-title {
+      font-size: var(--text-3xl);
+    }
+  }
+
+  /* Extra large devices */
+  @media (min-width: var(--breakpoint-xl)) {
+    .project-scene {
+      padding: var(--space-20) var(--space-6);
+      gap: var(--space-8);
+    }
+
+    .project-content {
+      padding: var(--panel-padding-xl);
+    }
+  }
+
+  /* Ultra-wide screens - prevent over-expansion */
+  @media (min-width: var(--breakpoint-2xl)) {
+    .scene-text {
+      max-width: 800px;
+    }
+  }
+
+  /* Landscape orientation on mobile - adjust for limited height */
+  @media (max-height: 600px) and (orientation: landscape) and (max-width: var(--breakpoint-lg)) {
+    .project-scene {
+      min-height: auto;
+      padding: var(--space-8) var(--space-4);
+    }
+
+    .project-content {
+      padding: var(--panel-padding-md);
+    }
+
+    .project-header {
+      margin-bottom: var(--space-4);
+    }
+
+    .project-summary {
+      margin-bottom: var(--space-4);
+    }
+
+    .project-tech {
+      margin-bottom: var(--space-4);
+    }
+
+    .project-links {
+      margin-bottom: var(--space-3);
+    }
+  }
+
+  /* Container queries for adaptive behavior */
+  @container (max-width: 400px) {
+    .project-content {
+      padding: var(--panel-padding-sm);
+    }
+
+    .project-title {
+      font-size: var(--text-lg);
+    }
+
+    .project-summary {
+      font-size: var(--text-sm);
+    }
+  }
+
+  @container (min-width: 400px) and (max-width: 600px) {
+    .project-content {
+      padding: var(--panel-padding-md);
+    }
+
+    .project-title {
+      font-size: var(--text-xl);
+    }
+  }
+
+  @container (min-width: 600px) {
+    .project-content {
+      padding: var(--panel-padding-lg);
+    }
+
+    .project-title {
+      font-size: var(--text-2xl);
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .project-link {
+      border: 1px solid var(--color-bg-primary);
+    }
+
+    .project-detail-link {
+      border-width: 2px;
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .scene-visual,
+    .scene-background {
+      opacity: 0.2;
+    }
+
+    .project-link,
+    .project-detail-link {
+      transition: none;
+    }
+  }
+
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .project-link,
+    .project-detail-link {
+      padding: var(--space-3) var(--space-5);
+      min-height: 44px; /* Minimum touch target size */
+    }
+  }
+</style>

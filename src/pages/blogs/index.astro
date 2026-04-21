@@ -1,0 +1,35 @@
+---
+/**
+ * Blog Listing Page
+ * Displays all blog posts in a typography-focused layout with HD-2D aesthetic
+ * Sorted by date (newest first) with minimal animation
+ */
+
+import PageContainer from '../../components/ui/PageContainer.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import BlogList from '../../components/blogs/BlogList.astro';
+---
+
+<PageContainer 
+  title="Blog | HD-2D Portfolio"
+  description="Thoughts on web development, design, and technology. Explore articles about modern web development, accessibility, and creative coding."
+  ogType="website"
+  class="blogs-page"
+>
+  <PageHero 
+    title="Blog"
+    description="Thoughts on web development, design, and technology"
+  />
+  
+  <div class="blogs-content">
+    <BlogList />
+  </div>
+</PageContainer>
+
+<style>
+  .blogs-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6) var(--space-16);
+  }
+</style>

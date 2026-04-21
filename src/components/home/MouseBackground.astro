@@ -1,0 +1,186 @@
+---
+/**
+ * Mouse-reactive background component
+ * Renders layered background elements that respond to mouse movement
+ * Only active on home page, respects prefers-reduced-motion
+ */
+---
+
+<div class="mouse-background">
+  <!-- Background layer (slowest) -->
+  <div 
+    class="mouse-background__layer mouse-background__layer--back"
+    data-mouse-layer
+    data-mouse-speed="0.5"
+    aria-hidden="true"
+  >
+    <div class="mouse-background__gradient mouse-background__gradient--1"></div>
+  </div>
+
+  <!-- Middle layer (medium speed) -->
+  <div 
+    class="mouse-background__layer mouse-background__layer--mid"
+    data-mouse-layer
+    data-mouse-speed="0.8"
+    aria-hidden="true"
+  >
+    <div class="mouse-background__gradient mouse-background__gradient--2"></div>
+  </div>
+
+  <!-- Front layer (fastest, most subtle) -->
+  <div 
+    class="mouse-background__layer mouse-background__layer--front"
+    data-mouse-layer
+    data-mouse-speed="1.2"
+    aria-hidden="true"
+  >
+    <div class="mouse-background__gradient mouse-background__gradient--3"></div>
+  </div>
+</div>
+
+<script>
+  // Lazy load mouse background script on first interaction
+  // This reduces initial JavaScript payload for the home page
+  let cleanup: (() => void) | null = null;
+  let isInitialized = false;
+
+  async function lazyInitMouseBackground() {
+    if (isInitialized) return;
+    isInitialized = true;
+
+    // Dynamic import - only loads when needed
+    const { initMouseBackground } = await import('../../scripts/mouseBackground');
+    cleanup = initMouseBackground();
+  }
+
+  // Initialize on first mouse movement (lazy loading)
+  function handleFirstMouseMove() {
+    lazyInitMouseBackground();
+    window.removeEventListener('mousemove', handleFirstMouseMove);
+  }
+
+  // Also initialize on first touch (for touch devices)
+  function handleFirstTouch() {
+    lazyInitMouseBackground();
+    window.removeEventListener('touchstart', handleFirstTouch);
+  }
+
+  // Set up lazy loading listeners
+  window.addEventListener('mousemove', handleFirstMouseMove, { passive: true, once: true });
+  window.addEventListener('touchstart', handleFirstTouch, { passive: true, once: true });
+
+  // Cleanup on page unload (for SPA navigation if added later)
+  window.addEventListener('beforeunload', () => {
+    if (cleanup) cleanup();
+  });
+</script>
+
+<style>
+  .mouse-background {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .mouse-background__layer {
+    position: absolute;
+    inset: -10%; /* Extend beyond viewport for smooth movement */
+    transition: transform var(--duration-slow) var(--ease-smooth);
+    will-change: transform;
+  }
+
+  /* Layer depth ordering */
+  .mouse-background__layer--back {
+    z-index: 1;
+  }
+
+  .mouse-background__layer--mid {
+    z-index: 2;
+  }
+
+  .mouse-background__layer--front {
+    z-index: 3;
+  }
+
+  /* Gradient elements */
+  .mouse-background__gradient {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(var(--blur-background));
+    opacity: 0.6;
+  }
+
+  /* Gradient 1 - Large, warm glow (top left) */
+  .mouse-background__gradient--1 {
+    top: 10%;
+    left: 10%;
+    width: var(--gradient-large);
+    height: var(--gradient-large);
+    background: radial-gradient(
+      circle,
+      rgba(212, 165, 116, 0.8) 0%,
+      rgba(212, 165, 116, 0.5) 30%,
+      rgba(212, 165, 116, 0.2) 50%,
+      transparent 70%
+    );
+  }
+
+  /* Gradient 2 - Medium, accent glow (bottom right) */
+  .mouse-background__gradient--2 {
+    bottom: 15%;
+    right: 15%;
+    width: var(--gradient-medium);
+    height: var(--gradient-medium);
+    background: radial-gradient(
+      circle,
+      rgba(139, 115, 85, 0.7) 0%,
+      rgba(139, 115, 85, 0.4) 30%,
+      rgba(139, 115, 85, 0.2) 50%,
+      transparent 70%
+    );
+  }
+
+  /* Gradient 3 - Small, subtle highlight (center) */
+  .mouse-background__gradient--3 {
+    top: 50%;
+    left: 50%;
+    transform: var(--transform-center);
+    width: var(--gradient-small);
+    height: var(--gradient-small);
+    background: radial-gradient(
+      circle,
+      rgba(232, 228, 223, 0.25) 0%,
+      rgba(232, 228, 223, 0.12) 30%,
+      rgba(232, 228, 223, 0.05) 50%,
+      transparent 70%
+    );
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .mouse-background__layer {
+      transition: none;
+      transform: none !important;
+    }
+  }
+
+  /* Adjust for smaller screens */
+  @media (max-width: var(--breakpoint-lg)) {
+    .mouse-background__gradient--1 {
+      width: var(--gradient-mobile-large);
+      height: var(--gradient-mobile-large);
+    }
+
+    .mouse-background__gradient--2 {
+      width: var(--gradient-mobile-medium);
+      height: var(--gradient-mobile-medium);
+    }
+
+    .mouse-background__gradient--3 {
+      width: var(--gradient-mobile-small);
+      height: var(--gradient-mobile-small);
+    }
+  }
+</style>

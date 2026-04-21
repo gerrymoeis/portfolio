@@ -1,0 +1,155 @@
+---
+/**
+ * SpotifyEmbed - Spotify embed with iframe API integration
+ * Uses Spotify's iframe API for proper playback state detection
+ */
+
+import { spotifyConfig } from '../../config/spotify';
+
+export interface Props {
+  /** Initial Spotify embed URL (from Spotify's embed generator) */
+  embedUrl?: string;
+  /** Height of the embed in pixels */
+  height?: number;
+  /** Whether to show the compact version */
+  compact?: boolean;
+  /** Description for accessibility */
+  description?: string;
+  /** Whether this is used in a carousel (enables dynamic src switching) */
+  isCarousel?: boolean;
+}
+
+const { 
+  embedUrl = spotifyConfig.playlists[0]?.embedUrl || spotifyConfig.legacyEmbed?.embedUrl,
+  height = spotifyConfig.legacyEmbed?.height ?? 352,
+  compact = spotifyConfig.legacyEmbed?.compact ?? false,
+  description = spotifyConfig.legacyEmbed?.description ?? "Spotify playlist",
+  isCarousel = false
+} = Astro.props;
+
+// Extract URI from embed URL for iframe API
+const extractUri = (url: string | undefined) => {
+  if (!url) return '';
+  const match = url.match(/\/embed\/(track|album|playlist|episode|show)\/([a-zA-Z0-9]+)/);
+  if (match) {
+    return `spotify:${match[1]}:${match[2]}`;
+  }
+  return '';
+};
+
+const initialUri = extractUri(isCarousel ? spotifyConfig.playlists[0]?.embedUrl : embedUrl);
+---
+
+<!-- Load Spotify iframe API -->
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+
+<div class="spotify-embed">
+  <div 
+    id="spotify-embed-container"
+    data-spotify-uri={initialUri}
+    data-height={compact ? "152" : height.toString()}
+    data-description={description}
+  ></div>
+</div>
+
+<script>
+  // Suppress Spotify DRM robustness warnings in production
+  if (!import.meta.env.DEV) {
+    const originalWarn = console.warn;
+    console.warn = function(...args) {
+      const message = args.join(' ');
+      if (message.includes('robustness level') || message.includes('requestMediaKeySystemAccess')) {
+        return; // Suppress DRM-related warnings
+      }
+      originalWarn.apply(console, args);
+    };
+  }
+</script>
+
+<script>
+  // Initialize Spotify embed controller
+  import('../../scripts/spotifyEmbedController');
+</script>
+
+<style>
+  .spotify-embed {
+    width: 100%;
+    height: 352px; /* Fixed height instead of 100% */
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+    z-index: 1;
+    
+    /* Match the design system's panel styling */
+    background: var(--color-surface-base);
+    border: var(--panel-border-width) var(--panel-border-style) var(--panel-border-color);
+    box-shadow: var(--panel-shadow-base);
+    
+    /* Add transition to base element so it works both ways */
+    transition: 
+      transform var(--duration-medium) var(--ease-out),
+      box-shadow var(--duration-medium) var(--ease-out);
+    
+    /* Subtle glow effect to match other panels */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(
+        135deg,
+        rgba(246, 224, 94, 0.05) 0%,
+        transparent 50%,
+        rgba(139, 149, 109, 0.03) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+
+  #spotify-embed-container {
+    width: 100%;
+    height: 352px; /* Fixed height to match container */
+    border: none;
+    border-radius: var(--radius-lg);
+    position: relative;
+    z-index: 2;
+    display: block;
+  }
+
+  /* Hover effects to match design system */
+  .spotify-embed:hover {
+    transform: var(--transform-hover-lift-strong);
+    box-shadow: var(--panel-shadow-elevated);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: var(--breakpoint-md)) {
+    .spotify-embed {
+      border-radius: var(--radius-social);
+    }
+    
+    #spotify-embed-container {
+      border-radius: var(--radius-social);
+    }
+  }
+
+  /* Dark mode adjustments */
+  @media (prefers-color-scheme: dark) {
+    .spotify-embed {
+      background: var(--color-surface-dark);
+      border-color: var(--color-border-light);
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .spotify-embed:hover {
+      transform: none;
+    }
+  }
+</style>

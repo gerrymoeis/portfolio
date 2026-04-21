@@ -1,0 +1,426 @@
+/* Design System Tokens */
+/* HD-2D Portfolio - True Octopath Traveler Aesthetic */
+
+:root {
+  /* ============================================
+     HD-2D COLOR PALETTE
+     Inspired by Octopath Traveler's warm, atmospheric tones
+     ============================================ */
+  
+  /* Background - Atmospheric depth with warm tones */
+  --color-bg-deep: #0a0b0f;           /* Deep night sky */
+  --color-bg-dark: #1a1c24;           /* Dark atmospheric base */
+  --color-bg-mid: #2d3142;            /* Mid-tone atmospheric */
+  --color-bg-light: #4f5d75;          /* Light atmospheric */
+  --color-bg-accent: #8b956d;         /* Warm accent background */
+  
+  /* Surface colors - UI panels and frames */
+  --color-surface-dark: #1e2328;      /* Dark panel background */
+  --color-surface-base: #2a2f36;      /* Base panel background */
+  --color-surface-elevated: #363d47;   /* Elevated panel background */
+  --color-surface-light: #4a5568;     /* Light panel background */
+  
+  /* Text colors - High contrast for readability */
+  --color-text-primary: #f7fafc;      /* Primary text - bright white */
+  --color-text-secondary: #e2e8f0;    /* Secondary text - soft white */
+  --color-text-tertiary: #cbd5e0;     /* Tertiary text - muted white */
+  --color-text-accent: #ffd700;       /* Accent text - golden yellow */
+  --color-text-muted: #a0aec0;        /* Muted text - gray */
+  
+  /* Accent colors - Golden/amber theme */
+  --color-accent-primary: #f6e05e;    /* Primary accent - warm gold */
+  --color-accent-secondary: #ed8936;  /* Secondary accent - warm orange */
+  --color-accent-tertiary: #d69e2e;   /* Tertiary accent - deeper gold */
+  
+  /* Border and frame colors */
+  --color-border-light: rgba(247, 250, 252, 0.1);   /* Light border */
+  --color-border-medium: rgba(247, 250, 252, 0.2);  /* Medium border */
+  --color-border-strong: rgba(247, 250, 252, 0.3);  /* Strong border */
+  --color-border-accent: rgba(246, 224, 94, 0.4);   /* Accent border */
+  
+  /* Shadow colors for depth */
+  --color-shadow-light: rgba(0, 0, 0, 0.2);
+  --color-shadow-medium: rgba(0, 0, 0, 0.4);
+  --color-shadow-strong: rgba(0, 0, 0, 0.6);
+  --color-shadow-accent: rgba(246, 224, 94, 0.3);
+  
+  /* Particle and effect colors */
+  --color-particle-warm: rgba(246, 224, 94, 0.6);
+  --color-particle-cool: rgba(139, 149, 109, 0.4);
+  --color-particle-neutral: rgba(247, 250, 252, 0.3);
+  
+  /* Particle colors for specific components */
+  --color-particle-primary: var(--color-particle-warm);
+  --color-particle-secondary: var(--color-particle-cool);
+  --color-particle-tertiary: var(--color-particle-neutral);
+  
+  /* ============================================
+     RESPONSIVE SPACING TOKENS
+     Fluid spacing scale that adapts to viewport
+     ============================================ */
+  
+  --space-1: clamp(0.25rem, 0.2rem + 0.2vw, 0.3rem);   /* 4px - 4.8px */
+  --space-2: clamp(0.5rem, 0.4rem + 0.4vw, 0.6rem);    /* 8px - 9.6px */
+  --space-3: clamp(0.75rem, 0.6rem + 0.6vw, 0.9rem);   /* 12px - 14.4px */
+  --space-4: clamp(1rem, 0.8rem + 0.8vw, 1.2rem);      /* 16px - 19.2px */
+  --space-5: clamp(1.25rem, 1rem + 1vw, 1.5rem);       /* 20px - 24px */
+  --space-6: clamp(1.5rem, 1.2rem + 1.2vw, 1.8rem);    /* 24px - 28.8px */
+  --space-8: clamp(2rem, 1.6rem + 1.6vw, 2.4rem);      /* 32px - 38.4px */
+  --space-10: clamp(2.5rem, 2rem + 2vw, 3rem);         /* 40px - 48px */
+  --space-12: clamp(3rem, 2.4rem + 2.4vw, 3.6rem);     /* 48px - 57.6px */
+  --space-16: clamp(4rem, 3.2rem + 3.2vw, 4.8rem);     /* 64px - 76.8px */
+  --space-20: clamp(5rem, 4rem + 4vw, 6rem);           /* 80px - 96px */
+  --space-24: clamp(6rem, 4.8rem + 4.8vw, 7.2rem);     /* 96px - 115.2px */
+  --space-32: clamp(8rem, 6.4rem + 6.4vw, 9.6rem);     /* 128px - 153.6px */
+  
+  /* ============================================
+     RESPONSIVE BREAKPOINTS
+     Enhanced with container query support
+     ============================================ */
+  
+  --breakpoint-xs: 360px;   /* Extra small devices */
+  --breakpoint-sm: 480px;   /* Small devices */
+  --breakpoint-md: 640px;   /* Medium devices */
+  --breakpoint-lg: 768px;   /* Large devices */
+  --breakpoint-xl: 1024px;  /* Extra large devices */
+  --breakpoint-2xl: 1200px; /* 2X large devices */
+  --breakpoint-3xl: 1440px; /* 3X large devices */
+  
+  /* Container query breakpoints */
+  --container-sm: 20rem;    /* 320px */
+  --container-md: 28rem;    /* 448px */
+  --container-lg: 32rem;    /* 512px */
+  --container-xl: 36rem;    /* 576px */
+  --container-2xl: 42rem;   /* 672px */
+  
+  /* ============================================
+     HD-2D DEPTH LAYERS
+     Z-index system for proper layering
+     ============================================ */
+  
+  --layer-background: -1;
+  --layer-base: 0;
+  --layer-content: 1;
+  --layer-elevated: 10;
+  --layer-overlay: 20;
+  --layer-modal: 30;
+  --layer-tooltip: 40;
+  --layer-navigation: 50;
+  --layer-particles: 5;
+  
+  /* ============================================
+     RESPONSIVE BORDER RADIUS TOKENS
+     Scales with viewport size
+     ============================================ */
+  
+  --radius-xs: clamp(2px, 1px + 0.5vw, 3px);
+  --radius-sm: clamp(4px, 2px + 1vw, 6px);
+  --radius-md: clamp(8px, 4px + 2vw, 12px);
+  --radius-lg: clamp(12px, 6px + 3vw, 18px);
+  --radius-xl: clamp(16px, 8px + 4vw, 24px);
+  --radius-full: 9999px;
+  --radius-pill: 50px;
+  --radius-nav-pill: 48px;
+  --radius-nav-link: 20px;
+  --radius-social: 6px;
+  --radius-tag: 12px;
+  
+  /* ============================================
+     HD-2D EFFECTS
+     Special effect values for authentic look
+     ============================================ */
+  
+  /* Tilt-shift blur values */
+  --blur-subtle: 1px;
+  --blur-light: 2px;
+  --blur-medium: 4px;
+  --blur-strong: 8px;
+  
+  /* Depth of field values */
+  --dof-near: 0px;
+  --dof-mid: 2px;
+  --dof-far: 6px;
+  
+  /* Atmospheric lighting */
+  --glow-subtle: 0 0 10px;
+  --glow-medium: 0 0 20px;
+  --glow-strong: 0 0 30px;
+  
+  /* ============================================
+     LEGACY COMPATIBILITY MAPPINGS
+     Map old variables to new HD-2D system
+     ============================================ */
+  
+  /* Background mappings */
+  --color-bg-primary: var(--color-bg-deep);
+  --color-bg-secondary: var(--color-bg-dark);
+  --color-bg-radial-center: var(--color-bg-light);
+  --color-bg-radial-mid: var(--color-bg-mid);
+  --color-bg-radial-outer: var(--color-bg-dark);
+  --color-bg-radial-edge: var(--color-bg-deep);
+  
+  /* Surface mappings */
+  --color-surface: var(--color-surface-base);
+  --color-surface-elevated: var(--color-surface-elevated);
+  
+  /* Border mappings */
+  --color-border: var(--color-border-medium);
+  --color-border-strong: var(--color-border-strong);
+  
+  /* Block-specific mappings for home page */
+  --color-block-bg: var(--color-surface-base);
+  --color-block-border: var(--color-border-accent);
+  --color-block-shadow: var(--color-shadow-medium);
+  
+  /* Link colors */
+  --color-link: var(--color-accent-primary);
+  --color-link-hover: var(--color-accent-secondary);
+  
+  /* Animation durations */
+  --duration-fast: 0.15s;
+  --duration-medium: 0.3s;
+  --duration-slow: 0.6s;
+  
+  /* Easing functions */
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  /* ============================================
+     HOVER AND INTERACTIVE STATES
+     Enhanced contrast tokens for better visibility
+     ============================================ */
+  
+  /* Social link hover effects */
+  --color-social-hover-bg: rgba(246, 224, 94, 0.15);
+  --color-social-hover-bg-subtle: rgba(246, 224, 94, 0.05);
+  --color-social-hover-bg-home: rgba(0, 0, 0, 0.05);
+  
+  /* Navigation hover and active states */
+  --color-nav-hover-bg: rgba(246, 224, 94, 0.1);
+  --color-nav-active-bg: rgba(246, 224, 94, 0.15);
+  --color-nav-active-indicator: var(--color-accent-primary);
+  
+  /* Enhanced contrast colors */
+  --color-contrast-high: var(--color-text-primary);
+  --color-contrast-medium: var(--color-text-secondary);
+  --color-contrast-low: var(--color-text-tertiary);
+
+  /* Focus state tokens for accessibility */
+  --focus-outline-color: var(--color-accent-primary);
+  --focus-outline-width: 2px;
+  --focus-outline-offset: 2px;
+  --focus-outline-style: solid;
+
+  /* ============================================
+     TRANSFORM VALUES
+     Consistent transform values for interactions
+     ============================================ */
+  
+  --transform-hover-lift: translateY(-1px);
+  --transform-hover-lift-strong: translateY(-2px);
+  --transform-center: translate(-50%, -50%);
+
+  /* ============================================
+     EXTENDED BLUR VALUES
+     Additional blur values for effects
+     ============================================ */
+  
+  --blur-background: 100px;
+  --blur-backdrop: 12px;
+  --blur-backdrop-light: 10px;
+  --blur-backdrop-medium: 8px;
+  --blur-project-image: 2px;
+
+  /* ============================================
+     RESPONSIVE COMPONENT DIMENSIONS
+     Fluid dimensions that adapt to viewport
+     ============================================ */
+  
+  /* Navigation dimensions */
+  --nav-max-width: clamp(300px, 80vw, 400px);
+  --nav-indicator-width: 20px;
+  --nav-indicator-height: 2px;
+  
+  /* Content max widths */
+  --content-max-width: clamp(320px, 90vw, 1200px);
+  --hero-max-width: clamp(280px, 85vw, 700px);
+  --hero-description-max-width: clamp(240px, 80vw, 500px);
+  --project-scene-max-width: clamp(300px, 85vw, 700px);
+  --project-image-max-width: clamp(280px, 90vw, 800px);
+  
+  /* Spotify panel dimensions */
+  --spotify-panel-min-height: clamp(60px, 15vw, 80px);
+  --spotify-album-size: clamp(40px, 10vw, 48px);
+  
+  /* Particle dimensions */
+  --particle-dot-size: clamp(2px, 0.5vw, 3px);
+  --particle-small-size: clamp(4px, 1vw, 6px);
+  --particle-medium-size: clamp(8px, 2vw, 10px);
+  --particle-large-size: clamp(12px, 3vw, 16px);
+  
+  /* Music visualizer height */
+  --music-visualizer-height: clamp(120px, 25vw, 200px);
+
+  /* ============================================
+     RESPONSIVE GRADIENT DIMENSIONS
+     Fluid background gradient sizes
+     ============================================ */
+  
+  --gradient-large: clamp(400px, 80vw, 800px);
+  --gradient-medium: clamp(350px, 70vw, 700px);
+  --gradient-small: clamp(300px, 60vw, 600px);
+  --gradient-mobile-large: clamp(300px, 90vw, 400px);
+  --gradient-mobile-medium: clamp(280px, 85vw, 350px);
+  --gradient-mobile-small: clamp(250px, 80vw, 300px);
+  
+  /* ============================================
+     HD-2D PANEL FRAME SYSTEM
+     Responsive ornate borders and frames
+     ============================================ */
+  
+  /* Panel frame styles */
+  --panel-border-width: clamp(1px, 0.2vw, 2px);
+  --panel-border-style: solid;
+  --panel-border-color: var(--color-border-accent);
+  --panel-inner-border: 1px solid var(--color-border-light);
+  
+  /* Panel shadows for depth */
+  --panel-shadow-base: 
+    0 4px 12px var(--color-shadow-medium),
+    0 2px 4px var(--color-shadow-light),
+    inset 0 1px 0 rgba(246, 224, 94, 0.1);
+    
+  --panel-shadow-elevated: 
+    0 8px 24px var(--color-shadow-strong),
+    0 4px 8px var(--color-shadow-medium),
+    inset 0 1px 0 rgba(246, 224, 94, 0.15);
+  
+  /* Tilt-shift effects for HD-2D depth - Subtle for readability */
+  --tilt-shift-near: blur(0px) brightness(1.05);
+  --tilt-shift-mid: blur(0px) brightness(1.0);
+  --tilt-shift-far: blur(0.5px) brightness(0.98);
+  
+  /* Atmospheric glow effects */
+  --atmospheric-glow: 
+    0 0 20px rgba(246, 224, 94, 0.3),
+    0 0 40px rgba(246, 224, 94, 0.1);
+    
+  --subtle-glow: 
+    0 0 10px rgba(246, 224, 94, 0.2);
+
+  /* ============================================
+     RESPONSIVE LAYOUT UTILITIES
+     Container and layout tokens
+     ============================================ */
+  
+  /* Home page layout */
+  --home-max-width: clamp(320px, 95vw, 1000px);
+  --home-gap: clamp(var(--space-4), 4vw, var(--space-12));
+  --home-padding: clamp(var(--space-3), 3vw, var(--space-8));
+  
+  /* Navigation clearance - calculated based on navigation dimensions */
+  --nav-clearance-xs: 80px;    /* Extra small devices */
+  --nav-clearance-sm: 100px;   /* Small devices */
+  --nav-clearance-md: 120px;   /* Medium devices */
+  --nav-clearance-lg: 160px;   /* Large devices */
+  --nav-clearance-xl: 160px;   /* Extra large devices */
+  --nav-clearance-2xl: 180px;  /* Ultra-wide devices */
+  
+  /* Navigation clearance for small heights */
+  --nav-clearance-small-height-xs: 70px;
+  --nav-clearance-small-height-sm: 90px;
+  --nav-clearance-small-height-md: 110px;
+  --nav-clearance-small-height-lg: 140px;
+  
+  /* Navigation clearance for very small heights */
+  --nav-clearance-tiny-height-xs: 60px;
+  --nav-clearance-tiny-height-sm: 80px;
+  --nav-clearance-tiny-height-md: 100px;
+  
+  /* Navigation clearance for landscape orientation */
+  --nav-clearance-landscape: 70px;
+  
+  /* Navigation clearance for extreme cases */
+  --nav-clearance-minimal: 50px;
+  
+  /* Grid system */
+  --grid-gap: clamp(var(--space-4), 3vw, var(--space-8));
+  --grid-margin: clamp(var(--space-4), 5vw, var(--space-6));
+  
+  /* Panel padding */
+  --panel-padding-sm: clamp(var(--space-3), 3vw, var(--space-4));
+  --panel-padding-md: clamp(var(--space-4), 4vw, var(--space-6));
+  --panel-padding-lg: clamp(var(--space-6), 5vw, var(--space-8));
+  --panel-padding-xl: clamp(var(--space-8), 6vw, var(--space-12));
+}
+
+/* ============================================
+   RESPONSIVE DESIGN UTILITIES
+   Mobile-first responsive classes
+   ============================================ */
+
+/* Container queries support */
+@supports (container-type: inline-size) {
+  .container-responsive {
+    container-type: inline-size;
+  }
+  
+  .container-responsive .responsive-content {
+    /* Use container queries when supported */
+  }
+}
+
+/* Responsive visibility utilities */
+.hidden-mobile {
+  display: none;
+}
+
+.hidden-tablet {
+  display: block;
+}
+
+.hidden-desktop {
+  display: block;
+}
+
+@media (min-width: var(--breakpoint-md)) {
+  .hidden-mobile {
+    display: block;
+  }
+  
+  .hidden-tablet {
+    display: none;
+  }
+}
+
+@media (min-width: var(--breakpoint-xl)) {
+  .hidden-desktop {
+    display: none;
+  }
+  
+  .hidden-tablet {
+    display: block;
+  }
+}
+
+/* Responsive text alignment */
+.text-center-mobile {
+  text-align: center;
+}
+
+@media (min-width: var(--breakpoint-md)) {
+  .text-center-mobile {
+    text-align: left;
+  }
+}
+
+/* Responsive flex utilities */
+.flex-col-mobile {
+  flex-direction: column;
+}
+
+@media (min-width: var(--breakpoint-md)) {
+  .flex-col-mobile {
+    flex-direction: row;
+  }
+}

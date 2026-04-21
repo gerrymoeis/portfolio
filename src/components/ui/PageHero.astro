@@ -1,0 +1,177 @@
+---
+/**
+ * PageHero - Unified hero section for listing pages
+ * Provides consistent hero styling across blogs and projects pages
+ * 
+ * Props:
+ * - title: Page title to display
+ * - description: Page description text
+ * - class: Additional CSS classes (optional)
+ */
+
+import Panel from './Panel.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  class?: string;
+}
+
+const { title, description, class: className = '' } = Astro.props;
+---
+
+<header class={`page-hero ${className}`}>
+  <Panel variant="elevated" glow={true} class="hero-panel">
+    <h1 class="page-hero__title text-display-2">{title}</h1>
+    <p class="page-hero__description text-body-large">
+      {description}
+    </p>
+  </Panel>
+</header>
+
+<style>
+  .page-hero {
+    max-width: clamp(320px, 90vw, 800px);
+    margin: 0 auto;
+    padding: var(--space-16) var(--space-6) var(--space-8);
+    text-align: center;
+  }
+
+  :global(.hero-panel) {
+    padding: var(--panel-padding-xl);
+    text-align: center;
+  }
+
+  .page-hero__title {
+    margin-bottom: var(--space-4);
+    text-shadow: 0 2px 4px var(--color-shadow-light);
+  }
+
+  .page-hero__description {
+    max-width: clamp(280px, 80vw, 600px);
+    margin: 0 auto;
+    opacity: 0.9;
+  }
+
+  /* Responsive adjustments - Mobile first approach */
+  
+  /* Extra small devices */
+  @media (max-width: var(--breakpoint-xs)) {
+    .page-hero {
+      padding: var(--space-8) var(--space-3) var(--space-6);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--panel-padding-md);
+    }
+
+    .page-hero__title {
+      margin-bottom: var(--space-3);
+    }
+  }
+
+  /* Small devices */
+  @media (min-width: var(--breakpoint-xs)) and (max-width: var(--breakpoint-sm)) {
+    .page-hero {
+      padding: var(--space-12) var(--space-4) var(--space-6);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--panel-padding-lg);
+    }
+  }
+
+  /* Medium devices */
+  @media (min-width: var(--breakpoint-sm)) and (max-width: var(--breakpoint-lg)) {
+    .page-hero {
+      padding: var(--space-12) var(--space-4) var(--space-6);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--panel-padding-lg);
+    }
+  }
+
+  /* Large devices */
+  @media (min-width: var(--breakpoint-lg)) and (max-width: var(--breakpoint-xl)) {
+    .page-hero {
+      padding: var(--space-20) var(--space-8) var(--space-12);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--panel-padding-xl);
+    }
+  }
+
+  /* Extra large devices */
+  @media (min-width: var(--breakpoint-xl)) {
+    .page-hero {
+      padding: var(--space-24) var(--space-8) var(--space-16);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--panel-padding-xl);
+    }
+  }
+
+  /* Ultra-wide screens - prevent over-expansion */
+  @media (min-width: var(--breakpoint-2xl)) {
+    .page-hero {
+      max-width: 900px;
+      padding: var(--space-24) var(--space-12) var(--space-20);
+    }
+  }
+
+  /* Landscape orientation on mobile - reduce vertical padding */
+  @media (max-height: 600px) and (orientation: landscape) and (max-width: var(--breakpoint-lg)) {
+    .page-hero {
+      padding: var(--space-6) var(--space-4) var(--space-4);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--panel-padding-md);
+    }
+
+    .page-hero__title {
+      margin-bottom: var(--space-2);
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .page-hero__title {
+      text-shadow: none;
+    }
+  }
+
+  /* Container queries for adaptive behavior */
+  @container (max-width: 400px) {
+    .page-hero {
+      padding: var(--space-8) var(--space-3) var(--space-6);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--panel-padding-sm);
+    }
+  }
+
+  @container (min-width: 400px) and (max-width: 600px) {
+    .page-hero {
+      padding: var(--space-12) var(--space-4) var(--space-8);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--panel-padding-md);
+    }
+  }
+
+  @container (min-width: 600px) {
+    .page-hero {
+      padding: var(--space-16) var(--space-6) var(--space-12);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--panel-padding-lg);
+    }
+  }
+</style>

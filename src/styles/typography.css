@@ -1,0 +1,293 @@
+/* Typography System */
+/* HD-2D inspired font definitions and text styles with fluid responsive scaling */
+
+:root {
+  /* ============================================
+     HD-2D FONT FAMILIES
+     Serif for headings (fantasy/medieval feel), sans-serif for readability
+     ============================================ */
+  
+  --font-display: 'Crimson Text', 'Georgia', serif;  /* More fantasy-appropriate serif */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', 'Consolas', monospace;
+  
+  /* ============================================
+     FLUID RESPONSIVE FONT SIZES
+     Scales smoothly between mobile and desktop
+     ============================================ */
+  
+  --text-xs: clamp(0.7rem, 0.65rem + 0.2vw, 0.75rem);      /* 11.2px - 12px */
+  --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem);    /* 12.8px - 14px */
+  --text-base: clamp(0.9rem, 0.85rem + 0.3vw, 1rem);       /* 14.4px - 16px */
+  --text-lg: clamp(1rem, 0.95rem + 0.35vw, 1.125rem);      /* 16px - 18px */
+  --text-xl: clamp(1.1rem, 1rem + 0.5vw, 1.25rem);         /* 17.6px - 20px */
+  --text-2xl: clamp(1.3rem, 1.2rem + 0.75vw, 1.5rem);      /* 20.8px - 24px */
+  --text-3xl: clamp(1.6rem, 1.4rem + 1vw, 1.875rem);       /* 25.6px - 30px */
+  --text-4xl: clamp(1.9rem, 1.7rem + 1.25vw, 2.25rem);     /* 30.4px - 36px */
+  --text-5xl: clamp(2.4rem, 2.1rem + 1.5vw, 3rem);         /* 38.4px - 48px */
+  --text-6xl: clamp(2.8rem, 2.4rem + 2vw, 3.75rem);        /* 44.8px - 60px */
+  
+  /* ============================================
+     RESPONSIVE LINE HEIGHTS
+     Optimized for atmospheric readability across devices
+     ============================================ */
+  
+  --leading-tight: clamp(1.1, 1.1 + 0.1vw, 1.2);
+  --leading-normal: clamp(1.4, 1.4 + 0.1vw, 1.5);
+  --leading-relaxed: clamp(1.6, 1.6 + 0.15vw, 1.75);
+  
+  /* ============================================
+     HD-2D FONT WEIGHTS
+     ============================================ */
+  
+  --weight-light: 300;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 900;
+}
+
+/* ============================================
+   HD-2D TEXT STYLES
+   Atmospheric and cinematic typography with responsive scaling
+   ============================================ */
+
+/* Display text styles - For hero sections and major headings */
+.text-display-1 {
+  font-family: var(--font-display);
+  font-size: var(--text-6xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  color: var(--color-text-primary);
+  text-shadow: 0 2px 4px var(--color-shadow-light);
+  letter-spacing: clamp(-0.03em, -0.02em + -0.01vw, -0.02em);
+}
+
+.text-display-2 {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  color: var(--color-text-primary);
+  text-shadow: 0 1px 3px var(--color-shadow-light);
+  letter-spacing: clamp(-0.02em, -0.015em + -0.005vw, -0.01em);
+}
+
+.text-display-3 {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  color: var(--color-text-primary);
+  text-shadow: 0 1px 2px var(--color-shadow-light);
+}
+
+/* Heading styles - For section headings */
+.text-heading-1 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  color: var(--color-text-primary);
+  text-shadow: 0 1px 2px var(--color-shadow-light);
+}
+
+.text-heading-2 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+}
+
+.text-heading-3 {
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+}
+
+/* Body text styles - For content and descriptions */
+.text-body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+}
+
+.text-body-large {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+}
+
+.text-body-small {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* Accent text styles - For highlights and special content */
+.text-accent {
+  color: var(--color-accent-primary);
+  text-shadow: 0 0 8px rgba(246, 224, 94, 0.3);
+}
+
+.text-accent-secondary {
+  color: var(--color-accent-secondary);
+  text-shadow: 0 0 6px rgba(237, 137, 54, 0.3);
+}
+
+/* Monospace text */
+.text-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-normal);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-dark);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+/* Link styles with HD-2D glow effects */
+.text-link {
+  color: var(--color-accent-primary);
+  text-decoration: none;
+  transition: 
+    color var(--duration-fast) var(--ease-out),
+    text-shadow var(--duration-fast) var(--ease-out);
+  position: relative;
+}
+
+.text-link:hover {
+  color: var(--color-accent-secondary);
+  text-shadow: 0 0 8px rgba(246, 224, 94, 0.4);
+}
+
+.text-link:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Atmospheric text effects */
+.text-atmospheric {
+  background: linear-gradient(
+    135deg,
+    var(--color-text-primary) 0%,
+    var(--color-accent-primary) 50%,
+    var(--color-text-primary) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: atmosphericShimmer 3s ease-in-out infinite;
+}
+
+@keyframes atmosphericShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY UTILITIES
+   Mobile-first responsive text classes
+   ============================================ */
+
+/* Responsive text sizing utilities */
+.text-responsive-sm {
+  font-size: var(--text-sm);
+}
+
+.text-responsive-base {
+  font-size: var(--text-base);
+}
+
+.text-responsive-lg {
+  font-size: var(--text-lg);
+}
+
+.text-responsive-xl {
+  font-size: var(--text-xl);
+}
+
+.text-responsive-2xl {
+  font-size: var(--text-2xl);
+}
+
+.text-responsive-3xl {
+  font-size: var(--text-3xl);
+}
+
+/* Responsive line height utilities */
+.leading-responsive-tight {
+  line-height: var(--leading-tight);
+}
+
+.leading-responsive-normal {
+  line-height: var(--leading-normal);
+}
+
+.leading-responsive-relaxed {
+  line-height: var(--leading-relaxed);
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY OVERRIDES
+   Device-specific adjustments
+   ============================================ */
+
+/* Extra small devices - optimize for readability */
+@media (max-width: var(--breakpoint-xs)) {
+  .text-display-1,
+  .text-display-2,
+  .text-display-3 {
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  
+  .text-body,
+  .text-body-large,
+  .text-body-small {
+    line-height: 1.6;
+  }
+}
+
+/* Large screens - enhance visual hierarchy */
+@media (min-width: var(--breakpoint-2xl)) {
+  .text-display-1 {
+    letter-spacing: -0.03em;
+  }
+  
+  .text-display-2 {
+    letter-spacing: -0.02em;
+  }
+  
+  .text-heading-1,
+  .text-heading-2 {
+    letter-spacing: -0.01em;
+  }
+}
+
+/* High DPI displays - adjust text rendering */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .text-display-1,
+  .text-display-2,
+  .text-display-3 {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

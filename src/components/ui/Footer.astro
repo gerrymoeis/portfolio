@@ -1,0 +1,302 @@
+---
+/**
+ * Footer - Site footer component
+ * HD-2D styled footer for all pages except home
+ * Contains copyright, social links, and navigation with active states
+ * 
+ * Props:
+ * - currentPath: Current page path for active state detection (optional)
+ */
+
+import Icon from './Icon.astro';
+
+interface Props {
+  currentPath?: string;
+}
+
+interface SocialLink {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+const { currentPath } = Astro.props;
+
+const socialLinks: SocialLink[] = [
+  { name: "GitHub", url: "https://github.com/yourusername", icon: "github" },
+  { name: "Twitter", url: "https://twitter.com/yourusername", icon: "twitter" },
+  { name: "LinkedIn", url: "https://linkedin.com/in/yourusername", icon: "linkedin" },
+];
+
+const navLinks = [
+  { label: 'Home', href: '/', target: undefined },
+  { label: 'Projects', href: '/projects', target: '_blank' },
+  { label: 'Blogs', href: '/blogs', target: '_blank' },
+];
+
+const currentYear = new Date().getFullYear();
+
+// Get current path for active state (fallback to Astro.url.pathname if not provided)
+const activePath = currentPath || Astro.url.pathname;
+---
+
+<footer class="footer depth-mid" role="contentinfo">
+  <div class="footer__container">
+    <div class="footer__content">
+      <!-- Navigation Links -->
+      <nav class="footer__nav" aria-label="Footer navigation">
+        <ul class="footer__nav-list">
+          {navLinks.map((link) => {
+            const isActive = activePath === link.href || 
+                            (link.href !== '/' && activePath.startsWith(link.href));
+            
+            return (
+              <li class="footer__nav-item">
+                <a 
+                  href={link.href} 
+                  class:list={['footer__nav-link', { 'footer__nav-link--active': isActive }]}
+                  aria-current={isActive ? 'page' : undefined}
+                  target={link.target}
+                  rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                >
+                  {link.label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      <!-- Social Links -->
+      <div class="footer__social">
+        <ul class="footer__social-list">
+          {socialLinks.map((link) => (
+            <li class="footer__social-item">
+              <a 
+                href={link.url} 
+                class="footer__social-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit ${link.name} (opens in new tab)`}
+              >
+                <Icon name={link.icon} class="footer__social-icon" />
+                <span class="footer__social-name">{link.name}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer__copyright">
+        <p class="footer__copyright-text">
+          © {currentYear} HD-2D Portfolio. Built with care and attention to detail.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-surface-elevated);
+    border-top: var(--panel-border-width) var(--panel-border-style) var(--color-accent-primary);
+    box-shadow: 
+      var(--panel-shadow-elevated),
+      var(--atmospheric-glow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Atmospheric overlay - similar to navigation but with footer characteristics */
+  .footer::before {
+    content: '';
+    position: absolute;
+    inset: var(--space-2);
+    border: 1px solid var(--color-border-accent);
+    border-radius: 0; /* Removed border radius */
+    pointer-events: none;
+  }
+
+  .footer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 30% 30%, var(--color-particle-warm) 0%, transparent 60%),
+      radial-gradient(circle at 70% 70%, var(--color-particle-cool) 0%, transparent 60%);
+    pointer-events: none;
+    border-radius: 0; /* Removed border radius */
+  }
+
+  .footer__container {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-6) var(--space-8);
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    text-align: center;
+  }
+
+  /* Navigation */
+  .footer__nav-list {
+    display: flex;
+    gap: var(--space-6);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .footer__nav-item {
+    margin: 0;
+  }
+
+  .footer__nav-link {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: 
+      color var(--duration-medium) var(--ease-out),
+      background-color var(--duration-medium) var(--ease-out);
+  }
+
+  .footer__nav-link:hover {
+    color: var(--color-contrast-high);
+    background-color: var(--color-nav-hover-bg);
+  }
+
+  .footer__nav-link:focus-visible {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .footer__nav-link--active {
+    color: var(--color-contrast-high);
+    background-color: var(--color-nav-active-bg);
+    font-weight: var(--weight-semibold);
+    box-shadow: var(--subtle-glow);
+  }
+
+  .footer__nav-link--active::after {
+    content: '';
+    position: absolute;
+    bottom: calc(-1 * var(--space-1));
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--nav-indicator-width);
+    height: var(--nav-indicator-height);
+    background-color: var(--color-nav-active-indicator);
+    border-radius: var(--radius-xs);
+    box-shadow: 0 0 var(--space-1) var(--color-nav-active-indicator);
+  }
+
+  /* Social Links */
+  .footer__social-list {
+    display: flex;
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .footer__social-item {
+    margin: 0;
+  }
+
+  .footer__social-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    transition: 
+      color var(--duration-medium) var(--ease-out),
+      background-color var(--duration-medium) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .footer__social-link:hover {
+    color: var(--color-contrast-high);
+    background-color: var(--color-social-hover-bg);
+    transform: var(--transform-hover-lift);
+  }
+
+  .footer__social-link:focus-visible {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .footer__social-icon {
+    font-size: var(--text-lg);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  /* Copyright */
+  .footer__copyright-text {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: var(--breakpoint-lg)) {
+    .footer__container {
+      padding: var(--space-8) var(--space-4) var(--space-6);
+    }
+
+    .footer__content {
+      gap: var(--space-6);
+    }
+
+    .footer__nav-list {
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .footer__social-list {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .footer__social-link {
+      flex-direction: column;
+      text-align: center;
+      padding: var(--space-2);
+    }
+
+    .footer__social-name {
+      font-size: var(--text-xs);
+    }
+  }
+
+  @media (max-width: var(--breakpoint-sm)) {
+    .footer__nav-list {
+      gap: var(--space-2);
+    }
+
+    .footer__nav-link {
+      font-size: var(--text-sm);
+      padding: var(--space-1) var(--space-2);
+    }
+  }
+</style>

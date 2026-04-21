@@ -1,0 +1,56 @@
+---
+/**
+ * Icon - FontAwesome icon component
+ * Centralized icon component that uses the icon configuration
+ * 
+ * Props:
+ * - name: Icon name from the icon configuration (required)
+ * - class: Additional CSS classes (optional)
+ * - size: Icon size ('sm' | 'md' | 'lg' | 'xl') (optional)
+ * - label: Custom aria-label (optional, uses config label by default)
+ */
+
+import { getIcon } from '../../config/icons';
+
+interface Props {
+  name: string;
+  class?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  label?: string;
+}
+
+const { 
+  name, 
+  class: className = '', 
+  size = 'md',
+  label 
+} = Astro.props;
+
+const iconConfig = getIcon(name);
+
+if (!iconConfig && import.meta.env.DEV) {
+  console.warn(`Icon "${name}" not found in icon configuration`);
+}
+
+const iconClass = iconConfig ? iconConfig.faClass : 'fas fa-question';
+const iconLabel = label || (iconConfig ? iconConfig.label : name);
+
+const sizeClasses = {
+  sm: 'fa-sm',
+  md: '',
+  lg: 'fa-lg',
+  xl: 'fa-2x'
+};
+
+const classes = [
+  iconClass,
+  sizeClasses[size],
+  className
+].filter(Boolean).join(' ');
+---
+
+<i 
+  class={classes}
+  aria-label={iconLabel}
+  role="img"
+></i>
