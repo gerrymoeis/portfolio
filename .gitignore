@@ -17,10 +17,7 @@ pnpm-debug.log*
 .env
 .env.production
 
-# macOS-specific files
-.DS_Store
-
-# jetbrains setting folder
+# macOS-specifi# jetbrains setting# jetbrains setting folder
 .idea/
 
 # Kiro AI assistant
@@ -33,4 +30,7 @@ pnpm-debug.log*
 docs
 
 # Wrangler build artifacts
+.wrangler/s
+.wrangler/act
 .wrangler/
+
