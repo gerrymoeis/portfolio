@@ -1,9 +1,18 @@
 /* Design System Tokens */
 /* HD-2D Portfolio - True Octopath Traveler Aesthetic */
+/* Bilingual Portfolio with Light/Dark Theme Support */
 
 :root {
   /* ============================================
-     HD-2D COLOR PALETTE
+     THEME SYSTEM
+     Default: Dark theme (HD-2D aesthetic)
+     ============================================ */
+  
+  /* Theme toggle transition */
+  --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  
+  /* ============================================
+     HD-2D COLOR PALETTE - DARK THEME (DEFAULT)
      Inspired by Octopath Traveler's warm, atmospheric tones
      ============================================ */
   
@@ -422,5 +431,149 @@
 @media (min-width: var(--breakpoint-md)) {
   .flex-col-mobile {
     flex-direction: row;
+  }
+}
+
+/* ============================================
+   LIGHT THEME
+   Clean, bright alternative with maintained HD-2D aesthetic
+   ============================================ */
+
+[data-theme="light"] {
+  /* Background - Clean and bright */
+  --color-bg-deep: #f7fafc;           /* Soft white */
+  --color-bg-dark: #edf2f7;           /* Light gray */
+  --color-bg-mid: #e2e8f0;            /* Mid gray */
+  --color-bg-light: #cbd5e0;          /* Darker gray */
+  --color-bg-accent: #d4d9c8;         /* Warm accent background */
+  
+  /* Surface colors - UI panels and frames */
+  --color-surface-dark: #ffffff;      /* Pure white panel */
+  --color-surface-base: #f7fafc;      /* Soft white panel */
+  --color-surface-elevated: #edf2f7;  /* Elevated panel */
+  --color-surface-light: #e2e8f0;     /* Light panel */
+  
+  /* Text colors - High contrast for readability */
+  --color-text-primary: #1a202c;      /* Primary text - dark */
+  --color-text-secondary: #2d3748;    /* Secondary text - medium dark */
+  --color-text-tertiary: #4a5568;     /* Tertiary text - gray */
+  --color-text-accent: #d69e2e;       /* Accent text - golden */
+  --color-text-muted: #718096;        /* Muted text - light gray */
+  
+  /* Accent colors - Golden/amber theme (maintained) */
+  --color-accent-primary: #d69e2e;    /* Primary accent - deeper gold */
+  --color-accent-secondary: #dd6b20;  /* Secondary accent - orange */
+  --color-accent-tertiary: #b7791f;   /* Tertiary accent - dark gold */
+  
+  /* Border and frame colors */
+  --color-border-light: rgba(26, 32, 44, 0.1);    /* Light border */
+  --color-border-medium: rgba(26, 32, 44, 0.2);   /* Medium border */
+  --color-border-strong: rgba(26, 32, 44, 0.3);   /* Strong border */
+  --color-border-accent: rgba(214, 158, 46, 0.4); /* Accent border */
+  
+  /* Shadow colors for depth */
+  --color-shadow-light: rgba(0, 0, 0, 0.05);
+  --color-shadow-medium: rgba(0, 0, 0, 0.1);
+  --color-shadow-strong: rgba(0, 0, 0, 0.15);
+  --color-shadow-accent: rgba(214, 158, 46, 0.2);
+  
+  /* Particle and effect colors */
+  --color-particle-warm: rgba(214, 158, 46, 0.5);
+  --color-particle-cool: rgba(139, 149, 109, 0.3);
+  --color-particle-neutral: rgba(26, 32, 44, 0.2);
+  
+  /* Hover and interactive states */
+  --color-social-hover-bg: rgba(214, 158, 46, 0.1);
+  --color-social-hover-bg-subtle: rgba(214, 158, 46, 0.05);
+  --color-social-hover-bg-home: rgba(0, 0, 0, 0.03);
+  
+  --color-nav-hover-bg: rgba(214, 158, 46, 0.08);
+  --color-nav-active-bg: rgba(214, 158, 46, 0.12);
+  
+  /* Panel shadows for light theme */
+  --panel-shadow-base: 
+    0 2px 8px var(--color-shadow-light),
+    0 1px 2px var(--color-shadow-medium),
+    inset 0 1px 0 rgba(214, 158, 46, 0.05);
+    
+  --panel-shadow-elevated: 
+    0 4px 16px var(--color-shadow-medium),
+    0 2px 4px var(--color-shadow-light),
+    inset 0 1px 0 rgba(214, 158, 46, 0.08);
+  
+  /* Atmospheric glow effects (subtle in light theme) */
+  --atmospheric-glow: 
+    0 0 15px rgba(214, 158, 46, 0.15),
+    0 0 30px rgba(214, 158, 46, 0.05);
+    
+  --subtle-glow: 
+    0 0 8px rgba(214, 158, 46, 0.1);
+}
+
+/* ============================================
+   THEME TRANSITION SUPPORT
+   Smooth transitions when switching themes
+   ============================================ */
+
+body {
+  transition: var(--theme-transition);
+}
+
+/* Apply transitions to all themed elements */
+* {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+/* Disable transitions for elements that shouldn't animate */
+*:where(
+  img, 
+  video, 
+  canvas, 
+  svg, 
+  [data-no-transition]
+) {
+  transition: none !important;
+}
+
+/* ============================================
+   SYSTEM PREFERENCE DETECTION
+   Respect user's OS theme preference
+   ============================================ */
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    /* Apply light theme if no theme is set and user prefers light */
+    --color-bg-deep: #f7fafc;
+    --color-bg-dark: #edf2f7;
+    --color-bg-mid: #e2e8f0;
+    --color-bg-light: #cbd5e0;
+    --color-bg-accent: #d4d9c8;
+    
+    --color-surface-dark: #ffffff;
+    --color-surface-base: #f7fafc;
+    --color-surface-elevated: #edf2f7;
+    --color-surface-light: #e2e8f0;
+    
+    --color-text-primary: #1a202c;
+    --color-text-secondary: #2d3748;
+    --color-text-tertiary: #4a5568;
+    --color-text-accent: #d69e2e;
+    --color-text-muted: #718096;
+    
+    --color-accent-primary: #d69e2e;
+    --color-accent-secondary: #dd6b20;
+    --color-accent-tertiary: #b7791f;
+    
+    --color-border-light: rgba(26, 32, 44, 0.1);
+    --color-border-medium: rgba(26, 32, 44, 0.2);
+    --color-border-strong: rgba(26, 32, 44, 0.3);
+    --color-border-accent: rgba(214, 158, 46, 0.4);
+    
+    --color-shadow-light: rgba(0, 0, 0, 0.05);
+    --color-shadow-medium: rgba(0, 0, 0, 0.1);
+    --color-shadow-strong: rgba(0, 0, 0, 0.15);
+    --color-shadow-accent: rgba(214, 158, 46, 0.2);
   }
 }

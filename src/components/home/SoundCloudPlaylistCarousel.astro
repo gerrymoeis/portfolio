@@ -1,0 +1,317 @@
+---
+/**
+ * SoundCloudPlaylistCarousel - Carousel for SoundCloud playlist embeds
+ * Simple implementation with navigation controls
+ */
+
+import NavigationControls from './NavigationControls.astro';
+import PaginationIndicator from './PaginationIndicator.astro';
+
+export interface SoundCloudPlaylist {
+  id: string;
+  title: string;
+  embedUrl: string;
+  artist: string;
+}
+
+export interface Props {
+  /** SoundCloud playlists to display */
+  playlists?: SoundCloudPlaylist[];
+  /** Show navigation controls */
+  showControls?: boolean;
+  /** Additional CSS class names */
+  className?: string;
+}
+
+const { 
+  playlists = [],
+  showControls = true,
+  className = ''
+} = Astro.props;
+
+// Determine if we should show carousel controls
+const isMultiplePlaylist = playlists.length > 1;
+const shouldShowControls = isMultiplePlaylist && showControls;
+
+// Generate unique IDs for accessibility
+const carouselId = `soundcloud-carousel-${Math.random().toString(36).substring(2, 9)}`;
+const liveRegionId = `${carouselId}-live-region`;
+
+// If no playlists, don't render anything
+if (playlists.length === 0 && import.meta.env.DEV) {
+  console.error('No SoundCloud playlists provided. Carousel will not render.');
+}
+---
+
+{playlists.length > 0 && (
+  <div 
+    class={`soundcloud-playlist-carousel ${className}`}
+    role="region"
+    aria-label="SoundCloud playlist carousel"
+    aria-describedby={liveRegionId}
+    data-carousel-id={carouselId}
+    data-total-playlists={playlists.length}
+    data-show-controls={shouldShowControls}
+    data-playlists={JSON.stringify(playlists)}
+  >
+    <!-- Accessibility: Live region for screen reader announcements -->
+    <div 
+      id={liveRegionId}
+      class="carousel-live-region"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      Showing playlist 1 of {playlists.length}: {playlists[0]?.title}
+    </div>
+
+    <!-- Carousel container -->
+    <div class="carousel-embed-container">
+      {playlists.map((playlist, index) => (
+        <div 
+          class={`carousel-embed ${index === 0 ? 'active' : ''}`}
+          data-index={index}
+          style={index === 0 ? '' : 'display: none;'}
+        >
+          <iframe 
+            width="100%" 
+            height="450" 
+            scrolling="no" 
+            frameborder="no" 
+            allow="autoplay" 
+            src={playlist.embedUrl}
+            title={playlist.title}
+            loading={index === 0 ? 'eager' : 'lazy'}
+          ></iframe>
+        </div>
+      ))}
+    </div>
+
+    <!-- Navigation controls (only shown for multiple playlists) -->
+    {shouldShowControls && (
+      <NavigationControls 
+        currentIndex={0}
+        totalPlaylists={playlists.length}
+        showControls={shouldShowControls}
+        labels={{
+          previous: "Previous playlist",
+          next: "Next playlist"
+        }}
+      />
+    )}
+
+    <!-- Pagination indicators (only shown for multiple playlists) -->
+    {shouldShowControls && (
+      <PaginationIndicator 
+        playlists={playlists}
+        currentIndex={0}
+        clickable={true}
+        className="carousel-pagination-component"
+        ariaLabel="Playlist navigation indicators"
+      />
+    )}
+  </div>
+)}
+
+<style>
+  .soundcloud-playlist-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    isolation: isolate;
+  }
+
+  /* Accessibility: Hide live region visually but keep it available to screen readers */
+  .carousel-live-region {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Embed container */
+  .carousel-embed-container {
+    width: 100%;
+    height: 450px;
+    position: relative;
+  }
+
+  .carousel-embed {
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease;
+  }
+
+  .carousel-embed.active {
+    display: block !important;
+  }
+
+  /* SoundCloud iframe styling */
+  .carousel-embed iframe {
+    border: none;
+    border-radius: 8px;
+  }
+
+  /* Pagination indicators styling */
+  .carousel-pagination-component {
+    margin-top: 2px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .carousel-embed-container {
+      height: 400px;
+    }
+    
+    .carousel-embed iframe {
+      height: 400px;
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-embed {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // SoundCloud carousel navigation
+  class SoundCloudPlaylistCarousel {
+    private container: HTMLElement;
+    private liveRegion: HTMLElement;
+    private currentIndex: number = 0;
+    private totalPlaylists: number;
+    private playlists: any[];
+    private embeds: NodeListOf<HTMLElement>;
+    
+    constructor(container: HTMLElement) {
+      this.container = container;
+      this.liveRegion = container.querySelector('.carousel-live-region') as HTMLElement;
+      this.totalPlaylists = parseInt(container.dataset.totalPlaylists || '0', 10);
+      this.playlists = JSON.parse(container.dataset.playlists || '[]');
+      this.embeds = container.querySelectorAll('.carousel-embed');
+      
+      this.init();
+    }
+    
+    private init() {
+      if (this.totalPlaylists <= 1) return;
+      
+      this.setupEventListeners();
+      this.updateAccessibility();
+    }
+    
+    private setupEventListeners() {
+      // Listen for navigation events from NavigationControls component
+      this.container.addEventListener('carousel:navigate', this.handleNavigationEvent.bind(this) as EventListener);
+      
+      // Listen for pagination events from PaginationIndicator component
+      this.container.addEventListener('pagination:navigate', this.handlePaginationEvent.bind(this) as EventListener);
+      
+      // Keyboard navigation for the carousel container
+      this.container.addEventListener('keydown', this.handleKeyboard.bind(this));
+    }
+    
+    private handleNavigationEvent(event: Event) {
+      const customEvent = event as CustomEvent;
+      const { direction } = customEvent.detail;
+      
+      if (direction === 'next' && this.currentIndex < this.totalPlaylists - 1) {
+        this.navigateToIndex(this.currentIndex + 1);
+      } else if (direction === 'previous' && this.currentIndex > 0) {
+        this.navigateToIndex(this.currentIndex - 1);
+      }
+    }
+    
+    private handlePaginationEvent(event: Event) {
+      const customEvent = event as CustomEvent;
+      const { index } = customEvent.detail;
+      
+      this.navigateToIndex(index);
+    }
+    
+    private handleKeyboard(event: KeyboardEvent) {
+      if (event.target !== this.container && !this.container.contains(event.target as Node)) {
+        return;
+      }
+      
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          if (this.currentIndex > 0) {
+            this.navigateToIndex(this.currentIndex - 1);
+          }
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          if (this.currentIndex < this.totalPlaylists - 1) {
+            this.navigateToIndex(this.currentIndex + 1);
+          }
+          break;
+      }
+    }
+    
+    private navigateToIndex(index: number) {
+      if (index === this.currentIndex || index < 0 || index >= this.totalPlaylists) {
+        return;
+      }
+      
+      // Hide current embed
+      this.embeds[this.currentIndex]?.classList.remove('active');
+      this.embeds[this.currentIndex]?.setAttribute('style', 'display: none;');
+      
+      // Show new embed
+      this.currentIndex = index;
+      this.embeds[this.currentIndex]?.classList.add('active');
+      this.embeds[this.currentIndex]?.setAttribute('style', '');
+      
+      // Update UI
+      this.updateNavigationState();
+      this.updatePaginationState();
+      this.updateAccessibility();
+    }
+    
+    private updateNavigationState() {
+      // Update NavigationControls component state
+      const navigationControls = this.container.querySelector('.navigation-controls');
+      if (navigationControls && (window as any).NavigationControlsHandler) {
+        const handler = (navigationControls as any).navigationHandler;
+        if (handler && handler.updateButtonStates) {
+          handler.updateButtonStates(this.currentIndex, this.totalPlaylists);
+        }
+      }
+    }
+    
+    private updatePaginationState() {
+      // Update PaginationIndicator component state
+      const paginationIndicator = this.container.querySelector('[data-pagination-indicator]');
+      if (paginationIndicator && (paginationIndicator as any).paginationHandler) {
+        const handler = (paginationIndicator as any).paginationHandler;
+        handler.updateState(this.currentIndex);
+      }
+    }
+    
+    private updateAccessibility() {
+      if (this.liveRegion) {
+        const currentPlaylist = this.playlists[this.currentIndex];
+        const playlistTitle = currentPlaylist?.title || `Playlist ${this.currentIndex + 1}`;
+        
+        this.liveRegion.textContent = `Showing playlist ${this.currentIndex + 1} of ${this.totalPlaylists}: ${playlistTitle}`;
+      }
+    }
+  }
+  
+  // Initialize carousels when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const carousels = document.querySelectorAll('.soundcloud-playlist-carousel');
+    carousels.forEach(carousel => {
+      new SoundCloudPlaylistCarousel(carousel as HTMLElement);
+    });
+  });
+</script>

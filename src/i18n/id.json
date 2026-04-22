@@ -1,0 +1,33 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "projects": "Proyek",
+    "blogs": "Blog",
+    "experiences": "Pengalaman",
+    "cv": "CV"
+  },
+  "theme": {
+    "toggle": "Ganti tema",
+    "switchToLight": "Ganti ke tema terang",
+    "switchToDark": "Ganti ke tema gelap"
+  },
+  "language": {
+    "toggle": "Ganti bahasa",
+    "switchToEnglish": "Ganti ke Bahasa Inggris",
+    "switchToIndonesian": "Ganti ke Bahasa Indonesia",
+    "current": "Bahasa Indonesia"
+  },
+  "hero": {
+    "subtitle": "Pengembang Web & Peneliti Teknologi",
+    "description": "Membangun pengalaman web yang indah dan inovatif dengan fokus pada performa dan aksesibilitas"
+  },
+  "common": {
+    "readMore": "Baca selengkapnya",
+    "viewProject": "Lihat proyek",
+    "download": "Unduh",
+    "close": "Tutup",
+    "next": "Selanjutnya",
+    "previous": "Sebelumnya",
+    "skipToContent": "Langsung ke konten utama"
+  }
+}

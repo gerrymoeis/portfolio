@@ -1,0 +1,132 @@
+---
+/**
+ * Theme Toggle Component
+ * Button to switch between light and dark themes
+ * Uses FontAwesome icons for sun and moon
+ */
+---
+
+<button
+  id="theme-toggle"
+  class="theme-toggle"
+  aria-label="Toggle theme"
+  title="Toggle theme"
+  type="button"
+>
+  <i class="theme-icon sun-icon fa-solid fa-sun" aria-hidden="true"></i>
+  <i class="theme-icon moon-icon fa-solid fa-moon" aria-hidden="true"></i>
+</button>
+
+<style>
+  .theme-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: var(--color-surface-base);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--color-text-primary);
+  }
+  
+  .theme-toggle:hover {
+    background: var(--color-surface-elevated);
+    border-color: var(--color-border-accent);
+    transform: translateY(-1px);
+  }
+  
+  .theme-toggle:active {
+    transform: translateY(0);
+  }
+  
+  .theme-toggle:focus-visible {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+  
+  .theme-icon {
+    position: absolute;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: scale(0);
+  }
+  
+  /* Dark theme: show sun icon (to switch to light) */
+  :global([data-theme="dark"]) .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  
+  :global([data-theme="dark"]) .moon-icon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0);
+  }
+  
+  /* Light theme: show moon icon (to switch to dark) */
+  :global([data-theme="light"]) .sun-icon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0);
+  }
+  
+  :global([data-theme="light"]) .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  
+  /* Accessibility: Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .theme-toggle,
+    .theme-icon {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { toggleTheme, getCurrentTheme } from '../../scripts/theme';
+  
+  // Initialize theme toggle button
+  function initThemeToggle() {
+    const button = document.getElementById('theme-toggle');
+    if (!button) return;
+    
+    // Update button aria-label based on current theme
+    function updateAriaLabel() {
+      if (!button) return; // Additional null check for TypeScript
+      const theme = getCurrentTheme();
+      const label = theme === 'dark' 
+        ? 'Switch to light theme' 
+        : 'Switch to dark theme';
+      button.setAttribute('aria-label', label);
+      button.setAttribute('title', label);
+    }
+    
+    // Initial update
+    updateAriaLabel();
+    
+    // Handle click
+    button.addEventListener('click', () => {
+      toggleTheme();
+      updateAriaLabel();
+    });
+    
+    // Listen for theme changes from other sources
+    window.addEventListener('themechange', updateAriaLabel);
+  }
+  
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeToggle);
+  } else {
+    initThemeToggle();
+  }
+  
+  // Re-initialize on page navigation (for SPA-like behavior)
+  document.addEventListener('astro:page-load', initThemeToggle);
+</script>

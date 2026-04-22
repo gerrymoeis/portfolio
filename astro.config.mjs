@@ -4,38 +4,25 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // Site URL for sitemap generation and canonical URLs
-  // Update this to your actual domain in production
-  site: 'https://octoporto.pages.dev',
+  site: 'https://gerrymoeis.pages.dev',
+  output: 'static',
   
-  output: 'static', // SSG mode - generate static HTML files at build time
-  
-  // Integrations
   integrations: [
     sitemap({
-      // Customize sitemap generation
-      filter: (page) => !page.includes('/api/'), // Exclude API routes if any
+      filter: (page) => !page.includes('/api/'),
       changefreq: 'weekly',
       priority: 0.7,
       lastmod: new Date(),
     }),
   ],
   
-  // Image optimization configuration
   image: {
-    // Enable image optimization for all formats
-    // Astro will automatically generate optimized versions
     domains: [],
     remotePatterns: [],
   },
   
   build: {
-    // Inline small stylesheets automatically for better performance
     inlineStylesheets: 'auto',
-    
-    // Enable code splitting for better caching and smaller initial bundles
-    // Each page will only load the JavaScript it needs
-    split: true,
   },
   
   vite: {
@@ -43,22 +30,14 @@ export default defineConfig({
       globals: true,
       environment: 'node',
     },
-    
     build: {
-      // Enable minification for production builds
       minify: 'esbuild',
-      
-      // Configure chunk splitting for optimal caching
       rollupOptions: {
         output: {
-          // Manual chunk splitting for better code organization
           manualChunks: (id) => {
-            // Vendor chunks for node_modules
             if (id.includes('node_modules')) {
               return 'vendor';
             }
-            
-            // Separate chunks for client scripts
             if (id.includes('/scripts/mouseBackground')) {
               return 'mouse-background';
             }
@@ -69,15 +48,11 @@ export default defineConfig({
               return 'view-counter';
             }
           },
-          
-          // Optimize chunk file names for better caching
           chunkFileNames: 'chunks/[name].[hash].js',
           entryFileNames: 'entry/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash][extname]',
         },
       },
-      
-      // Set chunk size warning limit (in KB)
       chunkSizeWarningLimit: 500,
     },
   },

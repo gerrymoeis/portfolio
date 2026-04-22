@@ -1,0 +1,103 @@
+---
+/**
+ * Language Toggle Component
+ * Button to switch between Indonesian and English (client-side, no page reload)
+ */
+---
+
+<button
+  id="language-toggle"
+  class="language-toggle"
+  aria-label="Toggle language"
+  title="Toggle language"
+  type="button"
+>
+  <span class="language-toggle__text" id="language-text">EN</span>
+</button>
+
+<style>
+  .language-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: var(--color-surface-base);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--color-text-primary);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-sm);
+  }
+  
+  .language-toggle:hover {
+    background: var(--color-surface-elevated);
+    border-color: var(--color-border-accent);
+    transform: translateY(-1px);
+    color: var(--color-accent-primary);
+  }
+  
+  .language-toggle:active {
+    transform: translateY(0);
+  }
+  
+  .language-toggle:focus-visible {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+  
+  .language-toggle__text {
+    font-family: var(--font-body);
+    letter-spacing: 0.5px;
+  }
+  
+  /* Accessibility: Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .language-toggle {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { toggleLanguage, getCurrentLanguage } from '../../scripts/language';
+  
+  function initLanguageToggle() {
+    const button = document.getElementById('language-toggle');
+    const text = document.getElementById('language-text');
+    if (!button || !text) return;
+    
+    // Update button text based on current language
+    function updateButtonText() {
+      const lang = getCurrentLanguage();
+      text.textContent = lang === 'en' ? 'ID' : 'EN';
+      button.setAttribute('aria-label', lang === 'en' ? 'Switch to Indonesian' : 'Ganti ke Bahasa Inggris');
+      button.setAttribute('title', lang === 'en' ? 'Switch to Indonesian' : 'Ganti ke Bahasa Inggris');
+    }
+    
+    // Initial update
+    updateButtonText();
+    
+    // Handle click
+    button.addEventListener('click', () => {
+      toggleLanguage();
+      updateButtonText();
+    });
+    
+    // Listen for language changes from other sources
+    window.addEventListener('languagechange', updateButtonText);
+  }
+  
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLanguageToggle);
+  } else {
+    initLanguageToggle();
+  }
+  
+  // Re-initialize on page navigation
+  document.addEventListener('astro:page-load', initLanguageToggle);
+</script>

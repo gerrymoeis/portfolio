@@ -2,11 +2,15 @@
 /**
  * SemiCylindricalNav - Semi-cylindrical/half-arc navigation bar
  * Centered horizontally at the top of the home page
- * Contains Home, Projects, Blogs links with no dropdowns
+ * Contains Home, Projects, Blogs links with bilingual support
  */
 
+import ThemeToggle from './ThemeToggle.astro';
+import LanguageToggle from './LanguageToggle.astro';
+import type { BilingualText } from '../../config/home';
+
 interface NavigationLink {
-  label: string;
+  label: BilingualText;
   href: string;
   target?: string;
 }
@@ -27,15 +31,23 @@ const { links, currentPath = '/' } = Astro.props;
           <a 
             href={link.href} 
             class={`semi-cylindrical-nav__link ${currentPath === link.href ? 'semi-cylindrical-nav__link--active' : ''}`}
-            aria-label={`Navigate to ${link.label}`}
+            aria-label={`Navigate to ${link.label.en}`}
             aria-current={currentPath === link.href ? 'page' : undefined}
             target={link.target}
             rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+            data-bilingual="nav"
           >
-            {link.label}
+            <span data-lang="en">{link.label.en}</span>
+            <span data-lang="id">{link.label.id}</span>
           </a>
         </li>
       ))}
+      <li class="semi-cylindrical-nav__item semi-cylindrical-nav__item--controls">
+        <div class="semi-cylindrical-nav__controls">
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
+      </li>
     </ul>
   </div>
 </nav>
@@ -102,6 +114,16 @@ const { links, currentPath = '/' } = Astro.props;
   .semi-cylindrical-nav__item {
     margin: 0;
   }
+  
+  .semi-cylindrical-nav__item--controls {
+    margin-left: var(--space-2);
+  }
+  
+  .semi-cylindrical-nav__controls {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+  }
 
   .semi-cylindrical-nav__link {
     display: block;
@@ -119,6 +141,17 @@ const { links, currentPath = '/' } = Astro.props;
       box-shadow var(--duration-medium) var(--ease-out);
     position: relative;
     white-space: nowrap;
+  }
+  
+  /* Hide inactive language */
+  .semi-cylindrical-nav__link span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .semi-cylindrical-nav__link span[data-lang="en"],
+  :global(html[lang="id"]) .semi-cylindrical-nav__link span[data-lang="id"] {
+    display: inline;
   }
 
   .semi-cylindrical-nav__link:hover {

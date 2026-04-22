@@ -1,0 +1,49 @@
+---
+/**
+ * Custom Cursor Component
+ * Initializes 3D Peach Pink Pixel cursor with particle trail
+ * Only active on desktop devices
+ */
+---
+
+<script>
+  import { initCustomCursor } from '../../scripts/cursor';
+  import { initCursorTrail } from '../../scripts/cursorTrail';
+  
+  let cursor: ReturnType<typeof initCustomCursor> = null;
+  let trail: ReturnType<typeof initCursorTrail> = null;
+  
+  function initializeCursor() {
+    // Clean up existing instances
+    if (cursor) {
+      cursor.destroy();
+    }
+    if (trail) {
+      trail.destroy();
+    }
+    
+    // Initialize new instances
+    cursor = initCustomCursor();
+    trail = initCursorTrail();
+  }
+  
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeCursor);
+  } else {
+    initializeCursor();
+  }
+  
+  // Re-initialize on page navigation (for SPA-like behavior)
+  document.addEventListener('astro:page-load', initializeCursor);
+  
+  // Clean up on page unload
+  document.addEventListener('astro:before-preparation', () => {
+    if (cursor) {
+      cursor.destroy();
+    }
+    if (trail) {
+      trail.destroy();
+    }
+  });
+</script>

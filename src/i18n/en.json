@@ -1,0 +1,33 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "blogs": "Blogs",
+    "experiences": "Experiences",
+    "cv": "CV"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme"
+  },
+  "language": {
+    "toggle": "Toggle language",
+    "switchToEnglish": "Switch to English",
+    "switchToIndonesian": "Switch to Indonesian",
+    "current": "English"
+  },
+  "hero": {
+    "subtitle": "Web Developer & Technology Researcher",
+    "description": "Building beautiful and innovative web experiences with focus on performance and accessibility"
+  },
+  "common": {
+    "readMore": "Read more",
+    "viewProject": "View project",
+    "download": "Download",
+    "close": "Close",
+    "next": "Next",
+    "previous": "Previous",
+    "skipToContent": "Skip to main content"
+  }
+}

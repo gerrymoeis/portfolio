@@ -1,19 +1,20 @@
 ---
 /**
  * Hero - Home page hero section
- * Displays main title, subtitle, and description
- * Updated for minimalist design with serif headings
+ * Displays main title, subtitle, and description with bilingual support
  * 
  * Props:
  * - title: Main hero title (required)
- * - subtitle: Hero subtitle (required)
- * - description: Hero description text (required)
+ * - subtitle: Hero subtitle (bilingual)
+ * - description: Hero description text (bilingual)
  */
+
+import type { BilingualText } from '../../config/home';
 
 interface Props {
   title: string;
-  subtitle: string;
-  description: string;
+  subtitle: BilingualText;
+  description: BilingualText;
 }
 
 const { title, subtitle, description } = Astro.props;
@@ -21,8 +22,16 @@ const { title, subtitle, description } = Astro.props;
 
 <div class="hero">
   <h1 class="hero__title">{title}</h1>
-  <p class="hero__subtitle">{subtitle}</p>
-  <p class="hero__description">{description}</p>
+  
+  <p class="hero__subtitle" data-bilingual="subtitle">
+    <span data-lang="en">{subtitle.en}</span>
+    <span data-lang="id">{subtitle.id}</span>
+  </p>
+  
+  <p class="hero__description" data-bilingual="description">
+    <span data-lang="en">{description.en}</span>
+    <span data-lang="id">{description.id}</span>
+  </p>
 </div>
 
 <style>
@@ -33,7 +42,7 @@ const { title, subtitle, description } = Astro.props;
   }
 
   .hero__title {
-    font-family: var(--font-display); /* Serif for headings */
+    font-family: var(--font-display);
     font-size: var(--text-5xl);
     font-weight: var(--weight-bold);
     color: var(--color-text-primary);
@@ -43,7 +52,7 @@ const { title, subtitle, description } = Astro.props;
   }
 
   .hero__subtitle {
-    font-family: var(--font-body); /* Sans-serif for body */
+    font-family: var(--font-body);
     font-size: var(--text-xl);
     font-weight: var(--weight-medium);
     color: var(--color-accent-primary);
@@ -52,7 +61,7 @@ const { title, subtitle, description } = Astro.props;
   }
 
   .hero__description {
-    font-family: var(--font-body); /* Sans-serif for body */
+    font-family: var(--font-body);
     font-size: var(--text-lg);
     font-weight: var(--weight-normal);
     color: var(--color-text-secondary);
@@ -62,10 +71,20 @@ const { title, subtitle, description } = Astro.props;
     margin-left: auto;
     margin-right: auto;
   }
+  
+  /* Hide inactive language */
+  [data-bilingual] span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) [data-bilingual] span[data-lang="en"],
+  :global(html[lang="id"]) [data-bilingual] span[data-lang="id"] {
+    display: inline;
+  }
 
   /* Responsive typography - Mobile first approach */
   
-  /* Extra small devices */
   @media (max-width: var(--breakpoint-xs)) {
     .hero__title {
       font-size: var(--text-3xl);
@@ -82,7 +101,6 @@ const { title, subtitle, description } = Astro.props;
     }
   }
 
-  /* Small devices */
   @media (min-width: var(--breakpoint-xs)) and (max-width: var(--breakpoint-sm)) {
     .hero__title {
       font-size: var(--text-4xl);
@@ -99,7 +117,6 @@ const { title, subtitle, description } = Astro.props;
     }
   }
 
-  /* Medium devices */
   @media (min-width: var(--breakpoint-sm)) and (max-width: var(--breakpoint-lg)) {
     .hero__title {
       font-size: var(--text-4xl);
@@ -114,7 +131,6 @@ const { title, subtitle, description } = Astro.props;
     }
   }
 
-  /* Large devices and up - use fluid scaling */
   @media (min-width: var(--breakpoint-lg)) {
     .hero__title {
       font-size: var(--text-5xl);
@@ -129,14 +145,12 @@ const { title, subtitle, description } = Astro.props;
     }
   }
 
-  /* Ultra-wide screens - prevent text from becoming too large */
   @media (min-width: var(--breakpoint-2xl)) {
     .hero__title {
       font-size: clamp(var(--text-5xl), 4vw, var(--text-6xl));
     }
   }
 
-  /* Landscape orientation on mobile - adjust spacing */
   @media (max-height: 600px) and (orientation: landscape) {
     .hero__title {
       margin-bottom: var(--space-2);
@@ -147,7 +161,6 @@ const { title, subtitle, description } = Astro.props;
     }
   }
 
-  /* High contrast mode support */
   @media (prefers-contrast: high) {
     .hero__title {
       color: var(--color-text-primary);
@@ -163,7 +176,6 @@ const { title, subtitle, description } = Astro.props;
     }
   }
 
-  /* Reduced motion preferences */
   @media (prefers-reduced-motion: reduce) {
     .hero__title,
     .hero__subtitle,

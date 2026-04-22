@@ -1,16 +1,23 @@
-# HD-2D Portfolio
+# Gerry Moeis - Personal Portfolio
 
-A modern, static-first portfolio website built with Astro, featuring an HD-2D aesthetic inspired by Octopath Traveler.
+An Awwwards-worthy personal portfolio website featuring bilingual support (Indonesian/English), advanced audio visualizer, custom cursor, and HD-2D aesthetic inspired by Octopath Traveler.
 
-## Features
+## 🎯 Features (14 Total)
 
 - 🎨 **HD-2D Aesthetic** - Layered depth effects and atmospheric lighting
-- ⚡ **Static-First** - Pre-rendered HTML for optimal performance
-- 📱 **Fully Responsive** - Mobile-first design with fluid typography
-- ♿ **Accessible** - WCAG compliant with keyboard navigation
-- 🎵 **Spotify Integration** - Embedded playlist carousel
-- 📊 **View Counter** - Optional blog post view tracking
-- 🧪 **Well-Tested** - Unit and property-based testing
+- 🌓 **Light/Dark Theme** - Smooth theme toggle with system preference detection
+- 🌍 **Bilingual** - Indonesian and English with seamless switching
+- 🎵 **Advanced Audio Visualizer** - Multiple modes synced with SoundCloud
+- 🖱️ **Custom Cursor** - Magnetic effect with GSAP animations
+- ✨ **Cursor Trail** - Particle effects following cursor
+- 🎭 **Three.js 3D Effects** - Minimal but clear 3D elements
+- 📱 **Fully Responsive** - Mobile-first design
+- ⚡ **Performance Optimized** - Lighthouse 95+ score target
+- ♿ **Accessible** - WCAG 2.2 Level AA compliant
+- 📄 **Auto CV Generation** - LaTeX-based CV in both languages
+- 📝 **StudioCMS** - Content management for projects, blogs, experiences
+- 🎬 **Unique Layouts** - Different animations per content type
+- 🚀 **Cloudflare Pages** - Free tier deployment
 
 ## Quick Start
 
@@ -28,105 +35,67 @@ npm run build
 npm run preview
 ```
 
-## Configuration
-
-1. **Personal Information**: Update `src/config/home.ts` with your details
-2. **Spotify Playlists**: Configure `src/config/spotify.ts` with your embed URLs
-3. **View Counter** (Optional): Copy `.env.example` to `.env` and add your API URL
-
 ## Project Structure
 
 ```
-src/
-├── components/     # Reusable UI components
-├── config/         # Site configuration
-├── content/        # Markdown content (blogs, projects)
-├── layouts/        # Page layouts
-├── pages/          # Route pages
-├── scripts/        # Client-side JavaScript
-├── styles/         # Design system and global styles
-└── tests/          # Unit tests
+main_folder/
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── config/         # Site configuration
+│   ├── content/        # Markdown content (blogs, projects)
+│   ├── i18n/          # Translation files (ID/EN)
+│   ├── layouts/        # Page layouts
+│   ├── pages/          # Route pages
+│   ├── scripts/        # Client-side JavaScript
+│   ├── styles/         # Design system and global styles
+│   └── tests/          # Unit tests
+├── public/            # Static assets
+└── templates/         # LaTeX CV templates
 ```
 
 ## Technology Stack
 
-- **Framework**: [Astro 5](https://astro.build) - Static site generation
-- **Styling**: CSS with custom design tokens
-- **Animation**: GSAP for smooth interactions
-- **Particles**: tsParticles for visual effects
+- **Framework**: Astro 5.16.10 (SSG)
+- **Language**: TypeScript (strict mode)
+- **Animation**: GSAP 3.14.2
+- **3D**: Three.js (lazy loaded)
+- **CMS**: StudioCMS
 - **Testing**: Vitest + fast-check
-- **TypeScript**: Strict mode enabled
+- **Deployment**: Cloudflare Pages
 
-## Design System
+## Content Types
 
-The project uses a comprehensive design token system with:
-- Fluid typography and spacing
-- Responsive breakpoints
-- HD-2D depth layers
-- Atmospheric effects
-- Accessible color contrast
+### Projects
+- Vertical parallax scroll layout
+- Immersive showcase with animations
+- Bilingual content
 
-## Content Management
+### Blogs
+- Clean, readable layout
+- No scroll animations (focus on content)
+- Table of contents
+- Bilingual posts
 
-### Adding Blog Posts
+### Experiences
+- Horizontal scroll timeline
+- Scroll down = content moves left
+- Card-based layout
+- Bilingual descriptions
 
-Create a new `.md` file in `src/content/blogs/`:
+## Development Timeline
 
-```markdown
----
-title: "Your Post Title"
-date: 2024-01-01
-summary: "Brief description"
-tags: ["tag1", "tag2"]
----
-
-Your content here...
-```
-
-### Adding Projects
-
-Create a new `.md` file in `src/content/projects/`:
-
-```markdown
----
-title: "Project Name"
-summary: "Project description"
-year: 2024
-status: "completed"
-techStack: ["Astro", "TypeScript"]
-heroImage: "/images/projects/hero.svg"
-links:
-  github: "https://github.com/..."
-  live: "https://..."
----
-
-Project details...
-```
-
-## Testing
-
-```bash
-# Run tests once
-npm test
-
-# Watch mode
-npm run test:watch
-
-# UI mode
-npm run test:ui
-```
-
-## Deployment
-
-This site is optimized for deployment on:
-- **Cloudflare Pages** (recommended)
-- **Netlify**
-- **Vercel**
-- Any static hosting service
-
-Build command: `npm run build`  
-Output directory: `dist`
+- **Phase 1** (Weeks 1-2): Foundation - Theme, i18n, visualizer, cursor
+- **Phase 2** (Weeks 3-4): Content & CMS - StudioCMS, layouts, CV generation
+- **Phase 3** (Weeks 5-6): Advanced - Three.js, animations, interactions
+- **Phase 4** (Week 7): Optimization - Performance, SEO, accessibility
+- **Phase 5** (Week 8): Polish & Launch - Final touches, deployment
 
 ## License
 
-MIT License - feel free to use this as a template for your own portfolio!
+MIT License
+
+---
+
+**Developer**: Gerry Moeis  
+**University**: State University of Surabaya  
+**Role**: R&D Head, Himafortic

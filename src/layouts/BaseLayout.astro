@@ -9,6 +9,7 @@
  * - noScroll: Disable scrolling (for home page) (optional)
  * - ogImage: Open Graph image URL (optional, defaults to favicon)
  * - ogType: Open Graph type (optional, defaults to 'website')
+ * - lang: Language code (optional, defaults to 'en')
  */
 
 // Import CSS files so Astro can process them
@@ -16,6 +17,10 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 import '../styles/typography.css';
 import '../styles/motion.css';
+import '../styles/scrollbar.css';
+
+import { getLangFromUrl } from '../i18n/utils';
+import CustomCursor from '../components/ui/CustomCursor.astro';
 
 interface Props {
   title: string;
@@ -23,6 +28,7 @@ interface Props {
   noScroll?: boolean;
   ogImage?: string;
   ogType?: 'website' | 'article';
+  lang?: string;
 }
 
 const { 
@@ -30,8 +36,12 @@ const {
   description, 
   noScroll = false,
   ogImage,
-  ogType = 'website'
+  ogType = 'website',
+  lang
 } = Astro.props;
+
+// Get language from URL or use provided lang
+const currentLang = lang || getLangFromUrl(Astro.url);
 
 // Get canonical URL for this page
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
@@ -42,7 +52,7 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : 
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={currentLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -73,14 +83,63 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
-    <!-- FontAwesome Icons -->
-    <script src="https://kit.fontawesome.com/3f7347f781.js" crossorigin="anonymous"></script>
+    <!-- Theme initialization (inline to prevent FOUC) -->
+    <script is:inline>
+      // Initialize theme immediately to prevent flash
+      (function() {
+        const THEME_KEY = 'portfolio-theme';
+        
+        function getStoredTheme() {
+          try {
+            return localStorage.getItem(THEME_KEY);
+          } catch {
+            return null;
+          }
+        }
+        
+        function getSystemTheme() {
+          return window.matchMedia('(prefers-color-scheme: light)').matches 
+            ? 'light' 
+            : 'dark';
+        }
+        
+        const theme = getStoredTheme() || getSystemTheme();
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+      
+      // Initialize language immediately to prevent flash
+      (function() {
+        const LANG_KEY = 'portfolio-language';
+        
+        function getStoredLanguage() {
+          try {
+            return localStorage.getItem(LANG_KEY);
+          } catch {
+            return null;
+          }
+        }
+        
+        function getBrowserLanguage() {
+          const browserLang = navigator.language.toLowerCase();
+          return browserLang.startsWith('id') ? 'id' : 'en';
+        }
+        
+        const lang = getStoredLanguage() || getBrowserLanguage();
+        document.documentElement.setAttribute('lang', lang);
+      })();
+    </script>
+    
+    <!-- FontAwesome Icons - Latest CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
   <body class:list={[{ 'no-scroll': noScroll }]}>
     <!-- Skip to content link for accessibility -->
     <a href="#main-content" class="skip-to-content">
       Skip to main content
     </a>
+    
+    <!-- Custom Cursor (desktop only) -->
+    <CustomCursor />
     
     <slot />
   </body>
