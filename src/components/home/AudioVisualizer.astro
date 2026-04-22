@@ -14,7 +14,7 @@ export interface Props {
 
 const { 
   barCount = 50, // Not used anymore (canvas-based now)
-  height = 120
+  height = 180 // Increased from 120 to 180
 } = Astro.props;
 ---
 
@@ -44,7 +44,7 @@ const {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 120px;
+    height: 180px; /* Increased from 120px */
     z-index: 999;
     pointer-events: none;
     overflow: hidden;

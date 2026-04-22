@@ -190,10 +190,9 @@ export class TabAudioVisualizer {
       this.audioContext = null;
     }
 
-    // Clear canvas
+    // Clear canvas (transparent)
     if (this.canvas && this.ctx) {
-      this.ctx.fillStyle = '#000000';
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     // Update container class

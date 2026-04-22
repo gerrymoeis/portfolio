@@ -16,9 +16,8 @@ export function visualizeFrequencyBarsMirrored(
   const dataArray = new Uint8Array(bufferLength);
   analyser.getByteFrequencyData(dataArray);
 
-  // Clear canvas with fade effect
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Clear canvas with fade effect (transparent background)
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // SIMPLE: Use same calculation as left-to-right but mirror from center
   const centerX = canvas.width / 2;
