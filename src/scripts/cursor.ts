@@ -141,18 +141,32 @@ export class CustomCursor {
   }
 
   /**
-   * Attach focus/blur listeners to handle browser dialogs
+   * Attach focus/blur listeners to handle browser dialogs and iframes
    */
   private attachFocusListeners(): void {
-    // When page loses focus (e.g., browser permission dialog appears)
+    // When page loses focus
     window.addEventListener('blur', () => {
-      if (this.cursor) {
-        this.cursor.style.display = 'none';
-      }
-      this.showSystemCursor();
+      // Use setTimeout to let browser update document.activeElement
+      // The blur event fires BEFORE activeElement is updated
+      setTimeout(() => {
+        // Check if blur was caused by iframe interaction
+        const isIframeBlur = document.activeElement && 
+                            document.activeElement.tagName === 'IFRAME';
+        
+        if (isIframeBlur) {
+          // Iframe blur: Keep custom cursor visible
+          // Do nothing - custom cursor stays active
+        } else {
+          // Dialog/other blur: Hide custom cursor, show system cursor
+          if (this.cursor) {
+            this.cursor.style.display = 'none';
+          }
+          this.showSystemCursor();
+        }
+      }, 0);
     });
 
-    // When page regains focus (dialog closes)
+    // When page regains focus
     window.addEventListener('focus', () => {
       if (this.cursor) {
         this.cursor.style.display = 'block';
@@ -160,7 +174,7 @@ export class CustomCursor {
       this.hideDefaultCursor();
     });
 
-    // Fallback: visibility change detection
+    // Fallback: visibility change detection (for tab switching)
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         if (this.cursor) {
