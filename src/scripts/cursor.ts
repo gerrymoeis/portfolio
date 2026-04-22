@@ -160,8 +160,9 @@ export class CustomCursor {
       
       // Only hide custom cursor for non-iframe blur events (e.g., browser dialogs)
       if (!isIframeInteraction) {
-        if (this.cursor) {
-          this.cursor.style.display = 'none';
+        // Completely remove custom cursor from DOM
+        if (this.cursor && this.cursor.parentNode) {
+          this.cursor.parentNode.removeChild(this.cursor);
         }
         this.showSystemCursor();
       }
@@ -169,8 +170,9 @@ export class CustomCursor {
 
     // When page regains focus
     window.addEventListener('focus', () => {
-      if (this.cursor) {
-        this.cursor.style.display = 'block';
+      // Restore custom cursor only if it was removed (not just hidden)
+      if (!this.cursor || !this.cursor.parentNode) {
+        this.createCursorElement();
       }
       this.hideDefaultCursor();
     });
@@ -178,13 +180,15 @@ export class CustomCursor {
     // Fallback: visibility change detection (for tab switching)
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        if (this.cursor) {
-          this.cursor.style.display = 'none';
+        // Completely remove custom cursor from DOM
+        if (this.cursor && this.cursor.parentNode) {
+          this.cursor.parentNode.removeChild(this.cursor);
         }
         this.showSystemCursor();
       } else {
-        if (this.cursor) {
-          this.cursor.style.display = 'block';
+        // Restore custom cursor only if it was removed
+        if (!this.cursor || !this.cursor.parentNode) {
+          this.createCursorElement();
         }
         this.hideDefaultCursor();
       }
