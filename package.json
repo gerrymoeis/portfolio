@@ -14,13 +14,10 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "analyze": "npm run build && node scripts/analyze-bundles.js",
-    "analyze:bundles": "node scripts/analyze-bundles.js",
-    "validate:spotify": "node scripts/validate-spotify-config.js"
+    "analyze:bundles": "node scripts/analyze-bundles.js"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
-    "@tsparticles/engine": "^3.9.1",
-    "@tsparticles/preset-fire": "^3.2.0",
     "astro": "^5.16.10",
     "gsap": "^3.14.2"
   },

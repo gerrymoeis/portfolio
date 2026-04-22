@@ -1,14 +1,14 @@
 ---
 /**
- * PaginationIndicator - Dot-based navigation for Spotify Playlist Carousel
+ * PaginationIndicator - Dot-based navigation for SoundCloud Playlist Carousel
  * Provides visual indication of current position and direct navigation to specific playlists
  */
 
-import type { SpotifyPlaylist } from '../../config/spotify';
+import type { SoundCloudPlaylist } from '../../config/soundcloud';
 
 export interface Props {
   /** Array of playlists to create dots for */
-  playlists: SpotifyPlaylist[];
+  playlists: SoundCloudPlaylist[];
   /** Current active playlist index */
   currentIndex?: number;
   /** Whether dots are clickable for direct navigation */

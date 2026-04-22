@@ -1,6 +1,6 @@
 /**
  * Custom Cursor with GSAP
- * 3D Peach Pink Pixel cursor with proper hover states
+ * Gradient Citrine cursor with glow effect and proper hover states
  */
 
 import gsap from 'gsap';

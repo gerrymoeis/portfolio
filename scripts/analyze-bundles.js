@@ -64,7 +64,7 @@ function findJSFiles(dir, fileList = []) {
 }
 
 /**
- * Analyze JavaScript bundles for a specific page with Spotify optimization insights
+ * Analyze JavaScript bundles for a specific page
  */
 function analyzePageBundles(pagePath, pageName) {
   const pageDir = path.join(__dirname, '..', 'dist', pagePath);
@@ -85,9 +85,7 @@ function analyzePageBundles(pagePath, pageName) {
   const scriptMatches = html.matchAll(/<script[^>]*src="([^"]+)"[^>]*>/g);
   
   let totalSize = 0;
-  let spotifySize = 0;
   const scripts = [];
-  const spotifyScripts = [];
 
   for (const match of scriptMatches) {
     const scriptSrc = match[1];
@@ -96,32 +94,19 @@ function analyzePageBundles(pagePath, pageName) {
     
     if (fs.existsSync(scriptPath)) {
       const size = parseFloat(getFileSizeKB(scriptPath));
-      const content = fs.readFileSync(scriptPath, 'utf-8');
-      const hasSpotify = content.includes('spotify') || content.includes('Spotify');
       
       totalSize += size;
       scripts.push({
         path: scriptSrc,
-        size: size,
-        hasSpotify: hasSpotify
+        size: size
       });
-
-      if (hasSpotify) {
-        spotifySize += size;
-        spotifyScripts.push({
-          path: scriptSrc,
-          size: size
-        });
-      }
     }
   }
 
   return {
     name: pageName,
     totalSize: totalSize,
-    spotifySize: spotifySize,
     scripts: scripts,
-    spotifyScripts: spotifyScripts,
     target: SIZE_TARGETS[pageName.toLowerCase()] || null,
   };
 }
@@ -146,49 +131,15 @@ function printResults(results) {
     console.log(`\n${colors.bold}${name} Page${colors.reset}`);
     console.log(`${statusColor}${statusIcon} Total: ${totalSize.toFixed(2)} KB${colors.reset}${target ? ` (target: < ${target} KB)` : ''}`);
     
-    if (spotifySize > 0) {
-      const spotifyPercentage = ((spotifySize / totalSize) * 100).toFixed(1);
-      console.log(`🎵 Spotify: ${spotifySize.toFixed(2)} KB (${spotifyPercentage}% of total)`);
-      totalSpotifySize += spotifySize;
-    }
-    
     if (scripts.length > 0) {
       console.log('\nScripts:');
       scripts.forEach((script) => {
-        const spotifyIcon = script.hasSpotify ? '🎵' : '  ';
-        console.log(`  ${spotifyIcon} ${script.path} - ${script.size.toFixed(2)} KB`);
+        console.log(`  ${script.path} - ${script.size.toFixed(2)} KB`);
       });
     } else {
       console.log('  No JavaScript bundles found');
     }
-
-    // Spotify-specific recommendations
-    if (spotifyScripts.length > 0) {
-      console.log(`\n${colors.cyan}🎵 Spotify Optimization Recommendations:${colors.reset}`);
-      
-      if (spotifySize > 20) {
-        console.log(`  ⚡ Consider using the optimized Spotify client (current: ${spotifySize.toFixed(2)} KB)`);
-        console.log(`  📦 Implement lazy loading for Spotify integration`);
-      } else if (spotifySize > 10) {
-        console.log(`  ✨ Spotify bundle size is reasonable (${spotifySize.toFixed(2)} KB)`);
-        console.log(`  💡 Consider code splitting if not already implemented`);
-      } else {
-        console.log(`  ✅ Spotify bundle size is well optimized (${spotifySize.toFixed(2)} KB)`);
-      }
-    }
   });
-
-  // Overall Spotify analysis
-  if (totalSpotifySize > 0) {
-    console.log(`\n${colors.bold}${colors.cyan}🎵 Overall Spotify Analysis${colors.reset}`);
-    console.log(`Total Spotify code across all pages: ${totalSpotifySize.toFixed(2)} KB`);
-    
-    if (totalSpotifySize > 30) {
-      console.log(`${colors.yellow}⚠ Consider implementing shared Spotify chunks to reduce duplication${colors.reset}`);
-    } else {
-      console.log(`${colors.green}✓ Spotify integration has minimal bundle impact${colors.reset}`);
-    }
-  }
 
   console.log('\n' + '─'.repeat(80));
 }

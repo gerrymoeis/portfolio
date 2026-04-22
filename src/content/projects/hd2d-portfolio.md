@@ -29,7 +29,7 @@ A comprehensive design system with:
 ### Interactive Elements
 - Mouse-reactive background on the home page
 - Scroll-based parallax effects on the projects page
-- Optional Spotify integration showing current listening
+- SoundCloud integration with Octopath Traveler playlists
 - View counter for blog posts
 
 ### Content Management

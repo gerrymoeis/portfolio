@@ -1,6 +1,6 @@
 ---
 /**
- * AudioVisualizer - Fake audio visualizer that syncs with Spotify embed
+ * AudioVisualizer - Audio visualizer that syncs with SoundCloud player
  * Positioned at the bottom of the home page with HD-2D styling
  * Provides organic-looking animations that respond to playback state
  */
@@ -248,8 +248,8 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
       // Global access
       (window as any).audioVisualizer = controller;
       
-      // Import sync script
-      import('../../scripts/simpleVisualizerSync');
+      // TODO: Connect to SoundCloud player events
+      // Listen for SoundCloud playback events when implemented
     }
   });
 </script>

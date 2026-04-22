@@ -6,13 +6,6 @@
  */
 
 interface ImportMetaEnv {
-  // Spotify Integration Configuration
-  readonly SPOTIFY_WORKER_URL: string;
-  readonly SPOTIFY_WORKER_URL_DEV: string;
-  readonly SPOTIFY_WORKER_URL_STAGING: string;
-  readonly SPOTIFY_WORKER_URL_PROD: string;
-  readonly DEV_SPOTIFY_WORKER_URL: string;
-  
   // Standard Astro environment variables
   readonly NODE_ENV: 'development' | 'production';
   readonly DEPLOYMENT_ENVIRONMENT: 'development' | 'staging' | 'production';
