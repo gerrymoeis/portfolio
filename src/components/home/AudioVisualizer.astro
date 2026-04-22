@@ -6,24 +6,27 @@
  */
 
 export interface Props {
-  /** Number of visualizer bars */
-  barCount?: number;
-  /** Height of the visualizer container */
+  /** Height of the visualizer container in pixels */
   height?: number;
 }
 
 const { 
-  barCount = 50, // Not used anymore (canvas-based now)
-  height = 180 // Increased from 120 to 180
+  height = 180 // Default height in pixels
 } = Astro.props;
+
+// Calculate glow height (should be taller than visualizer for effect)
+const glowHeight = Math.max(height * 2.2, 400);
 ---
 
-<div class="audio-visualizer" data-visualizer-container>
+<div 
+  class="audio-visualizer" 
+  data-visualizer-container
+  style={`--visualizer-height: ${height}px; --glow-height: ${glowHeight}px;`}
+>
   <!-- Canvas for visualization -->
   <canvas 
     id="visualizer-canvas" 
     data-visualizer-canvas
-    style={`height: ${height}px`}
   ></canvas>
   
   <!-- HD-2D atmospheric glow effect -->
@@ -44,7 +47,7 @@ const {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 180px; /* Increased from 120px */
+    height: var(--visualizer-height, 180px); /* Use CSS variable with fallback */
     z-index: 999;
     pointer-events: none;
     overflow: hidden;
@@ -68,7 +71,7 @@ const {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 400px;
+    height: var(--glow-height, 400px); /* Use CSS variable with fallback */
     background: radial-gradient(
       ellipse 150% 100% at center bottom,
       rgba(246, 224, 94, 0.02) 0%,
@@ -102,33 +105,37 @@ const {
     }
   }
   
+  /* Responsive: Scale down on smaller screens */
   @media (max-width: var(--breakpoint-lg)) {
     .audio-visualizer {
-      height: clamp(80px, 15vw, 100px);
+      /* Scale to 80% of configured height, min 80px, max 100px */
+      height: clamp(80px, calc(var(--visualizer-height, 180px) * 0.8), 100px);
     }
     
     .audio-visualizer__glow {
-      height: 350px;
+      height: calc(var(--glow-height, 400px) * 0.875); /* 87.5% of glow height */
     }
   }
   
   @media (max-width: var(--breakpoint-md)) {
     .audio-visualizer {
-      height: clamp(60px, 12vw, 80px);
+      /* Scale to 60% of configured height, min 60px, max 80px */
+      height: clamp(60px, calc(var(--visualizer-height, 180px) * 0.6), 80px);
     }
     
     .audio-visualizer__glow {
-      height: 300px;
+      height: calc(var(--glow-height, 400px) * 0.75); /* 75% of glow height */
     }
   }
   
   @media (max-width: var(--breakpoint-sm)) {
     .audio-visualizer {
-      height: clamp(40px, 8vw, 60px);
+      /* Scale to 40% of configured height, min 40px, max 60px */
+      height: clamp(40px, calc(var(--visualizer-height, 180px) * 0.4), 60px);
     }
     
     .audio-visualizer__glow {
-      height: 250px;
+      height: calc(var(--glow-height, 400px) * 0.625); /* 62.5% of glow height */
     }
   }
   
