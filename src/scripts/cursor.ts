@@ -144,15 +144,30 @@ export class CustomCursor {
    * Attach focus/blur listeners to handle browser dialogs
    */
   private attachFocusListeners(): void {
-    // When page loses focus (e.g., browser permission dialog appears)
+    let lastMouseTarget: EventTarget | null = null;
+
+    // Track the last element the mouse was over
+    document.addEventListener('mouseover', (e) => {
+      lastMouseTarget = e.target;
+    }, true);
+
+    // When page loses focus
     window.addEventListener('blur', () => {
-      if (this.cursor) {
-        this.cursor.style.display = 'none';
+      // Check if the last mouse target was an iframe
+      const isIframeInteraction = lastMouseTarget instanceof HTMLElement && 
+                                   (lastMouseTarget.tagName === 'IFRAME' || 
+                                    lastMouseTarget.closest('iframe'));
+      
+      // Only hide custom cursor for non-iframe blur events (e.g., browser dialogs)
+      if (!isIframeInteraction) {
+        if (this.cursor) {
+          this.cursor.style.display = 'none';
+        }
+        this.showSystemCursor();
       }
-      this.showSystemCursor();
     });
 
-    // When page regains focus (dialog closes)
+    // When page regains focus
     window.addEventListener('focus', () => {
       if (this.cursor) {
         this.cursor.style.display = 'block';
@@ -160,7 +175,7 @@ export class CustomCursor {
       this.hideDefaultCursor();
     });
 
-    // Fallback: visibility change detection
+    // Fallback: visibility change detection (for tab switching)
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         if (this.cursor) {
