@@ -117,6 +117,11 @@ export class CustomCursor {
    * Hide default cursor
    */
   private hideDefaultCursor(): void {
+    // Don't create duplicate style elements
+    if (this.styleElement && this.styleElement.parentNode) {
+      return; // Style already applied
+    }
+    
     this.styleElement = document.createElement('style');
     this.styleElement.textContent = `
       * {
@@ -137,6 +142,7 @@ export class CustomCursor {
   private showSystemCursor(): void {
     if (this.styleElement && this.styleElement.parentNode) {
       this.styleElement.parentNode.removeChild(this.styleElement);
+      this.styleElement = null; // Clear reference
     }
   }
 
@@ -159,7 +165,10 @@ export class CustomCursor {
         } else {
           // Dialog/other blur: Hide custom cursor, show system cursor
           if (this.cursor) {
+            // Move cursor far off-screen AND hide it
             this.cursor.style.display = 'none';
+            this.cursor.style.transform = 'translate(-9999px, -9999px)';
+            this.cursor.style.visibility = 'hidden';
           }
           this.showSystemCursor();
         }
@@ -170,6 +179,8 @@ export class CustomCursor {
     window.addEventListener('focus', () => {
       if (this.cursor) {
         this.cursor.style.display = 'block';
+        this.cursor.style.transform = '';
+        this.cursor.style.visibility = 'visible';
       }
       this.hideDefaultCursor();
     });
@@ -179,11 +190,15 @@ export class CustomCursor {
       if (document.hidden) {
         if (this.cursor) {
           this.cursor.style.display = 'none';
+          this.cursor.style.transform = 'translate(-9999px, -9999px)';
+          this.cursor.style.visibility = 'hidden';
         }
         this.showSystemCursor();
       } else {
         if (this.cursor) {
           this.cursor.style.display = 'block';
+          this.cursor.style.transform = '';
+          this.cursor.style.visibility = 'visible';
         }
         this.hideDefaultCursor();
       }
