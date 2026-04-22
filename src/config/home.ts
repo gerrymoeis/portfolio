@@ -68,19 +68,23 @@ export const homeConfig: HomeConfig = {
     },
     { 
       label: { id: "Proyek", en: "Projects" }, 
-      href: "/projects" 
+      href: "/projects",
+      target: "_blank"
     },
     { 
       label: { id: "Blog", en: "Blogs" }, 
-      href: "/blogs" 
+      href: "/blogs",
+      target: "_blank"
     },
     { 
       label: { id: "Pengalaman", en: "Experiences" }, 
-      href: "/experiences" 
+      href: "/experiences",
+      target: "_blank"
     },
     { 
       label: { id: "CV", en: "CV" }, 
-      href: "/cv" 
+      href: "/cv",
+      target: "_blank"
     },
   ],
 };

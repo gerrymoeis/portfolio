@@ -248,8 +248,8 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
       // Global access
       (window as any).audioVisualizer = controller;
       
-      // TODO: Connect to SoundCloud player events
-      // Listen for SoundCloud playback events when implemented
+      // Note: Real audio visualization is handled by TabAudioVisualizer
+      // This controller provides fallback fake animation if needed
     }
   });
 </script>
@@ -299,10 +299,12 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
     border-radius: 4px 4px 0 0;
     transition: height var(--duration-medium) ease-out, opacity var(--duration-medium) ease-out;
     position: relative;
+    will-change: height, opacity;
     
     box-shadow: 
-      0 0 6px var(--color-accent-primary),
-      0 0 12px rgba(246, 224, 94, 0.4);
+      0 0 8px var(--color-accent-primary),
+      0 0 16px rgba(246, 224, 94, 0.5),
+      0 -2px 12px rgba(246, 224, 94, 0.3);
   }
   
   .audio-visualizer__glow {
@@ -324,7 +326,7 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
   }
   
   .audio-visualizer--playing .audio-visualizer__bar-fill {
-    transition: height 0.1s ease-out, opacity 0.1s ease-out;
+    transition: none !important; /* Remove transition for real-time audio */
   }
   
   .audio-visualizer--playing .audio-visualizer__glow {

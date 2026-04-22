@@ -12,6 +12,7 @@ import Hero from '../components/home/Hero.astro';
 import SocialPanel from '../components/home/SocialPanel.astro';
 import SoundCloudPlaylistCarousel from '../components/home/SoundCloudPlaylistCarousel.astro';
 import AudioVisualizer from '../components/home/AudioVisualizer.astro';
+import AudioVisualizerControls from '../components/home/AudioVisualizerControls.astro';
 import { homeConfig } from '../config/home';
 
 const { hero, social, navigation } = homeConfig;
@@ -79,6 +80,9 @@ const soundCloudPlaylists = [
 
   <!-- Audio Visualizer BEFORE main content in DOM for proper stacking -->
   <AudioVisualizer height={120} />
+  
+  <!-- Audio Visualizer Controls -->
+  <AudioVisualizerControls />
 </BaseLayout>
 
 <style>

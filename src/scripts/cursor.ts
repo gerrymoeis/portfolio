@@ -117,13 +117,13 @@ export class CustomCursor {
   private hideDefaultCursor(): void {
     const style = document.createElement('style');
     style.textContent = `
-      *, *::before, *::after {
+      * {
         cursor: none !important;
       }
       
-      /* Hide cursor in iframes too */
-      iframe {
+      a, button, [role="button"], input, textarea, select {
         cursor: none !important;
+        pointer-events: auto !important;
       }
     `;
     document.head.appendChild(style);
