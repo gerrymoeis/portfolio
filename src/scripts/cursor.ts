@@ -15,6 +15,7 @@ export class CustomCursor {
   private mouseY = 0;
   private isHovering = false;
   private options: Required<CursorOptions>;
+  private styleElement: HTMLStyleElement | null = null;
 
   constructor(options: CursorOptions = {}) {
     this.options = {
@@ -36,6 +37,7 @@ export class CustomCursor {
     this.createCursorElement();
     this.attachEventListeners();
     this.hideDefaultCursor();
+    this.attachFocusListeners();
   }
 
   /**
@@ -115,8 +117,8 @@ export class CustomCursor {
    * Hide default cursor
    */
   private hideDefaultCursor(): void {
-    const style = document.createElement('style');
-    style.textContent = `
+    this.styleElement = document.createElement('style');
+    this.styleElement.textContent = `
       * {
         cursor: none !important;
       }
@@ -126,7 +128,52 @@ export class CustomCursor {
         pointer-events: auto !important;
       }
     `;
-    document.head.appendChild(style);
+    document.head.appendChild(this.styleElement);
+  }
+
+  /**
+   * Show default cursor (restore system cursor)
+   */
+  private showSystemCursor(): void {
+    if (this.styleElement && this.styleElement.parentNode) {
+      this.styleElement.parentNode.removeChild(this.styleElement);
+    }
+  }
+
+  /**
+   * Attach focus/blur listeners to handle browser dialogs
+   */
+  private attachFocusListeners(): void {
+    // When page loses focus (e.g., browser permission dialog appears)
+    window.addEventListener('blur', () => {
+      if (this.cursor) {
+        this.cursor.style.display = 'none';
+      }
+      this.showSystemCursor();
+    });
+
+    // When page regains focus (dialog closes)
+    window.addEventListener('focus', () => {
+      if (this.cursor) {
+        this.cursor.style.display = 'block';
+      }
+      this.hideDefaultCursor();
+    });
+
+    // Fallback: visibility change detection
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (this.cursor) {
+          this.cursor.style.display = 'none';
+        }
+        this.showSystemCursor();
+      } else {
+        if (this.cursor) {
+          this.cursor.style.display = 'block';
+        }
+        this.hideDefaultCursor();
+      }
+    });
   }
 
   /**
@@ -218,6 +265,7 @@ export class CustomCursor {
     if (this.cursor) {
       this.cursor.remove();
     }
+    this.showSystemCursor();
   }
 }
 
