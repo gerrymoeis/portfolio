@@ -28,6 +28,7 @@ export class CursorTrail {
   private animationFrame: number | null = null;
   private options: Required<TrailOptions>;
   private isActive = false;
+  private isVisible = true;
 
   constructor(options: TrailOptions = {}) {
     this.options = {
@@ -89,11 +90,36 @@ export class CursorTrail {
     this.mouseX = e.clientX;
     this.mouseY = e.clientY;
 
+    // Only spawn particles if trail is visible
+    if (!this.isVisible) return;
+
     const now = Date.now();
     if (now - this.lastSpawnTime > this.options.spawnRate) {
       this.spawnParticle();
       this.lastSpawnTime = now;
     }
+  }
+
+  /**
+   * Hide trail (for dialogs)
+   */
+  hide(): void {
+    this.isVisible = false;
+    // Hide all existing particles
+    this.particles.forEach((particle) => {
+      particle.element.style.display = 'none';
+    });
+  }
+
+  /**
+   * Show trail
+   */
+  show(): void {
+    this.isVisible = true;
+    // Show all existing particles
+    this.particles.forEach((particle) => {
+      particle.element.style.display = 'block';
+    });
   }
 
   /**

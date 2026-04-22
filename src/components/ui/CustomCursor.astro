@@ -25,6 +25,38 @@
     // Initialize new instances
     cursor = initCustomCursor();
     trail = initCursorTrail();
+    
+    // Coordinate cursor and trail visibility for dialogs
+    if (trail) {
+      // Listen for window blur/focus to hide/show trail
+      window.addEventListener('blur', () => {
+        setTimeout(() => {
+          const isIframeBlur = document.activeElement && 
+                              document.activeElement.tagName === 'IFRAME';
+          
+          if (!isIframeBlur && trail) {
+            // Dialog blur: hide trail
+            trail.hide();
+          }
+        }, 0);
+      });
+      
+      window.addEventListener('focus', () => {
+        if (trail) {
+          trail.show();
+        }
+      });
+      
+      document.addEventListener('visibilitychange', () => {
+        if (trail) {
+          if (document.hidden) {
+            trail.hide();
+          } else {
+            trail.show();
+          }
+        }
+      });
+    }
   }
   
   // Initialize on page load
