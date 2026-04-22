@@ -144,51 +144,32 @@ export class CustomCursor {
    * Attach focus/blur listeners to handle browser dialogs
    */
   private attachFocusListeners(): void {
-    let lastMouseTarget: EventTarget | null = null;
-
-    // Track the last element the mouse was over
-    document.addEventListener('mouseover', (e) => {
-      lastMouseTarget = e.target;
-    }, true);
-
-    // When page loses focus
+    // When page loses focus (e.g., browser permission dialog appears)
     window.addEventListener('blur', () => {
-      // Check if the last mouse target was an iframe
-      const isIframeInteraction = lastMouseTarget instanceof HTMLElement && 
-                                   (lastMouseTarget.tagName === 'IFRAME' || 
-                                    lastMouseTarget.closest('iframe'));
-      
-      // Only hide custom cursor for non-iframe blur events (e.g., browser dialogs)
-      if (!isIframeInteraction) {
-        // Completely remove custom cursor from DOM
-        if (this.cursor && this.cursor.parentNode) {
-          this.cursor.parentNode.removeChild(this.cursor);
-        }
-        this.showSystemCursor();
+      if (this.cursor) {
+        this.cursor.style.display = 'none';
       }
+      this.showSystemCursor();
     });
 
-    // When page regains focus
+    // When page regains focus (dialog closes)
     window.addEventListener('focus', () => {
-      // Restore custom cursor only if it was removed (not just hidden)
-      if (!this.cursor || !this.cursor.parentNode) {
-        this.createCursorElement();
+      if (this.cursor) {
+        this.cursor.style.display = 'block';
       }
       this.hideDefaultCursor();
     });
 
-    // Fallback: visibility change detection (for tab switching)
+    // Fallback: visibility change detection
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        // Completely remove custom cursor from DOM
-        if (this.cursor && this.cursor.parentNode) {
-          this.cursor.parentNode.removeChild(this.cursor);
+        if (this.cursor) {
+          this.cursor.style.display = 'none';
         }
         this.showSystemCursor();
       } else {
-        // Restore custom cursor only if it was removed
-        if (!this.cursor || !this.cursor.parentNode) {
-          this.createCursorElement();
+        if (this.cursor) {
+          this.cursor.style.display = 'block';
         }
         this.hideDefaultCursor();
       }
