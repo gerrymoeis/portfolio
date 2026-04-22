@@ -13,245 +13,29 @@ export interface Props {
 }
 
 const { 
-  barCount = 50, // Increased for full screen coverage
+  barCount = 50, // Not used anymore (canvas-based now)
   height = 120
 } = Astro.props;
-
-// Generate bar data with randomized properties for organic feel
-const bars = Array.from({ length: barCount }, (_, i) => ({
-  id: i,
-  baseHeight: 0, // Start from 0% base height
-  maxHeight: 60 + Math.random() * 40,   // 60-100% max height
-  animationDelay: Math.random() * 2,    // 0-2s delay
-  animationDuration: 0.6 + Math.random() * 0.8, // 0.6-1.4s duration
-  pulseOffset: Math.random() * Math.PI * 2, // Random phase offset
-}));
 ---
 
 <div class="audio-visualizer" data-visualizer-container>
-  <div class="audio-visualizer__bars" style={`height: ${height}px`}>
-    {bars.map((bar) => (
-      <div 
-        class="audio-visualizer__bar"
-        data-bar-id={bar.id}
-        style={`
-          --base-height: ${bar.baseHeight}%;
-          --max-height: ${bar.maxHeight}%;
-          --animation-delay: ${bar.animationDelay}s;
-          --animation-duration: ${bar.animationDuration}s;
-          --pulse-offset: ${bar.pulseOffset};
-        `}
-      >
-        <div class="audio-visualizer__bar-fill"></div>
-      </div>
-    ))}
-  </div>
+  <!-- Canvas for visualization -->
+  <canvas 
+    id="visualizer-canvas" 
+    data-visualizer-canvas
+    style={`height: ${height}px`}
+  ></canvas>
   
   <!-- HD-2D atmospheric glow effect -->
   <div class="audio-visualizer__glow" aria-hidden="true"></div>
 </div>
 
 <script>
-  // Audio Visualizer Controller - Organic animation with proper pause
-  class AudioVisualizerController {
-    private container: HTMLElement;
-    private bars: NodeListOf<HTMLElement>;
-    private isPlaying: boolean = false;
-    private isPausing: boolean = false;
-    private animationFrameId: number | null = null;
-    private startTime: number = 0;
-    private pauseStartTime: number = 0;
-    private barHeights: number[] = [];
-
-    constructor(container: HTMLElement) {
-      this.container = container;
-      this.bars = container.querySelectorAll('[data-bar-id]');
-      this.barHeights = new Array(this.bars.length).fill(0);
-      this.init();
-    }
-
-    private async init(): Promise<void> {
-      // Initialize all bars to 0 height
-      this.bars.forEach((bar) => {
-        const barElement = bar.querySelector('.audio-visualizer__bar-fill') as HTMLElement;
-        if (barElement) {
-          barElement.style.height = '0%';
-          barElement.style.opacity = '0.8';
-        }
-      });
-
-      this.isPlaying = false;
-      this.isPausing = false;
-      this.container.classList.add('audio-visualizer--paused');
-      this.container.classList.remove('audio-visualizer--playing');
-    }
-
-    public play(): void {
-      if (this.isPlaying) return;
-
-      // Cancel any existing animation
-      if (this.animationFrameId) {
-        cancelAnimationFrame(this.animationFrameId);
-        this.animationFrameId = null;
-      }
-
-      this.isPlaying = true;
-      this.isPausing = false;
-      this.container.classList.add('audio-visualizer--playing');
-      this.container.classList.remove('audio-visualizer--paused');
-
-      this.startTime = performance.now();
-      this.animate();
-    }
-
-    public pause(): void {
-      // Cancel any existing animation
-      if (this.animationFrameId) {
-        cancelAnimationFrame(this.animationFrameId);
-        this.animationFrameId = null;
-      }
-
-      this.isPlaying = false;
-      this.isPausing = true;
-      this.pauseStartTime = performance.now();
-
-      // Store current heights
-      this.bars.forEach((bar, index) => {
-        const barElement = bar.querySelector('.audio-visualizer__bar-fill') as HTMLElement;
-        if (barElement) {
-          const currentHeight = parseFloat(barElement.style.height) || 0;
-          this.barHeights[index] = currentHeight;
-        }
-      });
-
-      // Start pause animation
-      this.animatePause();
-
-      // Update classes after animation completes
-      setTimeout(() => {
-        this.container.classList.add('audio-visualizer--paused');
-        this.container.classList.remove('audio-visualizer--playing');
-        this.isPausing = false;
-      }, 1500);
-    }
-
-    public toggle(): void {
-      if (this.isPlaying) {
-        this.pause();
-      } else {
-        this.play();
-      }
-    }
-
-    private animate(): void {
-      if (!this.isPlaying || this.isPausing) {
-        if (this.animationFrameId) {
-          cancelAnimationFrame(this.animationFrameId);
-          this.animationFrameId = null;
-        }
-        return;
-      }
-
-      const currentTime = performance.now();
-      const elapsed = (currentTime - this.startTime) / 1000;
-
-      this.bars.forEach((bar, index) => {
-        const barElement = bar.querySelector('.audio-visualizer__bar-fill') as HTMLElement;
-        if (!barElement) return;
-
-        const baseHeight = 0;
-        const maxHeight = parseFloat(getComputedStyle(bar).getPropertyValue('--max-height')) || 85;
-        const pulseOffset = parseFloat(getComputedStyle(bar).getPropertyValue('--pulse-offset')) || 0;
-
-        const primaryWave = Math.sin(elapsed * 2.2 + pulseOffset) * 0.4;
-        const secondaryWave = Math.sin(elapsed * 3.8 + pulseOffset * 1.3) * 0.3;
-        const tertiaryWave = Math.sin(elapsed * 1.5 + pulseOffset * 0.7) * 0.3;
-        const randomFactor = Math.sin(elapsed * 0.7 + index * 0.5) * 0.15;
-
-        const waveSum = (primaryWave + secondaryWave + tertiaryWave + randomFactor) / 4;
-        const normalizedWave = Math.max(0, Math.min(1, (waveSum + 1) / 2));
-
-        const heightRange = maxHeight - baseHeight;
-        const finalHeight = baseHeight + (heightRange * normalizedWave);
-
-        this.barHeights[index] = Math.max(0, finalHeight);
-
-        barElement.style.height = `${this.barHeights[index]}%`;
-
-        const opacity = 0.8 + (normalizedWave * 0.2);
-        barElement.style.opacity = opacity.toString();
-      });
-
-      this.animationFrameId = requestAnimationFrame(() => this.animate());
-    }
-
-    private animatePause(): void {
-      if (!this.isPausing) return;
-
-      const currentTime = performance.now();
-      const elapsed = (currentTime - this.pauseStartTime) / 1000;
-      const pauseDuration = 1.5;
-      const progress = Math.min(elapsed / pauseDuration, 1);
-
-      // Ease out cubic for smooth deceleration
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-
-      this.bars.forEach((bar, index) => {
-        const barElement = bar.querySelector('.audio-visualizer__bar-fill') as HTMLElement;
-        if (!barElement) return;
-
-        const startHeight = this.barHeights[index] || 0;
-        const currentHeight = startHeight * (1 - easeOut);
-
-        barElement.style.height = `${Math.max(0, currentHeight)}%`;
-
-        const opacity = 0.8 * (1 - easeOut * 0.6);
-        barElement.style.opacity = opacity.toString();
-      });
-
-      if (progress < 1) {
-        this.animationFrameId = requestAnimationFrame(() => this.animatePause());
-      } else {
-        // Ensure all bars are at 0
-        this.bars.forEach((bar) => {
-          const barElement = bar.querySelector('.audio-visualizer__bar-fill') as HTMLElement;
-          if (barElement) {
-            barElement.style.height = '0%';
-            barElement.style.opacity = '0.4';
-          }
-        });
-
-        if (this.animationFrameId) {
-          cancelAnimationFrame(this.animationFrameId);
-          this.animationFrameId = null;
-        }
-      }
-    }
-
-    public destroy(): void {
-      this.isPlaying = false;
-      this.isPausing = false;
-
-      if (this.animationFrameId) {
-        cancelAnimationFrame(this.animationFrameId);
-        this.animationFrameId = null;
-      }
-    }
-  }
-
-  // Initialize visualizer when DOM is ready
-  document.addEventListener('DOMContentLoaded', () => {
-    const container = document.querySelector('[data-visualizer-container]') as HTMLElement;
-    if (container) {
-      const controller = new AudioVisualizerController(container);
-      
-      // Global access
-      (window as any).audioVisualizer = controller;
-      
-      // Note: Real audio visualization is handled by TabAudioVisualizer
-      // This controller provides fallback fake animation if needed
-    }
-  });
+  // Audio Visualizer - Canvas-based rendering
+  // Visualization logic is handled by TabAudioVisualizer (tabAudioVisualizer.ts)
+  // This component just provides the canvas element
+  
+  console.log('✅ Audio Visualizer canvas ready');
 </script>
 
 <style>
@@ -260,51 +44,18 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
     bottom: 0;
     left: 0;
     right: 0;
-    height: 120px; /* Set explicit height */
+    height: 120px;
     z-index: 999;
     pointer-events: none;
     overflow: hidden;
   }
   
-  .audio-visualizer__bars {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100%; /* Use full height of container */
+  canvas[data-visualizer-canvas] {
+    display: block;
+    width: 100%;
+    height: 100%;
     position: relative;
     z-index: 2;
-  }
-  
-  .audio-visualizer__bar {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    align-items: flex-end;
-    position: relative;
-    min-width: 0;
-  }
-  
-  .audio-visualizer__bar-fill {
-    width: 100%;
-    height: 0%;
-    background: linear-gradient(
-      to top,
-      var(--color-accent-primary) 0%,
-      var(--color-accent-secondary) 50%,
-      var(--color-accent-tertiary) 100%
-    );
-    border-radius: 4px 4px 0 0;
-    transition: height var(--duration-medium) ease-out, opacity var(--duration-medium) ease-out;
-    position: relative;
-    will-change: height, opacity;
-    
-    box-shadow: 
-      0 0 8px var(--color-accent-primary),
-      0 0 16px rgba(246, 224, 94, 0.5),
-      0 -2px 12px rgba(246, 224, 94, 0.3);
   }
   
   .audio-visualizer__glow {
@@ -325,19 +76,8 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
     filter: blur(8px);
   }
   
-  .audio-visualizer--playing .audio-visualizer__bar-fill {
-    transition: none !important; /* Remove transition for real-time audio */
-  }
-  
   .audio-visualizer--playing .audio-visualizer__glow {
     animation: glow-pulse 8s ease-in-out infinite alternate;
-  }
-  
-  .audio-visualizer--paused .audio-visualizer__bar-fill {
-    height: 0% !important;
-    opacity: 0.2 !important;
-    animation: none !important;
-    transition: height 0.8s ease-out, opacity 0.8s ease-out !important;
   }
   
   .audio-visualizer--paused .audio-visualizer__glow {
@@ -359,11 +99,7 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
   
   @media (max-width: var(--breakpoint-lg)) {
     .audio-visualizer {
-      /* Reduce height on tablets */
-    }
-    
-    .audio-visualizer__bars {
-      height: clamp(80px, 15vw, 100px) !important;
+      height: clamp(80px, 15vw, 100px);
     }
     
     .audio-visualizer__glow {
@@ -373,11 +109,7 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
   
   @media (max-width: var(--breakpoint-md)) {
     .audio-visualizer {
-      /* Further reduce on small tablets */
-    }
-    
-    .audio-visualizer__bars {
-      height: clamp(60px, 12vw, 80px) !important;
+      height: clamp(60px, 12vw, 80px);
     }
     
     .audio-visualizer__glow {
@@ -387,11 +119,7 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
   
   @media (max-width: var(--breakpoint-sm)) {
     .audio-visualizer {
-      /* Much smaller on mobile */
-    }
-    
-    .audio-visualizer__bars {
-      height: clamp(40px, 8vw, 60px) !important;
+      height: clamp(40px, 8vw, 60px);
     }
     
     .audio-visualizer__glow {
@@ -400,26 +128,12 @@ const bars = Array.from({ length: barCount }, (_, i) => ({
   }
   
   @media (prefers-reduced-motion: reduce) {
-    .audio-visualizer__bar-fill {
-      animation: none !important;
-      transition: none;
-    }
-    
     .audio-visualizer__glow {
       animation: none !important;
-    }
-    
-    .audio-visualizer--playing .audio-visualizer__bar-fill {
-      height: var(--max-height, 80%) !important;
     }
   }
   
   @media (prefers-contrast: high) {
-    .audio-visualizer__bar-fill {
-      background: var(--color-accent-primary);
-      box-shadow: none;
-    }
-    
     .audio-visualizer__glow {
       display: none;
     }

@@ -1,13 +1,14 @@
 /**
  * Tab Audio Visualizer
  * Captures audio from browser tab and visualizes it in real-time
- * Adapted from experiment_folder/visualizer-main.js
  * 
  * Uses:
  * - Screen Capture API (getDisplayMedia) for tab audio capture
  * - Web Audio API (AnalyserNode) for frequency analysis
- * - Existing AudioVisualizer bars for rendering
+ * - Canvas 2D for rendering mirrored frequency bars
  */
+
+import { visualizeFrequencyBarsMirrored } from './visualizers/frequencyBarsMirrored';
 
 export class TabAudioVisualizer {
   // Audio API properties
@@ -18,8 +19,9 @@ export class TabAudioVisualizer {
   private animationId: number | null = null;
   private isRunning: boolean = false;
 
-  // Visualizer elements
-  private bars: NodeListOf<HTMLElement> | null = null;
+  // Canvas elements
+  private canvas: HTMLCanvasElement | null = null;
+  private ctx: CanvasRenderingContext2D | null = null;
   private container: HTMLElement | null = null;
 
   // Status callback
@@ -33,11 +35,28 @@ export class TabAudioVisualizer {
    * Initialize visualizer
    */
   private init(): void {
-    // Find visualizer container and bars
+    // Find canvas and container
+    this.canvas = document.querySelector('[data-visualizer-canvas]') as HTMLCanvasElement;
     this.container = document.querySelector('[data-visualizer-container]') as HTMLElement;
-    if (this.container) {
-      this.bars = this.container.querySelectorAll('[data-bar-id]');
+    
+    if (this.canvas) {
+      this.ctx = this.canvas.getContext('2d');
+      this.resizeCanvas();
+      
+      // Add resize listener
+      window.addEventListener('resize', () => this.resizeCanvas());
     }
+  }
+
+  /**
+   * Resize canvas to match display size
+   */
+  private resizeCanvas(): void {
+    if (!this.canvas) return;
+    
+    // Set canvas size to match its display size
+    this.canvas.width = this.canvas.offsetWidth;
+    this.canvas.height = this.canvas.offsetHeight;
   }
 
   /**
@@ -171,15 +190,10 @@ export class TabAudioVisualizer {
       this.audioContext = null;
     }
 
-    // Reset bars to 0
-    if (this.bars) {
-      this.bars.forEach((bar) => {
-        const barElement = bar.querySelector('.audio-visualizer__bar-fill') as HTMLElement;
-        if (barElement) {
-          barElement.style.height = '0%';
-          barElement.style.opacity = '0.4';
-        }
-      });
+    // Clear canvas
+    if (this.canvas && this.ctx) {
+      this.ctx.fillStyle = '#000000';
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     // Update container class
@@ -197,66 +211,10 @@ export class TabAudioVisualizer {
    * Visualization loop
    */
   private visualize(): void {
-    if (!this.isRunning || !this.analyser || !this.bars) return;
+    if (!this.isRunning || !this.analyser || !this.canvas || !this.ctx) return;
 
-    // Get frequency data
-    const bufferLength = this.analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    this.analyser.getByteFrequencyData(dataArray);
-
-    // Calculate how many frequency bins to use per bar
-    const barCount = this.bars.length;
-    const step = Math.floor(bufferLength / barCount);
-
-    // Debug: Log frequency data every 60 frames (~1 second)
-    if (Math.random() < 0.016) {
-      const maxValue = Math.max(...Array.from(dataArray));
-      const avgValue = Array.from(dataArray).reduce((a, b) => a + b, 0) / dataArray.length;
-      console.log(`[Visualizer Debug] Max: ${maxValue}, Avg: ${avgValue.toFixed(1)}, Bars: ${barCount}`);
-    }
-
-    // Update each bar based on frequency data
-    this.bars.forEach((bar, index) => {
-      const barElement = bar.querySelector('.audio-visualizer__bar-fill') as HTMLElement;
-      if (!barElement) return;
-
-      // Get frequency data for this bar (average multiple bins)
-      const startIndex = index * step;
-      const endIndex = Math.min(startIndex + step, bufferLength);
-      let sum = 0;
-      let count = 0;
-
-      for (let i = startIndex; i < endIndex; i++) {
-        sum += dataArray[i];
-        count++;
-      }
-
-      const average = count > 0 ? sum / count : 0;
-      
-      // Normalize to 0-1 range (0-255 -> 0-1)
-      const normalizedValue = average / 255;
-
-      // AGGRESSIVE AMPLIFICATION for visibility
-      // Apply power curve to boost mid-range values significantly
-      // Then multiply by 3.5 for strong visibility
-      const amplified = Math.pow(normalizedValue, 0.7) * 3.5;
-      const clampedValue = Math.min(amplified, 1.0);
-
-      // Get max height from CSS variable (default 85%)
-      const maxHeight = parseFloat(getComputedStyle(bar).getPropertyValue('--max-height')) || 85;
-
-      // Calculate bar height - direct mapping with minimum threshold
-      const barHeight = clampedValue > 0.02 
-        ? Math.max(clampedValue * maxHeight, 3) // Minimum 3% when audio detected
-        : 0;
-
-      // Update bar directly (no transition needed, handled by requestAnimationFrame)
-      barElement.style.height = `${barHeight}%`;
-
-      // Update opacity for better visibility
-      const opacity = 0.85 + (clampedValue * 0.15); // 0.85 to 1.0
-      barElement.style.opacity = opacity.toString();
-    });
+    // Call mirrored visualizer function
+    visualizeFrequencyBarsMirrored(this.ctx, this.canvas, this.analyser);
 
     // Update container class
     if (this.container) {
@@ -280,7 +238,12 @@ export class TabAudioVisualizer {
    */
   public destroy(): void {
     this.stop();
-    this.bars = null;
+    
+    // Remove resize listener
+    window.removeEventListener('resize', () => this.resizeCanvas());
+    
+    this.canvas = null;
+    this.ctx = null;
     this.container = null;
     this.onStatusChange = null;
   }
