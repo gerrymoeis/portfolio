@@ -27,7 +27,7 @@ export function visualizeFrequencyBarsMirrored(
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Continuously shift the base hue of the gradient (animation)
-  globalHueOffset -= 0.1;
+  globalHueOffset -= 0.15;
   if (globalHueOffset >= 360) {
     globalHueOffset = 0;
   }
