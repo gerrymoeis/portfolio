@@ -62,11 +62,10 @@ export function visualizeFrequencyBarsMirrored(
     const currentHue = (baseHue + gradientHueOffset) % 360;
     
     // Audio intensity affects saturation and lightness
-    // Adjusted for warm jewel tone style (matching website theme)
-    // Increased visibility while maintaining jewel tone character
+    // Significantly increased for better visibility
     const intensity = dataArray[i] / 255;
-    const saturation = 85 + (intensity * 10); // 85-95% (more visible, still jewel tone)
-    const lightness = 60 + (intensity * 15);  // 60-75% (brighter, more visible)
+    const saturation = 90 + (intensity * 10); // 90-100% (very saturated, highly visible)
+    const lightness = 65 + (intensity * 15);  // 65-80% (much brighter, clearly visible)
 
     // Simple HSL color (full spectrum like old code)
     ctx.fillStyle = `hsl(${currentHue}, ${saturation}%, ${lightness}%)`;

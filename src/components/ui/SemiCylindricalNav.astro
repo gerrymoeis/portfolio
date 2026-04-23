@@ -1,8 +1,10 @@
 ---
 /**
- * SemiCylindricalNav - Semi-cylindrical/half-arc navigation bar
+ * SemiCylindricalNav - Semi-cylindrical/half-arc navigation bar with mobile hamburger menu
  * Centered horizontally at the top of the home page
  * Contains Home, Projects, Blogs links with bilingual support
+ * Mobile: Hamburger menu (<768px)
+ * Desktop: Horizontal navigation (>=768px)
  */
 
 import ThemeToggle from './ThemeToggle.astro';
@@ -24,7 +26,19 @@ const { links, currentPath = '/' } = Astro.props;
 ---
 
 <nav class="semi-cylindrical-nav" aria-label="Main navigation">
-  <div class="semi-cylindrical-nav__container">
+  <!-- Mobile hamburger button (visible < 768px) -->
+  <button 
+    class="semi-cylindrical-nav__hamburger" 
+    aria-label="Toggle navigation menu"
+    aria-expanded="false"
+    data-nav-toggle
+  >
+    <span class="semi-cylindrical-nav__hamburger-line"></span>
+    <span class="semi-cylindrical-nav__hamburger-line"></span>
+    <span class="semi-cylindrical-nav__hamburger-line"></span>
+  </button>
+
+  <div class="semi-cylindrical-nav__container" data-nav-menu>
     <ul class="semi-cylindrical-nav__list">
       {links.map((link) => (
         <li class="semi-cylindrical-nav__item">
@@ -50,9 +64,155 @@ const { links, currentPath = '/' } = Astro.props;
       </li>
     </ul>
   </div>
+
+  <!-- Mobile overlay (visible when menu is open) -->
+  <div class="semi-cylindrical-nav__overlay" data-nav-overlay></div>
 </nav>
 
+<script>
+  // Mobile navigation toggle
+  const navToggle = document.querySelector('[data-nav-toggle]');
+  const navMenu = document.querySelector('[data-nav-menu]');
+  const navOverlay = document.querySelector('[data-nav-overlay]');
+  const navLinks = document.querySelectorAll('.semi-cylindrical-nav__link');
+
+  function openMenu() {
+    navMenu?.classList.add('is-open');
+    navOverlay?.classList.add('is-visible');
+    navToggle?.classList.add('is-active');
+    navToggle?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+  }
+
+  function closeMenu() {
+    navMenu?.classList.remove('is-open');
+    navOverlay?.classList.remove('is-visible');
+    navToggle?.classList.remove('is-active');
+    navToggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = ''; // Restore scroll
+  }
+
+  function toggleMenu() {
+    const isOpen = navMenu?.classList.contains('is-open');
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
+  // Toggle menu on button click
+  navToggle?.addEventListener('click', toggleMenu);
+
+  // Close menu on overlay click
+  navOverlay?.addEventListener('click', closeMenu);
+
+  // Close menu on link click (mobile)
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 768) {
+        closeMenu();
+      }
+    });
+  });
+
+  // Close menu on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navMenu?.classList.contains('is-open')) {
+      closeMenu();
+    }
+  });
+
+  // Close menu on window resize to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && navMenu?.classList.contains('is-open')) {
+      closeMenu();
+    }
+  });
+</script>
+
 <style>
+  /* ============================================
+     MOBILE HAMBURGER BUTTON
+     ============================================ */
+  
+  .semi-cylindrical-nav__hamburger {
+    display: none; /* Hidden on desktop */
+    position: fixed;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: calc(var(--layer-navigation) + 1);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 48px;
+    height: 48px;
+    background: var(--color-surface-elevated);
+    border: var(--panel-border-width) var(--panel-border-style) var(--color-accent-primary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--panel-shadow-elevated);
+    backdrop-filter: blur(var(--blur-backdrop-light));
+    cursor: pointer;
+    transition: all var(--duration-medium) var(--ease-out);
+  }
+
+  .semi-cylindrical-nav__hamburger:hover {
+    background: var(--color-nav-hover-bg);
+    transform: var(--transform-hover-lift);
+  }
+
+  .semi-cylindrical-nav__hamburger:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+
+  .semi-cylindrical-nav__hamburger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-text-primary);
+    border-radius: 2px;
+    transition: all var(--duration-medium) var(--ease-out);
+  }
+
+  /* Hamburger animation when open */
+  .semi-cylindrical-nav__hamburger.is-active .semi-cylindrical-nav__hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .semi-cylindrical-nav__hamburger.is-active .semi-cylindrical-nav__hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .semi-cylindrical-nav__hamburger.is-active .semi-cylindrical-nav__hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ============================================
+     MOBILE OVERLAY
+     ============================================ */
+  
+  .semi-cylindrical-nav__overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: var(--layer-navigation);
+    opacity: 0;
+    transition: opacity var(--duration-medium) var(--ease-out);
+  }
+
+  .semi-cylindrical-nav__overlay.is-visible {
+    display: block;
+    opacity: 1;
+  }
+
+  /* ============================================
+     NAVIGATION CONTAINER & LIST
+     ============================================ */
+
   .semi-cylindrical-nav {
     position: fixed;
     top: var(--space-6);
@@ -186,10 +346,93 @@ const { links, currentPath = '/' } = Astro.props;
     box-shadow: 0 0 4px var(--color-accent-primary);
   }
 
-  /* Responsive adjustments - Mobile first approach */
-  
+  /* ============================================
+     MOBILE NAVIGATION (<768px)
+     ============================================ */
+
+  @media (max-width: 767px) {
+    /* Show hamburger button */
+    .semi-cylindrical-nav__hamburger {
+      display: flex;
+    }
+
+    /* Hide desktop nav positioning */
+    .semi-cylindrical-nav {
+      position: static;
+      transform: none;
+      left: auto;
+      top: auto;
+    }
+
+    /* Transform navigation container to mobile menu */
+    .semi-cylindrical-nav__container {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      max-width: 85vw;
+      height: 100vh;
+      border-radius: 0;
+      border-right: none;
+      border-top: none;
+      border-bottom: none;
+      z-index: var(--layer-navigation);
+      transition: right var(--duration-medium) var(--ease-out);
+      overflow-y: auto;
+      padding: var(--space-20) var(--space-6) var(--space-6);
+    }
+
+    .semi-cylindrical-nav__container.is-open {
+      right: 0;
+    }
+
+    /* Remove atmospheric overlays on mobile */
+    .semi-cylindrical-nav__container::before,
+    .semi-cylindrical-nav__container::after {
+      display: none;
+    }
+
+    .semi-cylindrical-nav__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .semi-cylindrical-nav__item {
+      width: 100%;
+    }
+
+    .semi-cylindrical-nav__item--controls {
+      margin-left: 0;
+      margin-top: var(--space-4);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-border-medium);
+    }
+
+    .semi-cylindrical-nav__controls {
+      justify-content: center;
+      gap: var(--space-4);
+    }
+
+    .semi-cylindrical-nav__link {
+      width: 100%;
+      padding: var(--space-4);
+      font-size: var(--text-lg);
+      text-align: left;
+      border-radius: var(--radius-md);
+    }
+
+    .semi-cylindrical-nav__link--active::after {
+      display: none; /* Remove indicator on mobile */
+    }
+  }
+
+  /* ============================================
+     RESPONSIVE ADJUSTMENTS - DESKTOP
+     ============================================ */
+
   /* Extra small devices - very compact navigation */
-  @media (max-width: var(--breakpoint-xs)) {
+  @media (min-width: 768px) and (max-width: var(--breakpoint-xs)) {
     .semi-cylindrical-nav {
       top: var(--space-2);
       max-width: calc(100vw - var(--space-2));
@@ -320,7 +563,11 @@ const { links, currentPath = '/' } = Astro.props;
 
   /* Reduced motion preferences */
   @media (prefers-reduced-motion: reduce) {
-    .semi-cylindrical-nav__link {
+    .semi-cylindrical-nav__link,
+    .semi-cylindrical-nav__hamburger,
+    .semi-cylindrical-nav__hamburger-line,
+    .semi-cylindrical-nav__container,
+    .semi-cylindrical-nav__overlay {
       transition: none;
     }
 
