@@ -63,10 +63,10 @@ export function visualizeFrequencyBarsMirrored(
     
     // Audio intensity affects saturation and lightness
     // Adjusted for warm jewel tone style (matching website theme)
-    // Jewel tones: Saturation 73-83%, Lightness 56-76%
+    // Increased visibility while maintaining jewel tone character
     const intensity = dataArray[i] / 255;
-    const saturation = 75 + (intensity * 10); // 75-85% (jewel tone range)
-    const lightness = 55 + (intensity * 15);  // 55-70% (jewel tone range)
+    const saturation = 85 + (intensity * 10); // 85-95% (more visible, still jewel tone)
+    const lightness = 60 + (intensity * 15);  // 60-75% (brighter, more visible)
 
     // Simple HSL color (full spectrum like old code)
     ctx.fillStyle = `hsl(${currentHue}, ${saturation}%, ${lightness}%)`;

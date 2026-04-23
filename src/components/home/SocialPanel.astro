@@ -49,11 +49,12 @@ const { social } = Astro.props;
 
   .social-panel__title {
     font-family: var(--font-display); /* Serif for headings */
-    font-size: var(--text-lg);
-    font-weight: var(--weight-semibold);
+    font-size: var(--text-2xl); /* Proper heading hierarchy - 20.8-24px */
+    font-weight: var(--weight-bold); /* Stronger weight for headings */
     color: var(--color-text-primary);
-    margin: 0 0 var(--space-4) 0;
+    margin: 0 0 var(--space-6) 0; /* More space below heading */
     text-align: center;
+    line-height: var(--leading-tight);
   }
 
   .social-panel__list {
