@@ -197,9 +197,8 @@ const { links, currentPath = '/' } = Astro.props;
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: var(--layer-navigation);
+    background: rgba(0, 0, 0, 0.7); /* Darker overlay without blur */
+    z-index: calc(var(--layer-navigation) - 1); /* Below menu */
     opacity: 0;
     transition: opacity var(--duration-medium) var(--ease-out);
   }
@@ -376,7 +375,7 @@ const { links, currentPath = '/' } = Astro.props;
       border-right: none;
       border-top: none;
       border-bottom: none;
-      z-index: var(--layer-navigation);
+      z-index: var(--layer-navigation); /* Above overlay */
       transition: right var(--duration-medium) var(--ease-out);
       overflow-y: auto;
       padding: var(--space-20) var(--space-6) var(--space-6);

@@ -34,7 +34,10 @@ export function visualizeFrequencyBarsMirrored(
 
   // SIMPLE: Use same calculation as left-to-right but mirror from center
   const centerX = canvas.width / 2;
-  const barWidth = (centerX / bufferLength) * 2.5; // Half width divided by frequency bins
+  // Increase bar width multiplier to reduce gaps (2.5 → 3.5)
+  // This makes bars wider and fills more space
+  const barWidth = (centerX / bufferLength) * 3.5; // Increased from 2.5 to 3.5
+  const barGap = 0.5; // Small gap between bars (was 1)
   
   for (let i = 0; i < bufferLength; i++) {
     let barHeight = (dataArray[i] / 255) * canvas.height;
@@ -62,16 +65,18 @@ export function visualizeFrequencyBarsMirrored(
     const currentHue = (baseHue + gradientHueOffset) % 360;
     
     // Audio intensity affects saturation and lightness
-    // Significantly increased for better visibility
+    // Adjusted for warm jewel tone style (matching website theme)
+    // Jewel tones: Saturation 73-83%, Lightness 56-76%
     const intensity = dataArray[i] / 255;
-    const saturation = 90 + (intensity * 10); // 90-100% (very saturated, highly visible)
-    const lightness = 65 + (intensity * 15);  // 65-80% (much brighter, clearly visible)
+    const saturation = 75 + (intensity * 10); // 75-85% (jewel tone range)
+    const lightness = 55 + (intensity * 15);  // 55-70% (jewel tone range)
 
     // Simple HSL color (full spectrum like old code)
     ctx.fillStyle = `hsl(${currentHue}, ${saturation}%, ${lightness}%)`;
 
     // Draw right side (center to right edge)
-    const xRight = centerX + (i * (barWidth + 1));
+    // Reduced gap from 1 to 0.5
+    const xRight = centerX + (i * (barWidth + barGap));
     ctx.fillRect(
       xRight,
       canvas.height - barHeight,
@@ -80,7 +85,7 @@ export function visualizeFrequencyBarsMirrored(
     );
 
     // Draw left side (mirror - center to left edge)
-    const xLeft = centerX - (i * (barWidth + 1)) - barWidth;
+    const xLeft = centerX - (i * (barWidth + barGap)) - barWidth;
     ctx.fillRect(
       xLeft,
       canvas.height - barHeight,
