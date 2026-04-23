@@ -1,12 +1,23 @@
 /**
  * Custom Cursor with GSAP
- * Gradient Citrine cursor with glow effect and proper hover states
+ * Theme-aware cursor: Gradient Citrine (dark) / Gradient Fox (light)
  */
 
 import gsap from 'gsap';
 
 interface CursorOptions {
   cursorSize?: number;
+}
+
+interface CursorImages {
+  dark: {
+    default: string;
+    pointer: string;
+  };
+  light: {
+    default: string;
+    pointer: string;
+  };
 }
 
 export class CustomCursor {
@@ -16,11 +27,43 @@ export class CustomCursor {
   private isHovering = false;
   private options: Required<CursorOptions>;
   private styleElement: HTMLStyleElement | null = null;
+  private currentTheme: 'light' | 'dark' = 'dark';
+  
+  private cursorImages: CursorImages = {
+    dark: {
+      default: '/gradient-citrine-cursor.png',
+      pointer: '/gradient-citrine-pointer.png',
+    },
+    light: {
+      default: '/gradient-fox-cursor.png',
+      pointer: '/gradient-fox-pointer.png',
+    },
+  };
 
   constructor(options: CursorOptions = {}) {
     this.options = {
       cursorSize: options.cursorSize || 32,
     };
+    
+    // Detect initial theme
+    this.currentTheme = this.getTheme();
+  }
+
+  /**
+   * Get current theme from document
+   */
+  private getTheme(): 'light' | 'dark' {
+    if (typeof window === 'undefined') return 'dark';
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  }
+
+  /**
+   * Get cursor glow color based on theme
+   */
+  private getGlowColor(): string {
+    return this.currentTheme === 'dark' 
+      ? 'rgba(246, 224, 94, 0.6)' // Golden yellow for dark theme
+      : 'rgba(255, 85, 0, 0.6)';   // Red-orange for light theme
   }
 
   /**
@@ -38,6 +81,7 @@ export class CustomCursor {
     this.attachEventListeners();
     this.hideDefaultCursor();
     this.attachFocusListeners();
+    this.attachThemeListener();
   }
 
   /**
@@ -57,6 +101,8 @@ export class CustomCursor {
   private createCursorElement(): void {
     this.cursor = document.createElement('div');
     this.cursor.className = 'custom-cursor';
+    
+    const glowColor = this.getGlowColor();
     this.cursor.style.cssText = `
       position: fixed;
       width: ${this.options.cursorSize}px;
@@ -67,14 +113,18 @@ export class CustomCursor {
       left: 0;
       top: 0;
       opacity: 1;
-      filter: drop-shadow(0 0 8px rgba(246, 224, 94, 0.6)) 
-              drop-shadow(0 0 16px rgba(246, 224, 94, 0.4))
-              drop-shadow(0 0 24px rgba(246, 224, 94, 0.2));
+      filter: drop-shadow(0 0 8px ${glowColor}) 
+              drop-shadow(0 0 16px ${glowColor.replace('0.6', '0.4')})
+              drop-shadow(0 0 24px ${glowColor.replace('0.6', '0.2')});
+      transition: filter 0.3s ease;
     `;
+
+    // Get theme-appropriate cursor images
+    const images = this.cursorImages[this.currentTheme];
 
     // Default cursor image
     const cursorImg = document.createElement('img');
-    cursorImg.src = '/gradient-citrine-cursor.png';
+    cursorImg.src = images.default;
     cursorImg.alt = '';
     cursorImg.className = 'cursor-default';
     cursorImg.style.cssText = `
@@ -85,11 +135,12 @@ export class CustomCursor {
       position: absolute;
       top: 0;
       left: 0;
+      transition: opacity 0.3s ease;
     `;
     
     // Pointer cursor image (for hover)
     const pointerImg = document.createElement('img');
-    pointerImg.src = '/gradient-citrine-pointer.png';
+    pointerImg.src = images.pointer;
     pointerImg.alt = '';
     pointerImg.className = 'cursor-pointer';
     pointerImg.style.cssText = `
@@ -100,6 +151,7 @@ export class CustomCursor {
       position: absolute;
       top: 0;
       left: 0;
+      transition: opacity 0.3s ease;
     `;
 
     this.cursor.appendChild(cursorImg);
@@ -203,6 +255,63 @@ export class CustomCursor {
         this.hideDefaultCursor();
       }
     });
+  }
+
+  /**
+   * Attach theme change listener
+   */
+  private attachThemeListener(): void {
+    // Listen for theme changes
+    window.addEventListener('themechange', ((event: CustomEvent) => {
+      const newTheme = event.detail.theme as 'light' | 'dark';
+      this.updateTheme(newTheme);
+    }) as EventListener);
+    
+    // Also listen for data-theme attribute changes (fallback)
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          const newTheme = this.getTheme();
+          if (newTheme !== this.currentTheme) {
+            this.updateTheme(newTheme);
+          }
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+  }
+
+  /**
+   * Update cursor theme
+   */
+  private updateTheme(newTheme: 'light' | 'dark'): void {
+    if (!this.cursor) return;
+    
+    this.currentTheme = newTheme;
+    const images = this.cursorImages[newTheme];
+    const glowColor = this.getGlowColor();
+    
+    // Update cursor images
+    const defaultImg = this.cursor.querySelector('.cursor-default') as HTMLImageElement;
+    const pointerImg = this.cursor.querySelector('.cursor-pointer') as HTMLImageElement;
+    
+    if (defaultImg) {
+      defaultImg.src = images.default;
+    }
+    if (pointerImg) {
+      pointerImg.src = images.pointer;
+    }
+    
+    // Update glow effect
+    this.cursor.style.filter = `
+      drop-shadow(0 0 8px ${glowColor}) 
+      drop-shadow(0 0 16px ${glowColor.replace('0.6', '0.4')})
+      drop-shadow(0 0 24px ${glowColor.replace('0.6', '0.2')})
+    `;
   }
 
   /**

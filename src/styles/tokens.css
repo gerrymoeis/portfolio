@@ -36,7 +36,7 @@
   --color-text-accent: #ffd700;       /* Accent text - golden yellow */
   --color-text-muted: #a0aec0;        /* Muted text - gray */
   
-  /* Accent colors - Golden/amber theme */
+  /* Accent colors - Golden/amber theme (DARK THEME ONLY) */
   --color-accent-primary: #f6e05e;    /* Primary accent - warm gold */
   --color-accent-secondary: #ed8936;  /* Secondary accent - warm orange */
   --color-accent-tertiary: #d69e2e;   /* Tertiary accent - deeper gold */
@@ -118,9 +118,48 @@
   --layer-particles: 5;
   
   /* ============================================
-     RESPONSIVE BORDER RADIUS TOKENS
-     Scales with viewport size
+     GLASSMORPHISM MOBILE MENU
+     Theme-aware background colors
      ============================================ */
+  
+  --color-mobile-menu-bg: rgba(42, 47, 54, 0.65);
+  --color-mobile-menu-shadow-strong: rgba(0, 0, 0, 0.3);
+  --color-mobile-menu-shadow-light: rgba(0, 0, 0, 0.2);
+  
+  /* ============================================
+     PAGINATION INDICATOR COLORS
+     Theme-aware glow colors for slider dots
+     ============================================ */
+  
+  --color-pagination-glow-soft: rgba(246, 224, 94, 0.4);
+  --color-pagination-glow-medium: rgba(246, 224, 94, 0.2);
+  --color-pagination-glow-strong: rgba(246, 224, 94, 0.6);
+  --color-pagination-glow-intense: rgba(246, 224, 94, 0.3);
+  --color-pagination-hover-bg: rgba(246, 224, 94, 0.05);
+  --color-pagination-focus-bg: rgba(246, 224, 94, 0.1);
+  --color-pagination-inner-glow: rgba(246, 224, 94, 0.1);
+  
+  /* ============================================
+     SCROLLBAR COLORS
+     Theme-aware scrollbar colors
+     ============================================ */
+  
+  --scrollbar-thumb-start: rgba(246, 224, 94, 0.6);
+  --scrollbar-thumb-mid: rgba(246, 224, 94, 0.4);
+  --scrollbar-thumb-end: rgba(246, 224, 94, 0.6);
+  --scrollbar-thumb-hover-start: rgba(246, 224, 94, 0.8);
+  --scrollbar-thumb-hover-mid: rgba(246, 224, 94, 0.6);
+  --scrollbar-thumb-hover-end: rgba(246, 224, 94, 0.8);
+  --scrollbar-thumb-active-start: rgba(246, 224, 94, 0.9);
+  --scrollbar-thumb-active-mid: rgba(246, 224, 94, 0.7);
+  --scrollbar-thumb-active-end: rgba(246, 224, 94, 0.9);
+  --scrollbar-glow-soft: rgba(246, 224, 94, 0.4);
+  --scrollbar-glow-medium: rgba(246, 224, 94, 0.6);
+  --scrollbar-glow-strong: rgba(246, 224, 94, 0.8);
+  --scrollbar-inset-glow-soft: rgba(246, 224, 94, 0.3);
+  --scrollbar-inset-glow-medium: rgba(246, 224, 94, 0.4);
+  --scrollbar-inset-glow-strong: rgba(246, 224, 94, 0.5);
+  --scrollbar-firefox-color: rgba(246, 224, 94, 0.6);
   
   --radius-xs: clamp(2px, 1px + 0.5vw, 3px);
   --radius-sm: clamp(4px, 2px + 1vw, 6px);
@@ -457,11 +496,11 @@
   --color-text-primary: #1a202c;      /* Primary text - very dark (16.1:1 ratio) */
   --color-text-secondary: #2d3748;    /* Secondary text - dark (12.6:1 ratio) */
   --color-text-tertiary: #4a5568;     /* Tertiary text - medium (7.5:1 ratio) */
-  --color-text-accent: #FF2A00;       /* Accent text - bright red-orange */
+  --color-text-accent: #ff5500;       /* Accent text - bright red-orange */
   --color-text-muted: #718096;        /* Muted text - gray (4.5:1 ratio) */
   
   /* Accent colors - Bright red-orange theme */
-  --color-accent-primary: #FF2A00;    /* Primary accent - bright red-orange */
+  --color-accent-primary: #ff5500;    /* Primary accent - bright red-orange */
   --color-accent-secondary: #FF4500;  /* Secondary accent - orange-red */
   --color-accent-tertiary: #CC2200;   /* Tertiary accent - darker red */
   
@@ -469,45 +508,89 @@
   --color-border-light: rgba(26, 32, 44, 0.15);    /* More visible light border */
   --color-border-medium: rgba(26, 32, 44, 0.25);   /* More visible medium border */
   --color-border-strong: rgba(26, 32, 44, 0.4);    /* Strong border */
-  --color-border-accent: rgba(255, 42, 0, 0.5);    /* Red-orange accent border */
+  --color-border-accent: rgba(255, 85, 0, 0.5);    /* Red-orange accent border */
   
   /* Shadow colors for depth - More visible */
   --color-shadow-light: rgba(0, 0, 0, 0.08);
   --color-shadow-medium: rgba(0, 0, 0, 0.15);
   --color-shadow-strong: rgba(0, 0, 0, 0.25);
-  --color-shadow-accent: rgba(255, 42, 0, 0.3);
+  --color-shadow-accent: rgba(255, 85, 0, 0.3);
   
   /* Particle and effect colors */
-  --color-particle-warm: rgba(255, 42, 0, 0.6);
+  --color-particle-warm: rgba(255, 85, 0, 0.6);
   --color-particle-cool: rgba(139, 149, 109, 0.4);
   --color-particle-neutral: rgba(26, 32, 44, 0.3);
   
-  /* Hover and interactive states - More visible */
-  --color-social-hover-bg: rgba(255, 42, 0, 0.15);
-  --color-social-hover-bg-subtle: rgba(255, 42, 0, 0.08);
+  /* Hover and interactive states - Red-orange for light theme */
+  --color-social-hover-bg: rgba(255, 85, 0, 0.15);
+  --color-social-hover-bg-subtle: rgba(255, 85, 0, 0.08);
   --color-social-hover-bg-home: rgba(0, 0, 0, 0.05);
   
-  --color-nav-hover-bg: rgba(255, 42, 0, 0.12);
-  --color-nav-active-bg: rgba(255, 42, 0, 0.18);
+  --color-nav-hover-bg: rgba(255, 85, 0, 0.12);
+  --color-nav-active-bg: rgba(255, 85, 0, 0.18);
   
   /* Panel shadows for light theme - More visible */
   --panel-shadow-base: 
     0 2px 8px var(--color-shadow-medium),
     0 1px 2px var(--color-shadow-strong),
-    inset 0 1px 0 rgba(255, 42, 0, 0.08);
+    inset 0 1px 0 rgba(255, 85, 0, 0.08);
     
   --panel-shadow-elevated: 
     0 4px 16px var(--color-shadow-strong),
     0 2px 4px var(--color-shadow-medium),
-    inset 0 1px 0 rgba(255, 42, 0, 0.12);
+    inset 0 1px 0 rgba(255, 85, 0, 0.12);
   
   /* Atmospheric glow effects (more visible in light theme) */
   --atmospheric-glow: 
-    0 0 20px rgba(255, 42, 0, 0.2),
-    0 0 40px rgba(255, 42, 0, 0.08);
+    0 0 20px rgba(255, 85, 0, 0.2),
+    0 0 40px rgba(255, 85, 0, 0.08);
     
   --subtle-glow: 
-    0 0 10px rgba(255, 42, 0, 0.15);
+    0 0 10px rgba(255, 85, 0, 0.15);
+  
+  /* ============================================
+     GLASSMORPHISM MOBILE MENU - LIGHT THEME
+     Lower opacity for visible blur effect
+     ============================================ */
+  
+  --color-mobile-menu-bg: rgba(255, 255, 255, 0.55);
+  --color-mobile-menu-shadow-strong: rgba(0, 0, 0, 0.15);
+  --color-mobile-menu-shadow-light: rgba(0, 0, 0, 0.1);
+  
+  /* ============================================
+     PAGINATION INDICATOR COLORS - LIGHT THEME
+     Red-orange glow colors for slider dots
+     ============================================ */
+  
+  --color-pagination-glow-soft: rgba(255, 85, 0, 0.4);
+  --color-pagination-glow-medium: rgba(255, 85, 0, 0.2);
+  --color-pagination-glow-strong: rgba(255, 85, 0, 0.6);
+  --color-pagination-glow-intense: rgba(255, 85, 0, 0.3);
+  --color-pagination-hover-bg: rgba(255, 85, 0, 0.05);
+  --color-pagination-focus-bg: rgba(255, 85, 0, 0.1);
+  --color-pagination-inner-glow: rgba(255, 85, 0, 0.1);
+  
+  /* ============================================
+     SCROLLBAR COLORS - LIGHT THEME
+     Red-orange scrollbar colors
+     ============================================ */
+  
+  --scrollbar-thumb-start: rgba(255, 85, 0, 0.7);
+  --scrollbar-thumb-mid: rgba(255, 85, 0, 0.5);
+  --scrollbar-thumb-end: rgba(255, 85, 0, 0.7);
+  --scrollbar-thumb-hover-start: rgba(255, 85, 0, 0.9);
+  --scrollbar-thumb-hover-mid: rgba(255, 85, 0, 0.7);
+  --scrollbar-thumb-hover-end: rgba(255, 85, 0, 0.9);
+  --scrollbar-thumb-active-start: rgba(255, 85, 0, 1);
+  --scrollbar-thumb-active-mid: rgba(255, 85, 0, 0.8);
+  --scrollbar-thumb-active-end: rgba(255, 85, 0, 1);
+  --scrollbar-glow-soft: rgba(255, 85, 0, 0.5);
+  --scrollbar-glow-medium: rgba(255, 85, 0, 0.7);
+  --scrollbar-glow-strong: rgba(255, 85, 0, 0.8);
+  --scrollbar-inset-glow-soft: rgba(255, 85, 0, 0.4);
+  --scrollbar-inset-glow-medium: rgba(255, 85, 0, 0.5);
+  --scrollbar-inset-glow-strong: rgba(255, 85, 0, 0.6);
+  --scrollbar-firefox-color: rgba(255, 85, 0, 0.7);
 }
 
 /* ============================================

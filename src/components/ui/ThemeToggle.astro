@@ -40,6 +40,16 @@
     transform: translateY(-1px);
   }
   
+  /* Dark theme hover - golden yellow icon */
+  :global(html:not([data-theme="light"])) .theme-toggle:hover {
+    color: #f6e05e;
+  }
+  
+  /* Light theme hover - red-orange icon */
+  :global([data-theme="light"]) .theme-toggle:hover {
+    color: #ff5500;
+  }
+  
   .theme-toggle:active {
     transform: translateY(0);
   }

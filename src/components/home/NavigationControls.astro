@@ -143,10 +143,24 @@ const shouldRender = showControls && totalPlaylists > 1;
     
     /* Enhanced hover effects */
     &:hover:not(:disabled) {
-      background: var(--color-surface-elevated);
       transform: var(--transform-hover-lift);
       box-shadow: var(--panel-shadow-elevated);
       border-color: var(--color-accent-primary);
+      color: var(--color-accent-primary); /* Change icon color on hover */
+    }
+    
+    /* Dark theme - keep dark background on hover for better contrast */
+    :global(html:not([data-theme="light"])) &:hover:not(:disabled) {
+      background: var(--color-surface-base); /* Keep dark background */
+      border-color: var(--color-accent-primary); /* Golden yellow border */
+      color: var(--color-accent-primary); /* Golden yellow icon */
+    }
+    
+    /* Light theme - keep light background on hover */
+    :global([data-theme="light"]) &:hover:not(:disabled) {
+      background: var(--color-surface-elevated); /* Keep light background */
+      border-color: var(--color-accent-primary); /* Red-orange border */
+      color: var(--color-accent-primary); /* Red-orange icon */
     }
     
     /* Active state */
@@ -242,16 +256,13 @@ const shouldRender = showControls && totalPlaylists > 1;
     }
   }
 
-  /* Dark mode adjustments */
+  /* Dark mode adjustments - removed conflicting hover background change */
   @media (prefers-color-scheme: dark) {
     .nav-button {
       background: var(--color-surface-dark);
       border-color: var(--color-border-medium);
       
-      &:hover:not(:disabled) {
-        background: var(--color-surface-elevated);
-        border-color: var(--color-accent-primary);
-      }
+      /* Removed hover background change - handled by theme-specific rules above */
       
       &:disabled {
         background: var(--color-bg-dark);

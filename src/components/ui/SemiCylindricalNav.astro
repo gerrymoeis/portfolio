@@ -315,9 +315,19 @@ const { links, currentPath = '/' } = Astro.props;
 
   .semi-cylindrical-nav__link:hover {
     color: var(--color-text-primary);
-    background-color: rgba(255, 42, 0, 0.1); /* Red-orange hover */
+    background-color: var(--color-nav-hover-bg);
     transform: translateY(-1px);
     box-shadow: var(--subtle-glow);
+  }
+  
+  /* Dark theme hover - golden yellow */
+  :global(html:not([data-theme="light"])) .semi-cylindrical-nav__link:hover {
+    background-color: rgba(246, 224, 94, 0.1);
+  }
+  
+  /* Light theme hover - red-orange */
+  :global([data-theme="light"]) .semi-cylindrical-nav__link:hover {
+    background-color: rgba(255, 85, 0, 0.1);
   }
 
   .semi-cylindrical-nav__link:focus-visible {
@@ -327,9 +337,19 @@ const { links, currentPath = '/' } = Astro.props;
 
   .semi-cylindrical-nav__link--active {
     color: var(--color-text-primary);
-    background-color: rgba(255, 42, 0, 0.15); /* Red-orange active */
+    background-color: var(--color-nav-active-bg);
     font-weight: var(--weight-semibold);
     box-shadow: var(--subtle-glow);
+  }
+  
+  /* Dark theme active - golden yellow */
+  :global(html:not([data-theme="light"])) .semi-cylindrical-nav__link--active {
+    background-color: rgba(246, 224, 94, 0.15);
+  }
+  
+  /* Light theme active - red-orange */
+  :global([data-theme="light"]) .semi-cylindrical-nav__link--active {
+    background-color: rgba(255, 85, 0, 0.15);
   }
 
   .semi-cylindrical-nav__link--active::after {
@@ -379,25 +399,34 @@ const { links, currentPath = '/' } = Astro.props;
       transition: right var(--duration-medium) var(--ease-out);
       overflow-y: auto;
       padding: var(--space-20) var(--space-6) var(--space-6);
-      /* Ensure backdrop-filter works on mobile for both themes */
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      /* Glassmorphism effect using design system tokens */
+      background: var(--color-mobile-menu-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
     }
-
-    /* Dark theme mobile menu - semi-transparent with blur */
+    
+    /* Dark theme - golden yellow glow on left edge */
     :global(html:not([data-theme="light"])) .semi-cylindrical-nav__container {
-      background: rgba(42, 47, 54, 0.85);
+      border-left: 1px solid rgba(246, 224, 94, 0.9);
       box-shadow: 
-        -4px 0 24px rgba(0, 0, 0, 0.3),
-        -2px 0 8px rgba(0, 0, 0, 0.2);
+        -4px 0 24px var(--color-mobile-menu-shadow-strong),
+        -2px 0 8px var(--color-mobile-menu-shadow-light),
+        -6px 0 24px rgba(246, 224, 94, 0.6),
+        -3px 0 12px rgba(246, 224, 94, 0.8),
+        inset 3px 0 10px rgba(246, 224, 94, 0.5),
+        inset 1px 0 0 rgba(246, 224, 94, 1);
     }
-
-    /* Light theme mobile menu - semi-transparent with blur */
+    
+    /* Light theme - red-orange glow on left edge */
     :global([data-theme="light"]) .semi-cylindrical-nav__container {
-      background: rgba(255, 255, 255, 0.85);
+      border-left: 1px solid rgba(255, 85, 0, 0.9);
       box-shadow: 
-        -4px 0 24px rgba(0, 0, 0, 0.15),
-        -2px 0 8px rgba(0, 0, 0, 0.1);
+        -4px 0 24px var(--color-mobile-menu-shadow-strong),
+        -2px 0 8px var(--color-mobile-menu-shadow-light),
+        -6px 0 24px rgba(255, 85, 0, 0.5),
+        -3px 0 12px rgba(255, 85, 0, 0.7),
+        inset 3px 0 10px rgba(255, 85, 0, 0.4),
+        inset 1px 0 0 rgba(255, 85, 0, 0.9);
     }
 
     .semi-cylindrical-nav__container.is-open {

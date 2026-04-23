@@ -1,6 +1,6 @@
 /**
  * Cursor Particle Trail Effect
- * Creates a smooth particle trail following the cursor
+ * Theme-aware particle trail: Golden yellow (dark) / Red-orange (light)
  */
 
 import gsap from 'gsap';
@@ -17,7 +17,6 @@ interface TrailOptions {
   particleSize?: number;
   particleLifetime?: number;
   spawnRate?: number;
-  color?: string;
 }
 
 export class CursorTrail {
@@ -26,9 +25,10 @@ export class CursorTrail {
   private mouseY = 0;
   private lastSpawnTime = 0;
   private animationFrame: number | null = null;
-  private options: Required<TrailOptions>;
+  private options: Required<Omit<TrailOptions, 'color'>>;
   private isActive = false;
   private isVisible = true;
+  private currentTheme: 'light' | 'dark' = 'dark';
 
   constructor(options: TrailOptions = {}) {
     this.options = {
@@ -36,8 +36,27 @@ export class CursorTrail {
       particleSize: options.particleSize || 10,
       particleLifetime: options.particleLifetime || 1000, // ms
       spawnRate: options.spawnRate || 30, // ms between spawns
-      color: options.color || 'rgba(246, 224, 94, 0.8)', // Citrine yellow
     };
+    
+    // Detect initial theme
+    this.currentTheme = this.getTheme();
+  }
+
+  /**
+   * Get current theme from document
+   */
+  private getTheme(): 'light' | 'dark' {
+    if (typeof window === 'undefined') return 'dark';
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  }
+
+  /**
+   * Get particle color based on theme
+   */
+  private getParticleColor(): string {
+    return this.currentTheme === 'dark'
+      ? 'rgba(246, 224, 94, 0.9)' // Golden yellow for dark theme
+      : 'rgba(255, 85, 0, 0.9)';   // Red-orange for light theme
   }
 
   /**
@@ -59,6 +78,7 @@ export class CursorTrail {
     }
 
     this.attachEventListeners();
+    this.attachThemeListener();
     this.startAnimation();
     this.isActive = true;
     
@@ -81,6 +101,54 @@ export class CursorTrail {
    */
   private attachEventListeners(): void {
     document.addEventListener('mousemove', this.handleMouseMove.bind(this));
+  }
+
+  /**
+   * Attach theme change listener
+   */
+  private attachThemeListener(): void {
+    // Listen for theme changes
+    window.addEventListener('themechange', ((event: CustomEvent) => {
+      const newTheme = event.detail.theme as 'light' | 'dark';
+      this.updateTheme(newTheme);
+    }) as EventListener);
+    
+    // Also listen for data-theme attribute changes (fallback)
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          const newTheme = this.getTheme();
+          if (newTheme !== this.currentTheme) {
+            this.updateTheme(newTheme);
+          }
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+  }
+
+  /**
+   * Update trail theme
+   */
+  private updateTheme(newTheme: 'light' | 'dark'): void {
+    this.currentTheme = newTheme;
+    const newColor = this.getParticleColor();
+    
+    // Update existing particles with new color
+    this.particles.forEach((particle) => {
+      particle.element.style.background = newColor;
+      
+      // Update box-shadow with new color
+      particle.element.style.boxShadow = `
+        0 0 ${this.options.particleSize * 1.5}px ${newColor},
+        0 0 ${this.options.particleSize * 3}px ${newColor.replace('0.9', '0.6')},
+        0 0 ${this.options.particleSize * 5}px ${newColor.replace('0.9', '0.3')}
+      `;
+    });
   }
 
   /**
@@ -137,22 +205,25 @@ export class CursorTrail {
     const particle = document.createElement('div');
     particle.className = 'cursor-trail-particle';
     
+    const color = this.getParticleColor();
+    
     // Minimalist glow effect - matches cursor shape
     particle.style.cssText = `
       position: fixed;
       width: ${this.options.particleSize}px;
       height: ${this.options.particleSize}px;
-      background: ${this.options.color};
+      background: ${color};
       border-radius: 50%;
       pointer-events: none;
       z-index: 9998;
       will-change: transform, opacity;
       box-shadow: 
-        0 0 ${this.options.particleSize * 1.5}px ${this.options.color},
-        0 0 ${this.options.particleSize * 3}px rgba(246, 224, 94, 0.6),
-        0 0 ${this.options.particleSize * 5}px rgba(246, 224, 94, 0.3);
+        0 0 ${this.options.particleSize * 1.5}px ${color},
+        0 0 ${this.options.particleSize * 3}px ${color.replace('0.9', '0.6')},
+        0 0 ${this.options.particleSize * 5}px ${color.replace('0.9', '0.3')};
       left: 0;
       top: 0;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
     `;
 
     document.body.appendChild(particle);
@@ -252,7 +323,6 @@ export function initCursorTrail(): CursorTrail | null {
     particleSize: 8,
     particleLifetime: 800,
     spawnRate: 20,
-    color: 'rgba(246, 224, 94, 0.9)', // Citrine yellow to match cursor
   });
   
   trail.init();

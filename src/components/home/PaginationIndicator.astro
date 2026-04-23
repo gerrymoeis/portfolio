@@ -78,8 +78,8 @@ const totalPlaylists = playlists.length;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px; /* Reduced from 44px */
-    height: 32px; /* Reduced from 44px */
+    width: 32px;
+    height: 32px;
     border: none;
     border-radius: var(--radius-full);
     background: transparent;
@@ -94,13 +94,6 @@ const totalPlaylists = playlists.length;
     &:focus-visible {
       outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
       outline-offset: var(--focus-outline-offset);
-      background-color: rgba(246, 224, 94, 0.1);
-    }
-    
-    /* Hover effects */
-    &:hover:not(:disabled) {
-      transform: scale(1.1);
-      background-color: rgba(246, 224, 94, 0.05);
     }
     
     /* Active/pressed state */
@@ -114,9 +107,29 @@ const totalPlaylists = playlists.length;
       opacity: 0.6;
     }
   }
+  
+  /* Dark theme hover and focus */
+  :global([data-theme="dark"]) .pagination-dot:focus-visible {
+    background-color: rgba(246, 224, 94, 0.1);
+  }
+  
+  :global([data-theme="dark"]) .pagination-dot:hover:not(:disabled) {
+    transform: scale(1.1);
+    background-color: rgba(246, 224, 94, 0.05);
+  }
+  
+  /* Light theme hover and focus */
+  :global([data-theme="light"]) .pagination-dot:focus-visible {
+    background-color: rgba(255, 85, 0, 0.1);
+  }
+  
+  :global([data-theme="light"]) .pagination-dot:hover:not(:disabled) {
+    transform: scale(1.1);
+    background-color: rgba(255, 85, 0, 0.05);
+  }
 
   .pagination-dot__indicator {
-    width: 12px; /* Bigger dots */
+    width: 12px;
     height: 12px;
     border-radius: var(--radius-full);
     background: var(--color-text-tertiary);
@@ -132,30 +145,57 @@ const totalPlaylists = playlists.length;
       position: absolute;
       inset: -2px;
       border-radius: var(--radius-full);
-      background: radial-gradient(circle, transparent 60%, rgba(246, 224, 94, 0.1) 100%);
       opacity: 0;
       transition: opacity var(--duration-fast) var(--ease-out);
     }
+  }
+  
+  /* Dark theme inner glow */
+  :global([data-theme="dark"]) .pagination-dot__indicator::before {
+    background: radial-gradient(circle, transparent 60%, rgba(246, 224, 94, 0.1) 100%);
+  }
+  
+  /* Light theme inner glow */
+  :global([data-theme="light"]) .pagination-dot__indicator::before {
+    background: radial-gradient(circle, transparent 60%, rgba(255, 85, 0, 0.1) 100%);
   }
 
   /* Active state styling using primary accent color */
   .pagination-dot--active .pagination-dot__indicator {
     background: var(--color-accent-primary);
     transform: scale(1.25);
-    box-shadow: 
-      0 0 8px rgba(246, 224, 94, 0.4),
-      0 0 16px rgba(246, 224, 94, 0.2);
     
     &::before {
       opacity: 1;
     }
   }
+  
+  /* Dark theme - golden yellow glow */
+  :global([data-theme="dark"]) .pagination-dot--active .pagination-dot__indicator {
+    box-shadow: 
+      0 0 8px rgba(246, 224, 94, 0.4),
+      0 0 16px rgba(246, 224, 94, 0.2);
+  }
+  
+  /* Light theme - red-orange glow */
+  :global([data-theme="light"]) .pagination-dot--active .pagination-dot__indicator {
+    box-shadow: 
+      0 0 8px rgba(255, 85, 0, 0.4),
+      0 0 16px rgba(255, 85, 0, 0.2);
+  }
 
-  /* Enhanced hover state for active dot */
-  .pagination-dot--active:hover:not(:disabled) .pagination-dot__indicator {
+  /* Enhanced hover state for active dot - dark theme */
+  :global([data-theme="dark"]) .pagination-dot--active:hover:not(:disabled) .pagination-dot__indicator {
     box-shadow: 
       0 0 12px rgba(246, 224, 94, 0.6),
       0 0 24px rgba(246, 224, 94, 0.3);
+  }
+  
+  /* Enhanced hover state for active dot - light theme */
+  :global([data-theme="light"]) .pagination-dot--active:hover:not(:disabled) .pagination-dot__indicator {
+    box-shadow: 
+      0 0 12px rgba(255, 85, 0, 0.6),
+      0 0 24px rgba(255, 85, 0, 0.3);
   }
 
   /* Screen reader only text */
