@@ -9,17 +9,22 @@
  * - class: Additional CSS classes (optional)
  */
 
+import ThemeToggle from './ThemeToggle.astro';
+import LanguageToggle from './LanguageToggle.astro';
+
 interface Props {
   class?: string;
 }
 
 const { class: className = '' } = Astro.props;
 
-// Navigation links - Consistent order: Home, Projects, Blogs
+// Navigation links with bilingual support - Consistent order: Home, Projects, Blogs, Experiences, CV
 const navLinks = [
-  { label: 'Home', href: '/', target: undefined },
-  { label: 'Projects', href: '/projects', target: '_blank' },
-  { label: 'Blogs', href: '/blogs', target: '_blank' },
+  { label: { id: 'Beranda', en: 'Home' }, href: '/', target: undefined },
+  { label: { id: 'Proyek', en: 'Projects' }, href: '/projects', target: '_blank' },
+  { label: { id: 'Blog', en: 'Blogs' }, href: '/blogs', target: '_blank' },
+  { label: { id: 'Pengalaman', en: 'Experiences' }, href: '/experiences', target: '_blank' },
+  { label: { id: 'CV', en: 'CV' }, href: '/cv', target: '_blank' },
 ];
 
 // Get current path for active state
@@ -50,15 +55,24 @@ const currentPath = Astro.url.pathname;
           <a 
             href={link.href} 
             class:list={['navigation__link', { 'navigation__link--active': isActive }]}
+            aria-label={`Navigate to ${link.label.en}`}
             aria-current={isActive ? 'page' : undefined}
             target={link.target}
             rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+            data-bilingual="nav"
           >
-            {link.label}
+            <span data-lang="en">{link.label.en}</span>
+            <span data-lang="id">{link.label.id}</span>
           </a>
         </li>
       );
     })}
+    <li class="navigation__item navigation__item--controls">
+      <div class="navigation__controls">
+        <LanguageToggle />
+        <ThemeToggle />
+      </div>
+    </li>
   </ul>
 
   <!-- Mobile overlay (visible when menu is open) -->
@@ -215,7 +229,7 @@ const currentPath = Astro.url.pathname;
 
   .navigation__list {
     display: flex;
-    gap: var(--space-8);
+    gap: var(--space-4);
     align-items: center;
     justify-content: center;
     list-style: none;
@@ -229,7 +243,7 @@ const currentPath = Astro.url.pathname;
     padding: var(--space-3) var(--space-6);
     position: relative;
     overflow: hidden;
-    max-width: var(--nav-max-width);
+    max-width: fit-content;
     margin: 0 auto;
   }
 
@@ -248,8 +262,7 @@ const currentPath = Astro.url.pathname;
     position: absolute;
     inset: 0;
     background: 
-      radial-gradient(circle at 30% 30%, var(--color-particle-warm) 0%, transparent 60%),
-      radial-gradient(circle at 70% 70%, var(--color-particle-cool) 0%, transparent 60%);
+      radial-gradient(ellipse 40% 30% at 50% 0%, var(--color-particle-warm) 0%, transparent 50%);
     pointer-events: none;
     border-radius: var(--radius-pill);
   }
@@ -258,6 +271,18 @@ const currentPath = Astro.url.pathname;
     margin: 0;
     position: relative;
     z-index: 1;
+  }
+  
+  .navigation__item--controls {
+    margin-left: var(--space-2);
+    padding-left: var(--space-4);
+    border-left: 1px solid var(--color-border-medium);
+  }
+  
+  .navigation__controls {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
   }
 
   .navigation__link {
@@ -277,12 +302,33 @@ const currentPath = Astro.url.pathname;
     position: relative;
     white-space: nowrap;
   }
+  
+  /* Hide inactive language */
+  .navigation__link span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .navigation__link span[data-lang="en"],
+  :global(html[lang="id"]) .navigation__link span[data-lang="id"] {
+    display: inline;
+  }
 
   .navigation__link:hover {
-    color: var(--color-contrast-high);
+    color: var(--color-text-primary);
     background-color: var(--color-nav-hover-bg);
-    transform: var(--transform-hover-lift);
+    transform: translateY(-1px);
     box-shadow: var(--subtle-glow);
+  }
+  
+  /* Dark theme hover - golden yellow */
+  :global(html:not([data-theme="light"])) .navigation__link:hover {
+    background-color: rgba(246, 224, 94, 0.25);
+  }
+  
+  /* Light theme hover - red-orange */
+  :global([data-theme="light"]) .navigation__link:hover {
+    background-color: rgba(255, 85, 0, 0.25);
   }
 
   .navigation__link:focus-visible {
@@ -291,10 +337,20 @@ const currentPath = Astro.url.pathname;
   }
 
   .navigation__link--active {
-    color: var(--color-contrast-high);
+    color: var(--color-text-primary);
     background-color: var(--color-nav-active-bg);
     font-weight: var(--weight-semibold);
     box-shadow: var(--subtle-glow);
+  }
+  
+  /* Dark theme active - golden yellow */
+  :global(html:not([data-theme="light"])) .navigation__link--active {
+    background-color: rgba(246, 224, 94, 0.35);
+  }
+  
+  /* Light theme active - red-orange */
+  :global([data-theme="light"]) .navigation__link--active {
+    background-color: rgba(255, 85, 0, 0.35);
   }
 
   .navigation__link--active::after {
@@ -305,9 +361,9 @@ const currentPath = Astro.url.pathname;
     transform: translateX(-50%);
     width: var(--nav-indicator-width);
     height: var(--nav-indicator-height);
-    background-color: var(--color-nav-active-indicator);
+    background-color: var(--color-accent-primary);
     border-radius: var(--radius-xs);
-    box-shadow: 0 0 var(--space-1) var(--color-nav-active-indicator);
+    box-shadow: 0 0 var(--space-1) var(--color-accent-primary);
   }
 
   /* ============================================
@@ -329,7 +385,6 @@ const currentPath = Astro.url.pathname;
       max-width: 85vw;
       height: 100vh;
       flex-direction: column;
-      justify-content: flex-start;
       align-items: stretch;
       gap: 0;
       padding: var(--space-20) var(--space-6) var(--space-6);
@@ -340,6 +395,35 @@ const currentPath = Astro.url.pathname;
       z-index: var(--layer-navigation);
       transition: right var(--duration-medium) var(--ease-out);
       overflow-y: auto;
+      overflow-x: hidden;
+      /* Glassmorphism effect using design system tokens */
+      background: var(--color-mobile-menu-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+    }
+    
+    /* Dark theme - golden yellow glow on left edge */
+    :global(html:not([data-theme="light"])) .navigation__list {
+      border-left: 1px solid rgba(246, 224, 94, 0.9);
+      box-shadow: 
+        -4px 0 24px var(--color-mobile-menu-shadow-strong),
+        -2px 0 8px var(--color-mobile-menu-shadow-light),
+        -6px 0 24px rgba(246, 224, 94, 0.6),
+        -3px 0 12px rgba(246, 224, 94, 0.8),
+        inset 3px 0 10px rgba(246, 224, 94, 0.5),
+        inset 1px 0 0 rgba(246, 224, 94, 1);
+    }
+    
+    /* Light theme - red-orange glow on left edge */
+    :global([data-theme="light"]) .navigation__list {
+      border-left: 1px solid rgba(255, 85, 0, 0.9);
+      box-shadow: 
+        -4px 0 24px var(--color-mobile-menu-shadow-strong),
+        -2px 0 8px var(--color-mobile-menu-shadow-light),
+        -6px 0 24px rgba(255, 85, 0, 0.5),
+        -3px 0 12px rgba(255, 85, 0, 0.7),
+        inset 3px 0 10px rgba(255, 85, 0, 0.4),
+        inset 1px 0 0 rgba(255, 85, 0, 0.9);
     }
 
     .navigation__list.is-open {
@@ -354,6 +438,21 @@ const currentPath = Astro.url.pathname;
 
     .navigation__item {
       width: 100%;
+      flex-shrink: 0;
+    }
+    
+    .navigation__item--controls {
+      margin-left: 0;
+      padding-left: 0;
+      margin-top: var(--space-4);
+      padding-top: var(--space-4);
+      border-left: none;
+      border-top: 1px solid var(--color-border-medium);
+    }
+
+    .navigation__controls {
+      justify-content: center;
+      gap: var(--space-4);
     }
 
     .navigation__link {
@@ -393,7 +492,7 @@ const currentPath = Astro.url.pathname;
     .navigation__list {
       gap: var(--space-2);
       padding: var(--space-2) var(--space-4);
-      max-width: 85vw;
+      max-width: 90vw;
     }
 
     .navigation__link {
@@ -405,9 +504,9 @@ const currentPath = Astro.url.pathname;
   /* Medium devices - balanced sizing */
   @media (min-width: var(--breakpoint-sm)) and (max-width: var(--breakpoint-lg)) {
     .navigation__list {
-      gap: var(--space-4);
+      gap: var(--space-3);
       padding: var(--space-2) var(--space-4);
-      max-width: 80vw;
+      max-width: 95vw;
     }
 
     .navigation__link {
@@ -419,9 +518,9 @@ const currentPath = Astro.url.pathname;
   /* Large devices - full sizing */
   @media (min-width: var(--breakpoint-lg)) {
     .navigation__list {
-      gap: var(--space-8);
+      gap: var(--space-4);
       padding: var(--space-3) var(--space-6);
-      max-width: var(--nav-max-width);
+      max-width: fit-content;
     }
 
     .navigation__link {
@@ -430,10 +529,11 @@ const currentPath = Astro.url.pathname;
     }
   }
 
-  /* Ultra-wide screens - prevent over-expansion */
+  /* Ultra-wide screens - allow natural sizing */
   @media (min-width: var(--breakpoint-2xl)) {
     .navigation__list {
-      max-width: 500px;
+      max-width: fit-content;
+      gap: var(--space-6);
     }
   }
 

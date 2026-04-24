@@ -7,8 +7,8 @@
 ---
 
 <button
-  id="theme-toggle"
   class="theme-toggle"
+  data-theme-toggle
   aria-label="Toggle theme"
   title="Toggle theme"
   type="button"
@@ -101,29 +101,33 @@
 <script>
   import { toggleTheme, getCurrentTheme } from '../../scripts/theme';
   
-  // Initialize theme toggle button
+  // Initialize all theme toggle buttons
   function initThemeToggle() {
-    const button = document.getElementById('theme-toggle');
-    if (!button) return;
+    const buttons = document.querySelectorAll('[data-theme-toggle]');
+    if (!buttons.length) return;
     
     // Update button aria-label based on current theme
     function updateAriaLabel() {
-      if (!button) return; // Additional null check for TypeScript
       const theme = getCurrentTheme();
       const label = theme === 'dark' 
         ? 'Switch to light theme' 
         : 'Switch to dark theme';
-      button.setAttribute('aria-label', label);
-      button.setAttribute('title', label);
+      
+      buttons.forEach(button => {
+        button.setAttribute('aria-label', label);
+        button.setAttribute('title', label);
+      });
     }
     
     // Initial update
     updateAriaLabel();
     
-    // Handle click
-    button.addEventListener('click', () => {
-      toggleTheme();
-      updateAriaLabel();
+    // Handle click for each button
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        toggleTheme();
+        updateAriaLabel();
+      });
     });
     
     // Listen for theme changes from other sources

@@ -6,13 +6,13 @@
 ---
 
 <button
-  id="language-toggle"
   class="language-toggle"
+  data-language-toggle
   aria-label="Toggle language"
   title="Toggle language"
   type="button"
 >
-  <span class="language-toggle__text" id="language-text">EN</span>
+  <span class="language-toggle__text">EN</span>
 </button>
 
 <style>
@@ -66,25 +66,32 @@
   import { toggleLanguage, getCurrentLanguage } from '../../scripts/language';
   
   function initLanguageToggle() {
-    const button = document.getElementById('language-toggle');
-    const text = document.getElementById('language-text');
-    if (!button || !text) return;
+    const buttons = document.querySelectorAll('[data-language-toggle]');
+    if (!buttons.length) return;
     
     // Update button text based on current language
     function updateButtonText() {
       const lang = getCurrentLanguage();
-      text.textContent = lang === 'en' ? 'ID' : 'EN';
-      button.setAttribute('aria-label', lang === 'en' ? 'Switch to Indonesian' : 'Ganti ke Bahasa Inggris');
-      button.setAttribute('title', lang === 'en' ? 'Switch to Indonesian' : 'Ganti ke Bahasa Inggris');
+      
+      buttons.forEach(button => {
+        const text = button.querySelector('.language-toggle__text');
+        if (text) {
+          text.textContent = lang === 'en' ? 'ID' : 'EN';
+        }
+        button.setAttribute('aria-label', lang === 'en' ? 'Switch to Indonesian' : 'Ganti ke Bahasa Inggris');
+        button.setAttribute('title', lang === 'en' ? 'Switch to Indonesian' : 'Ganti ke Bahasa Inggris');
+      });
     }
     
     // Initial update
     updateButtonText();
     
-    // Handle click
-    button.addEventListener('click', () => {
-      toggleLanguage();
-      updateButtonText();
+    // Handle click for each button
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        toggleLanguage();
+        updateButtonText();
+      });
     });
     
     // Listen for language changes from other sources

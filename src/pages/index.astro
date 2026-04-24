@@ -108,11 +108,15 @@ const soundCloudPlaylists = [
     overflow-y: auto;
     z-index: var(--layer-content);
     
+    /* Ensure background covers entire viewport including top */
+    margin: 0;
+    width: 100%;
+    
     /* DEFAULT MOBILE FIRST - MUCH MORE SPACE */
     padding: var(--space-8);
     gap: var(--space-8);
-    padding-top: 200px; /* HUGE top padding for mobile */
-    padding-bottom: 120px; /* HUGE bottom padding for mobile */
+    padding-top: 120px; /* Reduced to match bottom */
+    padding-bottom: 120px; /* Keep same as top */
   }
 
   /* Hero block - Row 1 (long horizontal) */
@@ -182,8 +186,8 @@ const soundCloudPlaylists = [
     .home {
       padding: var(--space-6);
       gap: var(--space-6);
-      padding-top: 180px;
-      padding-bottom: 100px;
+      padding-top: 100px; /* Reduced to match bottom */
+      padding-bottom: 100px; /* Keep same as top */
     }
     
     .home__music-block {
@@ -196,8 +200,8 @@ const soundCloudPlaylists = [
     .home {
       padding: var(--space-8);
       gap: var(--space-10);
-      padding-top: 160px;
-      padding-bottom: 80px;
+      padding-top: 110px; /* Reduced to match bottom */
+      padding-bottom: 110px; /* Keep same as top */
     }
     
     /* FORCE COLUMN LAYOUT - DON'T CHANGE TO ROW */

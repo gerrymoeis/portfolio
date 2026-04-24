@@ -25,20 +25,21 @@ interface Props {
 const { links, currentPath = '/' } = Astro.props;
 ---
 
-<nav class="semi-cylindrical-nav" aria-label="Main navigation">
-  <!-- Mobile hamburger button (visible < 768px) -->
-  <button 
-    class="semi-cylindrical-nav__hamburger" 
-    aria-label="Toggle navigation menu"
-    aria-expanded="false"
-    data-nav-toggle
-  >
-    <span class="semi-cylindrical-nav__hamburger-line"></span>
-    <span class="semi-cylindrical-nav__hamburger-line"></span>
-    <span class="semi-cylindrical-nav__hamburger-line"></span>
-  </button>
+<!-- Mobile hamburger button (visible < 768px) - Outside nav wrapper -->
+<button 
+  class="semi-cylindrical-nav__hamburger" 
+  aria-label="Toggle navigation menu"
+  aria-expanded="false"
+  data-nav-toggle
+>
+  <span class="semi-cylindrical-nav__hamburger-line"></span>
+  <span class="semi-cylindrical-nav__hamburger-line"></span>
+  <span class="semi-cylindrical-nav__hamburger-line"></span>
+</button>
 
-  <div class="semi-cylindrical-nav__container" data-nav-menu>
+<!-- Desktop navigation wrapper -->
+<nav class="semi-cylindrical-nav" aria-label="Main navigation">
+  <div class="semi-cylindrical-nav__container semi-cylindrical-nav__container--desktop">
     <ul class="semi-cylindrical-nav__list">
       {links.map((link) => (
         <li class="semi-cylindrical-nav__item">
@@ -64,10 +65,38 @@ const { links, currentPath = '/' } = Astro.props;
       </li>
     </ul>
   </div>
-
-  <!-- Mobile overlay (visible when menu is open) -->
-  <div class="semi-cylindrical-nav__overlay" data-nav-overlay></div>
 </nav>
+
+<!-- Mobile menu (separate from desktop nav) -->
+<div class="semi-cylindrical-nav__container semi-cylindrical-nav__container--mobile" data-nav-menu>
+  <ul class="semi-cylindrical-nav__list">
+    {links.map((link) => (
+      <li class="semi-cylindrical-nav__item">
+        <a 
+          href={link.href} 
+          class={`semi-cylindrical-nav__link ${currentPath === link.href ? 'semi-cylindrical-nav__link--active' : ''}`}
+          aria-label={`Navigate to ${link.label.en}`}
+          aria-current={currentPath === link.href ? 'page' : undefined}
+          target={link.target}
+          rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+          data-bilingual="nav"
+        >
+          <span data-lang="en">{link.label.en}</span>
+          <span data-lang="id">{link.label.id}</span>
+        </a>
+      </li>
+    ))}
+    <li class="semi-cylindrical-nav__item semi-cylindrical-nav__item--controls">
+      <div class="semi-cylindrical-nav__controls">
+        <LanguageToggle />
+        <ThemeToggle />
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- Mobile overlay (visible when menu is open) -->
+<div class="semi-cylindrical-nav__overlay" data-nav-overlay></div>
 
 <script>
   // Mobile navigation toggle
@@ -223,6 +252,13 @@ const { links, currentPath = '/' } = Astro.props;
     display: flex;
     justify-content: center;
   }
+  
+  /* Hide desktop navbar completely on mobile */
+  @media (max-width: 767px) {
+    .semi-cylindrical-nav {
+      display: none;
+    }
+  }
 
   .semi-cylindrical-nav__container {
     background: var(--color-surface-elevated);
@@ -236,6 +272,11 @@ const { links, currentPath = '/' } = Astro.props;
     position: relative;
     overflow: hidden;
     max-width: 100%;
+  }
+  
+  /* Hide mobile container on desktop */
+  .semi-cylindrical-nav__container--mobile {
+    display: none;
   }
 
   /* HD-2D atmospheric overlay */
@@ -322,12 +363,12 @@ const { links, currentPath = '/' } = Astro.props;
   
   /* Dark theme hover - golden yellow */
   :global(html:not([data-theme="light"])) .semi-cylindrical-nav__link:hover {
-    background-color: rgba(246, 224, 94, 0.1);
+    background-color: rgba(246, 224, 94, 0.25);
   }
   
   /* Light theme hover - red-orange */
   :global([data-theme="light"]) .semi-cylindrical-nav__link:hover {
-    background-color: rgba(255, 85, 0, 0.1);
+    background-color: rgba(255, 85, 0, 0.25);
   }
 
   .semi-cylindrical-nav__link:focus-visible {
@@ -344,12 +385,12 @@ const { links, currentPath = '/' } = Astro.props;
   
   /* Dark theme active - golden yellow */
   :global(html:not([data-theme="light"])) .semi-cylindrical-nav__link--active {
-    background-color: rgba(246, 224, 94, 0.15);
+    background-color: rgba(246, 224, 94, 0.35);
   }
   
   /* Light theme active - red-orange */
   :global([data-theme="light"]) .semi-cylindrical-nav__link--active {
-    background-color: rgba(255, 85, 0, 0.15);
+    background-color: rgba(255, 85, 0, 0.35);
   }
 
   .semi-cylindrical-nav__link--active::after {
@@ -374,17 +415,15 @@ const { links, currentPath = '/' } = Astro.props;
     .semi-cylindrical-nav__hamburger {
       display: flex;
     }
-
-    /* Hide desktop nav positioning */
-    .semi-cylindrical-nav {
-      position: static;
-      transform: none;
-      left: auto;
-      top: auto;
+    
+    /* Hide desktop container on mobile */
+    .semi-cylindrical-nav__container--desktop {
+      display: none;
     }
 
-    /* Transform navigation container to mobile menu */
-    .semi-cylindrical-nav__container {
+    /* Mobile menu container */
+    .semi-cylindrical-nav__container--mobile {
+      display: block;
       position: fixed;
       top: 0;
       right: -100%;
@@ -395,18 +434,26 @@ const { links, currentPath = '/' } = Astro.props;
       border-right: none;
       border-top: none;
       border-bottom: none;
-      z-index: var(--layer-navigation); /* Above overlay */
+      z-index: var(--layer-navigation);
       transition: right var(--duration-medium) var(--ease-out);
       overflow-y: auto;
       padding: var(--space-20) var(--space-6) var(--space-6);
-      /* Glassmorphism effect using design system tokens */
+      /* Glassmorphism effect */
       background: var(--color-mobile-menu-bg);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
     }
     
+    .semi-cylindrical-nav__container--mobile.is-open {
+      right: 0;
+    }
+    
+    .semi-cylindrical-nav__container--mobile.is-open {
+      right: 0;
+    }
+    
     /* Dark theme - golden yellow glow on left edge */
-    :global(html:not([data-theme="light"])) .semi-cylindrical-nav__container {
+    :global(html:not([data-theme="light"])) .semi-cylindrical-nav__container--mobile {
       border-left: 1px solid rgba(246, 224, 94, 0.9);
       box-shadow: 
         -4px 0 24px var(--color-mobile-menu-shadow-strong),
@@ -418,7 +465,7 @@ const { links, currentPath = '/' } = Astro.props;
     }
     
     /* Light theme - red-orange glow on left edge */
-    :global([data-theme="light"]) .semi-cylindrical-nav__container {
+    :global([data-theme="light"]) .semi-cylindrical-nav__container--mobile {
       border-left: 1px solid rgba(255, 85, 0, 0.9);
       box-shadow: 
         -4px 0 24px var(--color-mobile-menu-shadow-strong),
@@ -429,13 +476,9 @@ const { links, currentPath = '/' } = Astro.props;
         inset 1px 0 0 rgba(255, 85, 0, 0.9);
     }
 
-    .semi-cylindrical-nav__container.is-open {
-      right: 0;
-    }
-
     /* Remove atmospheric overlays on mobile */
-    .semi-cylindrical-nav__container::before,
-    .semi-cylindrical-nav__container::after {
+    .semi-cylindrical-nav__container--mobile::before,
+    .semi-cylindrical-nav__container--mobile::after {
       display: none;
     }
 

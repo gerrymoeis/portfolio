@@ -18,15 +18,23 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  background-color: var(--color-bg-primary);
+  /* Extend into safe areas on notched devices */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
 body {
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   line-height: var(--leading-normal);
   font-family: var(--font-body);
   font-size: var(--text-base);
   color: var(--color-text-secondary);
   background-color: var(--color-bg-primary);
+  /* Ensure body extends to edges including safe areas */
+  margin: 0;
+  padding: 0;
 }
 
 /* Remove default list styles */
