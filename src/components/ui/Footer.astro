@@ -2,7 +2,7 @@
 /**
  * Footer - Site footer component
  * HD-2D styled footer for all pages except home
- * Contains copyright, social links, and navigation with active states
+ * Contains copyright, social links, navigation with active states, and CV download
  * 
  * Props:
  * - currentPath: Current page path for active state detection (optional)
@@ -22,16 +22,18 @@ interface SocialLink {
 
 const { currentPath } = Astro.props;
 
+// Social links - removed Twitter and LinkedIn, added Email
 const socialLinks: SocialLink[] = [
   { name: "GitHub", url: "https://github.com/yourusername", icon: "github" },
-  { name: "Twitter", url: "https://twitter.com/yourusername", icon: "twitter" },
-  { name: "LinkedIn", url: "https://linkedin.com/in/yourusername", icon: "linkedin" },
+  { name: "Email", url: "mailto:your.email@example.com", icon: "email" },
 ];
 
+// Navigation links with bilingual support - updated to match navbar
 const navLinks = [
-  { label: 'Home', href: '/', target: undefined },
-  { label: 'Projects', href: '/projects', target: '_blank' },
-  { label: 'Blogs', href: '/blogs', target: '_blank' },
+  { label: { id: 'Beranda', en: 'Home' }, href: '/', target: undefined },
+  { label: { id: 'Proyek', en: 'Projects' }, href: '/projects', target: '_blank' },
+  { label: { id: 'Blog', en: 'Blogs' }, href: '/blogs', target: '_blank' },
+  { label: { id: 'Pengalaman', en: 'Experiences' }, href: '/experiences', target: '_blank' },
 ];
 
 const currentYear = new Date().getFullYear();
@@ -58,12 +60,28 @@ const activePath = currentPath || Astro.url.pathname;
                   aria-current={isActive ? 'page' : undefined}
                   target={link.target}
                   rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                  data-bilingual="footer-nav"
                 >
-                  {link.label}
+                  <span data-lang="en">{link.label.en}</span>
+                  <span data-lang="id">{link.label.id}</span>
                 </a>
               </li>
             );
           })}
+          <!-- CV Download Button -->
+          <li class="footer__nav-item footer__nav-item--cv">
+            <a 
+              href="/cv.pdf" 
+              class="footer__cv-button"
+              download
+              aria-label="Download CV"
+              data-bilingual="cv-button"
+            >
+              <Icon name="download" class="footer__cv-icon" />
+              <span data-lang="en">Download my CV</span>
+              <span data-lang="id">Unduh CV saya</span>
+            </a>
+          </li>
         </ul>
       </nav>
 
@@ -90,7 +108,7 @@ const activePath = currentPath || Astro.url.pathname;
       <!-- Copyright -->
       <div class="footer__copyright">
         <p class="footer__copyright-text">
-          © {currentYear} HD-2D Portfolio. Built with care and attention to detail.
+          © {currentYear} Gerry Moeis Portfolio.
         </p>
       </div>
     </div>
@@ -106,27 +124,6 @@ const activePath = currentPath || Astro.url.pathname;
       var(--atmospheric-glow);
     position: relative;
     overflow: hidden;
-  }
-
-  /* Atmospheric overlay - similar to navigation but with footer characteristics */
-  .footer::before {
-    content: '';
-    position: absolute;
-    inset: var(--space-2);
-    border: 1px solid var(--color-border-accent);
-    border-radius: 0; /* Removed border radius */
-    pointer-events: none;
-  }
-
-  .footer::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-      radial-gradient(circle at 30% 30%, var(--color-particle-warm) 0%, transparent 60%),
-      radial-gradient(circle at 70% 70%, var(--color-particle-cool) 0%, transparent 60%);
-    pointer-events: none;
-    border-radius: 0; /* Removed border radius */
   }
 
   .footer__container {
@@ -149,13 +146,21 @@ const activePath = currentPath || Astro.url.pathname;
   .footer__nav-list {
     display: flex;
     gap: var(--space-6);
+    align-items: center;
     list-style: none;
     margin: 0;
     padding: 0;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .footer__nav-item {
     margin: 0;
+  }
+  
+  .footer__nav-item--cv {
+    /* CV button tidak sejajar dengan text links */
+    margin-left: var(--space-4);
   }
 
   .footer__nav-link {
@@ -170,6 +175,17 @@ const activePath = currentPath || Astro.url.pathname;
     transition: 
       color var(--duration-medium) var(--ease-out),
       background-color var(--duration-medium) var(--ease-out);
+  }
+  
+  /* Hide inactive language */
+  .footer__nav-link span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .footer__nav-link span[data-lang="en"],
+  :global(html[lang="id"]) .footer__nav-link span[data-lang="id"] {
+    display: inline;
   }
 
   .footer__nav-link:hover {
@@ -201,11 +217,79 @@ const activePath = currentPath || Astro.url.pathname;
     border-radius: var(--radius-xs);
     box-shadow: 0 0 var(--space-1) var(--color-nav-active-indicator);
   }
+  
+  /* CV Download Button */
+  .footer__cv-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    transition: all var(--duration-medium) ease;
+    box-shadow: 0 0 20px rgba(246, 224, 94, 0.3);
+  }
+  
+  /* Dark theme CV button */
+  :global(html:not([data-theme="light"])) .footer__cv-button {
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+  }
+  
+  :global(html:not([data-theme="light"])) .footer__cv-button:hover {
+    background: var(--color-accent-secondary);
+    box-shadow: 0 0 30px rgba(246, 224, 94, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Light theme CV button */
+  :global([data-theme="light"]) .footer__cv-button {
+    background: #ff5500;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 85, 0, 0.3);
+  }
+  
+  :global([data-theme="light"]) .footer__cv-button:hover {
+    background: #ff6a1a;
+    box-shadow: 0 0 30px rgba(255, 85, 0, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  .footer__cv-button:focus-visible {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+  
+  .footer__cv-button:active {
+    transform: translateY(0);
+  }
+  
+  .footer__cv-icon {
+    font-size: var(--text-lg);
+    line-height: 1;
+  }
+  
+  /* Hide inactive language for CV button */
+  .footer__cv-button span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language for CV button */
+  :global(html[lang="en"]) .footer__cv-button span[data-lang="en"],
+  :global(html[lang="id"]) .footer__cv-button span[data-lang="id"] {
+    display: inline;
+  }
 
-  /* Social Links */
+  /* Social Links - Larger size for better hierarchy */
   .footer__social-list {
     display: flex;
-    gap: var(--space-4);
+    gap: var(--space-6);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -218,13 +302,13 @@ const activePath = currentPath || Astro.url.pathname;
   .footer__social-link {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
     font-family: var(--font-body);
-    font-size: var(--text-sm);
+    font-size: var(--text-lg); /* Larger text size */
     font-weight: var(--weight-medium);
     color: var(--color-text-tertiary);
     text-decoration: none;
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-sm);
     transition: 
       color var(--duration-medium) var(--ease-out),
@@ -244,7 +328,7 @@ const activePath = currentPath || Astro.url.pathname;
   }
 
   .footer__social-icon {
-    font-size: var(--text-lg);
+    font-size: var(--text-2xl); /* Larger icon size */
     line-height: 1;
     flex-shrink: 0;
   }
@@ -252,51 +336,145 @@ const activePath = currentPath || Astro.url.pathname;
   /* Copyright */
   .footer__copyright-text {
     font-family: var(--font-body);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
     margin: 0;
+  }
+  
+  /* Light mode copyright - better contrast */
+  :global([data-theme="light"]) .footer__copyright-text {
+    color: var(--color-text-primary);
     opacity: 0.8;
   }
 
-  /* Responsive adjustments */
-  @media (max-width: var(--breakpoint-lg)) {
+  /* Responsive adjustments - Mobile First */
+  @media (max-width: 768px) {
     .footer__container {
-      padding: var(--space-8) var(--space-4) var(--space-6);
+      padding: var(--space-12) var(--space-6) var(--space-10);
     }
 
     .footer__content {
-      gap: var(--space-6);
+      gap: var(--space-6); /* Reduced base gap */
     }
 
+    /* Navigation - Force Vertical Layout */
     .footer__nav-list {
-      flex-direction: column;
-      gap: var(--space-3);
+      flex-direction: column !important;
+      flex-wrap: nowrap !important;
+      gap: var(--space-4);
+      width: 100%;
+      align-items: stretch;
+    }
+    
+    .footer__nav-item {
+      width: 100%;
+      margin: 0;
+    }
+    
+    .footer__nav-item--cv {
+      margin-left: 0 !important;
+      margin-top: var(--space-6) !important; /* Symmetric spacing */
+      margin-bottom: var(--space-6) !important; /* Symmetric spacing */
+      padding-top: 0;
+      border-top: none;
+    }
+    
+    .footer__nav-link {
+      width: 100%;
+      text-align: center;
+      display: block;
+      padding: var(--space-3) var(--space-5);
+      font-size: var(--text-base);
+    }
+    
+    .footer__cv-button {
+      width: 100%;
+      padding: var(--space-3) var(--space-5);
+      font-size: var(--text-base);
     }
 
+    /* Social Links - Vertical Stack */
     .footer__social-list {
+      flex-direction: column;
       justify-content: center;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-5);
+      width: 100%;
     }
 
     .footer__social-link {
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: center;
       text-align: center;
-      padding: var(--space-2);
+      padding: var(--space-3) var(--space-5);
+      gap: var(--space-3);
+      width: 100%;
+      max-width: 300px;
     }
 
     .footer__social-name {
-      font-size: var(--text-xs);
+      font-size: var(--text-lg);
+    }
+    
+    .footer__social-icon {
+      font-size: var(--text-2xl);
+    }
+    
+    .footer__copyright-text {
+      font-size: var(--text-base);
+      padding: 0 var(--space-4);
     }
   }
 
-  @media (max-width: var(--breakpoint-sm)) {
+  @media (max-width: 480px) {
+    .footer__container {
+      padding: var(--space-10) var(--space-4) var(--space-8);
+    }
+    
+    .footer__content {
+      gap: var(--space-5); /* Reduced base gap */
+    }
+    
     .footer__nav-list {
-      gap: var(--space-2);
+      gap: var(--space-3);
     }
 
     .footer__nav-link {
       font-size: var(--text-sm);
-      padding: var(--space-1) var(--space-2);
+      padding: var(--space-2) var(--space-4);
+    }
+    
+    .footer__nav-item--cv {
+      margin-top: var(--space-5) !important; /* Symmetric spacing */
+      margin-bottom: var(--space-5) !important; /* Symmetric spacing */
+      padding-top: 0;
+    }
+    
+    .footer__cv-button {
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--text-sm);
+    }
+    
+    .footer__social-list {
+      gap: var(--space-4);
+    }
+    
+    .footer__social-link {
+      font-size: var(--text-base);
+      padding: var(--space-2) var(--space-4);
+      gap: var(--space-3);
+    }
+    
+    .footer__social-icon {
+      font-size: var(--text-xl);
+    }
+    
+    .footer__social-name {
+      font-size: var(--text-base);
+    }
+    
+    .footer__copyright-text {
+      font-size: var(--text-sm);
     }
   }
 </style>
