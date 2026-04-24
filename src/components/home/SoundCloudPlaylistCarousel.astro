@@ -70,8 +70,9 @@ const liveRegionId = `${carouselId}-live-region`;
           <iframe 
             class="soundcloud-iframe"
             width="100%" 
-            height="450" 
-            allow="autoplay" 
+            height="450"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-presentation"
             src={playlist.embedUrl}
             title={playlist.title}
             loading={index === 0 ? 'eager' : 'lazy'}
@@ -152,6 +153,10 @@ const liveRegionId = `${carouselId}-live-region`;
     border: none;
     border-radius: 8px;
     overflow: hidden;
+    /* Improve touch interaction on mobile */
+    touch-action: manipulation;
+    /* Ensure proper rendering on mobile */
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Pagination indicators styling */
