@@ -73,7 +73,6 @@ export class TabAudioVisualizer {
     if (this.onStatusChange) {
       this.onStatusChange(message, type);
     }
-    console.log(`[TabAudioVisualizer] ${type.toUpperCase()}: ${message}`);
   }
 
   /**
@@ -141,13 +140,7 @@ export class TabAudioVisualizer {
         this.stop();
       });
 
-      console.log('✅ Tab Audio Visualizer started successfully');
-      console.log('Audio tracks:', audioTracks.length);
-      console.log('Sample rate:', this.audioContext.sampleRate);
-
     } catch (error: any) {
-      console.error('❌ Error starting visualizer:', error);
-      
       let errorMessage = 'Failed to start visualizer: ';
       
       if (error.name === 'NotAllowedError') {
@@ -179,7 +172,6 @@ export class TabAudioVisualizer {
     if (this.stream) {
       this.stream.getTracks().forEach(track => {
         track.stop();
-        console.log('Stopped track:', track.kind);
       });
       this.stream = null;
     }
@@ -202,8 +194,6 @@ export class TabAudioVisualizer {
     }
 
     this.updateStatus('Visualizer stopped. Click "Start Visualizer" to begin again.', 'info');
-
-    console.log('⏹️ Tab Audio Visualizer stopped');
   }
 
   /**

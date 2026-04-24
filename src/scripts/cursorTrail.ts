@@ -67,13 +67,11 @@ export class CursorTrail {
     
     // Only enable on desktop devices
     if (this.isTouchDevice()) {
-      console.log('Cursor trail disabled: touch device detected');
       return;
     }
 
     // Check for reduced motion preference
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      console.log('Cursor trail disabled: reduced motion preference');
       return;
     }
 
@@ -81,8 +79,6 @@ export class CursorTrail {
     this.attachThemeListener();
     this.startAnimation();
     this.isActive = true;
-    
-    console.log('Cursor trail active');
   }
 
   /**
@@ -326,11 +322,6 @@ export function initCursorTrail(): CursorTrail | null {
   });
   
   trail.init();
-  
-  // Debug log
-  if (import.meta.env.DEV) {
-    console.log('Cursor trail initialized:', trail);
-  }
   
   return trail;
 }
