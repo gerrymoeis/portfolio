@@ -31,22 +31,21 @@ const navLinks = [
 const currentPath = Astro.url.pathname;
 ---
 
-<!-- Mobile hamburger button (outside nav wrapper) -->
-<button 
-  class="navigation__hamburger" 
-  aria-label="Toggle navigation menu"
-  aria-expanded="false"
-  data-nav-toggle
->
-  <span class="navigation__hamburger-line"></span>
-  <span class="navigation__hamburger-line"></span>
-  <span class="navigation__hamburger-line"></span>
-</button>
-
-<!-- Desktop navigation wrapper -->
 <nav class={`navigation ${className}`} aria-label="Main navigation">
+  <!-- Mobile hamburger button (visible < 768px) -->
+  <button 
+    class="navigation__hamburger" 
+    aria-label="Toggle navigation menu"
+    aria-expanded="false"
+    data-nav-toggle
+  >
+    <span class="navigation__hamburger-line"></span>
+    <span class="navigation__hamburger-line"></span>
+    <span class="navigation__hamburger-line"></span>
+  </button>
+
   <!-- Navigation menu -->
-  <ul class="navigation__list navigation__list--desktop">
+  <ul class="navigation__list" data-nav-menu>
     {navLinks.map((link) => {
       const isActive = currentPath === link.href || 
                       (link.href !== '/' && currentPath.startsWith(link.href));
@@ -75,41 +74,10 @@ const currentPath = Astro.url.pathname;
       </div>
     </li>
   </ul>
+
+  <!-- Mobile overlay (visible when menu is open) -->
+  <div class="navigation__overlay" data-nav-overlay></div>
 </nav>
-
-<!-- Mobile menu (separate from desktop nav) -->
-<ul class="navigation__list navigation__list--mobile" data-nav-menu>
-  {navLinks.map((link) => {
-    const isActive = currentPath === link.href || 
-                    (link.href !== '/' && currentPath.startsWith(link.href));
-    
-    return (
-      <li class="navigation__item">
-        <a 
-          href={link.href} 
-          class:list={['navigation__link', { 'navigation__link--active': isActive }]}
-          aria-label={`Navigate to ${link.label.en}`}
-          aria-current={isActive ? 'page' : undefined}
-          target={link.target}
-          rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
-          data-bilingual="nav"
-        >
-          <span data-lang="en">{link.label.en}</span>
-          <span data-lang="id">{link.label.id}</span>
-        </a>
-      </li>
-    );
-  })}
-  <li class="navigation__item navigation__item--controls">
-    <div class="navigation__controls">
-      <LanguageToggle />
-      <ThemeToggle />
-    </div>
-  </li>
-</ul>
-
-<!-- Mobile overlay (visible when menu is open) -->
-<div class="navigation__overlay" data-nav-overlay></div>
 
 <script>
   // Mobile navigation toggle
@@ -176,11 +144,6 @@ const currentPath = Astro.url.pathname;
 <style>
   .navigation {
     width: 100%;
-  }
-  
-  /* Hide mobile list on desktop */
-  .navigation__list--mobile {
-    display: none;
   }
 
   /* ============================================
@@ -412,28 +375,18 @@ const currentPath = Astro.url.pathname;
     .navigation__hamburger {
       display: flex;
     }
-    
-    /* Hide desktop navigation completely on mobile */
-    .navigation {
-      display: none;
-    }
-    
-    /* Hide desktop list on mobile */
-    .navigation__list--desktop {
-      display: none;
-    }
 
-    /* Show and style mobile menu */
-    .navigation__list--mobile {
-      display: block;
+    /* Transform navigation list to mobile menu */
+    .navigation__list {
       position: fixed;
       top: 0;
       right: -100%;
       width: 280px;
       max-width: 85vw;
       height: 100vh;
-      list-style: none;
-      margin: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
       padding: var(--space-20) var(--space-6) var(--space-6);
       border-radius: 0;
       border-right: none;
@@ -443,14 +396,14 @@ const currentPath = Astro.url.pathname;
       transition: right var(--duration-medium) var(--ease-out);
       overflow-y: auto;
       overflow-x: hidden;
-      /* Glassmorphism effect */
+      /* Glassmorphism effect using design system tokens */
       background: var(--color-mobile-menu-bg);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
     }
     
     /* Dark theme - golden yellow glow on left edge */
-    :global(html:not([data-theme="light"])) .navigation__list--mobile {
+    :global(html:not([data-theme="light"])) .navigation__list {
       border-left: 1px solid rgba(246, 224, 94, 0.9);
       box-shadow: 
         -4px 0 24px var(--color-mobile-menu-shadow-strong),
@@ -462,7 +415,7 @@ const currentPath = Astro.url.pathname;
     }
     
     /* Light theme - red-orange glow on left edge */
-    :global([data-theme="light"]) .navigation__list--mobile {
+    :global([data-theme="light"]) .navigation__list {
       border-left: 1px solid rgba(255, 85, 0, 0.9);
       box-shadow: 
         -4px 0 24px var(--color-mobile-menu-shadow-strong),
@@ -473,17 +426,22 @@ const currentPath = Astro.url.pathname;
         inset 1px 0 0 rgba(255, 85, 0, 0.9);
     }
 
-    .navigation__list--mobile.is-open {
+    .navigation__list.is-open {
       right: 0;
     }
-    
-    /* Mobile menu items styling */
-    .navigation__list--mobile .navigation__item {
+
+    /* Remove atmospheric overlays on mobile */
+    .navigation__list::before,
+    .navigation__list::after {
+      display: none;
+    }
+
+    .navigation__item {
       width: 100%;
       flex-shrink: 0;
     }
     
-    .navigation__list--mobile .navigation__item--controls {
+    .navigation__item--controls {
       margin-left: 0;
       padding-left: 0;
       margin-top: var(--space-4);
@@ -492,23 +450,20 @@ const currentPath = Astro.url.pathname;
       border-top: 1px solid var(--color-border-medium);
     }
 
-    .navigation__list--mobile .navigation__controls {
-      display: flex;
+    .navigation__controls {
       justify-content: center;
       gap: var(--space-4);
-      align-items: center;
     }
 
-    .navigation__list--mobile .navigation__link {
+    .navigation__link {
       width: 100%;
       padding: var(--space-4);
       font-size: var(--text-lg);
       text-align: left;
       border-radius: var(--radius-md);
-      display: block;
     }
 
-    .navigation__list--mobile .navigation__link--active::after {
+    .navigation__link--active::after {
       display: none; /* Remove indicator on mobile */
     }
   }
