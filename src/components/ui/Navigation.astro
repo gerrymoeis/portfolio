@@ -375,8 +375,13 @@ const currentPath = Astro.url.pathname;
     .navigation__hamburger {
       display: flex;
     }
+    
+    /* Hide desktop navbar on mobile when closed */
+    .navigation__list:not(.is-open) {
+      display: none;
+    }
 
-    /* Transform navigation list to mobile menu */
+    /* Transform navigation list to mobile menu when open */
     .navigation__list {
       position: fixed;
       top: 0;
@@ -427,6 +432,7 @@ const currentPath = Astro.url.pathname;
     }
 
     .navigation__list.is-open {
+      display: flex; /* Show when opened */
       right: 0;
     }
 
