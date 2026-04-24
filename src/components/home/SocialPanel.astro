@@ -1,7 +1,7 @@
 ---
 /**
- * SocialPanel - Social media links panel
- * Updated for minimalist design - no Panel wrapper needed
+ * SocialPanel - Social media links panel with CV download
+ * Updated for minimalist design with bilingual support
  * 
  * Props:
  * - social: Array of social link objects with name, url, and icon
@@ -20,12 +20,18 @@ interface Props {
 }
 
 const { social } = Astro.props;
+
+// Filter out LinkedIn
+const filteredSocial = social.filter(link => link.name.toLowerCase() !== 'linkedin');
 ---
 
 <div class="social-panel">
-  <h2 class="social-panel__title">Connect</h2>
+  <h2 class="social-panel__title" data-bilingual="social-title">
+    <span data-lang="en">Connect</span>
+    <span data-lang="id">Terhubung</span>
+  </h2>
   <ul class="social-panel__list">
-    {social.map((link) => (
+    {filteredSocial.map((link) => (
       <li class="social-panel__item">
         <a 
           href={link.url} 
@@ -40,6 +46,21 @@ const { social } = Astro.props;
       </li>
     ))}
   </ul>
+  
+  <!-- Download CV Button -->
+  <div class="social-panel__cv-section">
+    <a 
+      href="/cv.pdf" 
+      class="social-panel__cv-button"
+      download
+      aria-label="Download CV"
+      data-bilingual="cv-button"
+    >
+      <Icon name="download" class="social-panel__cv-icon" />
+      <span data-lang="en">Download my CV</span>
+      <span data-lang="id">Unduh CV saya</span>
+    </a>
+  </div>
 </div>
 
 <style>
@@ -55,6 +76,17 @@ const { social } = Astro.props;
     margin: 0 0 var(--space-6) 0; /* More space below heading */
     text-align: center;
     line-height: var(--leading-tight);
+  }
+  
+  /* Hide inactive language */
+  .social-panel__title span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .social-panel__title span[data-lang="en"],
+  :global(html[lang="id"]) .social-panel__title span[data-lang="id"] {
+    display: inline;
   }
 
   .social-panel__list {
@@ -106,6 +138,82 @@ const { social } = Astro.props;
     font-size: var(--text-base);
     font-weight: var(--weight-medium);
   }
+  
+  /* CV Download Section */
+  .social-panel__cv-section {
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border-medium);
+    display: flex;
+    justify-content: center;
+  }
+  
+  .social-panel__cv-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    transition: all var(--duration-medium) ease;
+    box-shadow: 0 0 20px rgba(246, 224, 94, 0.3);
+  }
+  
+  /* Dark theme CV button */
+  :global(html:not([data-theme="light"])) .social-panel__cv-button {
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+  }
+  
+  :global(html:not([data-theme="light"])) .social-panel__cv-button:hover {
+    background: var(--color-accent-secondary);
+    box-shadow: 0 0 30px rgba(246, 224, 94, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Light theme CV button */
+  :global([data-theme="light"]) .social-panel__cv-button {
+    background: #ff5500;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 85, 0, 0.3);
+  }
+  
+  :global([data-theme="light"]) .social-panel__cv-button:hover {
+    background: #ff6a1a;
+    box-shadow: 0 0 30px rgba(255, 85, 0, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  .social-panel__cv-button:focus-visible {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+  
+  .social-panel__cv-button:active {
+    transform: translateY(0);
+  }
+  
+  .social-panel__cv-icon {
+    font-size: var(--text-lg);
+    line-height: 1;
+  }
+  
+  /* Hide inactive language for CV button */
+  .social-panel__cv-button span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language for CV button */
+  :global(html[lang="en"]) .social-panel__cv-button span[data-lang="en"],
+  :global(html[lang="id"]) .social-panel__cv-button span[data-lang="id"] {
+    display: inline;
+  }
 
   /* Responsive adjustments - Mobile first approach */
   
@@ -131,6 +239,21 @@ const { social } = Astro.props;
 
     .social-panel__name {
       font-size: var(--text-sm);
+    }
+    
+    .social-panel__cv-section {
+      margin-top: var(--space-4);
+      padding-top: var(--space-4);
+    }
+    
+    .social-panel__cv-button {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+      gap: var(--space-1);
+    }
+    
+    .social-panel__cv-icon {
+      font-size: var(--text-base);
     }
   }
 

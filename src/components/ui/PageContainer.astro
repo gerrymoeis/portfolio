@@ -13,11 +13,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navigation from './Navigation.astro';
 import Footer from './Footer.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import LanguageToggle from './LanguageToggle.astro';
 
 interface Props {
   title: string;
   description: string;
-  ogType?: string;
+  ogType?: 'website' | 'article';
   class?: string;
 }
 
@@ -27,6 +29,18 @@ const {
   ogType = "website",
   class: className = '' 
 } = Astro.props;
+
+// Navigation links for mobile menu - same as Navigation.astro
+const navLinks = [
+  { label: { id: 'Beranda', en: 'Home' }, href: '/', target: undefined },
+  { label: { id: 'Proyek', en: 'Projects' }, href: '/projects', target: '_blank' },
+  { label: { id: 'Blog', en: 'Blogs' }, href: '/blogs', target: '_blank' },
+  { label: { id: 'Pengalaman', en: 'Experiences' }, href: '/experiences', target: '_blank' },
+  { label: { id: 'CV', en: 'CV' }, href: '/cv', target: '_blank' },
+];
+
+// Get current path for active state
+const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout 
@@ -34,7 +48,20 @@ const {
   description={description}
   ogType={ogType}
 >
+  <!-- Mobile hamburger button (outside page-container for true fixed positioning) -->
+  <button 
+    class="mobile-nav__hamburger" 
+    aria-label="Toggle navigation menu"
+    aria-expanded="false"
+    data-nav-toggle
+  >
+    <span class="mobile-nav__hamburger-line"></span>
+    <span class="mobile-nav__hamburger-line"></span>
+    <span class="mobile-nav__hamburger-line"></span>
+  </button>
+
   <div class={`page-container depth-mid ${className}`}>
+    <!-- Desktop header with navigation (hidden on mobile) -->
     <header class="page-nav depth-near" role="banner">
       <Navigation />
     </header>
@@ -45,11 +72,112 @@ const {
 
     <Footer currentPath={Astro.url.pathname} />
   </div>
+
+  <!-- Mobile menu (separate from page-container for proper positioning) -->
+  <div class="mobile-nav__container" data-nav-menu>
+    <ul class="mobile-nav__list">
+      {navLinks.map((link) => {
+        const isActive = currentPath === link.href || 
+                        (link.href !== '/' && currentPath.startsWith(link.href));
+        
+        return (
+          <li class="mobile-nav__item">
+            <a 
+              href={link.href} 
+              class:list={['mobile-nav__link', { 'mobile-nav__link--active': isActive }]}
+              aria-label={`Navigate to ${link.label.en}`}
+              aria-current={isActive ? 'page' : undefined}
+              target={link.target}
+              rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+              data-bilingual="nav"
+            >
+              <span data-lang="en">{link.label.en}</span>
+              <span data-lang="id">{link.label.id}</span>
+            </a>
+          </li>
+        );
+      })}
+      <li class="mobile-nav__item mobile-nav__item--controls">
+        <div class="mobile-nav__controls">
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Mobile overlay (visible when menu is open) -->
+  <div class="mobile-nav__overlay" data-nav-overlay></div>
 </BaseLayout>
+
+<script>
+  // Mobile navigation toggle
+  const navToggle = document.querySelector('[data-nav-toggle]');
+  const navMenu = document.querySelector('[data-nav-menu]');
+  const navOverlay = document.querySelector('[data-nav-overlay]');
+  const navLinks = document.querySelectorAll('.mobile-nav__link');
+
+  function openMenu() {
+    navMenu?.classList.add('is-open');
+    navOverlay?.classList.add('is-visible');
+    navToggle?.classList.add('is-active');
+    navToggle?.setAttribute('aria-expanded', 'true');
+    // Don't prevent background scroll - allow scrolling
+  }
+
+  function closeMenu() {
+    navMenu?.classList.remove('is-open');
+    navOverlay?.classList.remove('is-visible');
+    navToggle?.classList.remove('is-active');
+    navToggle?.setAttribute('aria-expanded', 'false');
+    // No need to restore scroll since we never prevented it
+  }
+
+  function toggleMenu() {
+    const isOpen = navMenu?.classList.contains('is-open');
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
+  // Toggle menu on button click
+  navToggle?.addEventListener('click', toggleMenu);
+
+  // Close menu on overlay click
+  navOverlay?.addEventListener('click', closeMenu);
+
+  // Close menu on link click (mobile)
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 768) {
+        closeMenu();
+      }
+    });
+  });
+
+  // Close menu on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navMenu?.classList.contains('is-open')) {
+      closeMenu();
+    }
+  });
+
+  // Close menu on window resize to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && navMenu?.classList.contains('is-open')) {
+      closeMenu();
+    }
+  });
+</script>
 
 <style>
   .page-container {
     min-height: 100vh;
+    width: 100%;
+    max-width: 100vw; /* Prevent container from exceeding viewport width */
+    position: relative;
     background: 
       radial-gradient(
         ellipse at center top,
@@ -61,6 +189,9 @@ const {
       /* Atmospheric texture overlay */
       radial-gradient(circle at 30% 20%, var(--color-particle-warm) 0%, transparent 50%),
       radial-gradient(circle at 70% 80%, var(--color-particle-cool) 0%, transparent 50%);
+    /* CRITICAL: Hide horizontal overflow to prevent mobile menu from showing when off-screen */
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .page-nav {
@@ -85,5 +216,236 @@ const {
 
   .page-main {
     position: relative;
+  }
+
+  /* Hide desktop navigation header on mobile */
+  @media (max-width: 767px) {
+    .page-nav {
+      display: none;
+    }
+  }
+
+  /* ============================================
+     MOBILE NAVIGATION
+     ============================================ */
+  
+  /* Mobile hamburger button */
+  .mobile-nav__hamburger {
+    display: none; /* Hidden on desktop */
+    position: fixed;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: calc(var(--layer-navigation) + 1);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 48px;
+    height: 48px;
+    background: var(--color-surface-elevated);
+    border: var(--panel-border-width) var(--panel-border-style) var(--color-accent-primary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--panel-shadow-elevated);
+    backdrop-filter: blur(var(--blur-backdrop-light));
+    cursor: pointer;
+    transition: all var(--duration-medium) var(--ease-out);
+  }
+
+  .mobile-nav__hamburger:hover {
+    background: var(--color-nav-hover-bg);
+    transform: var(--transform-hover-lift);
+  }
+
+  .mobile-nav__hamburger:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+
+  .mobile-nav__hamburger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-text-primary);
+    border-radius: 2px;
+    transition: all var(--duration-medium) var(--ease-out);
+  }
+
+  /* Hamburger animation when open */
+  .mobile-nav__hamburger.is-active .mobile-nav__hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .mobile-nav__hamburger.is-active .mobile-nav__hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-nav__hamburger.is-active .mobile-nav__hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Mobile overlay */
+  .mobile-nav__overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7); /* Darker overlay - blur comes from menu backdrop-filter */
+    z-index: calc(var(--layer-navigation) - 1);
+    opacity: 0;
+    transition: opacity var(--duration-medium) var(--ease-out);
+  }
+
+  .mobile-nav__overlay.is-visible {
+    display: block;
+    opacity: 1;
+  }
+
+  /* Mobile menu container - hidden by default on all screens */
+  .mobile-nav__container {
+    display: none;
+  }
+
+  /* Show mobile elements only on mobile */
+  @media (max-width: 767px) {
+    .mobile-nav__hamburger {
+      display: flex;
+    }
+
+    .mobile-nav__container {
+      display: block;
+      position: fixed;
+      top: 0;
+      right: -320px; /* Off-screen by default - slightly more than max width (280px + padding) */
+      width: 280px;
+      max-width: 85vw;
+      height: 100vh;
+      height: 100dvh; /* Use dynamic viewport height for mobile browsers */
+      border-radius: 0;
+      border-right: none;
+      border-top: none;
+      border-bottom: none;
+      z-index: var(--layer-navigation);
+      transition: right var(--duration-medium) var(--ease-out);
+      overflow-y: auto;
+      overflow-x: hidden; /* Prevent horizontal scroll within menu */
+      padding: var(--space-20) var(--space-6) var(--space-6);
+      /* Glassmorphism effect */
+      background: var(--color-mobile-menu-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      /* Ensure menu doesn't cause horizontal scroll */
+      transform: translateZ(0); /* Force GPU acceleration and create new stacking context */
+      will-change: right; /* Optimize animation performance */
+    }
+    
+    .mobile-nav__container.is-open {
+      right: 0;
+    }
+    
+    /* Dark theme - golden yellow glow on left edge */
+    :global(html:not([data-theme="light"])) .mobile-nav__container {
+      border-left: 1px solid rgba(246, 224, 94, 0.9);
+      box-shadow: 
+        -4px 0 24px var(--color-mobile-menu-shadow-strong),
+        -2px 0 8px var(--color-mobile-menu-shadow-light),
+        -6px 0 24px rgba(246, 224, 94, 0.6),
+        -3px 0 12px rgba(246, 224, 94, 0.8),
+        inset 3px 0 10px rgba(246, 224, 94, 0.5),
+        inset 1px 0 0 rgba(246, 224, 94, 1);
+    }
+    
+    /* Light theme - red-orange glow on left edge */
+    :global([data-theme="light"]) .mobile-nav__container {
+      border-left: 1px solid rgba(255, 85, 0, 0.9);
+      box-shadow: 
+        -4px 0 24px var(--color-mobile-menu-shadow-strong),
+        -2px 0 8px var(--color-mobile-menu-shadow-light),
+        -6px 0 24px rgba(255, 85, 0, 0.5),
+        -3px 0 12px rgba(255, 85, 0, 0.7),
+        inset 3px 0 10px rgba(255, 85, 0, 0.4),
+        inset 1px 0 0 rgba(255, 85, 0, 0.9);
+    }
+
+    .mobile-nav__list {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .mobile-nav__item {
+      width: 100%;
+    }
+
+    .mobile-nav__item--controls {
+      margin-top: var(--space-4);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-border-medium);
+    }
+
+    .mobile-nav__controls {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      align-items: center;
+    }
+
+    .mobile-nav__link {
+      display: block;
+      width: 100%;
+      padding: var(--space-4);
+      font-size: var(--text-lg);
+      text-align: left;
+      border-radius: var(--radius-md);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: 
+        color var(--duration-medium) var(--ease-out),
+        background-color var(--duration-medium) var(--ease-out);
+    }
+    
+    /* Hide inactive language */
+    .mobile-nav__link span[data-lang] {
+      display: none;
+    }
+    
+    /* Show active language */
+    :global(html[lang="en"]) .mobile-nav__link span[data-lang="en"],
+    :global(html[lang="id"]) .mobile-nav__link span[data-lang="id"] {
+      display: inline;
+    }
+
+    .mobile-nav__link:hover {
+      color: var(--color-text-primary);
+      background-color: var(--color-nav-hover-bg);
+    }
+    
+    /* Dark theme hover - golden yellow */
+    :global(html:not([data-theme="light"])) .mobile-nav__link:hover {
+      background-color: rgba(246, 224, 94, 0.25);
+    }
+    
+    /* Light theme hover - red-orange */
+    :global([data-theme="light"]) .mobile-nav__link:hover {
+      background-color: rgba(255, 85, 0, 0.25);
+    }
+
+    .mobile-nav__link--active {
+      color: var(--color-text-primary);
+      background-color: var(--color-nav-active-bg);
+      font-weight: var(--weight-semibold);
+    }
+    
+    /* Dark theme active - golden yellow */
+    :global(html:not([data-theme="light"])) .mobile-nav__link--active {
+      background-color: rgba(246, 224, 94, 0.35);
+    }
+    
+    /* Light theme active - red-orange */
+    :global([data-theme="light"]) .mobile-nav__link--active {
+      background-color: rgba(255, 85, 0, 0.35);
+    }
   }
 </style>

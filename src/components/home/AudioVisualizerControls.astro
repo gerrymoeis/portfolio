@@ -593,6 +593,8 @@ const { className = '' } = Astro.props;
     min-width: 300px;
     max-width: 400px;
     background: var(--color-surface-elevated);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-radius: var(--radius-md);
     overflow: hidden;
     opacity: 0;
@@ -601,22 +603,24 @@ const { className = '' } = Astro.props;
     pointer-events: none;
   }
   
-  /* Dark theme toast shadow */
+  /* Dark theme toast - solid background with blur */
   :global(html:not([data-theme="light"])) .visualizer-toast {
+    background: rgba(54, 61, 71, 0.95); /* Almost solid dark background */
     box-shadow: 
       0 0 20px rgba(246, 224, 94, 0.3),
       0 8px 24px rgba(0, 0, 0, 0.4);
   }
   
-  /* Light theme toast shadow */
+  /* Light theme toast - solid background with blur */
   :global([data-theme="light"]) .visualizer-toast {
+    background: rgba(255, 255, 255, 0.98); /* More solid white background for better contrast */
     box-shadow: 
-      0 0 20px rgba(255, 85, 0, 0.3),
-      0 8px 24px rgba(0, 0, 0, 0.3);
+      0 0 20px rgba(255, 85, 0, 0.4), /* Red-orange glow - #ff5500 */
+      0 8px 24px rgba(0, 0, 0, 0.15);
   }
 
   .visualizer-toast--visible {
-    opacity: 1;
+    opacity: 1; /* Full opacity - no transparency */
     transform: translateY(0);
     pointer-events: auto;
   }
@@ -681,6 +685,10 @@ const { className = '' } = Astro.props;
     border-left: 4px solid var(--color-accent-primary);
   }
 
+  .visualizer-toast--info .visualizer-toast__text {
+    color: var(--color-text-primary); /* Keep default text color for info */
+  }
+
   .visualizer-toast--info .visualizer-toast__progress {
     background: var(--color-accent-primary);
   }
@@ -696,6 +704,19 @@ const { className = '' } = Astro.props;
   .visualizer-toast--success .visualizer-toast__progress {
     background: #4ade80;
   }
+  
+  /* Light theme success - darker green for better contrast */
+  :global([data-theme="light"]) .visualizer-toast--success {
+    border-left: 4px solid #16a34a; /* Darker green */
+  }
+  
+  :global([data-theme="light"]) .visualizer-toast--success .visualizer-toast__text {
+    color: #15803d; /* Even darker green for text contrast */
+  }
+  
+  :global([data-theme="light"]) .visualizer-toast--success .visualizer-toast__progress {
+    background: #16a34a; /* Darker green */
+  }
 
   .visualizer-toast--error {
     border-left: 4px solid #f87171;
@@ -707,6 +728,19 @@ const { className = '' } = Astro.props;
 
   .visualizer-toast--error .visualizer-toast__progress {
     background: #f87171;
+  }
+  
+  /* Light theme error - darker red for better contrast */
+  :global([data-theme="light"]) .visualizer-toast--error {
+    border-left: 4px solid #dc2626; /* Darker red */
+  }
+  
+  :global([data-theme="light"]) .visualizer-toast--error .visualizer-toast__text {
+    color: #b91c1c; /* Even darker red for text contrast */
+  }
+  
+  :global([data-theme="light"]) .visualizer-toast--error .visualizer-toast__progress {
+    background: #dc2626; /* Darker red */
   }
 
   /* Responsive */

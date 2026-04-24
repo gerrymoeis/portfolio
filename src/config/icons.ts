@@ -80,6 +80,11 @@ export const uiIcons: Record<string, IconConfig> = {
     name: 'view',
     faClass: 'fas fa-eye',
     label: 'Views'
+  },
+  download: {
+    name: 'download',
+    faClass: 'fas fa-download',
+    label: 'Download'
   }
 };
 

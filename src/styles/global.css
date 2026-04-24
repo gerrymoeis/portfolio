@@ -35,6 +35,8 @@ body {
   /* Ensure body extends to edges including safe areas */
   margin: 0;
   padding: 0;
+  /* CRITICAL: Hide horizontal overflow to prevent mobile menu from showing when off-screen */
+  overflow-x: hidden;
 }
 
 /* Remove default list styles */

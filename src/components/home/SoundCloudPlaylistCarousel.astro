@@ -134,12 +134,18 @@ const liveRegionId = `${carouselId}-live-region`;
     width: 100%;
     height: 450px;
     position: relative;
+    /* Enable horizontal scrolling on mobile for SoundCloud iframe */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   }
 
   .carousel-embed {
     width: 100%;
     height: 100%;
     transition: opacity 0.3s ease;
+    /* Ensure iframe doesn't shrink below minimum width on mobile */
+    min-width: 100%;
   }
 
   .carousel-embed.active {
@@ -157,6 +163,8 @@ const liveRegionId = `${carouselId}-live-region`;
     touch-action: manipulation;
     /* Ensure proper rendering on mobile */
     -webkit-overflow-scrolling: touch;
+    /* Prevent iframe from shrinking below minimum width */
+    min-width: 100%;
   }
 
   /* Pagination indicators styling */
@@ -168,6 +176,27 @@ const liveRegionId = `${carouselId}-live-region`;
   @media (max-width: 768px) {
     .carousel-embed-container {
       height: 400px;
+      /* Show scrollbar hint on mobile */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(246, 224, 94, 0.5) transparent;
+    }
+    
+    /* Webkit scrollbar styling for mobile */
+    .carousel-embed-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    
+    .carousel-embed-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .carousel-embed-container::-webkit-scrollbar-thumb {
+      background: rgba(246, 224, 94, 0.5);
+      border-radius: 4px;
+    }
+    
+    .carousel-embed-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(246, 224, 94, 0.7);
     }
     
     .carousel-embed iframe {
