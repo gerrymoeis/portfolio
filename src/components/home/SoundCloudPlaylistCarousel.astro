@@ -1,7 +1,7 @@
 ---
 /**
  * SoundCloudPlaylistCarousel - Carousel for SoundCloud playlist embeds
- * Simple implementation with navigation controls
+ * Optimized with single iframe per playlist using universal amber color (#ffa600)
  */
 
 import NavigationControls from './NavigationControls.astro';
@@ -10,8 +10,7 @@ import PaginationIndicator from './PaginationIndicator.astro';
 export interface SoundCloudPlaylist {
   id: string;
   title: string;
-  embedUrlDark: string;
-  embedUrlLight: string;
+  embedUrl: string;
   artist: string;
 }
 
@@ -37,11 +36,6 @@ const shouldShowControls = isMultiplePlaylist && showControls;
 // Generate unique IDs for accessibility
 const carouselId = `soundcloud-carousel-${Math.random().toString(36).substring(2, 9)}`;
 const liveRegionId = `${carouselId}-live-region`;
-
-// If no playlists, don't render anything
-if (playlists.length === 0 && import.meta.env.DEV) {
-  console.error('No SoundCloud playlists provided. Carousel will not render.');
-}
 ---
 
 {playlists.length > 0 && (
@@ -73,26 +67,13 @@ if (playlists.length === 0 && import.meta.env.DEV) {
           data-index={index}
           style={index === 0 ? '' : 'display: none;'}
         >
-          <!-- Dark theme iframe -->
           <iframe 
-            class="soundcloud-iframe soundcloud-iframe--dark"
+            class="soundcloud-iframe"
             width="100%" 
             height="450" 
             allow="autoplay" 
-            src={playlist.embedUrlDark}
-            title={`${playlist.title} (Dark theme)`}
-            loading={index === 0 ? 'eager' : 'lazy'}
-            style="border: none;"
-          ></iframe>
-          
-          <!-- Light theme iframe -->
-          <iframe 
-            class="soundcloud-iframe soundcloud-iframe--light"
-            width="100%" 
-            height="450" 
-            allow="autoplay" 
-            src={playlist.embedUrlLight}
-            title={`${playlist.title} (Light theme)`}
+            src={playlist.embedUrl}
+            title={playlist.title}
             loading={index === 0 ? 'eager' : 'lazy'}
             style="border: none;"
           ></iframe>
@@ -158,42 +139,16 @@ if (playlists.length === 0 && import.meta.env.DEV) {
     width: 100%;
     height: 100%;
     transition: opacity 0.3s ease;
-    position: relative;
   }
 
   .carousel-embed.active {
     display: block !important;
   }
-  
-  /* Theme-specific iframe visibility */
-  .soundcloud-iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  
-  /* Dark theme - show dark iframe, hide light iframe */
-  :global(html:not([data-theme="light"])) .soundcloud-iframe--dark {
-    display: block;
-  }
-  
-  :global(html:not([data-theme="light"])) .soundcloud-iframe--light {
-    display: none;
-  }
-  
-  /* Light theme - show light iframe, hide dark iframe */
-  :global([data-theme="light"]) .soundcloud-iframe--dark {
-    display: none;
-  }
-  
-  :global([data-theme="light"]) .soundcloud-iframe--light {
-    display: block;
-  }
 
   /* SoundCloud iframe styling */
   .soundcloud-iframe {
+    width: 100%;
+    height: 100%;
     border: none;
     border-radius: 8px;
     overflow: hidden;
