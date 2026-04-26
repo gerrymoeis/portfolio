@@ -21,32 +21,49 @@ const { className = '' } = Astro.props;
   <div class="visualizer-landing__backdrop"></div>
   <div class="visualizer-landing__content">
     <div class="visualizer-landing__left">
-      <h2 class="visualizer-landing__title">Enhanced Audio Experience</h2>
-      <p class="visualizer-landing__description">
-        This site features a <span class="visualizer-landing__highlight">real-time music visualizer</span> that syncs with <span class="visualizer-landing__highlight">audio playback</span>. 
-        To enable it, we'll need permission to listen to this tab's audio.
+      <h2 class="visualizer-landing__title" data-bilingual="visualizer-title">
+        <span data-lang="en">Enhanced Audio Experience</span>
+        <span data-lang="id">Pengalaman Audio yang Ditingkatkan</span>
+      </h2>
+      <p class="visualizer-landing__description" data-bilingual="visualizer-description">
+        <span data-lang="en">
+          This site features a <span class="visualizer-landing__highlight">real-time music visualizer</span> that syncs with <span class="visualizer-landing__highlight">audio playback</span>. 
+          To enable it, we'll need permission to listen to this tab's audio.
+        </span>
+        <span data-lang="id">
+          Situs ini memiliki <span class="visualizer-landing__highlight">visualizer musik real-time</span> yang sinkron dengan <span class="visualizer-landing__highlight">pemutaran audio</span>. 
+          Untuk mengaktifkannya, kami memerlukan izin untuk mendengarkan audio tab ini.
+        </span>
       </p>
-      <p class="visualizer-landing__privacy">
-        <span class="visualizer-landing__privacy-highlight">No recording</span> or <span class="visualizer-landing__privacy-highlight">data collection</span>. Audio is analyzed in real-time only.
+      <p class="visualizer-landing__privacy" data-bilingual="visualizer-privacy">
+        <span data-lang="en">
+          <span class="visualizer-landing__privacy-highlight">No recording</span> or <span class="visualizer-landing__privacy-highlight">data collection</span>. Audio is analyzed in real-time only.
+        </span>
+        <span data-lang="id">
+          <span class="visualizer-landing__privacy-highlight">Tidak ada rekaman</span> atau <span class="visualizer-landing__privacy-highlight">pengumpulan data</span>. Audio hanya dianalisis secara real-time.
+        </span>
       </p>
     </div>
     <div class="visualizer-landing__right">
-      <button class="visualizer-landing__button visualizer-landing__button--secondary" id="landingSkip">
-        Skip for Now
+      <button class="visualizer-landing__button visualizer-landing__button--secondary" id="landingSkip" data-bilingual="skip-button">
+        <span data-lang="en">Skip for Now</span>
+        <span data-lang="id">Lewati Sekarang</span>
       </button>
-      <button class="visualizer-landing__button visualizer-landing__button--primary" id="landingEnable">
-        Enable Visualizer
+      <button class="visualizer-landing__button visualizer-landing__button--primary" id="landingEnable" data-bilingual="enable-button">
+        <span data-lang="en">Enable Visualizer</span>
+        <span data-lang="id">Aktifkan Visualizer</span>
       </button>
     </div>
   </div>
 </div>
 
 <!-- Start Visualizer Button (bottom right, shown when stopped) -->
-<button class="visualizer-start-btn" id="visualizerStartBtn" style="display: none;">
+<button class="visualizer-start-btn" id="visualizerStartBtn" style="display: none;" data-bilingual="start-button">
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
     <path d="M4 2l11 7-11 7V2z" fill="currentColor"/>
   </svg>
-  <span>Start Visualizer</span>
+  <span data-lang="en">Start Visualizer</span>
+  <span data-lang="id">Mulai Visualizer</span>
 </button>
 
 <!-- Toast Notification (top right) -->
@@ -64,9 +81,54 @@ const { className = '' } = Astro.props;
 
 <script>
   import { getTabAudioVisualizer } from '../../scripts/tabAudioVisualizer';
+  import { getCurrentLanguage } from '../../scripts/language';
 
   // Local storage key for first visit
   const FIRST_VISIT_KEY = 'visualizer_first_visit_shown';
+
+  // Bilingual messages
+  const MESSAGES = {
+    en: {
+      // Status messages
+      alreadyRunning: 'Visualizer is already running',
+      requesting: 'Requesting tab audio capture... Please select "This Tab" and check "Share audio"',
+      audioCaptured: 'Audio captured! Initializing visualizer...',
+      visualizing: 'Visualizing! The visualizer is now synced with the audio.',
+      screenSharingStopped: 'Screen sharing stopped by user',
+      waiting: 'Waiting for music...',
+      stopped: 'Visualizer stopped. Click "Start Visualizer" to begin again.',
+      
+      // Error messages
+      permissionDenied: 'Permission denied. Please allow screen sharing and make sure to check "Share audio".',
+      noAudioTrack: 'No audio track found! Make sure to check "Share audio" in the browser prompt.',
+      noAudioSource: 'No audio source found. Make sure audio is playing.',
+      failed: 'Failed to start visualizer: ',
+    },
+    id: {
+      // Status messages
+      alreadyRunning: 'Visualizer sudah berjalan',
+      requesting: 'Meminta izin tangkapan audio tab... Silakan pilih "This Tab" dan centang "Share audio"',
+      audioCaptured: 'Audio berhasil ditangkap! Menginisialisasi visualizer...',
+      visualizing: 'Memvisualisasikan! Visualizer sekarang tersinkronisasi dengan audio.',
+      screenSharingStopped: 'Berbagi layar dihentikan oleh pengguna',
+      waiting: 'Menunggu musik...',
+      stopped: 'Visualizer dihentikan. Klik "Mulai Visualizer" untuk memulai lagi.',
+      
+      // Error messages
+      permissionDenied: 'Izin ditolak. Harap izinkan berbagi layar dan pastikan untuk mencentang "Share audio".',
+      noAudioTrack: 'Track audio tidak ditemukan! Pastikan untuk mencentang "Share audio" di prompt browser.',
+      noAudioSource: 'Sumber audio tidak ditemukan. Pastikan audio sedang diputar.',
+      failed: 'Gagal memulai visualizer: ',
+    }
+  };
+
+  /**
+   * Get translated message using existing i18n system
+   */
+  function getMessage(key: keyof typeof MESSAGES.en): string {
+    const lang = getCurrentLanguage();
+    return MESSAGES[lang][key];
+  }
 
   // Toast notification manager
   class ToastManager {
@@ -77,6 +139,8 @@ const { className = '' } = Astro.props;
     private autoHideTimer: number | null = null;
     private progressTimer: number | null = null;
     private isVisible: boolean = false;
+    private currentMessageKey: keyof typeof MESSAGES.en | undefined = undefined;
+    private currentType: 'info' | 'success' | 'error' = 'info';
 
     constructor() {
       this.toast = document.getElementById('visualizerToast') as HTMLElement;
@@ -91,10 +155,19 @@ const { className = '' } = Astro.props;
       this.closeBtn.addEventListener('click', () => {
         this.hide();
       });
+      
+      // Listen for language changes to update visible toast
+      window.addEventListener('languagechange', () => {
+        if (this.isVisible && this.currentMessageKey) {
+          this.toastText.textContent = getMessage(this.currentMessageKey);
+        }
+      });
     }
 
-    public show(message: string, type: 'info' | 'success' | 'error', duration: number = 5000): void {
+    public show(message: string, type: 'info' | 'success' | 'error', duration: number = 5000, messageKey?: keyof typeof MESSAGES.en): void {
       this.toastText.textContent = message;
+      this.currentMessageKey = messageKey;
+      this.currentType = type;
       this.toast.className = `visualizer-toast visualizer-toast--${type} visualizer-toast--visible`;
       this.toast.style.display = 'block';
       this.isVisible = true;
@@ -260,8 +333,50 @@ const { className = '' } = Astro.props;
 
     // Setup status callback
     visualizer.setStatusCallback((message: string, type: 'info' | 'success' | 'error') => {
+      // Translate message to current language and get message key
+      let translatedMessage = message;
+      let messageKey: keyof typeof MESSAGES.en | undefined = undefined;
+      
+      // Map English messages to translation keys
+      if (message.includes('already running')) {
+        messageKey = 'alreadyRunning';
+        translatedMessage = getMessage('alreadyRunning');
+      } else if (message.includes('Requesting tab audio capture')) {
+        messageKey = 'requesting';
+        translatedMessage = getMessage('requesting');
+      } else if (message.includes('Audio captured')) {
+        messageKey = 'audioCaptured';
+        translatedMessage = getMessage('audioCaptured');
+      } else if (message.includes('Visualizing!')) {
+        messageKey = 'visualizing';
+        translatedMessage = getMessage('visualizing');
+      } else if (message.includes('Screen sharing stopped')) {
+        messageKey = 'screenSharingStopped';
+        translatedMessage = getMessage('screenSharingStopped');
+      } else if (message.includes('Waiting for music')) {
+        messageKey = 'waiting';
+        translatedMessage = getMessage('waiting');
+      } else if (message.includes('stopped')) {
+        messageKey = 'stopped';
+        translatedMessage = getMessage('stopped');
+      } else if (message.includes('Permission denied')) {
+        messageKey = 'permissionDenied';
+        translatedMessage = getMessage('permissionDenied');
+      } else if (message.includes('No audio track found')) {
+        messageKey = 'noAudioTrack';
+        translatedMessage = getMessage('noAudioTrack');
+      } else if (message.includes('No audio source')) {
+        messageKey = 'noAudioSource';
+        translatedMessage = getMessage('noAudioSource');
+      } else if (message.includes('Failed to start visualizer')) {
+        // For "Failed" messages, we keep the dynamic error part in English
+        messageKey = 'failed';
+        const errorPart = message.replace('Failed to start visualizer: ', '');
+        translatedMessage = getMessage('failed') + errorPart;
+      }
+      
       const duration = type === 'error' ? 7000 : type === 'success' ? 4000 : 5000;
-      toastManager.show(message, type, duration);
+      toastManager.show(translatedMessage, type, duration, messageKey);
 
       // Show start button when stopped
       if (message.includes('stopped') || message.includes('denied') || message.includes('Failed')) {
@@ -365,8 +480,14 @@ const { className = '' } = Astro.props;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(var(--blur-backdrop-medium));
+    -webkit-backdrop-filter: blur(var(--blur-backdrop-medium));
+  }
+  
+  /* Light theme backdrop - lighter overlay */
+  :global([data-theme="light"]) .visualizer-landing__backdrop {
+    background: rgba(0, 0, 0, 0.4);
   }
 
   .visualizer-landing__content {
@@ -376,15 +497,26 @@ const { className = '' } = Astro.props;
     width: 100%;
     display: flex;
     gap: var(--space-6);
-    background: var(--color-bg-elevated);
+    background: var(--color-surface-elevated);
     border-radius: var(--radius-lg);
     padding: var(--space-6);
-    box-shadow: 
-      0 0 40px rgba(246, 224, 94, 0.3),
-      0 20px 60px rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(246, 224, 94, 0.2);
+    border: var(--panel-border-width) var(--panel-border-style) var(--color-border-accent);
     transform: scale(0.95);
-    transition: transform 0.3s var(--ease-out);
+    transition: transform var(--duration-medium) var(--ease-out);
+  }
+  
+  /* Dark theme - golden glow */
+  :global(html:not([data-theme="light"])) .visualizer-landing__content {
+    box-shadow: 
+      var(--glow-strong) var(--color-shadow-accent),
+      0 var(--space-5) var(--space-12) var(--color-shadow-strong);
+  }
+  
+  /* Light theme - red-orange glow */
+  :global([data-theme="light"]) .visualizer-landing__content {
+    box-shadow: 
+      var(--glow-strong) var(--color-shadow-accent),
+      0 var(--space-5) var(--space-12) var(--color-shadow-medium);
   }
 
   .visualizer-landing--visible .visualizer-landing__content {
@@ -405,6 +537,17 @@ const { className = '' } = Astro.props;
     margin: 0;
     line-height: 1.2;
   }
+  
+  /* Hide inactive language */
+  .visualizer-landing__title span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .visualizer-landing__title span[data-lang="en"],
+  :global(html[lang="id"]) .visualizer-landing__title span[data-lang="id"] {
+    display: inline;
+  }
 
   .visualizer-landing__description {
     font-size: var(--font-size-base);
@@ -412,11 +555,31 @@ const { className = '' } = Astro.props;
     line-height: 1.6;
     margin: 0;
   }
+  
+  /* Hide inactive language */
+  .visualizer-landing__description span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .visualizer-landing__description span[data-lang="en"],
+  :global(html[lang="id"]) .visualizer-landing__description span[data-lang="id"] {
+    display: inline;
+  }
 
   .visualizer-landing__highlight {
     color: var(--color-accent-primary);
     font-weight: 600;
-    text-shadow: 0 0 12px rgba(246, 224, 94, 0.4);
+  }
+  
+  /* Dark theme - add glow effect */
+  :global(html:not([data-theme="light"])) .visualizer-landing__highlight {
+    text-shadow: var(--glow-subtle) var(--color-shadow-accent);
+  }
+  
+  /* Light theme - no glow */
+  :global([data-theme="light"]) .visualizer-landing__highlight {
+    text-shadow: none;
   }
 
   .visualizer-landing__privacy {
@@ -425,7 +588,18 @@ const { className = '' } = Astro.props;
     line-height: 1.5;
     margin: 0;
     padding-top: var(--space-2);
-    border-top: 1px solid rgba(246, 224, 94, 0.1);
+    border-top: var(--panel-border-width) var(--panel-border-style) var(--color-border-light);
+  }
+  
+  /* Hide inactive language */
+  .visualizer-landing__privacy span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .visualizer-landing__privacy span[data-lang="en"],
+  :global(html[lang="id"]) .visualizer-landing__privacy span[data-lang="id"] {
+    display: inline;
   }
 
   .visualizer-landing__privacy-highlight {
@@ -444,34 +618,106 @@ const { className = '' } = Astro.props;
   .visualizer-landing__button {
     padding: var(--space-3) var(--space-4);
     font-size: var(--font-size-base);
-    font-weight: 500;
+    font-weight: 600;
     border-radius: var(--radius-md);
-    border: none;
+    border: 2px solid transparent;
     cursor: pointer;
     transition: all var(--duration-fast) var(--ease-out);
     white-space: nowrap;
   }
+  
+  /* Hide inactive language for buttons */
+  .visualizer-landing__button span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language for buttons */
+  :global(html[lang="en"]) .visualizer-landing__button span[data-lang="en"],
+  :global(html[lang="id"]) .visualizer-landing__button span[data-lang="id"] {
+    display: inline;
+  }
 
   .visualizer-landing__button--secondary {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-surface-light);
     color: var(--color-text-secondary);
+    border-color: var(--color-border-medium);
   }
 
   .visualizer-landing__button--secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
     color: var(--color-text-primary);
+    transform: var(--transform-hover-lift);
+  }
+  
+  /* Dark theme secondary button - golden yellow glowing border */
+  :global(html:not([data-theme="light"])) .visualizer-landing__button--secondary {
+    background: var(--color-surface-light);
+    border-color: var(--color-border-medium);
+  }
+  
+  :global(html:not([data-theme="light"])) .visualizer-landing__button--secondary:hover {
+    background: rgba(246, 224, 94, 0.1);
+    border-color: rgba(246, 224, 94, 0.8);
+    box-shadow: 
+      0 0 20px rgba(246, 224, 94, 0.4),
+      inset 0 0 10px rgba(246, 224, 94, 0.08);
+  }
+  
+  /* Light theme secondary button - red-orange glowing border */
+  :global([data-theme="light"]) .visualizer-landing__button--secondary {
+    background: rgba(255, 85, 0, 0.08);
+    border-color: rgba(255, 85, 0, 0.3);
+  }
+  
+  :global([data-theme="light"]) .visualizer-landing__button--secondary:hover {
+    background: rgba(255, 85, 0, 0.15);
+    border-color: rgba(255, 85, 0, 0.8);
+    box-shadow: 
+      0 0 20px rgba(255, 85, 0, 0.4),
+      inset 0 0 10px rgba(255, 85, 0, 0.08);
   }
 
   .visualizer-landing__button--primary {
     background: var(--color-accent-primary);
     color: var(--color-bg-primary);
-    box-shadow: 0 0 20px rgba(246, 224, 94, 0.3);
+    font-weight: 600;
+  }
+  
+  /* Dark theme primary button */
+  :global(html:not([data-theme="light"])) .visualizer-landing__button--primary {
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    box-shadow: var(--glow-medium) var(--color-shadow-accent);
   }
 
-  .visualizer-landing__button--primary:hover {
-    background: var(--color-accent-secondary);
-    box-shadow: 0 0 30px rgba(246, 224, 94, 0.5);
-    transform: translateY(-1px);
+  :global(html:not([data-theme="light"])) .visualizer-landing__button--primary:hover {
+    background: var(--color-bg-dark);
+    color: #f6e05e;
+    border-color: #f6e05e;
+    box-shadow: 
+      0 0 40px rgba(246, 224, 94, 0.8),
+      0 0 20px rgba(246, 224, 94, 0.6),
+      inset 0 0 20px rgba(246, 224, 94, 0.1);
+    text-shadow: 0 0 10px rgba(246, 224, 94, 0.8);
+    transform: var(--transform-hover-lift-strong);
+  }
+  
+  /* Light theme primary button */
+  :global([data-theme="light"]) .visualizer-landing__button--primary {
+    background: #ff5500;
+    color: #ffffff;
+    box-shadow: var(--glow-medium) var(--color-shadow-accent);
+  }
+  
+  :global([data-theme="light"]) .visualizer-landing__button--primary:hover {
+    background: #ffffff;
+    color: #ff5500;
+    border-color: #ff5500;
+    box-shadow: 
+      0 0 40px rgba(255, 85, 0, 0.8),
+      0 0 20px rgba(255, 85, 0, 0.6),
+      inset 0 0 20px rgba(255, 85, 0, 0.1);
+    text-shadow: 0 0 10px rgba(255, 85, 0, 0.8);
+    transform: var(--transform-hover-lift-strong);
   }
 
   .visualizer-landing__button--primary:active {
@@ -505,6 +751,17 @@ const { className = '' } = Astro.props;
 
   .visualizer-start-btn span {
     transition: all var(--duration-fast) var(--ease-out);
+  }
+  
+  /* Hide inactive language for start button */
+  .visualizer-start-btn span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language for start button */
+  :global(html[lang="en"]) .visualizer-start-btn span[data-lang="en"],
+  :global(html[lang="id"]) .visualizer-start-btn span[data-lang="id"] {
+    display: inline;
   }
 
   .visualizer-start-btn:active {
@@ -587,7 +844,7 @@ const { className = '' } = Astro.props;
   /* Toast Styles (Top Right) */
   .visualizer-toast {
     position: fixed;
-    top: var(--space-6);
+    top: calc(var(--nav-clearance-md) + var(--space-4)); /* Below navbar + spacing */
     right: var(--space-6);
     z-index: 1000;
     min-width: 300px;
@@ -743,21 +1000,42 @@ const { className = '' } = Astro.props;
     background: #dc2626; /* Darker red */
   }
 
-  /* Responsive */
-  @media (max-width: var(--breakpoint-md)) {
+  /* Responsive - Mobile and Tablet */
+  @media (max-width: 768px) {
     .visualizer-landing__content {
       flex-direction: column;
       max-width: 90vw;
-      gap: var(--space-4);
-      padding: var(--space-5);
+      gap: var(--space-6);
+      padding: var(--space-6);
+    }
+
+    .visualizer-landing__left {
+      width: 100%;
     }
 
     .visualizer-landing__right {
+      width: 100%;
       min-width: auto;
+      flex-direction: column; /* Stack buttons vertically */
+      gap: var(--space-4);
+    }
+    
+    .visualizer-landing__button {
+      width: 100%;
+      justify-content: center;
+      padding: var(--space-4) var(--space-5);
     }
 
     .visualizer-landing__title {
       font-size: var(--font-size-xl);
+    }
+    
+    .visualizer-landing__description {
+      font-size: var(--font-size-sm);
+    }
+    
+    .visualizer-landing__privacy {
+      font-size: var(--font-size-xs);
     }
 
     .visualizer-start-btn {
@@ -768,7 +1046,7 @@ const { className = '' } = Astro.props;
     }
 
     .visualizer-toast {
-      top: var(--space-4);
+      top: calc(var(--nav-clearance-xs) + var(--space-2)); /* Below navbar on mobile */
       right: var(--space-4);
       left: var(--space-4);
       min-width: auto;
