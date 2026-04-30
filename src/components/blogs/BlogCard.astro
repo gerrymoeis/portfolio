@@ -9,6 +9,7 @@
  * - summary: Brief description
  * - slug: URL slug for the blog post
  * - tags: Optional array of tags
+ * - readingTime: Reading time in minutes
  */
 
 import ViewCounter from './ViewCounter.astro';
@@ -19,9 +20,10 @@ interface Props {
   summary: string;
   slug: string;
   tags?: string[];
+  readingTime?: number;
 }
 
-const { title, date, summary, slug, tags } = Astro.props;
+const { title, date, summary, slug, tags, readingTime } = Astro.props;
 
 // Format date for display (simple approach for build compatibility)
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 
@@ -37,6 +39,13 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
         <time class="blog-card__date" datetime={date.toISOString()}>
           {formattedDate}
         </time>
+        {readingTime && (
+          <span class="blog-card__reading-time" data-bilingual>
+            <i class="fas fa-clock"></i>
+            <span data-lang="en">{readingTime} min read</span>
+            <span data-lang="id">{readingTime} menit baca</span>
+          </span>
+        )}
         <ViewCounter slug={slug} />
       </div>
     </div>
@@ -60,7 +69,8 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     border-radius: var(--radius-sm);
     transition: 
       border-color var(--duration-medium) var(--ease-out),
-      transform var(--duration-medium) var(--ease-out);
+      transform var(--duration-medium) var(--ease-out),
+      box-shadow var(--duration-medium) var(--ease-out);
     position: relative;
     overflow: hidden;
   }
@@ -77,8 +87,25 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
   }
 
   .blog-card:hover {
-    border-color: var(--color-border-strong);
-    transform: var(--transform-hover-lift-strong);
+    border-color: var(--color-accent-primary);
+    transform: translateY(-4px);
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.12),
+      0 0 20px rgba(246, 224, 94, 0.15);
+  }
+  
+  /* Dark theme hover - golden yellow glow */
+  :global(html:not([data-theme="light"])) .blog-card:hover {
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.3),
+      0 0 30px rgba(246, 224, 94, 0.25);
+  }
+  
+  /* Light theme hover - red-orange glow */
+  :global([data-theme="light"]) .blog-card:hover {
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.12),
+      0 0 30px rgba(255, 85, 0, 0.15);
   }
 
   .blog-card__link {
@@ -126,6 +153,32 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     font-size: var(--text-sm);
     font-weight: var(--weight-normal);
     color: var(--color-text-tertiary);
+  }
+  
+  .blog-card__reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-normal);
+    color: var(--color-text-tertiary);
+  }
+  
+  .blog-card__reading-time i {
+    font-size: var(--text-xs);
+    opacity: 0.7;
+  }
+  
+  /* Hide inactive language */
+  .blog-card__reading-time span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .blog-card__reading-time span[data-lang="en"],
+  :global(html[lang="id"]) .blog-card__reading-time span[data-lang="id"] {
+    display: inline;
   }
 
   .blog-card__summary {
