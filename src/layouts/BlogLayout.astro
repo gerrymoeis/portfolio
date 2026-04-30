@@ -4,8 +4,8 @@
  * Extends BaseLayout with blog-specific metadata and structure
  * 
  * Props:
- * - title: Blog post title (required)
- * - description: Blog post summary for SEO (required)
+ * - title: Blog post title (bilingual object)
+ * - description: Blog post summary for SEO (bilingual object)
  * - date: Publication date (required)
  * - tags: Optional array of tags
  * - slug: Blog post slug for canonical URL (required)
@@ -22,8 +22,8 @@ import '../styles/typography.css';
 import '../styles/motion.css';
 
 interface Props {
-  title: string;
-  description: string;
+  title: { en: string; id: string };
+  description: { en: string; id: string };
   date: Date;
   tags?: string[];
   slug: string;
@@ -52,9 +52,9 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Primary Meta Tags -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
-    <meta name="description" content={description} />
+    <title>{title.en}</title>
+    <meta name="title" content={title.en} />
+    <meta name="description" content={description.en} />
     
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL.href} />
@@ -62,15 +62,15 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article" />
     <meta property="og:url" content={canonicalURL.href} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={title.en} />
+    <meta property="og:description" content={description.en} />
     <meta property="og:image" content={ogImage.href} />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL.href} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
+    <meta property="twitter:title" content={title.en} />
+    <meta property="twitter:description" content={description.en} />
     <meta property="twitter:image" content={ogImage.href} />
     
     <!-- Article Meta -->
@@ -94,7 +94,10 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
       <main class="blog-detail" role="main">
         <article class="blog-article">
           <header class="blog-header">
-            <h1 class="blog-title">{title}</h1>
+            <h1 class="blog-title" data-bilingual>
+              <span data-lang="en">{title.en}</span>
+              <span data-lang="id">{title.id}</span>
+            </h1>
             
             <div class="blog-meta">
               <time datetime={date.toISOString()} class="blog-date">
@@ -113,7 +116,10 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
               )}
             </div>
             
-            <p class="blog-summary">{description}</p>
+            <p class="blog-summary" data-bilingual>
+              <span data-lang="en">{description.en}</span>
+              <span data-lang="id">{description.id}</span>
+            </p>
           </header>
           
           <div class="blog-content">
@@ -205,6 +211,17 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
     margin-bottom: var(--space-6);
   }
   
+  /* Hide inactive language */
+  .blog-title span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .blog-title span[data-lang="en"],
+  :global(html[lang="id"]) .blog-title span[data-lang="id"] {
+    display: inline;
+  }
+  
   .blog-meta {
     display: flex;
     flex-wrap: wrap;
@@ -241,10 +258,31 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
     font-style: italic;
   }
   
+  /* Hide inactive language */
+  .blog-summary span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .blog-summary span[data-lang="en"],
+  :global(html[lang="id"]) .blog-summary span[data-lang="id"] {
+    display: inline;
+  }
+  
   .blog-content {
     font-size: var(--text-base);
     line-height: var(--leading-relaxed);
     color: var(--color-text-primary);
+  }
+  
+  /* Bilingual content support */
+  .blog-content :global([data-bilingual] [data-lang]) {
+    display: none;
+  }
+  
+  :global(html[lang="en"]) .blog-content :global([data-bilingual] [data-lang="en"]),
+  :global(html[lang="id"]) .blog-content :global([data-bilingual] [data-lang="id"]) {
+    display: block;
   }
   
   /* Markdown content styling */

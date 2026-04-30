@@ -4,9 +4,9 @@
  * Displays blog post metadata and summary with a link to the full post
  * 
  * Props:
- * - title: Blog post title
+ * - title: Blog post title (bilingual object)
  * - date: Publication date
- * - summary: Brief description
+ * - summary: Brief description (bilingual object)
  * - slug: URL slug for the blog post
  * - tags: Optional array of tags
  * - readingTime: Reading time in minutes
@@ -15,9 +15,9 @@
 import ViewCounter from './ViewCounter.astro';
 
 interface Props {
-  title: string;
+  title: { en: string; id: string };
   date: Date;
-  summary: string;
+  summary: { en: string; id: string };
   slug: string;
   tags?: string[];
   readingTime?: number;
@@ -32,9 +32,12 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
 ---
 
 <article class="blog-card" role="listitem">
-  <a href={`/blogs/${slug}`} class="blog-card__link" aria-label={`Read article: ${title}`}>
+  <a href={`/blogs/${slug}`} class="blog-card__link" aria-label={`Read article: ${title.en}`}>
     <div class="blog-card__header">
-      <h2 class="blog-card__title">{title}</h2>
+      <h2 class="blog-card__title" data-bilingual>
+        <span data-lang="en">{title.en}</span>
+        <span data-lang="id">{title.id}</span>
+      </h2>
       <div class="blog-card__meta">
         <time class="blog-card__date" datetime={date.toISOString()}>
           {formattedDate}
@@ -50,7 +53,10 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
       </div>
     </div>
     
-    <p class="blog-card__summary">{summary}</p>
+    <p class="blog-card__summary" data-bilingual>
+      <span data-lang="en">{summary.en}</span>
+      <span data-lang="id">{summary.id}</span>
+    </p>
     
     {tags && tags.length > 0 && (
       <div class="blog-card__tags" role="list" aria-label="Article tags">
@@ -143,6 +149,17 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     margin-bottom: var(--space-2);
     transition: color var(--duration-fast) var(--ease-out);
   }
+  
+  /* Hide inactive language */
+  .blog-card__title span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .blog-card__title span[data-lang="en"],
+  :global(html[lang="id"]) .blog-card__title span[data-lang="id"] {
+    display: inline;
+  }
 
   .blog-card:hover .blog-card__title {
     color: var(--color-accent-primary);
@@ -187,6 +204,17 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     line-height: var(--leading-relaxed);
     color: var(--color-text-secondary);
     margin-bottom: var(--space-4);
+  }
+  
+  /* Hide inactive language */
+  .blog-card__summary span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .blog-card__summary span[data-lang="en"],
+  :global(html[lang="id"]) .blog-card__summary span[data-lang="id"] {
+    display: inline;
   }
 
   .blog-card__tags {

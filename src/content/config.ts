@@ -3,9 +3,15 @@ import { defineCollection, z } from 'astro:content';
 const blogsCollection = defineCollection({
   type: 'content',
   schema: z.object({
-    title: z.string(),
+    title: z.object({
+      en: z.string(),
+      id: z.string(),
+    }),
     date: z.date(),
-    summary: z.string(),
+    summary: z.object({
+      en: z.string(),
+      id: z.string(),
+    }),
     tags: z.array(z.string()).optional(),
   }),
 });
