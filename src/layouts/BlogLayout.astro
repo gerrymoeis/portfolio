@@ -92,6 +92,36 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
       </header>
       
       <main class="blog-detail" role="main">
+        <!-- 
+          FUTURE DEVELOPMENT: Sidebar for Related Posts & Recommendations
+          
+          When we have 3+ blog posts, implement sidebar layout:
+          
+          Desktop Layout:
+          - Container: max-width 1400px
+          - Main content: ~900px (65%) 
+          - Sidebar: 350px (25%)
+          - Gap: 50px between content and sidebar
+          
+          Sidebar Widgets (Priority Order):
+          1. Related Posts (based on tags) - 3-5 posts
+          2. Table of Contents (auto-generated from H2/H3)
+          3. Popular Posts (based on view count)
+          4. Tags/Categories filter
+          
+          Mobile Layout:
+          - Single column (stack vertically)
+          - Sidebar content moves to bottom
+          - Show only top 2-3 widgets
+          
+          Implementation:
+          - Change .blog-detail to grid layout
+          - Create BlogSidebar.astro component
+          - Implement related posts algorithm
+          - Add sticky sidebar behavior (desktop only)
+          
+          See: docs_and_backup/docs/blog-sidebar-recommendations-plan.md
+        -->
         <article class="blog-article">
           <header class="blog-header">
             <h1 class="blog-title" data-bilingual>
@@ -176,9 +206,17 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
   }
 
   .blog-detail {
-    max-width: 900px; /* Increased from 75ch for wider layout */
+    max-width: 1100px; /* Increased from 900px for even wider layout on desktop */
     margin: 0 auto;
-    padding: var(--space-16) var(--space-8);
+    padding: var(--space-16) var(--space-10);
+    
+    /* 
+      FUTURE: When sidebar is implemented, change to:
+      max-width: 1400px;
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: var(--space-10);
+    */
   }
   
   .blog-article {
