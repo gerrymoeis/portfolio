@@ -30,12 +30,11 @@ const {
   class: className = '' 
 } = Astro.props;
 
-// Navigation links for mobile menu - same as Navigation.astro
+// Navigation links for mobile menu - Order: Home, Projects, Blogs, CV
 const navLinks = [
   { label: { id: 'Beranda', en: 'Home' }, href: '/', target: undefined },
   { label: { id: 'Proyek', en: 'Projects' }, href: '/projects', target: '_blank' },
   { label: { id: 'Blog', en: 'Blogs' }, href: '/blogs', target: '_blank' },
-  { label: { id: 'Pengalaman', en: 'Experiences' }, href: '/experiences', target: '_blank' },
   { label: { id: 'CV', en: 'CV' }, href: '/cv', target: '_blank' },
 ];
 
