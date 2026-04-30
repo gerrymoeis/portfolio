@@ -28,7 +28,7 @@ body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
   line-height: var(--leading-normal);
-  font-family: var(--font-body);
+  font-family: var(--font-primary);
   font-size: var(--text-base);
   color: var(--color-text-secondary);
   background-color: var(--color-bg-primary);
@@ -149,8 +149,9 @@ a:focus-visible {
 /* Code blocks */
 code,
 pre {
-  font-family: var(--font-mono);
+  font-family: var(--font-primary);
   font-size: var(--text-sm);
+  letter-spacing: 0.02em;
 }
 
 pre {

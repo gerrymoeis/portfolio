@@ -313,7 +313,7 @@ const ogImage = new URL(heroImage, Astro.site || Astro.url.origin);
   }
   
   .project-title {
-    font-family: var(--font-display);
+    font-family: var(--font-primary);
     font-size: var(--text-5xl);
     font-weight: var(--weight-bold);
     color: var(--color-text-primary);
@@ -462,7 +462,7 @@ const ogImage = new URL(heroImage, Astro.site || Astro.url.origin);
   .content-wrapper :global(h4),
   .content-wrapper :global(h5),
   .content-wrapper :global(h6) {
-    font-family: var(--font-display);
+    font-family: var(--font-primary);
     font-weight: var(--weight-bold);
     line-height: var(--leading-tight);
     color: var(--color-text-primary);
@@ -514,9 +514,10 @@ const ogImage = new URL(heroImage, Astro.site || Astro.url.origin);
   }
   
   .content-wrapper :global(code) {
-    font-family: var(--font-mono);
+    font-family: var(--font-primary);
     font-size: 0.9em;
     background: var(--color-surface-base);
+    letter-spacing: 0.02em;
     padding: var(--space-1) var(--space-2);
     border-radius: 3px;
     border: 1px solid var(--color-border-medium);
