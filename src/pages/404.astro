@@ -15,15 +15,15 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
   title="404 - Page Not Found | Gerry Moeis"
   description="The page you're looking for doesn't exist."
 >
-  <!-- Toggle Controls - Fixed position top right -->
-  <div class="error-page__toggles">
-    <LanguageToggle />
-    <ThemeToggle />
-  </div>
-
   <main class="error-page">
     <div class="error-page__container">
       <Panel variant="elevated" glow>
+        <!-- Toggle Controls - Inside Panel, top right corner -->
+        <div class="error-page__toggles">
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
+
         <div class="error-page__content">
           <!-- Error Code -->
           <div class="error-page__code">404</div>
@@ -55,23 +55,6 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
 </BaseLayout>
 
 <style>
-  /* Toggle Controls - Fixed position */
-  .error-page__toggles {
-    position: fixed;
-    top: var(--space-6);
-    right: var(--space-6);
-    z-index: var(--layer-navigation);
-    display: flex;
-    gap: var(--space-3);
-    align-items: center;
-    background: var(--color-surface-elevated);
-    border: var(--panel-border-width) var(--panel-border-style) var(--color-accent-primary);
-    border-radius: var(--radius-full);
-    padding: var(--space-2) var(--space-4);
-    box-shadow: var(--panel-shadow-elevated);
-    backdrop-filter: blur(var(--blur-backdrop-light));
-  }
-
   .error-page {
     min-height: 100vh;
     width: 100%;
@@ -94,6 +77,18 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
   .error-page__container {
     width: 100%;
     max-width: 600px;
+    position: relative;
+  }
+
+  /* Toggle Controls - Desktop: bottom right, Mobile: below home button */
+  .error-page__toggles {
+    position: absolute;
+    bottom: var(--space-4);
+    right: var(--space-4);
+    z-index: 10;
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
   }
 
   .error-page__content {
@@ -105,10 +100,10 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     gap: var(--space-6);
   }
 
-  /* Error Code */
+  /* Error Code - BIGGER */
   .error-page__code {
     font-family: var(--font-display);
-    font-size: var(--text-9xl);
+    font-size: 10rem; /* Bigger: was var(--text-9xl) */
     font-weight: var(--weight-bold);
     color: var(--color-accent-primary);
     line-height: 1;
@@ -118,10 +113,10 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     opacity: 0.9;
   }
 
-  /* Title */
+  /* Title - BIGGER */
   .error-page__title {
     font-family: var(--font-display);
-    font-size: var(--text-3xl);
+    font-size: var(--text-4xl); /* Bigger: was var(--text-3xl) */
     font-weight: var(--weight-bold);
     color: var(--color-text-primary);
     margin: 0;
@@ -139,13 +134,13 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     display: inline;
   }
 
-  /* Description */
+  /* Description - BIGGER */
   .error-page__description {
     font-family: var(--font-body);
-    font-size: var(--text-lg);
+    font-size: var(--text-xl); /* Bigger: was var(--text-lg) */
     color: var(--color-text-secondary);
     margin: 0;
-    max-width: 400px;
+    max-width: 500px; /* Wider to accommodate bigger text */
     line-height: var(--leading-relaxed);
   }
   
@@ -160,18 +155,18 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     display: inline;
   }
 
-  /* Home Link */
+  /* Home Link - BIGGER */
   .error-page__home-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-3);
-    padding: var(--space-4) var(--space-8);
+    padding: var(--space-5) var(--space-10); /* Bigger padding */
     margin-top: var(--space-4);
     background: var(--color-accent-primary);
     color: var(--color-bg-primary);
     font-family: var(--font-body);
-    font-size: var(--text-lg);
+    font-size: var(--text-xl); /* Bigger: was var(--text-lg) */
     font-weight: var(--weight-semibold);
     text-decoration: none;
     border-radius: var(--radius-full);
@@ -227,7 +222,7 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
   }
   
   .error-page__home-link i {
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl); /* Bigger icon: was var(--text-xl) */
   }
   
   /* Hide inactive language */
@@ -243,15 +238,15 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
-    .error-page__toggles {
-      top: var(--space-4);
-      right: var(--space-4);
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-3);
-    }
-
     .error-page {
       padding: var(--space-4);
+    }
+
+    /* Mobile: Move toggles below home button, center aligned */
+    .error-page__toggles {
+      position: static;
+      margin-top: var(--space-6);
+      justify-content: center;
     }
 
     .error-page__content {
@@ -260,7 +255,39 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     }
 
     .error-page__code {
-      font-size: var(--text-8xl);
+      font-size: 7rem; /* Smaller on mobile */
+    }
+
+    .error-page__title {
+      font-size: var(--text-3xl);
+    }
+
+    .error-page__description {
+      font-size: var(--text-lg);
+    }
+
+    .error-page__home-link {
+      padding: var(--space-4) var(--space-8);
+      font-size: var(--text-lg);
+    }
+    
+    .error-page__home-link i {
+      font-size: var(--text-xl);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .error-page__toggles {
+      gap: var(--space-2);
+      margin-top: var(--space-5);
+    }
+
+    .error-page__content {
+      padding: var(--space-6) var(--space-4);
+    }
+
+    .error-page__code {
+      font-size: 5rem; /* Even smaller on small mobile */
     }
 
     .error-page__title {
@@ -270,30 +297,14 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     .error-page__description {
       font-size: var(--text-base);
     }
-
+    
     .error-page__home-link {
       padding: var(--space-3) var(--space-6);
       font-size: var(--text-base);
     }
-  }
-
-  @media (max-width: 480px) {
-    .error-page__toggles {
-      top: var(--space-3);
-      right: var(--space-3);
-      padding: var(--space-1) var(--space-2);
-    }
-
-    .error-page__code {
-      font-size: var(--text-7xl);
-    }
-
-    .error-page__title {
-      font-size: var(--text-xl);
-    }
-
-    .error-page__description {
-      font-size: var(--text-sm);
+    
+    .error-page__home-link i {
+      font-size: var(--text-lg);
     }
   }
 </style>
