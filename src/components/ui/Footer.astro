@@ -46,35 +46,51 @@ const activePath = currentPath || Astro.url.pathname;
     <div class="footer__content">
       <!-- Navigation Links -->
       <nav class="footer__nav" aria-label="Footer navigation">
-        <ul class="footer__nav-list">
-          {navLinks.map((link) => {
-            const isActive = activePath === link.href || 
-                            (link.href !== '/' && activePath.startsWith(link.href));
-            
-            return (
-              <li class="footer__nav-item">
-                <a 
-                  href={link.href} 
-                  class:list={['footer__nav-link', { 'footer__nav-link--active': isActive }]}
-                  aria-current={isActive ? 'page' : undefined}
-                  target={link.target}
-                  rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
-                  data-bilingual="footer-nav"
-                >
-                  <span data-lang="en">{link.label.en}</span>
-                  <span data-lang="id">{link.label.id}</span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+        <div class="footer__nav-row">
+          <ul class="footer__nav-list">
+            {navLinks.map((link) => {
+              const isActive = activePath === link.href || 
+                              (link.href !== '/' && activePath.startsWith(link.href));
+              
+              return (
+                <li class="footer__nav-item">
+                  <a 
+                    href={link.href} 
+                    class:list={['footer__nav-link', { 'footer__nav-link--active': isActive }]}
+                    aria-current={isActive ? 'page' : undefined}
+                    target={link.target}
+                    rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                    data-bilingual="footer-nav"
+                  >
+                    <span data-lang="en">{link.label.en}</span>
+                    <span data-lang="id">{link.label.id}</span>
+                  </a>
+                </li>
+              );
+            })}
+            <!-- CV Download Button - Inline with nav links (Desktop only) -->
+            <li class="footer__nav-item footer__nav-item--cv footer__nav-item--cv-desktop">
+              <a 
+                href="/cv.pdf" 
+                class="footer__cv-button"
+                download
+                aria-label="Download CV"
+                data-bilingual="cv-button"
+              >
+                <Icon name="download" class="footer__cv-icon" />
+                <span data-lang="en">Download my CV</span>
+                <span data-lang="id">Unduh CV saya</span>
+              </a>
+            </li>
+          </ul>
+        </div>
         
-        <!-- Right Column: CV + Social Links -->
-        <div class="footer__actions">
-          <!-- CV Download Button -->
+        <!-- Second Row: Social Links -->
+        <div class="footer__social">
+          <!-- CV Download Button - Mobile only (appears before social links) -->
           <a 
             href="/cv.pdf" 
-            class="footer__cv-button"
+            class="footer__cv-button footer__cv-button--mobile"
             download
             aria-label="Download CV"
             data-bilingual="cv-button"
@@ -84,7 +100,6 @@ const activePath = currentPath || Astro.url.pathname;
             <span data-lang="id">Unduh CV saya</span>
           </a>
           
-          <!-- Social Links -->
           <ul class="footer__social-list">
             {socialLinks.map((link) => (
               <li class="footer__social-item">
@@ -141,7 +156,7 @@ const activePath = currentPath || Astro.url.pathname;
     text-align: center;
   }
 
-  /* Navigation - Desktop: All in one row */
+  /* Navigation - Desktop: Two rows */
   .footer__nav {
     display: flex;
     flex-direction: column;
@@ -150,7 +165,14 @@ const activePath = currentPath || Astro.url.pathname;
     width: 100%;
   }
   
-  /* First row: Nav links + CV button */
+  /* First row wrapper */
+  .footer__nav-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* First row: Nav links + CV button (all inline) */
   .footer__nav-list {
     display: flex;
     gap: var(--space-6);
@@ -166,31 +188,19 @@ const activePath = currentPath || Astro.url.pathname;
     margin: 0;
   }
   
-  /* Actions container - Desktop: CV button inline with nav, social links below */
-  .footer__actions {
-    display: contents; /* Makes children participate in parent's flex layout */
+  .footer__nav-item--cv {
+    /* CV button inline with nav links */
+    margin-left: var(--space-2);
   }
   
-  /* CV button appears in same row as nav links on desktop */
-  .footer__cv-button {
-    display: inline-flex;
-    align-items: center;
+  /* Second row: Social links */
+  .footer__social {
+    width: 100%;
+    display: flex;
     justify-content: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-5);
-    background: var(--color-accent-primary);
-    color: var(--color-bg-primary);
-    font-family: var(--font-primary);
-    font-size: var(--text-base);
-    font-weight: var(--weight-semibold);
-    text-decoration: none;
-    border-radius: var(--radius-full);
-    border: 2px solid transparent;
-    transition: all var(--duration-medium) ease;
-    box-shadow: 0 0 20px rgba(246, 224, 94, 0.3);
   }
   
-  /* Social links appear in second row on desktop */
+  /* Social links list */
   .footer__social-list {
     display: flex;
     gap: var(--space-6);
@@ -272,6 +282,30 @@ const activePath = currentPath || Astro.url.pathname;
     border: 2px solid transparent;
     transition: all var(--duration-medium) ease;
     box-shadow: 0 0 20px rgba(246, 224, 94, 0.3);
+  }
+  
+  /* CV Download Button */
+  .footer__cv-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    border: 2px solid transparent;
+    transition: all var(--duration-medium) ease;
+    box-shadow: 0 0 20px rgba(246, 224, 94, 0.3);
+  }
+  
+  /* Hide mobile CV button on desktop */
+  .footer__cv-button--mobile {
+    display: none;
   }
   
   /* Dark theme CV button */
@@ -433,13 +467,19 @@ const activePath = currentPath || Astro.url.pathname;
       text-align: left;
     }
 
-    /* Two Column Layout for Mobile: Nav (left) + Actions (right) */
+    /* Two Column Layout for Mobile */
     .footer__nav {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: var(--space-6);
       align-items: start;
       width: 100%;
+    }
+    
+    /* First column: Nav links only */
+    .footer__nav-row {
+      grid-column: 1;
+      justify-content: flex-start;
     }
 
     /* Navigation Links - Left Column */
@@ -453,6 +493,11 @@ const activePath = currentPath || Astro.url.pathname;
     .footer__nav-item {
       width: auto;
       margin: 0;
+    }
+    
+    /* Hide desktop CV button on mobile */
+    .footer__nav-item--cv-desktop {
+      display: none;
     }
     
     .footer__nav-link {
@@ -474,22 +519,25 @@ const activePath = currentPath || Astro.url.pathname;
       padding: var(--space-2) var(--space-3);
     }
     
-    /* Actions Container - Right Column */
-    .footer__actions {
+    /* Second column: CV button + Social links */
+    .footer__social {
+      grid-column: 2;
+      justify-content: flex-start;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
       gap: var(--space-4);
     }
     
-    .footer__cv-button {
+    /* Show mobile CV button */
+    .footer__cv-button--mobile {
+      display: inline-flex;
       width: 100%;
       padding: var(--space-3) var(--space-4);
       font-size: var(--text-sm);
       justify-content: center;
     }
 
-    /* Social Links - Right Column (below CV button) */
+    /* Social Links - Right Column */
     .footer__social-list {
       flex-direction: column;
       gap: var(--space-4);
@@ -524,6 +572,7 @@ const activePath = currentPath || Astro.url.pathname;
       width: 100%;
       text-align: center;
       margin-top: var(--space-4);
+      grid-column: 1 / -1;
     }
     
     .footer__copyright-text {
