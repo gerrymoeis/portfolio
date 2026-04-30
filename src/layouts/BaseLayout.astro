@@ -140,11 +140,6 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
   <body class:list={[{ 'no-scroll': noScroll }]}>
-    <!-- Skip to content link for accessibility -->
-    <a href="#main-content" class="skip-to-content">
-      Skip to main content
-    </a>
-    
     <!-- Custom Cursor (desktop only) -->
     <CustomCursor />
     

@@ -86,17 +86,12 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
     <script src="https://kit.fontawesome.com/3f7347f781.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <!-- Skip to content link for accessibility -->
-    <a href="#main-content" class="skip-to-content">
-      Skip to main content
-    </a>
-    
     <div class="page-layout depth-mid">
       <header class="page-nav depth-near" role="banner">
         <Navigation />
       </header>
       
-      <main id="main-content" class="blog-detail" role="main">
+      <main class="blog-detail" role="main">
         <article class="blog-article">
           <header class="blog-header">
             <h1 class="blog-title">{title}</h1>

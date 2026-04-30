@@ -88,18 +88,13 @@ const ogImage = new URL(heroImage, Astro.site || Astro.url.origin);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <!-- Skip to content link for accessibility -->
-    <a href="#main-content" class="skip-to-content">
-      Skip to main content
-    </a>
-    
     <div class="page-layout depth-mid">
       <!-- Fixed navigation -->
       <header class="project-header depth-near">
         <Navigation />
       </header>
       
-      <main id="main-content" class="project-detail">
+      <main class="project-detail">
         <!-- Hero section with parallax background -->
         <section class="project-hero">
           <!-- Background layer - slowest movement -->
