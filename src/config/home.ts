@@ -77,11 +77,6 @@ export const homeConfig: HomeConfig = {
       target: "_blank"
     },
     { 
-      label: { id: "Pengalaman", en: "Experiences" }, 
-      href: "/experiences",
-      target: "_blank"
-    },
-    { 
       label: { id: "CV", en: "CV" }, 
       href: "/cv",
       target: "_blank"

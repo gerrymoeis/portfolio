@@ -1,0 +1,299 @@
+---
+/**
+ * 404 Error Page - Page Not Found
+ * HD-2D styled error page with bilingual support
+ * Provides clear navigation back to home
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Panel from '../components/ui/Panel.astro';
+import ThemeToggle from '../components/ui/ThemeToggle.astro';
+import LanguageToggle from '../components/ui/LanguageToggle.astro';
+---
+
+<BaseLayout 
+  title="404 - Page Not Found | Gerry Moeis"
+  description="The page you're looking for doesn't exist."
+>
+  <!-- Toggle Controls - Fixed position top right -->
+  <div class="error-page__toggles">
+    <LanguageToggle />
+    <ThemeToggle />
+  </div>
+
+  <main class="error-page">
+    <div class="error-page__container">
+      <Panel variant="elevated" glow>
+        <div class="error-page__content">
+          <!-- Error Code -->
+          <div class="error-page__code">404</div>
+          
+          <!-- Title -->
+          <h1 class="error-page__title" data-bilingual>
+            <span data-lang="en">Page Not Found</span>
+            <span data-lang="id">Halaman Tidak Ditemukan</span>
+          </h1>
+          
+          <!-- Description -->
+          <p class="error-page__description" data-bilingual>
+            <span data-lang="en">The page you're looking for doesn't exist or has been moved.</span>
+            <span data-lang="id">Halaman yang Anda cari tidak ada atau telah dipindahkan.</span>
+          </p>
+          
+          <!-- Home Link -->
+          <a href="/" class="error-page__home-link">
+            <i class="fas fa-home"></i>
+            <span data-bilingual>
+              <span data-lang="en">Go Home</span>
+              <span data-lang="id">Kembali ke Beranda</span>
+            </span>
+          </a>
+        </div>
+      </Panel>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  /* Toggle Controls - Fixed position */
+  .error-page__toggles {
+    position: fixed;
+    top: var(--space-6);
+    right: var(--space-6);
+    z-index: var(--layer-navigation);
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    background: var(--color-surface-elevated);
+    border: var(--panel-border-width) var(--panel-border-style) var(--color-accent-primary);
+    border-radius: var(--radius-full);
+    padding: var(--space-2) var(--space-4);
+    box-shadow: var(--panel-shadow-elevated);
+    backdrop-filter: blur(var(--blur-backdrop-light));
+  }
+
+  .error-page {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    background: 
+      radial-gradient(
+        ellipse at center top,
+        var(--color-bg-light) 0%,
+        var(--color-bg-mid) 30%,
+        var(--color-bg-dark) 70%,
+        var(--color-bg-deep) 100%
+      ),
+      radial-gradient(circle at 30% 20%, var(--color-particle-warm) 0%, transparent 50%),
+      radial-gradient(circle at 70% 80%, var(--color-particle-cool) 0%, transparent 50%);
+  }
+
+  .error-page__container {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .error-page__content {
+    padding: var(--space-12) var(--space-8);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  /* Error Code */
+  .error-page__code {
+    font-family: var(--font-display);
+    font-size: var(--text-9xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-accent-primary);
+    line-height: 1;
+    text-shadow: 
+      0 0 20px var(--color-accent-primary),
+      0 0 40px var(--color-accent-primary);
+    opacity: 0.9;
+  }
+
+  /* Title */
+  .error-page__title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
+    line-height: var(--leading-tight);
+  }
+  
+  /* Hide inactive language */
+  .error-page__title span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .error-page__title span[data-lang="en"],
+  :global(html[lang="id"]) .error-page__title span[data-lang="id"] {
+    display: inline;
+  }
+
+  /* Description */
+  .error-page__description {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin: 0;
+    max-width: 400px;
+    line-height: var(--leading-relaxed);
+  }
+  
+  /* Hide inactive language */
+  .error-page__description span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .error-page__description span[data-lang="en"],
+  :global(html[lang="id"]) .error-page__description span[data-lang="id"] {
+    display: inline;
+  }
+
+  /* Home Link */
+  .error-page__home-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-8);
+    margin-top: var(--space-4);
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    border: 2px solid transparent;
+    transition: all var(--duration-medium) var(--ease-out);
+    box-shadow: 0 0 20px rgba(246, 224, 94, 0.3);
+  }
+  
+  /* Dark theme home link */
+  :global(html:not([data-theme="light"])) .error-page__home-link {
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+  }
+  
+  :global(html:not([data-theme="light"])) .error-page__home-link:hover {
+    background: var(--color-bg-dark);
+    color: #f6e05e;
+    border-color: #f6e05e;
+    box-shadow: 
+      0 0 40px rgba(246, 224, 94, 0.8),
+      0 0 20px rgba(246, 224, 94, 0.6),
+      inset 0 0 20px rgba(246, 224, 94, 0.1);
+    text-shadow: 0 0 10px rgba(246, 224, 94, 0.8);
+    transform: translateY(-2px);
+  }
+  
+  /* Light theme home link */
+  :global([data-theme="light"]) .error-page__home-link {
+    background: #ff5500;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 85, 0, 0.3);
+  }
+  
+  :global([data-theme="light"]) .error-page__home-link:hover {
+    background: #ffffff;
+    color: #ff5500;
+    border-color: #ff5500;
+    box-shadow: 
+      0 0 40px rgba(255, 85, 0, 0.8),
+      0 0 20px rgba(255, 85, 0, 0.6),
+      inset 0 0 20px rgba(255, 85, 0, 0.1);
+    text-shadow: 0 0 10px rgba(255, 85, 0, 0.8);
+    transform: translateY(-2px);
+  }
+  
+  .error-page__home-link:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 4px;
+  }
+  
+  .error-page__home-link:active {
+    transform: translateY(0);
+  }
+  
+  .error-page__home-link i {
+    font-size: var(--text-xl);
+  }
+  
+  /* Hide inactive language */
+  .error-page__home-link span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .error-page__home-link span[data-lang="en"],
+  :global(html[lang="id"]) .error-page__home-link span[data-lang="id"] {
+    display: inline;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .error-page__toggles {
+      top: var(--space-4);
+      right: var(--space-4);
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+    }
+
+    .error-page {
+      padding: var(--space-4);
+    }
+
+    .error-page__content {
+      padding: var(--space-8) var(--space-6);
+      gap: var(--space-5);
+    }
+
+    .error-page__code {
+      font-size: var(--text-8xl);
+    }
+
+    .error-page__title {
+      font-size: var(--text-2xl);
+    }
+
+    .error-page__description {
+      font-size: var(--text-base);
+    }
+
+    .error-page__home-link {
+      padding: var(--space-3) var(--space-6);
+      font-size: var(--text-base);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .error-page__toggles {
+      top: var(--space-3);
+      right: var(--space-3);
+      padding: var(--space-1) var(--space-2);
+    }
+
+    .error-page__code {
+      font-size: var(--text-7xl);
+    }
+
+    .error-page__title {
+      font-size: var(--text-xl);
+    }
+
+    .error-page__description {
+      font-size: var(--text-sm);
+    }
+  }
+</style>
