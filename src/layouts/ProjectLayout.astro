@@ -14,7 +14,7 @@
  * - slug: Project slug for canonical URL (required)
  */
 
-import Navigation from '../components/ui/Navigation.astro';
+import SemiCylindricalNav from '../components/ui/SemiCylindricalNav.astro';
 import Footer from '../components/ui/Footer.astro';
 import ParallaxLayer from '../components/projects/ParallaxLayer.astro';
 import Panel from '../components/ui/Panel.astro';
@@ -43,6 +43,16 @@ interface Props {
 }
 
 const { title, description, year, status, techStack, heroImage, links, slug } = Astro.props;
+
+// Navigation links with bilingual support
+const navLinks = [
+  { label: { id: 'Beranda', en: 'Home' }, href: '/', target: undefined },
+  { label: { id: 'Proyek', en: 'Projects' }, href: '/projects', target: '_blank' },
+  { label: { id: 'Blog', en: 'Blogs' }, href: '/blogs', target: '_blank' },
+];
+
+// Get current path for active state
+const currentPath = Astro.url.pathname;
 
 // Format status for display
 const statusDisplay = status === 'in-progress' ? 'In Progress' : 
@@ -88,12 +98,10 @@ const ogImage = new URL(heroImage, Astro.site || Astro.url.origin);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
+    <!-- Semi-Cylindrical Navigation (Fixed at top) -->
+    <SemiCylindricalNav links={navLinks} currentPath={currentPath} />
+    
     <div class="page-layout depth-mid">
-      <!-- Fixed navigation -->
-      <header class="project-header depth-near">
-        <Navigation />
-      </header>
-      
       <main class="project-detail">
         <!-- Hero section with parallax background -->
         <section class="project-hero">

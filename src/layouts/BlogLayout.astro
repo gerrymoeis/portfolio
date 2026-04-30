@@ -11,7 +11,7 @@
  * - slug: Blog post slug for canonical URL (required)
  */
 
-import Navigation from '../components/ui/Navigation.astro';
+import SemiCylindricalNav from '../components/ui/SemiCylindricalNav.astro';
 import Footer from '../components/ui/Footer.astro';
 import ViewCounter from '../components/blogs/ViewCounter.astro';
 
@@ -30,6 +30,16 @@ interface Props {
 }
 
 const { title, description, date, tags, slug } = Astro.props;
+
+// Navigation links with bilingual support
+const navLinks = [
+  { label: { id: 'Beranda', en: 'Home' }, href: '/', target: undefined },
+  { label: { id: 'Proyek', en: 'Projects' }, href: '/projects', target: '_blank' },
+  { label: { id: 'Blog', en: 'Blogs' }, href: '/blogs', target: '_blank' },
+];
+
+// Get current path for active state
+const currentPath = Astro.url.pathname;
 
 // Format date for display
 const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -91,11 +101,10 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
     <script src="https://kit.fontawesome.com/3f7347f781.js" crossorigin="anonymous"></script>
   </head>
   <body>
+    <!-- Semi-Cylindrical Navigation (Fixed at top) -->
+    <SemiCylindricalNav links={navLinks} currentPath={currentPath} />
+    
     <div class="page-layout depth-mid">
-      <header class="page-nav depth-near" role="banner">
-        <Navigation />
-      </header>
-      
       <main class="blog-detail" role="main">
         <!-- 
           FUTURE DEVELOPMENT: Sidebar for Related Posts & Recommendations
@@ -188,22 +197,7 @@ const ogImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
       /* Atmospheric texture overlay */
       radial-gradient(circle at 30% 20%, rgba(246, 224, 94, 0.02) 0%, transparent 50%),
       radial-gradient(circle at 70% 80%, rgba(139, 149, 109, 0.015) 0%, transparent 50%);
-  }
-
-  .page-nav {
-    position: sticky;
-    top: 0;
-    z-index: var(--layer-navigation);
-    background: var(--color-surface-elevated);
-    backdrop-filter: blur(12px);
-    border-bottom: 2px solid var(--color-border-accent);
-    padding: var(--space-4) var(--space-6);
-    box-shadow: var(--panel-shadow-base);
-  }
-
-  .page-nav :global(.navigation) {
-    max-width: 1200px;
-    margin: 0 auto;
+    padding-top: var(--space-20); /* Add top padding for fixed nav */
   }
 
   .blog-detail {
