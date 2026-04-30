@@ -5,28 +5,63 @@
  * Sorted by date (newest first) with minimal animation
  */
 
-import PageContainer from '../../components/ui/PageContainer.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SemiCylindricalNav from '../../components/ui/SemiCylindricalNav.astro';
+import Footer from '../../components/ui/Footer.astro';
 import PageHero from '../../components/ui/PageHero.astro';
 import BlogList from '../../components/blogs/BlogList.astro';
+
+// Navigation links with bilingual support
+const navLinks = [
+  { label: { id: 'Beranda', en: 'Home' }, href: '/', target: undefined },
+  { label: { id: 'Proyek', en: 'Projects' }, href: '/projects', target: '_blank' },
+  { label: { id: 'Blog', en: 'Blogs' }, href: '/blogs', target: '_blank' },
+];
+
+// Get current path for active state
+const currentPath = Astro.url.pathname;
 ---
 
-<PageContainer 
+<BaseLayout 
   title="Blog | Gerry Moeis"
   description="Thoughts on web development, design, and technology. Explore articles about modern web development, accessibility, and creative coding."
   ogType="website"
-  class="blogs-page"
 >
-  <PageHero 
-    title={{ en: "Blogs", id: "Blog" }}
-    description={{ en: "Thoughts on web development, design, and technology", id: "Pemikiran tentang pengembangan web, desain, dan teknologi" }}
-  />
+  <!-- Semi-Cylindrical Navigation (Fixed at top) -->
+  <SemiCylindricalNav links={navLinks} currentPath={currentPath} />
   
-  <div class="blogs-content">
-    <BlogList />
+  <div class="page-layout depth-mid blogs-page">
+    <main role="main">
+      <PageHero 
+        title={{ en: "Blogs", id: "Blog" }}
+        description={{ en: "Thoughts on web development, design, and technology", id: "Pemikiran tentang pengembangan web, desain, dan teknologi" }}
+      />
+      
+      <div class="blogs-content">
+        <BlogList />
+      </div>
+    </main>
+    
+    <Footer currentPath={currentPath} />
   </div>
-</PageContainer>
+</BaseLayout>
 
 <style>
+  .page-layout {
+    min-height: 100vh;
+    background: 
+      radial-gradient(
+        ellipse at center top,
+        var(--color-bg-light) 0%,
+        var(--color-bg-mid) 30%,
+        var(--color-bg-dark) 70%,
+        var(--color-bg-deep) 100%
+      ),
+      radial-gradient(circle at 30% 20%, var(--color-particle-warm) 0%, transparent 50%),
+      radial-gradient(circle at 70% 80%, var(--color-particle-cool) 0%, transparent 50%);
+    padding-top: var(--space-20); /* Add top padding for fixed nav */
+  }
+
   .blogs-content {
     max-width: 1200px;
     margin: 0 auto;

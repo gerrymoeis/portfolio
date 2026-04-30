@@ -7,9 +7,21 @@
  */
 
 import { getCollection } from 'astro:content';
-import PageContainer from '../../components/ui/PageContainer.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SemiCylindricalNav from '../../components/ui/SemiCylindricalNav.astro';
+import Footer from '../../components/ui/Footer.astro';
 import PageHero from '../../components/ui/PageHero.astro';
 import ProjectScene from '../../components/projects/ProjectScene.astro';
+
+// Navigation links with bilingual support
+const navLinks = [
+  { label: { id: 'Beranda', en: 'Home' }, href: '/', target: undefined },
+  { label: { id: 'Proyek', en: 'Projects' }, href: '/projects', target: '_blank' },
+  { label: { id: 'Blog', en: 'Blogs' }, href: '/blogs', target: '_blank' },
+];
+
+// Get current path for active state
+const currentPath = Astro.url.pathname;
 
 // Query all projects from content collection
 const projects = await getCollection('projects');
@@ -18,30 +30,38 @@ const projects = await getCollection('projects');
 const sortedProjects = projects.sort((a, b) => b.data.year - a.data.year);
 ---
 
-<PageContainer 
+<BaseLayout 
   title="Projects | Gerry Moeis"
   description="Explore my portfolio of web development projects, featuring modern technologies, creative solutions, and innovative design approaches."
   ogType="website"
-  class="projects-page"
 >
-  <PageHero 
-    title="Projects"
-    description="A collection of projects showcasing web development, design, and creative problem-solving."
-  />
-
-  <div class="projects-scenes depth-mid" role="list" aria-label="Project portfolio">
-    {sortedProjects.map((project) => (
-      <ProjectScene
-        title={project.data.title}
-        summary={project.data.summary}
-        year={project.data.year}
-        status={project.data.status}
-        techStack={project.data.techStack}
-        heroImage={project.data.heroImage}
-        links={project.data.links}
-        slug={project.slug}
+  <!-- Semi-Cylindrical Navigation (Fixed at top) -->
+  <SemiCylindricalNav links={navLinks} currentPath={currentPath} />
+  
+  <div class="page-layout depth-mid projects-page">
+    <main role="main">
+      <PageHero 
+        title="Projects"
+        description="A collection of projects showcasing web development, design, and creative problem-solving."
       />
-    ))}
+
+      <div class="projects-scenes depth-mid" role="list" aria-label="Project portfolio">
+        {sortedProjects.map((project) => (
+          <ProjectScene
+            title={project.data.title}
+            summary={project.data.summary}
+            year={project.data.year}
+            status={project.data.status}
+            techStack={project.data.techStack}
+            heroImage={project.data.heroImage}
+            links={project.data.links}
+            slug={project.slug}
+          />
+        ))}
+      </div>
+    </main>
+    
+    <Footer currentPath={currentPath} />
   </div>
 
   <!-- Initialize parallax effects with lazy loading -->
@@ -89,9 +109,24 @@ const sortedProjects = projects.sort((a, b) => b.data.year - a.data.year);
       lazyInitParallax();
     }
   </script>
-</PageContainer>
+</BaseLayout>
 
 <style>
+  .page-layout {
+    min-height: 100vh;
+    background: 
+      radial-gradient(
+        ellipse at center top,
+        var(--color-bg-light) 0%,
+        var(--color-bg-mid) 30%,
+        var(--color-bg-dark) 70%,
+        var(--color-bg-deep) 100%
+      ),
+      radial-gradient(circle at 30% 20%, var(--color-particle-warm) 0%, transparent 50%),
+      radial-gradient(circle at 70% 80%, var(--color-particle-cool) 0%, transparent 50%);
+    padding-top: var(--space-20); /* Add top padding for fixed nav */
+  }
+
   .projects-scenes {
     position: relative;
   }
