@@ -141,13 +141,16 @@ const activePath = currentPath || Astro.url.pathname;
     text-align: center;
   }
 
-  /* Navigation */
+  /* Navigation - Desktop: All in one row */
   .footer__nav {
     display: flex;
+    flex-direction: column;
     gap: var(--space-6);
-    align-items: flex-start;
+    align-items: center;
+    width: 100%;
   }
-
+  
+  /* First row: Nav links + CV button */
   .footer__nav-list {
     display: flex;
     gap: var(--space-6);
@@ -163,11 +166,38 @@ const activePath = currentPath || Astro.url.pathname;
     margin: 0;
   }
   
-  /* Actions container (CV + Social) - Desktop: horizontal layout */
+  /* Actions container - Desktop: CV button inline with nav, social links below */
   .footer__actions {
+    display: contents; /* Makes children participate in parent's flex layout */
+  }
+  
+  /* CV button appears in same row as nav links on desktop */
+  .footer__cv-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    border: 2px solid transparent;
+    transition: all var(--duration-medium) ease;
+    box-shadow: 0 0 20px rgba(246, 224, 94, 0.3);
+  }
+  
+  /* Social links appear in second row on desktop */
+  .footer__social-list {
     display: flex;
     gap: var(--space-6);
-    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
   }
 
   .footer__nav-link {
@@ -306,15 +336,7 @@ const activePath = currentPath || Astro.url.pathname;
     display: inline;
   }
 
-  /* Social Links - Larger size for better hierarchy */
-  .footer__social-list {
-    display: flex;
-    gap: var(--space-6);
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
+  /* Social Links */
   .footer__social-item {
     margin: 0;
   }
@@ -368,9 +390,41 @@ const activePath = currentPath || Astro.url.pathname;
   }
 
   /* Responsive adjustments - Mobile First */
+  
+  /* Tablet/Small Desktop (769px - 1024px) - Maintain desktop layout but adjust spacing */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .footer__container {
+      padding: var(--space-10) var(--space-5) var(--space-8);
+    }
+    
+    .footer__nav-list {
+      gap: var(--space-4);
+    }
+    
+    .footer__nav-link {
+      font-size: var(--text-sm);
+      padding: var(--space-2) var(--space-2);
+    }
+    
+    .footer__cv-button {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+    }
+    
+    .footer__social-list {
+      gap: var(--space-5);
+    }
+    
+    .footer__social-link {
+      font-size: var(--text-base);
+      padding: var(--space-2) var(--space-3);
+    }
+  }
+  
+  /* Mobile (≤768px) - 2 Column Layout */
   @media (max-width: 768px) {
     .footer__container {
-      padding: var(--space-12) var(--space-6) var(--space-10);
+      padding: var(--space-10) var(--space-5) var(--space-8);
     }
 
     .footer__content {
@@ -405,8 +459,19 @@ const activePath = currentPath || Astro.url.pathname;
       width: auto;
       text-align: left;
       display: inline-block;
-      padding: var(--space-2) 0;
+      padding: var(--space-2) var(--space-3);
       font-size: var(--text-base);
+      border-radius: var(--radius-sm);
+    }
+    
+    .footer__nav-link:hover {
+      background-color: var(--color-nav-hover-bg);
+      padding: var(--space-2) var(--space-3);
+    }
+    
+    .footer__nav-link--active {
+      background-color: var(--color-nav-active-bg);
+      padding: var(--space-2) var(--space-3);
     }
     
     /* Actions Container - Right Column */
@@ -435,9 +500,15 @@ const activePath = currentPath || Astro.url.pathname;
       flex-direction: row;
       justify-content: flex-start;
       text-align: left;
-      padding: var(--space-2) 0;
+      padding: var(--space-2) var(--space-3);
       gap: var(--space-2);
       width: auto;
+      border-radius: var(--radius-sm);
+    }
+    
+    .footer__social-link:hover {
+      background-color: var(--color-social-hover-bg);
+      padding: var(--space-2) var(--space-3);
     }
 
     .footer__social-name {
@@ -461,9 +532,10 @@ const activePath = currentPath || Astro.url.pathname;
     }
   }
 
+  /* Small Mobile (≤480px) - Tighter spacing */
   @media (max-width: 480px) {
     .footer__container {
-      padding: var(--space-10) var(--space-4) var(--space-8);
+      padding: var(--space-8) var(--space-4) var(--space-6);
     }
     
     .footer__content {
@@ -473,6 +545,7 @@ const activePath = currentPath || Astro.url.pathname;
     /* Maintain 2-column layout on small mobile */
     .footer__nav {
       gap: var(--space-4);
+      grid-template-columns: 1fr 1fr;
     }
 
     .footer__nav-list {
@@ -481,10 +554,15 @@ const activePath = currentPath || Astro.url.pathname;
 
     .footer__nav-link {
       font-size: var(--text-sm);
-      padding: var(--space-2) 0;
+      padding: var(--space-2) var(--space-2);
     }
     
-    .footer__nav-item--cv {
+    .footer__nav-link:hover,
+    .footer__nav-link--active {
+      padding: var(--space-2) var(--space-2);
+    }
+    
+    .footer__actions {
       gap: var(--space-3);
     }
     
@@ -504,8 +582,12 @@ const activePath = currentPath || Astro.url.pathname;
     
     .footer__social-link {
       font-size: var(--text-sm);
-      padding: var(--space-2) 0;
+      padding: var(--space-2) var(--space-2);
       gap: var(--space-2);
+    }
+    
+    .footer__social-link:hover {
+      padding: var(--space-2) var(--space-2);
     }
     
     .footer__social-icon {
