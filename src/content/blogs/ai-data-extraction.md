@@ -75,7 +75,7 @@ But pure LLM approach isn't perfect either. API calls have cost (though small), 
 
 Primary layer uses LLM - handles 85-95% of cases. If LLM misses something obvious (like phone number with standard format), regex fallback kicks in. If caption lacks complete info, OCR extracts text from poster image, then LLM processes OCR output.
 
-Result? 100% success rate for 168 posts in testing. LLM handles majority, regex catches simple patterns LLM misses, OCR handles edge cases.
+This hybrid approach significantly improved extraction accuracy. LLM handles majority of cases, regex catches simple patterns LLM misses, and OCR handles edge cases where information is only in images.
 
 ## Training Data: Surprisingly Little
 
@@ -113,8 +113,7 @@ What used to take months of manual feature engineering and hundreds of thousands
 
 ---
 
-**Tech Stack**: Python, Google Gemini API, PostgreSQL, Playwright  
-**Status**: Production system, 100% success rate  
+**Tech Stack**: Python, Google Gemini API, Javascript, Playwright, PostgreSQL, NeonDB  
 **Related**: Information Extraction, NLP, Data Engineering
 
 </div>
@@ -183,7 +182,7 @@ Tapi pendekatan pure LLM juga gak sempurna. API call ada biayanya (meski kecil),
 
 Layer primary pakai LLM - handle 85-95% kasus. Kalau LLM miss sesuatu yang obvious (seperti nomor telepon dengan format standar), regex fallback kick in. Kalau caption kurang info lengkap, OCR ekstrak teks dari gambar poster, terus LLM proses output OCR.
 
-Hasilnya? 100% success rate untuk 168 post dalam testing. LLM handle mayoritas, regex catch pattern sederhana yang LLM miss, OCR handle edge case.
+Pendekatan hybrid ini secara signifikan meningkatkan akurasi ekstraksi. LLM handle mayoritas kasus, regex catch pattern sederhana yang LLM miss, dan OCR handle edge case dimana informasi hanya ada di gambar.
 
 ## Training Data: Surprisingly Little
 
@@ -221,8 +220,7 @@ Yang dulu butuh berbulan-bulan manual feature engineering dan ratusan ribu train
 
 ---
 
-**Tech Stack**: Python, Google Gemini API, PostgreSQL, Playwright  
-**Status**: Sistem produksi, 100% success rate  
+**Tech Stack**: Python, Google Gemini API, Javascript, Playwright, PostgreSQL, NeonDB  
 **Related**: Information Extraction, NLP, Data Engineering
 
 </div>
