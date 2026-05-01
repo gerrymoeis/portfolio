@@ -9,13 +9,7 @@
 
 import ThemeToggle from './ThemeToggle.astro';
 import LanguageToggle from './LanguageToggle.astro';
-import type { BilingualText } from '../../config/home';
-
-interface NavigationLink {
-  label: BilingualText;
-  href: string;
-  target?: string;
-}
+import type { NavigationLink } from '../../config/home';
 
 interface Props {
   links: NavigationLink[];
@@ -23,6 +17,16 @@ interface Props {
 }
 
 const { links, currentPath = '/' } = Astro.props;
+
+// Helper function to determine if a link is active
+// For home (/), only exact match
+// For other links, check if current path starts with the link href
+const isLinkActive = (linkHref: string): boolean => {
+  if (linkHref === '/') {
+    return currentPath === '/';
+  }
+  return currentPath.startsWith(linkHref);
+};
 ---
 
 <!-- Mobile hamburger button (visible < 768px) - Outside nav wrapper -->
@@ -41,22 +45,26 @@ const { links, currentPath = '/' } = Astro.props;
 <nav class="semi-cylindrical-nav" aria-label="Main navigation">
   <div class="semi-cylindrical-nav__container semi-cylindrical-nav__container--desktop">
     <ul class="semi-cylindrical-nav__list">
-      {links.map((link) => (
-        <li class="semi-cylindrical-nav__item">
-          <a 
-            href={link.href} 
-            class={`semi-cylindrical-nav__link ${currentPath === link.href ? 'semi-cylindrical-nav__link--active' : ''}`}
-            aria-label={`Navigate to ${link.label.en}`}
-            aria-current={currentPath === link.href ? 'page' : undefined}
-            target={link.target}
-            rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
-            data-bilingual="nav"
-          >
-            <span data-lang="en">{link.label.en}</span>
-            <span data-lang="id">{link.label.id}</span>
-          </a>
-        </li>
-      ))}
+      {links.map((link) => {
+        const isActive = isLinkActive(link.href);
+        return (
+          <li class="semi-cylindrical-nav__item">
+            <a 
+              href={link.href} 
+              class={`semi-cylindrical-nav__link ${isActive ? 'semi-cylindrical-nav__link--active' : ''}`}
+              aria-label={`Navigate to ${link.label.en}`}
+              aria-current={isActive ? 'page' : undefined}
+              target={link.target}
+              rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+              download={link.download}
+              data-bilingual="nav"
+            >
+              <span data-lang="en">{link.label.en}</span>
+              <span data-lang="id">{link.label.id}</span>
+            </a>
+          </li>
+        );
+      })}
       <li class="semi-cylindrical-nav__item semi-cylindrical-nav__item--controls">
         <div class="semi-cylindrical-nav__controls">
           <LanguageToggle />
@@ -70,22 +78,26 @@ const { links, currentPath = '/' } = Astro.props;
 <!-- Mobile menu (separate from desktop nav) -->
 <div class="semi-cylindrical-nav__container semi-cylindrical-nav__container--mobile" data-nav-menu>
   <ul class="semi-cylindrical-nav__list">
-    {links.map((link) => (
-      <li class="semi-cylindrical-nav__item">
-        <a 
-          href={link.href} 
-          class={`semi-cylindrical-nav__link ${currentPath === link.href ? 'semi-cylindrical-nav__link--active' : ''}`}
-          aria-label={`Navigate to ${link.label.en}`}
-          aria-current={currentPath === link.href ? 'page' : undefined}
-          target={link.target}
-          rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
-          data-bilingual="nav"
-        >
-          <span data-lang="en">{link.label.en}</span>
-          <span data-lang="id">{link.label.id}</span>
-        </a>
-      </li>
-    ))}
+    {links.map((link) => {
+      const isActive = isLinkActive(link.href);
+      return (
+        <li class="semi-cylindrical-nav__item">
+          <a 
+            href={link.href} 
+            class={`semi-cylindrical-nav__link ${isActive ? 'semi-cylindrical-nav__link--active' : ''}`}
+            aria-label={`Navigate to ${link.label.en}`}
+            aria-current={isActive ? 'page' : undefined}
+            target={link.target}
+            rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+            download={link.download}
+            data-bilingual="nav"
+          >
+            <span data-lang="en">{link.label.en}</span>
+            <span data-lang="id">{link.label.id}</span>
+          </a>
+        </li>
+      );
+    })}
     <li class="semi-cylindrical-nav__item semi-cylindrical-nav__item--controls">
       <div class="semi-cylindrical-nav__controls">
         <LanguageToggle />
@@ -166,7 +178,7 @@ const { links, currentPath = '/' } = Astro.props;
      ============================================ */
   
   .semi-cylindrical-nav__hamburger {
-    display: none; /* Hidden on desktop */
+    display: none;
     position: fixed;
     top: var(--space-4);
     right: var(--space-4);
@@ -177,18 +189,50 @@ const { links, currentPath = '/' } = Astro.props;
     gap: 5px;
     width: 48px;
     height: 48px;
-    background: var(--color-surface-elevated);
-    border: var(--panel-border-width) var(--panel-border-style) var(--color-accent-primary);
+    background: var(--bg-elevated);
     border-radius: var(--radius-md);
-    box-shadow: var(--panel-shadow-elevated);
     backdrop-filter: blur(var(--blur-backdrop-light));
     cursor: pointer;
     transition: all var(--duration-medium) var(--ease-out);
+  }
+  
+  /* Dark theme - golden yellow border with glow */
+  :global(html:not([data-theme="light"])) .semi-cylindrical-nav__hamburger {
+    border: 2px solid rgba(246, 224, 94, 0.8);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(246, 224, 94, 0.4),
+      0 0 10px rgba(246, 224, 94, 0.3);
+  }
+  
+  /* Light theme - red-orange border with glow */
+  :global([data-theme="light"]) .semi-cylindrical-nav__hamburger {
+    border: 2px solid rgba(255, 85, 0, 0.8);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.15),
+      0 0 20px rgba(255, 85, 0, 0.4),
+      0 0 10px rgba(255, 85, 0, 0.3);
   }
 
   .semi-cylindrical-nav__hamburger:hover {
     background: var(--color-nav-hover-bg);
     transform: var(--transform-hover-lift);
+  }
+  
+  /* Dark theme hover - stronger golden glow */
+  :global(html:not([data-theme="light"])) .semi-cylindrical-nav__hamburger:hover {
+    box-shadow: 
+      0 6px 16px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(246, 224, 94, 0.6),
+      0 0 15px rgba(246, 224, 94, 0.5);
+  }
+  
+  /* Light theme hover - stronger orange glow */
+  :global([data-theme="light"]) .semi-cylindrical-nav__hamburger:hover {
+    box-shadow: 
+      0 6px 16px rgba(0, 0, 0, 0.2),
+      0 0 30px rgba(255, 85, 0, 0.6),
+      0 0 15px rgba(255, 85, 0, 0.5);
   }
 
   .semi-cylindrical-nav__hamburger:focus-visible {
@@ -226,15 +270,15 @@ const { links, currentPath = '/' } = Astro.props;
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7); /* Darker overlay without blur */
-    z-index: calc(var(--layer-navigation) - 1); /* Below menu */
+    background: rgba(0, 0, 0, 0.7);
+    z-index: calc(var(--layer-navigation) - 2); /* Below menu AND hamburger button */
     opacity: 0;
     transition: opacity var(--duration-medium) var(--ease-out);
   }
 
   .semi-cylindrical-nav__overlay.is-visible {
     display: block;
-    opacity: 1;
+    opacity: 0;
   }
 
   /* ============================================
@@ -261,17 +305,38 @@ const { links, currentPath = '/' } = Astro.props;
   }
 
   .semi-cylindrical-nav__container {
-    background: var(--color-surface-elevated);
-    border: var(--panel-border-width) var(--panel-border-style) var(--color-accent-primary);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 50px; /* Semi-cylindrical shape */
-    box-shadow: 
-      var(--panel-shadow-elevated),
-      var(--atmospheric-glow);
     backdrop-filter: blur(10px);
-    padding: var(--space-3) var(--space-6);
+    -webkit-backdrop-filter: blur(10px);
+    padding: var(--space-3) var(--space-10);
     position: relative;
     overflow: hidden;
     max-width: 100%;
+  }
+  
+  /* Dark theme - bright golden yellow border with glow */
+  :global(html:not([data-theme="light"])) .semi-cylindrical-nav__container {
+    background: rgba(26, 28, 36, 0.7);
+    border: 2px solid rgba(246, 224, 94, 0.8); /* Brighter golden border */
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.4),
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      0 0 30px rgba(246, 224, 94, 0.5),
+      0 0 15px rgba(246, 224, 94, 0.4),
+      inset 0 1px 0 rgba(246, 224, 94, 0.2);
+  }
+  
+  /* Light theme - bright red-orange border with glow */
+  :global([data-theme="light"]) .semi-cylindrical-nav__container {
+    background: rgba(247, 250, 252, 0.7);
+    border: 2px solid rgba(255, 85, 0, 0.8); /* Brighter orange border */
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.15),
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      0 0 30px rgba(255, 85, 0, 0.5),
+      0 0 15px rgba(255, 85, 0, 0.4),
+      inset 0 1px 0 rgba(255, 85, 0, 0.2);
   }
   
   /* Hide mobile container on desktop */
@@ -303,7 +368,7 @@ const { links, currentPath = '/' } = Astro.props;
   .semi-cylindrical-nav__list {
     display: flex;
     align-items: center;
-    gap: var(--space-8);
+    gap: var(--space-4); /* Default gap for smaller screens */
     list-style: none;
     margin: 0;
     padding: 0;
@@ -315,13 +380,27 @@ const { links, currentPath = '/' } = Astro.props;
     margin: 0;
   }
   
+  /* Controls item with separator */
   .semi-cylindrical-nav__item--controls {
-    margin-left: var(--space-2);
+    padding-left: var(--space-8); /* Space after separator line */
+    position: relative;
+  }
+  
+  /* Separator line before controls (desktop only) */
+  .semi-cylindrical-nav__item--controls::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 48px;
+    background: var(--color-border-medium);
   }
   
   .semi-cylindrical-nav__controls {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--space-4); /* Gap between icons */
     align-items: center;
   }
 
@@ -333,7 +412,7 @@ const { links, currentPath = '/' } = Astro.props;
     color: var(--color-text-secondary);
     text-decoration: none;
     padding: var(--space-2) var(--space-4);
-    border-radius: 20px;
+    border-radius: 200px;
     transition: 
       color var(--duration-medium) var(--ease-out),
       background-color var(--duration-medium) var(--ease-out),
@@ -431,48 +510,44 @@ const { links, currentPath = '/' } = Astro.props;
       max-width: 85vw;
       height: 100vh;
       border-radius: 0;
-      border-right: none;
-      border-top: none;
-      border-bottom: none;
+      border-right: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
       z-index: var(--layer-navigation);
       transition: right var(--duration-medium) var(--ease-out);
       overflow-y: auto;
       padding: var(--space-20) var(--space-6) var(--space-6);
-      /* Glassmorphism effect */
       background: var(--color-mobile-menu-bg);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
+      /* Border and shadow will be set by theme-specific rules below */
     }
     
     .semi-cylindrical-nav__container--mobile.is-open {
       right: 0;
     }
     
-    .semi-cylindrical-nav__container--mobile.is-open {
-      right: 0;
-    }
-    
-    /* Dark theme - golden yellow glow on left edge */
+    /* Dark theme - golden yellow border and glow (CORRECT - no override) */
     :global(html:not([data-theme="light"])) .semi-cylindrical-nav__container--mobile {
-      border-left: 1px solid rgba(246, 224, 94, 0.9);
+      border-left: 2px solid rgba(246, 224, 94, 0.8);
       box-shadow: 
-        -4px 0 24px var(--color-mobile-menu-shadow-strong),
-        -2px 0 8px var(--color-mobile-menu-shadow-light),
-        -6px 0 24px rgba(246, 224, 94, 0.6),
-        -3px 0 12px rgba(246, 224, 94, 0.8),
-        inset 3px 0 10px rgba(246, 224, 94, 0.5),
-        inset 1px 0 0 rgba(246, 224, 94, 1);
+        -4px 0 24px rgba(0, 0, 0, 0.4),
+        -2px 0 8px rgba(0, 0, 0, 0.3),
+        -6px 0 30px rgba(246, 224, 94, 0.6),
+        -3px 0 15px rgba(246, 224, 94, 0.5),
+        inset 3px 0 10px rgba(246, 224, 94, 0.3),
+        inset 1px 0 0 rgba(246, 224, 94, 0.9);
     }
     
-    /* Light theme - red-orange glow on left edge */
+    /* Light theme - red-orange border and glow */
     :global([data-theme="light"]) .semi-cylindrical-nav__container--mobile {
-      border-left: 1px solid rgba(255, 85, 0, 0.9);
+      border-left: 2px solid rgba(255, 85, 0, 0.8);
       box-shadow: 
-        -4px 0 24px var(--color-mobile-menu-shadow-strong),
-        -2px 0 8px var(--color-mobile-menu-shadow-light),
-        -6px 0 24px rgba(255, 85, 0, 0.5),
-        -3px 0 12px rgba(255, 85, 0, 0.7),
-        inset 3px 0 10px rgba(255, 85, 0, 0.4),
+        -4px 0 24px rgba(0, 0, 0, 0.15),
+        -2px 0 8px rgba(0, 0, 0, 0.1),
+        -6px 0 30px rgba(255, 85, 0, 0.5),
+        -3px 0 15px rgba(255, 85, 0, 0.4),
+        inset 3px 0 10px rgba(255, 85, 0, 0.2),
         inset 1px 0 0 rgba(255, 85, 0, 0.9);
     }
 
@@ -496,12 +571,18 @@ const { links, currentPath = '/' } = Astro.props;
       margin-left: 0;
       margin-top: var(--space-4);
       padding-top: var(--space-4);
-      border-top: 1px solid var(--color-border-medium);
+      padding-left: 0; /* Remove left padding on mobile */
+      border-top: 2px solid var(--color-border-medium);
+    }
+    
+    /* Hide separator line on mobile */
+    .semi-cylindrical-nav__item--controls::before {
+      display: none;
     }
 
     .semi-cylindrical-nav__controls {
       justify-content: center;
-      gap: var(--space-4);
+      gap: var(--space-6);
     }
 
     .semi-cylindrical-nav__link {
@@ -586,7 +667,7 @@ const { links, currentPath = '/' } = Astro.props;
     }
   }
 
-  /* Large devices - full sizing */
+  /* Large devices - full sizing with proper spacing */
   @media (min-width: var(--breakpoint-lg)) {
     .semi-cylindrical-nav {
       top: var(--space-6);
@@ -594,11 +675,19 @@ const { links, currentPath = '/' } = Astro.props;
     }
 
     .semi-cylindrical-nav__container {
-      padding: var(--space-3) var(--space-6);
+      padding: var(--space-3) var(--space-8); /* More horizontal padding */
     }
 
     .semi-cylindrical-nav__list {
-      gap: var(--space-8);
+      gap: var(--space-6); /* Larger gap between navlinks */
+    }
+    
+    .semi-cylindrical-nav__item--controls {
+      padding-left: var(--space-8); /* More space after separator */
+    }
+    
+    .semi-cylindrical-nav__controls {
+      gap: var(--space-4); /* Larger gap between icons */
     }
 
     .semi-cylindrical-nav__link {
@@ -607,10 +696,23 @@ const { links, currentPath = '/' } = Astro.props;
     }
   }
 
-  /* Ultra-wide screens - prevent over-expansion */
+  /* Ultra-wide screens - even more spacing */
   @media (min-width: var(--breakpoint-2xl)) {
     .semi-cylindrical-nav__container {
-      max-width: 500px;
+      max-width: 700px; /* Wider max-width */
+      padding: var(--space-3) var(--space-10);
+    }
+    
+    .semi-cylindrical-nav__list {
+      gap: var(--space-8); /* Even larger gap between navlinks */
+    }
+    
+    .semi-cylindrical-nav__item--controls {
+      padding-left: var(--space-10);
+    }
+    
+    .semi-cylindrical-nav__controls {
+      gap: var(--space-5);
     }
   }
 
@@ -665,21 +767,7 @@ const { links, currentPath = '/' } = Astro.props;
       transform: none;
     }
   }
-
-  /* Touch device optimizations */
-  @media (hover: none) and (pointer: coarse) {
-    .semi-cylindrical-nav__link {
-      padding: var(--space-3) var(--space-4);
-      min-height: 44px; /* Minimum touch target size */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .semi-cylindrical-nav__list {
-      gap: var(--space-2);
-    }
-  }
+  
 
   /* Safe area adjustments for devices with notches */
   @supports (padding: max(0px)) {

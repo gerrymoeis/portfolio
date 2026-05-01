@@ -39,26 +39,9 @@ const panelClasses = [
 </div>
 
 <style>
-  /* Additional atmospheric variant */
   .panel--atmospheric {
-    background: linear-gradient(
-      135deg,
-      var(--color-surface-base) 0%,
-      var(--color-surface-dark) 100%
-    );
-    border-color: var(--color-accent-tertiary);
-    box-shadow: 
-      var(--panel-shadow-base),
-      var(--subtle-glow);
-  }
-
-  .panel--atmospheric::before {
-    border-color: var(--color-border-accent);
-  }
-
-  .panel--atmospheric::after {
-    background: 
-      radial-gradient(circle at 30% 30%, var(--color-particle-warm) 0%, transparent 60%),
-      radial-gradient(circle at 70% 70%, var(--color-particle-cool) 0%, transparent 60%);
+    background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
+    border: 2px solid var(--color-accent-primary);
+    box-shadow: var(--panel-shadow);
   }
 </style>

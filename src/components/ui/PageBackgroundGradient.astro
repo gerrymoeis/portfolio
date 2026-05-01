@@ -1,0 +1,45 @@
+---
+/**
+ * Page Background Gradient Component
+ * Renders a limited-height gradient at the top of pages (navbar area only)
+ * Automatically theme-aware (light/dark) and seamless fade to transparent
+ */
+---
+
+<div class="page-gradient"></div>
+
+<style>
+  .page-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
+    background: 
+      radial-gradient(
+        ellipse 150% 100% at 50% 0%,
+        var(--gradient-linear-start) 0%,
+        var(--gradient-linear-mid) 25%,
+        transparent 70%
+      ),
+      radial-gradient(
+        circle at 30% 15%, 
+        var(--gradient-particle-warm) 0%, 
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 70% 20%, 
+        var(--gradient-particle-cool) 0%, 
+        transparent 35%
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  /* Mobile - smaller gradient area */
+  @media (max-width: 768px) {
+    .page-gradient {
+      height: 300px;
+    }
+  }
+</style>

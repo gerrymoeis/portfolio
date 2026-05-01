@@ -16,18 +16,19 @@
      Inspired by Octopath Traveler's warm, atmospheric tones
      ============================================ */
   
-  /* Background - Atmospheric depth with warm tones */
-  --color-bg-deep: #0a0b0f;           /* Deep night sky */
-  --color-bg-dark: #1a1c24;           /* Dark atmospheric base */
-  --color-bg-mid: #2d3142;            /* Mid-tone atmospheric */
-  --color-bg-light: #4f5d75;          /* Light atmospheric */
-  --color-bg-accent: #8b956d;         /* Warm accent background */
+  /* Background - Simplified 3-level system */
+  --bg-base: #0a0b0f;           /* Darkest - page background */
+  --bg-elevated: #1a1c24;       /* Mid-dark - elevated surfaces */
+  --bg-surface: #2a2f36;        /* Lighter - panels & cards */
   
-  /* Surface colors - UI panels and frames */
-  --color-surface-dark: #1e2328;      /* Dark panel background */
-  --color-surface-base: #2a2f36;      /* Base panel background */
-  --color-surface-elevated: #363d47;   /* Elevated panel background */
-  --color-surface-light: #4a5568;     /* Light panel background */
+  /* Gradient helper - for smooth transitions */
+  --bg-gradient-mid: #2d3142;   /* Mid-tone for gradients */
+  --bg-gradient-light: #4f5d75; /* Light tone for gradients */
+  
+  /* Semantic mappings - for clarity */
+  --bg-page: var(--bg-base);
+  --bg-panel: var(--bg-surface);
+  --bg-panel-elevated: var(--bg-elevated);
   
   /* Text colors - High contrast for readability */
   --color-text-primary: #f7fafc;      /* Primary text - bright white */
@@ -62,6 +63,27 @@
   --color-particle-primary: var(--color-particle-warm);
   --color-particle-secondary: var(--color-particle-cool);
   --color-particle-tertiary: var(--color-particle-neutral);
+  
+  /* ============================================
+     PAGE BACKGROUND GRADIENTS - DARK THEME
+     Simplified - langsung pakai base colors
+     ============================================ */
+  
+  /* Radial gradient stops (for home page - ellipse at center) */
+  --gradient-radial-center: var(--bg-gradient-light);
+  --gradient-radial-mid: var(--bg-gradient-mid);
+  --gradient-radial-outer: var(--bg-elevated);
+  --gradient-radial-edge: var(--bg-base);
+  
+  /* Linear gradient stops (for blogs/projects - ellipse at center top) */
+  --gradient-linear-start: var(--bg-gradient-light);
+  --gradient-linear-mid: var(--bg-gradient-mid);
+  --gradient-linear-end-mid: var(--bg-elevated);
+  --gradient-linear-end: var(--bg-base);
+  
+  /* Particle overlay colors */
+  --gradient-particle-warm: rgba(246, 224, 94, 0.03);
+  --gradient-particle-cool: rgba(139, 149, 109, 0.02);
   
   /* ============================================
      RESPONSIVE SPACING TOKENS
@@ -118,107 +140,47 @@
   --layer-particles: 5;
   
   /* ============================================
-     GLASSMORPHISM MOBILE MENU
-     Theme-aware background colors
+     GLASSMORPHISM & SHADOWS
      ============================================ */
   
-  --color-mobile-menu-bg: rgba(42, 47, 54, 0.65);
-  --color-mobile-menu-shadow-strong: rgba(0, 0, 0, 0.3);
-  --color-mobile-menu-shadow-light: rgba(0, 0, 0, 0.2);
+  --mobile-menu-bg: rgba(42, 47, 54, 0.65);
+  --shadow-sm: rgba(0, 0, 0, 0.2);
+  --shadow-md: rgba(0, 0, 0, 0.3);
+  --shadow-lg: rgba(0, 0, 0, 0.4);
   
   /* ============================================
-     PAGINATION INDICATOR COLORS
-     Theme-aware glow colors for slider dots
+     OPACITY SCALE - Consistent alpha values
      ============================================ */
   
-  --color-pagination-glow-soft: rgba(246, 224, 94, 0.4);
-  --color-pagination-glow-medium: rgba(246, 224, 94, 0.2);
-  --color-pagination-glow-strong: rgba(246, 224, 94, 0.6);
-  --color-pagination-glow-intense: rgba(246, 224, 94, 0.3);
-  --color-pagination-hover-bg: rgba(246, 224, 94, 0.05);
-  --color-pagination-focus-bg: rgba(246, 224, 94, 0.1);
-  --color-pagination-inner-glow: rgba(246, 224, 94, 0.1);
+  --alpha-5: 0.05;
+  --alpha-10: 0.1;
+  --alpha-20: 0.2;
+  --alpha-30: 0.3;
+  --alpha-40: 0.4;
+  --alpha-50: 0.5;
+  --alpha-60: 0.6;
+  --alpha-70: 0.7;
+  --alpha-80: 0.8;
+  --alpha-90: 0.9;
   
   /* ============================================
-     SCROLLBAR COLORS
-     Theme-aware scrollbar colors
+     BORDER RADIUS - Simplified
      ============================================ */
   
-  --scrollbar-thumb-start: rgba(246, 224, 94, 0.6);
-  --scrollbar-thumb-mid: rgba(246, 224, 94, 0.4);
-  --scrollbar-thumb-end: rgba(246, 224, 94, 0.6);
-  --scrollbar-thumb-hover-start: rgba(246, 224, 94, 0.8);
-  --scrollbar-thumb-hover-mid: rgba(246, 224, 94, 0.6);
-  --scrollbar-thumb-hover-end: rgba(246, 224, 94, 0.8);
-  --scrollbar-thumb-active-start: rgba(246, 224, 94, 0.9);
-  --scrollbar-thumb-active-mid: rgba(246, 224, 94, 0.7);
-  --scrollbar-thumb-active-end: rgba(246, 224, 94, 0.9);
-  --scrollbar-glow-soft: rgba(246, 224, 94, 0.4);
-  --scrollbar-glow-medium: rgba(246, 224, 94, 0.6);
-  --scrollbar-glow-strong: rgba(246, 224, 94, 0.8);
-  --scrollbar-inset-glow-soft: rgba(246, 224, 94, 0.3);
-  --scrollbar-inset-glow-medium: rgba(246, 224, 94, 0.4);
-  --scrollbar-inset-glow-strong: rgba(246, 224, 94, 0.5);
-  --scrollbar-firefox-color: rgba(246, 224, 94, 0.6);
-  
-  --radius-xs: clamp(2px, 1px + 0.5vw, 3px);
-  --radius-sm: clamp(4px, 2px + 1vw, 6px);
-  --radius-md: clamp(8px, 4px + 2vw, 12px);
-  --radius-lg: clamp(12px, 6px + 3vw, 18px);
-  --radius-xl: clamp(16px, 8px + 4vw, 24px);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-full: 9999px;
-  --radius-pill: 50px;
-  --radius-nav-pill: 48px;
-  --radius-nav-link: 20px;
-  --radius-social: 6px;
-  --radius-tag: 12px;
   
   /* ============================================
-     HD-2D EFFECTS
-     Special effect values for authentic look
+     BLUR & EFFECTS
      ============================================ */
   
-  /* Tilt-shift blur values */
-  --blur-subtle: 1px;
-  --blur-light: 2px;
-  --blur-medium: 4px;
-  --blur-strong: 8px;
-  
-  /* Depth of field values */
-  --dof-near: 0px;
-  --dof-mid: 2px;
-  --dof-far: 6px;
-  
-  /* Atmospheric lighting */
-  --glow-subtle: 0 0 10px;
-  --glow-medium: 0 0 20px;
-  --glow-strong: 0 0 30px;
-  
-  /* ============================================
-     LEGACY COMPATIBILITY MAPPINGS
-     Map old variables to new HD-2D system
-     ============================================ */
-  
-  /* Background mappings */
-  --color-bg-primary: var(--color-bg-deep);
-  --color-bg-secondary: var(--color-bg-dark);
-  --color-bg-radial-center: var(--color-bg-light);
-  --color-bg-radial-mid: var(--color-bg-mid);
-  --color-bg-radial-outer: var(--color-bg-dark);
-  --color-bg-radial-edge: var(--color-bg-deep);
-  
-  /* Surface mappings */
-  --color-surface: var(--color-surface-base);
-  --color-surface-elevated: var(--color-surface-elevated);
-  
-  /* Border mappings */
-  --color-border: var(--color-border-medium);
-  --color-border-strong: var(--color-border-strong);
-  
-  /* Block-specific mappings for home page */
-  --color-block-bg: var(--color-surface-base);
-  --color-block-border: var(--color-border-accent);
-  --color-block-shadow: var(--color-shadow-medium);
+  --blur-sm: 2px;
+  --blur-md: 4px;
+  --blur-lg: 8px;
+  --blur-backdrop: 12px;
   
   /* Link colors */
   --color-link: var(--color-accent-primary);
@@ -280,217 +242,76 @@
   --blur-project-image: 2px;
 
   /* ============================================
-     RESPONSIVE COMPONENT DIMENSIONS
-     Fluid dimensions that adapt to viewport
+     PANEL SYSTEM
      ============================================ */
   
-  /* Navigation dimensions */
-  --nav-max-width: clamp(300px, 80vw, 400px);
-  --nav-indicator-width: 20px;
-  --nav-indicator-height: 2px;
-  
-  /* Content max widths */
-  --content-max-width: clamp(320px, 90vw, 1200px);
-  --hero-max-width: clamp(280px, 85vw, 700px);
-  --hero-description-max-width: clamp(240px, 80vw, 500px);
-  --project-scene-max-width: clamp(300px, 85vw, 700px);
-  --project-image-max-width: clamp(280px, 90vw, 800px);
-  
-  /* Spotify panel dimensions */
-  --spotify-panel-min-height: clamp(60px, 15vw, 80px);
-  --spotify-album-size: clamp(40px, 10vw, 48px);
-  
-  /* Particle dimensions */
-  --particle-dot-size: clamp(2px, 0.5vw, 3px);
-  --particle-small-size: clamp(4px, 1vw, 6px);
-  --particle-medium-size: clamp(8px, 2vw, 10px);
-  --particle-large-size: clamp(12px, 3vw, 16px);
-  
-  /* Music visualizer height */
-  --music-visualizer-height: clamp(120px, 25vw, 200px);
-
-  /* ============================================
-     RESPONSIVE GRADIENT DIMENSIONS
-     Fluid background gradient sizes
-     ============================================ */
-  
-  --gradient-large: clamp(400px, 80vw, 800px);
-  --gradient-medium: clamp(350px, 70vw, 700px);
-  --gradient-small: clamp(300px, 60vw, 600px);
-  --gradient-mobile-large: clamp(300px, 90vw, 400px);
-  --gradient-mobile-medium: clamp(280px, 85vw, 350px);
-  --gradient-mobile-small: clamp(250px, 80vw, 300px);
+  --panel-border: 1px solid var(--color-border-accent);
+  --panel-shadow: 0 4px 12px var(--shadow-md), 0 2px 4px var(--shadow-sm);
+  --panel-shadow-elevated: 0 8px 24px var(--shadow-lg), 0 4px 8px var(--shadow-md);
   
   /* ============================================
-     HD-2D PANEL FRAME SYSTEM
-     Responsive ornate borders and frames
+     SCROLLBAR COLORS - DARK THEME
+     Golden yellow scrollbar for dark theme
      ============================================ */
   
-  /* Panel frame styles */
-  --panel-border-width: clamp(1px, 0.2vw, 2px);
-  --panel-border-style: solid;
-  --panel-border-color: var(--color-border-accent);
-  --panel-inner-border: 1px solid var(--color-border-light);
+  --scrollbar-thumb-start: rgba(246, 224, 94, 0.7);
+  --scrollbar-thumb-mid: rgba(246, 224, 94, 0.5);
+  --scrollbar-thumb-end: rgba(246, 224, 94, 0.7);
+  --scrollbar-thumb-hover-start: rgba(246, 224, 94, 0.9);
+  --scrollbar-thumb-hover-mid: rgba(246, 224, 94, 0.7);
+  --scrollbar-thumb-hover-end: rgba(246, 224, 94, 0.9);
+  --scrollbar-thumb-active-start: rgba(246, 224, 94, 1);
+  --scrollbar-thumb-active-mid: rgba(246, 224, 94, 0.8);
+  --scrollbar-thumb-active-end: rgba(246, 224, 94, 1);
+  --scrollbar-glow-soft: rgba(246, 224, 94, 0.5);
+  --scrollbar-glow-medium: rgba(246, 224, 94, 0.7);
+  --scrollbar-glow-strong: rgba(246, 224, 94, 0.8);
+  --scrollbar-inset-glow-soft: rgba(246, 224, 94, 0.4);
+  --scrollbar-inset-glow-medium: rgba(246, 224, 94, 0.5);
+  --scrollbar-inset-glow-strong: rgba(246, 224, 94, 0.6);
+  --scrollbar-firefox-color: rgba(246, 224, 94, 0.7);
   
-  /* Panel shadows for depth */
-  --panel-shadow-base: 
-    0 4px 12px var(--color-shadow-medium),
-    0 2px 4px var(--color-shadow-light),
-    inset 0 1px 0 rgba(246, 224, 94, 0.1);
-    
-  --panel-shadow-elevated: 
-    0 8px 24px var(--color-shadow-strong),
-    0 4px 8px var(--color-shadow-medium),
-    inset 0 1px 0 rgba(246, 224, 94, 0.15);
-  
-  /* Tilt-shift effects for HD-2D depth - Subtle for readability */
-  --tilt-shift-near: blur(0px) brightness(1.05);
-  --tilt-shift-mid: blur(0px) brightness(1.0);
-  --tilt-shift-far: blur(0.5px) brightness(0.98);
-  
-  /* Atmospheric glow effects */
-  --atmospheric-glow: 
-    0 0 20px rgba(246, 224, 94, 0.3),
-    0 0 40px rgba(246, 224, 94, 0.1);
-    
-  --subtle-glow: 
-    0 0 10px rgba(246, 224, 94, 0.2);
-
   /* ============================================
-     RESPONSIVE LAYOUT UTILITIES
-     Container and layout tokens
+     LAYOUT UTILITIES
      ============================================ */
   
-  /* Home page layout */
-  --home-max-width: clamp(320px, 95vw, 1000px);
-  --home-gap: clamp(var(--space-4), 4vw, var(--space-12));
-  --home-padding: clamp(var(--space-3), 3vw, var(--space-8));
-  
-  /* Navigation clearance - calculated based on navigation dimensions */
-  --nav-clearance-xs: 80px;    /* Extra small devices */
-  --nav-clearance-sm: 100px;   /* Small devices */
-  --nav-clearance-md: 120px;   /* Medium devices */
-  --nav-clearance-lg: 160px;   /* Large devices */
-  --nav-clearance-xl: 160px;   /* Extra large devices */
-  --nav-clearance-2xl: 180px;  /* Ultra-wide devices */
-  
-  /* Navigation clearance for small heights */
-  --nav-clearance-small-height-xs: 70px;
-  --nav-clearance-small-height-sm: 90px;
-  --nav-clearance-small-height-md: 110px;
-  --nav-clearance-small-height-lg: 140px;
-  
-  /* Navigation clearance for very small heights */
-  --nav-clearance-tiny-height-xs: 60px;
-  --nav-clearance-tiny-height-sm: 80px;
-  --nav-clearance-tiny-height-md: 100px;
-  
-  /* Navigation clearance for landscape orientation */
-  --nav-clearance-landscape: 70px;
-  
-  /* Navigation clearance for extreme cases */
-  --nav-clearance-minimal: 50px;
-  
-  /* Grid system */
-  --grid-gap: clamp(var(--space-4), 3vw, var(--space-8));
-  --grid-margin: clamp(var(--space-4), 5vw, var(--space-6));
-  
-  /* Panel padding */
-  --panel-padding-sm: clamp(var(--space-3), 3vw, var(--space-4));
-  --panel-padding-md: clamp(var(--space-4), 4vw, var(--space-6));
-  --panel-padding-lg: clamp(var(--space-6), 5vw, var(--space-8));
-  --panel-padding-xl: clamp(var(--space-8), 6vw, var(--space-12));
+  --max-width: clamp(320px, 95vw, 1000px);
+  --panel-padding: clamp(var(--space-4), 4vw, var(--space-8));
 }
 
 /* ============================================
-   RESPONSIVE DESIGN UTILITIES
-   Mobile-first responsive classes
+   RESPONSIVE UTILITIES
    ============================================ */
 
-/* Container queries support */
-@supports (container-type: inline-size) {
-  .container-responsive {
-    container-type: inline-size;
-  }
-  
-  .container-responsive .responsive-content {
-    /* Use container queries when supported */
-  }
-}
-
-/* Responsive visibility utilities */
-.hidden-mobile {
-  display: none;
-}
-
-.hidden-tablet {
-  display: block;
-}
-
-.hidden-desktop {
-  display: block;
-}
+.hidden-mobile { display: none; }
+.hidden-tablet { display: block; }
+.hidden-desktop { display: block; }
 
 @media (min-width: var(--breakpoint-md)) {
-  .hidden-mobile {
-    display: block;
-  }
-  
-  .hidden-tablet {
-    display: none;
-  }
+  .hidden-mobile { display: block; }
+  .hidden-tablet { display: none; }
 }
 
 @media (min-width: var(--breakpoint-xl)) {
-  .hidden-desktop {
-    display: none;
-  }
-  
-  .hidden-tablet {
-    display: block;
-  }
-}
-
-/* Responsive text alignment */
-.text-center-mobile {
-  text-align: center;
-}
-
-@media (min-width: var(--breakpoint-md)) {
-  .text-center-mobile {
-    text-align: left;
-  }
-}
-
-/* Responsive flex utilities */
-.flex-col-mobile {
-  flex-direction: column;
-}
-
-@media (min-width: var(--breakpoint-md)) {
-  .flex-col-mobile {
-    flex-direction: row;
-  }
+  .hidden-desktop { display: none; }
+  .hidden-tablet { display: block; }
 }
 
 /* ============================================
    LIGHT THEME
-   Clean, bright alternative with maintained HD-2D aesthetic
    ============================================ */
 
 [data-theme="light"] {
-  /* Background - Clean and bright with better contrast */
-  --color-bg-deep: #ffffff;           /* Pure white for maximum contrast */
-  --color-bg-dark: #f7fafc;           /* Very light gray */
-  --color-bg-mid: #edf2f7;            /* Light gray */
-  --color-bg-light: #e2e8f0;          /* Medium gray */
-  --color-bg-accent: #f6e7d8;         /* Warm accent background */
+  --bg-base: #ffffff;
+  --bg-elevated: #f7fafc;
+  --bg-surface: #ffffff;
+  --bg-gradient-mid: #edf2f7;
+  --bg-gradient-light: #e2e8f0;
   
-  /* Surface colors - UI panels with better contrast */
-  --color-surface-dark: #ffffff;      /* Pure white panel */
-  --color-surface-base: #ffffff;      /* Pure white for better contrast */
-  --color-surface-elevated: #ffffff;  /* Pure white elevated panel */
-  --color-surface-light: #f7fafc;     /* Very light panel */
+  /* Semantic mappings */
+  --bg-page: var(--bg-base);
+  --bg-panel: var(--bg-surface);
+  --bg-panel-elevated: var(--bg-elevated);
   
   /* Text colors - WCAG AAA compliant (7:1 ratio) */
   --color-text-primary: #1a202c;      /* Primary text - very dark (16.1:1 ratio) */
@@ -520,6 +341,28 @@
   --color-particle-warm: rgba(255, 85, 0, 0.6);
   --color-particle-cool: rgba(139, 149, 109, 0.4);
   --color-particle-neutral: rgba(26, 32, 44, 0.3);
+  
+  /* ============================================
+     PAGE BACKGROUND GRADIENTS - LIGHT THEME
+     INVERTED: Edge (light) to Center (dark)
+     ============================================ */
+  
+  /* Radial gradient stops (for home page - ellipse at center) */
+  --gradient-radial-center: #6b7280;      /* Dark gray at center */
+  --gradient-radial-25: #9ca3af;          /* Medium-dark gray */
+  --gradient-radial-50: #d1d5db;          /* Medium-light gray */
+  --gradient-radial-75: #e5e7eb;          /* Light gray */
+  --gradient-radial-edge: #ffffff;        /* White at edge */
+  
+  /* Linear gradient stops (for blogs/projects - ellipse at center top) */
+  --gradient-linear-start: #9ca3af;       /* Medium-dark gray at top */
+  --gradient-linear-mid: #d1d5db;         /* Medium-light gray at 30% */
+  --gradient-linear-end-mid: #e5e7eb;     /* Light gray at 70% */
+  --gradient-linear-end: #ffffff;         /* White at bottom */
+  
+  /* Particle overlay colors - more visible */
+  --gradient-particle-warm: rgba(255, 85, 0, 0.12);
+  --gradient-particle-cool: rgba(237, 137, 54, 0.10);
   
   /* Hover and interactive states - Red-orange for light theme */
   --color-social-hover-bg: rgba(255, 85, 0, 0.15);
@@ -627,17 +470,11 @@ body {
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
-    /* Apply light theme if no theme is set and user prefers light */
-    --color-bg-deep: #f7fafc;
-    --color-bg-dark: #edf2f7;
-    --color-bg-mid: #e2e8f0;
-    --color-bg-light: #cbd5e0;
-    --color-bg-accent: #d4d9c8;
-    
-    --color-surface-dark: #ffffff;
-    --color-surface-base: #f7fafc;
-    --color-surface-elevated: #edf2f7;
-    --color-surface-light: #e2e8f0;
+    --bg-base: #ffffff;
+    --bg-elevated: #f7fafc;
+    --bg-surface: #ffffff;
+    --bg-gradient-mid: #edf2f7;
+    --bg-gradient-light: #e2e8f0;
     
     --color-text-primary: #1a202c;
     --color-text-secondary: #2d3748;

@@ -15,7 +15,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-surface-dark);
+  background: var(--bg-elevated);
   border-left: 1px solid var(--color-border-medium);
 }
 
@@ -28,7 +28,7 @@
     var(--scrollbar-thumb-end) 100%
   );
   border-radius: 6px;
-  border: 2px solid var(--color-surface-dark);
+  border: 2px solid var(--bg-elevated);
   box-shadow: 
     0 0 8px var(--scrollbar-glow-soft),
     inset 0 0 6px var(--scrollbar-inset-glow-soft);
@@ -63,7 +63,7 @@
 
 /* Scrollbar corner (where horizontal and vertical meet) */
 ::-webkit-scrollbar-corner {
-  background: var(--color-surface-dark);
+  background: var(--bg-elevated);
 }
 
 /* ============================================
@@ -72,7 +72,7 @@
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-firefox-color) var(--color-surface-dark);
+  scrollbar-color: var(--scrollbar-firefox-color) var(--bg-elevated);
 }
 
 /* ============================================
@@ -113,7 +113,7 @@ html {
   
   ::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    border: 1px solid var(--color-surface-dark);
+    border: 1px solid var(--bg-elevated);
   }
 }
 

@@ -50,7 +50,7 @@ const soundCloudPlaylists = [
   <SemiCylindricalNav links={navigation} currentPath="/" />
 
   <!-- Main content with radial gradient background -->
-  <main class="home depth-mid" role="main">
+  <main class="home page-background-radial depth-mid" role="main">
     <!-- Row 1: One long horizontal block (Hero) -->
     <section class="home__hero-block" aria-label="Introduction">
       <Panel variant="elevated" depth="near" glow={true} class="content-block content-block--hero">
@@ -86,148 +86,57 @@ const soundCloudPlaylists = [
 </BaseLayout>
 
 <style>
-  /* HD-2D Radial gradient background with atmospheric depth */
   .home {
-    min-height: 100vh;
-    background: 
-      radial-gradient(
-        ellipse at center,
-        var(--color-bg-radial-center) 0%,
-        var(--color-bg-radial-mid) 40%,
-        var(--color-bg-radial-outer) 80%,
-        var(--color-bg-radial-edge) 100%
-      ),
-      radial-gradient(circle at 20% 80%, rgba(246, 224, 94, 0.03) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(139, 149, 109, 0.02) 0%, transparent 50%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
-    overflow-x: hidden;
-    overflow-y: auto;
-    z-index: var(--layer-content);
-    
-    /* Ensure background covers entire viewport including top */
-    margin: 0;
-    width: 100%;
-    
-    /* DEFAULT MOBILE FIRST - MUCH MORE SPACE */
-    padding: var(--space-8);
-    gap: var(--space-8);
-    padding-top: 120px; /* Reduced to match bottom */
-    padding-bottom: 120px; /* Keep same as top */
+    min-height: 100vh;
+    padding: 200px var(--space-6) 200px;
+    gap: var(--space-12);
   }
 
-  /* Hero block - Row 1 (long horizontal) */
-  .home__hero-block {
+  .home__hero-block,
+  .home__bottom-row {
     width: 100%;
-    max-width: var(--home-max-width);
-    flex: 0 0 auto;
-    position: relative;
-    z-index: var(--layer-elevated);
+    max-width: var(--max-width);
   }
 
-  /* Bottom row - Row 2 (two blocks) - DEFAULT MOBILE STACK */
   .home__bottom-row {
     display: flex;
-    flex-direction: column; /* MOBILE FIRST - STACK VERTICALLY */
-    gap: var(--space-8);
-    width: 100%;
-    max-width: var(--home-max-width);
-    flex: 0 0 auto;
-    position: relative;
-    z-index: var(--layer-elevated);
-  }
-
-  .home__social-block {
-    flex: 1;
-    min-width: auto; /* MOBILE FIRST */
-    order: 1;
+    flex-direction: column;
+    gap: var(--space-12);
   }
 
   .home__music-block {
-    flex: 1; /* MOBILE FIRST - EQUAL SIZE */
-    min-width: auto; /* MOBILE FIRST */
-    min-height: 400px; /* BIGGER ON MOBILE */
-    order: 2;
+    min-height: 400px;
   }
 
-  /* Content block styling overrides for HD-2D panels */
   :global(.content-block--hero) {
     text-align: center;
-    padding: var(--panel-padding-xl);
-    isolation: isolate;
-    z-index: 1;
+    padding: var(--panel-padding);
   }
 
-  :global(.content-block--social) {
-    padding: var(--panel-padding-md);
-    isolation: isolate;
-    z-index: 1;
-  }
-
+  :global(.content-block--social),
   :global(.content-block--music) {
-    padding: var(--panel-padding-md);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    isolation: isolate;
-    z-index: 1;
+    padding: var(--panel-padding);
   }
 
-  /* Responsive design - Mobile first approach */
-  
-  /* ALL DEVICES 900px AND BELOW = MOBILE LAYOUT (COLUMN/STACK) */
-  /* Default is already mobile - just override specific sizes */
-  
-  /* Small phones */
   @media (max-width: 480px) {
     .home {
-      padding: var(--space-6);
-      gap: var(--space-6);
-      padding-top: 100px; /* Reduced to match bottom */
-      padding-bottom: 100px; /* Keep same as top */
-    }
-    
-    .home__music-block {
-      min-height: 350px;
+      padding: 200px var(--space-4) 200px;
+      gap: var(--space-12);
     }
   }
-  
-  /* Medium phones and small tablets - STILL MOBILE LAYOUT */
-  @media (min-width: 481px) and (max-width: 900px) {
-    .home {
-      padding: var(--space-8);
-      gap: var(--space-10);
-      padding-top: 110px; /* Reduced to match bottom */
-      padding-bottom: 110px; /* Keep same as top */
-    }
-    
-    /* FORCE COLUMN LAYOUT - DON'T CHANGE TO ROW */
-    .home__bottom-row {
-      flex-direction: column !important;
-    }
-    
-    .home__music-block {
-      min-height: 380px;
-    }
-  }
-  
-  /* DESKTOP STARTS AT 901px - NOW USE ROW LAYOUT */
+
   @media (min-width: 901px) {
     .home {
-      padding: var(--space-12);
-      gap: var(--space-8); /* Reduced gap between components */
-      /* Reasonable space between navbar and content */
-      padding-top: 180px; /* Reduced from 300px */
-      padding-bottom: 80px; /* Reduced from 150px */
+      padding: 200px var(--space-8) 200px;
     }
     
-    /* NOW SWITCH TO ROW LAYOUT FOR DESKTOP */
     .home__bottom-row {
-      flex-direction: row !important; /* FORCE ROW LAYOUT */
-      gap: var(--space-8); /* Reasonable gap between social and music */
+      flex-direction: row;
+      gap: var(--space-12);
     }
     
     .home__social-block {
@@ -236,60 +145,8 @@ const soundCloudPlaylists = [
     }
     
     .home__music-block {
-      flex: 2; /* DESKTOP - MUSIC BLOCK BIGGER */
+      flex: 2;
       min-width: 400px;
-      min-height: 402px;
-    }
-  }
-  
-  /* Large desktop - EVEN MORE SPACE */
-  @media (min-width: 1200px) {
-    .home {
-      padding-top: 200px; /* Reduced from 350px */
-      padding-bottom: 100px; /* Reduced from 200px */
-      gap: var(--space-10); /* Reasonable gap for large desktop */
-    }
-    
-    .home__bottom-row {
-      gap: var(--space-10); /* Reasonable gap between social and music */
-    }
-  }
-
-  /* High DPI displays - enhance visual quality */
-  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    :global(.content-block--hero),
-    :global(.content-block--social),
-    :global(.content-block--music) {
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-  }
-
-  /* Reduced motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    .home {
-      background: var(--color-bg-primary);
-    }
-  }
-
-  /* Dark mode adjustments */
-  @media (prefers-color-scheme: dark) {
-    .home {
-      background: 
-        radial-gradient(
-          ellipse at center,
-          var(--color-bg-radial-center) 0%,
-          var(--color-bg-radial-mid) 40%,
-          var(--color-bg-radial-outer) 80%,
-          var(--color-bg-radial-edge) 100%
-        );
-    }
-  }
-
-  /* Ensure smooth scrolling */
-  @media (prefers-reduced-motion: no-preference) {
-    .home {
-      scroll-behavior: smooth;
     }
   }
 </style>

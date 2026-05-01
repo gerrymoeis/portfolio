@@ -1,0 +1,230 @@
+---
+/**
+ * ActionButton - Reusable action button component
+ * Used for primary CTAs like "Download CV" and "Start Visualizer"
+ * Features bilingual support and theme-aware styling
+ * 
+ * Props:
+ * - href: Link URL (for <a> tag)
+ * - onClick: Click handler (for <button> tag)
+ * - icon: Icon name or SVG content
+ * - labelEn: English label
+ * - labelId: Indonesian label
+ * - variant: 'fixed' (bottom-right) or 'inline' (in-flow)
+ * - download: Boolean for download attribute
+ * - className: Additional CSS classes
+ * - ariaLabel: Accessibility label
+ */
+
+import Icon from './Icon.astro';
+
+export interface Props {
+  href?: string;
+  icon?: string;
+  iconSvg?: string;
+  labelEn: string;
+  labelId: string;
+  variant?: 'fixed' | 'inline';
+  download?: boolean;
+  className?: string;
+  ariaLabel?: string;
+  id?: string;
+}
+
+const { 
+  href,
+  icon,
+  iconSvg,
+  labelEn,
+  labelId,
+  variant = 'inline',
+  download = false,
+  className = '',
+  ariaLabel,
+  id
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+const additionalProps = href 
+  ? { href, ...(download && { download: true }) } 
+  : { type: 'button' as const };
+---
+
+<Tag
+  class={`action-button action-button--${variant} ${className}`}
+  aria-label={ariaLabel || labelEn}
+  data-bilingual="action-button"
+  id={id}
+  {...additionalProps}
+>
+  {icon && <Icon name={icon} class="action-button__icon" />}
+  {iconSvg && <Fragment set:html={iconSvg} />}
+  <span data-lang="en">{labelEn}</span>
+  <span data-lang="id">{labelId}</span>
+</Tag>
+
+<style>
+  .action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--duration-medium) ease;
+  }
+  
+  /* Inline variant - used in panels */
+  .action-button--inline {
+    position: relative;
+  }
+  
+  /* Fixed variant - bottom right corner */
+  .action-button--fixed {
+    position: fixed;
+    bottom: var(--space-6);
+    right: var(--space-6);
+    z-index: 1000;
+  }
+  
+  /* Hide inactive language */
+  .action-button span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .action-button span[data-lang="en"],
+  :global(html[lang="id"]) .action-button span[data-lang="id"] {
+    display: inline;
+  }
+  
+  .action-button__icon,
+  .action-button svg {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+  
+  .action-button:active {
+    transform: translateY(0);
+  }
+  
+  .action-button:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+  
+  /* Dark theme styling - solid bg, hover = transparent bg + glow border */
+  :global(html:not([data-theme="light"])) .action-button {
+    background: #f6e05e;
+    color: #0a0b0f;
+    border-color: #f6e05e;
+    box-shadow: 0 4px 12px rgba(246, 224, 94, 0.3) !important;
+  }
+  
+  :global(html:not([data-theme="light"])) .action-button:hover {
+    background: var(--bg-elevated);
+    color: #f6e05e;
+    border-color: #f6e05e;
+    box-shadow: 
+      0 0 40px rgba(246, 224, 94, 0.8),
+      0 0 20px rgba(246, 224, 94, 0.6),
+      inset 0 0 20px rgba(246, 224, 94, 0.15) !important;
+    text-shadow: 0 0 10px rgba(246, 224, 94, 0.8);
+    transform: translateY(-2px);
+  }
+  
+  /* Light theme styling - solid bg, hover = transparent bg + glow border */
+  :global([data-theme="light"]) .action-button {
+    background: #ff5500 !important;
+    color: #ffffff !important;
+    border-color: #ff5500 !important;
+    box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3) !important;
+  }
+  
+  :global([data-theme="light"]) .action-button:hover {
+    background: rgba(255, 255, 255, 1) !important;
+    color: #ff5500 !important;
+    border-color: #ff5500 !important;
+    box-shadow: 
+      0 0 40px rgba(255, 85, 0, 0.8),
+      0 0 20px rgba(255, 85, 0, 0.6),
+      inset 0 0 20px rgba(255, 85, 0, 0.15) !important;
+    text-shadow: 0 0 10px rgba(255, 85, 0, 0.8);
+    transform: translateY(-2px);
+  }
+  
+  /* Fixed variant - pulse animation */
+  :global(html:not([data-theme="light"])) .action-button--fixed {
+    animation: pulse-glow-dark 2s ease-in-out infinite;
+  }
+  
+  :global([data-theme="light"]) .action-button--fixed {
+    animation: pulse-glow-light 2s ease-in-out infinite;
+  }
+  
+  .action-button--fixed:hover {
+    animation: none !important;
+  }
+  
+  /* Dark theme pulse animation */
+  @keyframes pulse-glow-dark {
+    0%, 100% {
+      box-shadow: 0 4px 12px rgba(246, 224, 94, 0.3) !important;
+    }
+    50% {
+      box-shadow: 0 4px 16px rgba(246, 224, 94, 0.5) !important;
+    }
+  }
+  
+  /* Light theme pulse animation */
+  @keyframes pulse-glow-light {
+    0%, 100% {
+      box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3) !important;
+    }
+    50% {
+      box-shadow: 0 4px 16px rgba(255, 85, 0, 0.5) !important;
+    }
+  }
+  
+  /* Responsive - Mobile */
+  @media (max-width: var(--breakpoint-xs)) {
+    .action-button--inline {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+      gap: var(--space-1);
+    }
+    
+    .action-button--fixed {
+      bottom: var(--space-4);
+      right: var(--space-4);
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-xs);
+    }
+    
+    .action-button__icon,
+    .action-button svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .action-button {
+      transition: none;
+      animation: none !important;
+    }
+    
+    .action-button:hover {
+      transform: none;
+    }
+  }
+</style>

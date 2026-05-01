@@ -18,8 +18,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background-color: var(--color-bg-primary);
-  /* Extend into safe areas on notched devices */
+  background-color: var(--bg-page);
   min-height: 100vh;
   min-height: -webkit-fill-available;
 }
@@ -31,11 +30,9 @@ body {
   font-family: var(--font-primary);
   font-size: var(--text-base);
   color: var(--color-text-secondary);
-  background-color: var(--color-bg-primary);
-  /* Ensure body extends to edges including safe areas */
+  background-color: var(--bg-page);
   margin: 0;
   padding: 0;
-  /* CRITICAL: Hide horizontal overflow to prevent mobile menu from showing when off-screen */
   overflow-x: hidden;
 }
 
@@ -156,15 +153,15 @@ pre {
 
 pre {
   padding: var(--space-4);
-  background-color: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--color-border-medium);
   border-radius: 4px;
   overflow-x: auto;
 }
 
 code {
   padding: var(--space-1) var(--space-2);
-  background-color: var(--color-bg-secondary);
+  background-color: var(--bg-elevated);
   border-radius: 2px;
 }
 
@@ -184,7 +181,7 @@ blockquote {
 /* Horizontal rules */
 hr {
   border: none;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-border-medium);
   margin: var(--space-8) 0;
 }
 
@@ -249,93 +246,90 @@ select:focus-visible {
    ============================================ */
 
 .panel {
-  background: var(--color-surface-base);
-  border: var(--panel-border-width) var(--panel-border-style) var(--panel-border-color);
-  box-shadow: var(--panel-shadow-base);
-  position: relative;
-  overflow: hidden;
+  background: var(--bg-surface);
+  border: 2px solid var(--color-accent-primary);
+  box-shadow: var(--panel-shadow);
   border-radius: var(--radius-md);
+  position: relative;
 }
 
-/* Inner border for layered depth effect */
-.panel::before {
-  content: '';
-  position: absolute;
-  inset: 4px;
-  border: var(--panel-inner-border);
-  border-radius: calc(var(--radius-md) - 4px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Grain texture overlay for authentic pixel-art feel */
-.panel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(circle at 25% 25%, rgba(246, 224, 94, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(139, 149, 109, 0.03) 0%, transparent 50%);
-  opacity: 0.6;
-  pointer-events: none;
-  mix-blend-mode: overlay;
-  z-index: 2;
-}
-
-/* Elevated variant with stronger effects */
 .panel--elevated {
-  background: var(--color-surface-elevated);
+  background: var(--bg-elevated);
   border-color: var(--color-accent-primary);
   box-shadow: var(--panel-shadow-elevated);
-  filter: var(--tilt-shift-near);
   padding: 2em;
 }
 
-.panel--elevated::before {
-  border-color: rgba(246, 224, 94, 0.3);
-}
-
-.panel--elevated::after {
-  background: 
-    radial-gradient(circle at 25% 25%, rgba(246, 224, 94, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(139, 149, 109, 0.05) 0%, transparent 50%),
-    var(--atmospheric-glow);
-}
-
-/* Ensure content is above overlays */
 .panel > :global(*) {
   position: relative;
-  z-index: 3;
+  z-index: 1;
 }
+
+/* Depth layers */
+.depth-near { z-index: var(--layer-elevated); }
+.depth-mid { z-index: var(--layer-content); }
+.depth-far { z-index: var(--layer-base); }
 
 /* ============================================
-   HD-2D DEPTH LAYERS
-   Tilt-shift and atmospheric effects
+   PAGE BACKGROUND UTILITIES
+   Centralized background gradients for all pages
    ============================================ */
 
-/* Near layer - sharp focus, bright */
-.depth-near {
-  filter: var(--tilt-shift-near);
-  z-index: var(--layer-elevated);
+/* Radial gradient background (for home page) */
+.page-background-radial {
+  min-height: 100vh;
+  background: 
+    radial-gradient(
+      ellipse at center,
+      var(--gradient-radial-center) 0%,
+      var(--gradient-radial-mid) 40%,
+      var(--gradient-radial-outer) 80%,
+      var(--gradient-radial-edge) 100%
+    ),
+    radial-gradient(circle at 20% 80%, var(--gradient-particle-warm) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, var(--gradient-particle-cool) 0%, transparent 50%);
 }
 
-/* Mid layer - slight blur, normal brightness */
-.depth-mid {
-  filter: var(--tilt-shift-mid);
-  z-index: var(--layer-content);
+/* Light theme radial gradient (for home page) */
+[data-theme="light"] .page-background-radial {
+  background: 
+    radial-gradient(
+      ellipse at center,
+      var(--gradient-radial-center) 0%,
+      var(--gradient-radial-25) 25%,
+      var(--gradient-radial-50) 50%,
+      var(--gradient-radial-75) 75%,
+      var(--gradient-radial-edge) 100%
+    ),
+    radial-gradient(circle at 20% 80%, var(--gradient-particle-warm) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, var(--gradient-particle-cool) 0%, transparent 50%);
 }
 
-/* Far layer - more blur, darker */
-.depth-far {
-  filter: var(--tilt-shift-far);
-  z-index: var(--layer-base);
+/* Linear gradient background (for blogs/projects pages) */
+.page-background-linear {
+  min-height: 100vh;
+  background: 
+    radial-gradient(
+      ellipse at center top,
+      var(--gradient-linear-start) 0%,
+      var(--gradient-linear-mid) 30%,
+      var(--gradient-linear-end-mid) 70%,
+      var(--gradient-linear-end) 100%
+    ),
+    radial-gradient(circle at 30% 20%, var(--gradient-particle-warm) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, var(--gradient-particle-cool) 0%, transparent 50%);
 }
 
-/* Atmospheric glow effects */
-.atmospheric-glow {
-  box-shadow: var(--atmospheric-glow);
-}
-
-.subtle-glow {
-  box-shadow: var(--subtle-glow);
+/* Light theme linear gradient (for blogs/projects pages) */
+[data-theme="light"] .page-background-linear {
+  background: 
+    radial-gradient(
+      ellipse at center top,
+      var(--gradient-linear-start) 0%,
+      var(--gradient-linear-mid) 30%,
+      var(--gradient-linear-end-mid) 70%,
+      var(--gradient-linear-end) 100%
+    ),
+    radial-gradient(circle at 30% 20%, var(--gradient-particle-warm) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, var(--gradient-particle-cool) 0%, transparent 50%);
 }

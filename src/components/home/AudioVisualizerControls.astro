@@ -8,12 +8,16 @@
  * - Toast notifications (top right)
  */
 
+import ActionButton from '../ui/ActionButton.astro';
+
 export interface Props {
   /** Additional CSS class names */
   className?: string;
 }
 
 const { className = '' } = Astro.props;
+
+const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2l11 7-11 7V2z" fill="currentColor"/></svg>';
 ---
 
 <!-- First-Time Landing Overlay -->
@@ -58,13 +62,21 @@ const { className = '' } = Astro.props;
 </div>
 
 <!-- Start Visualizer Button (bottom right, shown when stopped) -->
-<button class="visualizer-start-btn" id="visualizerStartBtn" style="display: none;" data-bilingual="start-button">
-  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-    <path d="M4 2l11 7-11 7V2z" fill="currentColor"/>
-  </svg>
-  <span data-lang="en">Start Visualizer</span>
-  <span data-lang="id">Mulai Visualizer</span>
-</button>
+<ActionButton
+  id="visualizerStartBtn"
+  iconSvg={playIconSvg}
+  labelEn="Start Visualizer"
+  labelId="Mulai Visualizer"
+  variant="fixed"
+  className="visualizer-start-btn"
+  ariaLabel="Start audio visualizer"
+/>
+
+<style is:inline>
+  #visualizerStartBtn {
+    display: none;
+  }
+</style>
 
 <!-- Toast Notification (top right) -->
 <div class={`visualizer-toast ${className}`} id="visualizerToast" data-visualizer-toast style="display: none;">
@@ -724,127 +736,10 @@ const { className = '' } = Astro.props;
     transform: translateY(0);
   }
 
-  /* Start Button (Bottom Right) */
-  .visualizer-start-btn {
-    position: fixed;
-    bottom: var(--space-6);
-    right: var(--space-6);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-4);
-    background: var(--color-accent-primary);
-    color: var(--color-bg-primary);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    border: 2px solid transparent;
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-out);
-  }
-
-  .visualizer-start-btn svg {
-    flex-shrink: 0;
-    transition: all var(--duration-fast) var(--ease-out);
-  }
-
-  .visualizer-start-btn span {
-    transition: all var(--duration-fast) var(--ease-out);
-  }
-  
-  /* Hide inactive language for start button */
-  .visualizer-start-btn span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language for start button */
-  :global(html[lang="en"]) .visualizer-start-btn span[data-lang="en"],
-  :global(html[lang="id"]) .visualizer-start-btn span[data-lang="id"] {
-    display: inline;
-  }
-
-  .visualizer-start-btn:active {
-    transform: translateY(0);
-  }
-  
-  /* Dark theme - golden yellow */
-  :global(html:not([data-theme="light"])) .visualizer-start-btn {
-    background: var(--color-accent-primary);
-    color: var(--color-bg-primary);
-    box-shadow: 
-      0 0 30px rgba(246, 224, 94, 0.5),
-      0 8px 24px rgba(0, 0, 0, 0.4);
-    animation: pulse-glow-dark 2s ease-in-out infinite;
-  }
-  
-  :global(html:not([data-theme="light"])) .visualizer-start-btn:hover {
-    background: var(--color-bg-dark); /* Dark grey background for better contrast */
-    color: #f6e05e;
-    border-color: #f6e05e;
-    box-shadow: 
-      0 0 40px rgba(246, 224, 94, 0.8),
-      0 0 20px rgba(246, 224, 94, 0.6),
-      inset 0 0 20px rgba(246, 224, 94, 0.1);
-    text-shadow: 0 0 10px rgba(246, 224, 94, 0.8);
-    transform: translateY(-2px);
-    animation: none;
-  }
-  
-  /* Light theme - red-orange */
-  :global([data-theme="light"]) .visualizer-start-btn {
-    background: #ff5500;
-    color: #ffffff;
-    box-shadow: 
-      0 0 30px rgba(255, 85, 0, 0.5),
-      0 8px 24px rgba(0, 0, 0, 0.3);
-    animation: pulse-glow-light 2s ease-in-out infinite;
-  }
-  
-  :global([data-theme="light"]) .visualizer-start-btn:hover {
-    background: #ffffff; /* White background for better contrast */
-    color: #ff5500;
-    border-color: #ff5500;
-    box-shadow: 
-      0 0 40px rgba(255, 85, 0, 0.8),
-      0 0 20px rgba(255, 85, 0, 0.6),
-      inset 0 0 20px rgba(255, 85, 0, 0.1);
-    text-shadow: 0 0 10px rgba(255, 85, 0, 0.8);
-    transform: translateY(-2px);
-    animation: none;
-  }
-
-  /* Theme-specific pulse animations */
-  @keyframes pulse-glow-dark {
-    0%, 100% {
-      box-shadow: 
-        0 0 30px rgba(246, 224, 94, 0.5),
-        0 8px 24px rgba(0, 0, 0, 0.4);
-    }
-    50% {
-      box-shadow: 
-        0 0 40px rgba(246, 224, 94, 0.7),
-        0 8px 24px rgba(0, 0, 0, 0.4);
-    }
-  }
-
-  @keyframes pulse-glow-light {
-    0%, 100% {
-      box-shadow: 
-        0 0 30px rgba(255, 85, 0, 0.5),
-        0 8px 24px rgba(0, 0, 0, 0.3);
-    }
-    50% {
-      box-shadow: 
-        0 0 40px rgba(255, 85, 0, 0.7),
-        0 8px 24px rgba(0, 0, 0, 0.3);
-    }
-  }
-
   /* Toast Styles (Top Right) */
   .visualizer-toast {
     position: fixed;
-    top: calc(var(--nav-clearance-md) + var(--space-4)); /* Below navbar + spacing */
+    top: 100px; /* Fixed position below navbar */
     right: var(--space-6);
     z-index: 1000;
     min-width: 300px;
@@ -1038,15 +933,8 @@ const { className = '' } = Astro.props;
       font-size: var(--font-size-xs);
     }
 
-    .visualizer-start-btn {
-      bottom: var(--space-4);
-      right: var(--space-4);
-      font-size: var(--font-size-xs);
-      padding: var(--space-2) var(--space-3);
-    }
-
     .visualizer-toast {
-      top: calc(var(--nav-clearance-xs) + var(--space-2)); /* Below navbar on mobile */
+      top: 80px; /* Below navbar on mobile */
       right: var(--space-4);
       left: var(--space-4);
       min-width: auto;
@@ -1066,8 +954,7 @@ const { className = '' } = Astro.props;
   @media (prefers-reduced-motion: reduce) {
     .visualizer-landing,
     .visualizer-landing__content,
-    .visualizer-toast,
-    .visualizer-start-btn {
+    .visualizer-toast {
       transition: opacity 0.1s;
       transform: none;
       animation: none;
@@ -1078,10 +965,6 @@ const { className = '' } = Astro.props;
     }
 
     .visualizer-toast--visible {
-      transform: none;
-    }
-
-    .visualizer-start-btn:hover {
       transform: none;
     }
   }

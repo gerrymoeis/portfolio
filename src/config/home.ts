@@ -24,6 +24,7 @@ export interface NavigationLink {
   label: BilingualText;
   href: string;
   target?: string;
+  download?: boolean;
 }
 
 export interface HomeConfig {
@@ -78,8 +79,8 @@ export const homeConfig: HomeConfig = {
     },
     { 
       label: { id: "CV", en: "CV" }, 
-      href: "/cv",
-      target: "_blank"
+      href: "/cv.pdf",
+      download: true
     },
   ],
 };
