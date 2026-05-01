@@ -9,7 +9,7 @@
  * - Non-blocking to page content
  * - Rate limit handling dengan exponential backoff
  * - Request validation
- * - Idempotency support
+ * - localStorage-based duplicate prevention (24-hour window)
  */
 
 /**
@@ -29,35 +29,44 @@ function isValidSlug(slug: string): boolean {
 }
 
 /**
- * Get or create session ID for idempotency
- * Stored in localStorage to persist across page loads
+ * Check if view has been tracked recently
+ * Uses localStorage to prevent duplicate counts within 24-hour window
  * 
- * @returns Session ID string
+ * @param slug - The blog post slug
+ * @returns True if view was already tracked recently
  */
-function getSessionId(): string {
-  const key = 'view-counter-session';
-  let sessionId = localStorage.getItem(key);
-  
-  if (!sessionId) {
-    sessionId = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
-    localStorage.setItem(key, sessionId);
+function hasRecentView(slug: string): boolean {
+  try {
+    const key = `view-tracked-${slug}`;
+    const lastView = localStorage.getItem(key);
+    
+    if (!lastView) return false;
+    
+    const lastViewTime = parseInt(lastView, 10);
+    const now = Date.now();
+    const twentyFourHours = 24 * 60 * 60 * 1000;
+    
+    // Check if last view was within 24 hours
+    return (now - lastViewTime) < twentyFourHours;
+  } catch {
+    // If localStorage is not available, allow tracking
+    return false;
   }
-  
-  return sessionId;
 }
 
 /**
- * Generate idempotency key for view tracking
- * Prevents duplicate counts from retries or multiple tabs
- * Uses 5-minute time windows
+ * Mark view as tracked
+ * Stores timestamp in localStorage
  * 
  * @param slug - The blog post slug
- * @returns Idempotency key string
  */
-function generateIdempotencyKey(slug: string): string {
-  const sessionId = getSessionId();
-  const timeWindow = Math.floor(Date.now() / (5 * 60 * 1000)); // 5-minute windows
-  return `${slug}-${sessionId}-${timeWindow}`;
+function markViewTracked(slug: string): void {
+  try {
+    const key = `view-tracked-${slug}`;
+    localStorage.setItem(key, Date.now().toString());
+  } catch {
+    // Fail silently if localStorage is not available
+  }
 }
 
 /**
@@ -65,6 +74,7 @@ function generateIdempotencyKey(slug: string): string {
  * Sends a POST request to increment the view counter
  * Implements retry logic dengan exponential backoff for 429 responses
  * Fails silently on errors to avoid blocking page functionality
+ * Uses localStorage to prevent duplicate tracking within 24 hours
  * 
  * @param slug - The blog post slug
  * @param apiUrl - The base API URL from environment variables
@@ -84,6 +94,14 @@ export async function trackView(slug: string, apiUrl: string): Promise<void> {
       return;
     }
 
+    // Check if view was already tracked recently (24-hour window)
+    if (hasRecentView(slug)) {
+      if (import.meta.env.DEV) {
+        console.log('[ViewCounter] View already tracked recently, skipping');
+      }
+      return;
+    }
+
     const endpoint = `${apiUrl}/${slug}`;
     const maxRetries = 3;
     
@@ -93,7 +111,6 @@ export async function trackView(slug: string, apiUrl: string): Promise<void> {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-Idempotency-Key': generateIdempotencyKey(slug),
           },
         });
         
@@ -114,6 +131,9 @@ export async function trackView(slug: string, apiUrl: string): Promise<void> {
         
         // Success or non-retryable error
         if (response.ok) {
+          // Mark view as tracked in localStorage
+          markViewTracked(slug);
+          
           if (import.meta.env.DEV) {
             console.log('[ViewCounter] View tracked successfully');
           }

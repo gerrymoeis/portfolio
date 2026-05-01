@@ -2,23 +2,12 @@
 /**
  * Footer - Site footer component
  * HD-2D styled footer for all pages except home
- * Contains copyright, social links, and navigation with active states
+ * Contains copyright and social links only
  * 
- * Props:
- * - currentPath: Current page path for active state detection (optional)
+ * Props: None
  */
 
 import Icon from './Icon.astro';
-import { homeConfig } from '../../config/home';
-
-interface Props {
-  currentPath?: string;
-}
-
-const { currentPath } = Astro.props;
-
-// Get navigation links from config (single source of truth)
-const navLinks = homeConfig.navigation;
 
 // Social links - GitHub and Email only
 const socialLinks = [
@@ -27,52 +16,11 @@ const socialLinks = [
 ];
 
 const currentYear = new Date().getFullYear();
-
-// Get current path for active state (fallback to Astro.url.pathname if not provided)
-const activePath = currentPath || Astro.url.pathname;
-
-// Helper function to determine if a link is active
-const isLinkActive = (linkHref: string): boolean => {
-  if (linkHref === '/') {
-    return activePath === '/';
-  }
-  // For CV link, never show as active
-  if (linkHref.endsWith('.pdf')) {
-    return false;
-  }
-  return activePath.startsWith(linkHref);
-};
 ---
 
 <footer class="footer depth-mid" role="contentinfo">
   <div class="footer__container">
     <div class="footer__content">
-      <!-- Navigation Links -->
-      <!-- <nav class="footer__nav" aria-label="Footer navigation">
-        <ul class="footer__nav-list">
-          {navLinks.map((link) => {
-            const isActive = isLinkActive(link.href);
-            
-            return (
-              <li class="footer__nav-item">
-                <a 
-                  href={link.href} 
-                  class:list={['footer__nav-link', { 'footer__nav-link--active': isActive }]}
-                  aria-current={isActive ? 'page' : undefined}
-                  target={link.target}
-                  rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
-                  download={link.download}
-                  data-bilingual="footer-nav"
-                >
-                  <span data-lang="en">{link.label.en}</span>
-                  <span data-lang="id">{link.label.id}</span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </nav> -->
-
       <!-- Social Links -->
       <div class="footer__social">
         <ul class="footer__social-list">
@@ -130,89 +78,9 @@ const isLinkActive = (linkHref: string): boolean => {
     text-align: center;
   }
 
-  /* Navigation - Simple horizontal list */
-  .footer__nav {
-    width: 100%;
-  }
-  
-  .footer__nav-list {
-    display: flex;
-    gap: var(--space-6);
-    align-items: center;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .footer__nav-item {
-    margin: 0;
-  }
-
-  .footer__nav-link {
-    font-family: var(--font-primary);
-    font-size: var(--text-base);
-    font-weight: var(--weight-medium);
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    position: relative;
-    transition: 
-      color var(--duration-medium) var(--ease-out),
-      background-color var(--duration-medium) var(--ease-out);
-  }
-  
-  /* Hide inactive language */
-  .footer__nav-link span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .footer__nav-link span[data-lang="en"],
-  :global(html[lang="id"]) .footer__nav-link span[data-lang="id"] {
-    display: inline;
-  }
-
-  .footer__nav-link:hover {
-    color: var(--color-text-primary);
-    background-color: var(--color-nav-hover-bg);
-  }
-
-  .footer__nav-link:focus-visible {
-    outline: 2px solid var(--color-accent-primary);
-    outline-offset: 2px;
-  }
-
-  .footer__nav-link--active {
-    color: var(--color-text-primary);
-    background-color: var(--color-nav-active-bg);
-    font-weight: var(--weight-semibold);
-  }
-  
-  /* Dark theme hover/active */
-  :global(html:not([data-theme="light"])) .footer__nav-link:hover {
-    background-color: rgba(246, 224, 94, 0.15);
-  }
-  
-  :global(html:not([data-theme="light"])) .footer__nav-link--active {
-    background-color: rgba(246, 224, 94, 0.25);
-  }
-  
-  /* Light theme hover/active */
-  :global([data-theme="light"]) .footer__nav-link:hover {
-    background-color: rgba(255, 85, 0, 0.15);
-  }
-  
-  :global([data-theme="light"]) .footer__nav-link--active {
-    background-color: rgba(255, 85, 0, 0.25);
-  }
-
-  /* Social Links */
+  /* Social Links - Horizontal for desktop */
   .footer__social {
     width: 100%;
-    justify-content: center;
   }
   
   .footer__social-list {
@@ -243,6 +111,7 @@ const isLinkActive = (linkHref: string): boolean => {
       color var(--duration-medium) var(--ease-out),
       background-color var(--duration-medium) var(--ease-out),
       transform var(--duration-fast) var(--ease-out);
+    justify-content: center;
   }
 
   .footer__social-link:hover {
@@ -283,76 +152,27 @@ const isLinkActive = (linkHref: string): boolean => {
     }
 
     .footer__content {
-      gap: var(--space-8);
-      align-items: flex-start;
-      text-align: left;
+      gap: var(--space-6);
     }
     
-    /* Create 2 column layout wrapper */
-    .footer__nav,
-    .footer__social {
-      width: 100%;
-    }
-    
-    /* Navigation Links - Left column, vertical stack */
-    .footer__nav-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      align-items: flex-start;
-    }
-    
-    .footer__nav-item {
-      text-align: left;
-    }
-    
-    .footer__nav-link {
-      padding: var(--space-2) var(--space-3);
-      display: inline-block;
-      width: auto;
-    }
-    
-    /* Social Links - Right column, vertical stack */
+    /* Social Links - Vertical stack on mobile, center aligned */
     .footer__social-list {
-      display: flex;
       flex-direction: column;
       gap: var(--space-3);
-      align-items: flex-start;
+      align-items: center;
+    }
+    
+    .footer__social-item {
+      width: auto;
     }
     
     .footer__social-link {
       padding: var(--space-2) var(--space-3);
-      justify-content: flex-start;
+      justify-content: center;
     }
     
     .footer__social-icon {
       font-size: var(--text-xl);
-    }
-    
-    /* Create side-by-side layout for nav and social */
-    .footer__content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
-      gap: var(--space-8) var(--space-6);
-    }
-    
-    .footer__nav {
-      grid-column: 1;
-      grid-row: 1;
-    }
-    
-    .footer__social {
-      grid-column: 2;
-      grid-row: 1;
-    }
-    
-    /* Copyright - Full width, centered */
-    .footer__copyright {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      width: 100%;
-      text-align: center;
     }
     
     .footer__copyright-text {

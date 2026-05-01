@@ -228,11 +228,11 @@ const currentPath = Astro.url.pathname;
      MOBILE NAVIGATION
      ============================================ */
   
-  /* Mobile hamburger button */
+  /* Mobile hamburger button - Bottom RIGHT (changed from top right) */
   .mobile-nav__hamburger {
     display: none; /* Hidden on desktop */
     position: fixed;
-    top: var(--space-4);
+    bottom: var(--space-4);
     right: var(--space-4);
     z-index: calc(var(--layer-navigation) + 1);
     flex-direction: column;

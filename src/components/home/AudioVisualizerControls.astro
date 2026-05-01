@@ -739,7 +739,7 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
   /* Toast Styles (Top Right) */
   .visualizer-toast {
     position: fixed;
-    top: 100px; /* Fixed position below navbar */
+    top: 120px; /* Desktop: below navbar, adjusted to not cover navbar */
     right: var(--space-6);
     z-index: 1000;
     min-width: 300px;
@@ -934,7 +934,7 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
     }
 
     .visualizer-toast {
-      top: 80px; /* Below navbar on mobile */
+      top: var(--space-6); /* Mobile: top right, replacing hamburger menu position */
       right: var(--space-4);
       left: var(--space-4);
       min-width: auto;
