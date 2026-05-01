@@ -3,7 +3,9 @@ title: "Innovation Lab Website"
 summary: "Website untuk program coaching intensif persiapan kompetisi Olivia dan Gemastik, dengan scraping otomatis informasi kompetisi."
 year: 2025
 status: "completed"
+category: "web"
 techStack: ["Astro", "Vue", "TypeScript", "Tailwind CSS", "Anime.js"]
+thumbnail: "/images/projects/hd2d-portfolio-hero.svg"
 heroImage: "/images/projects/hd2d-portfolio-hero.svg"
 links:
   github: "https://github.com/gerrymoeis/innovation-lab-himafortic"

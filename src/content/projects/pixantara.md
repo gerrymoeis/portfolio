@@ -3,7 +3,9 @@ title: "Pixantara Competition Website"
 summary: "Website kompetisi game development dengan tema Pixel Nusantara, menampilkan budaya Indonesia dalam retro pixel art aesthetic."
 year: 2024
 status: "completed"
+category: "web"
 techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "GSAP"]
+thumbnail: "/images/projects/hd2d-portfolio-hero.svg"
 heroImage: "/images/projects/hd2d-portfolio-hero.svg"
 links:
   github: "https://github.com/gerrymoeis/pixantara_nextjs"

@@ -2,8 +2,10 @@
 title: "HD-2D Portfolio Website"
 summary: "A personal portfolio website inspired by the Octopath Traveler aesthetic, featuring layered depth, soft lighting, and calm motion."
 year: 2024
-status: "in-progress"
+status: "experimental"
+category: "web"
 techStack: ["Astro", "TypeScript", "CSS", "Vitest"]
+thumbnail: "/images/projects/hd2d-portfolio-hero.svg"
 heroImage: "/images/projects/hd2d-portfolio-hero.svg"
 links:
   github: "https://github.com/username/hd2d-portfolio"

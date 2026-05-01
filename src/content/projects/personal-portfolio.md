@@ -3,7 +3,9 @@ title: "Personal Portfolio Website"
 summary: "Portfolio website dengan HD-2D aesthetic, audio visualizer legal, dan sistem CV generator otomatis menggunakan LaTeX."
 year: 2024
 status: "in-progress"
+category: "web"
 techStack: ["Astro", "TypeScript", "CSS", "LaTeX"]
+thumbnail: "/images/projects/hd2d-portfolio-hero.svg"
 heroImage: "/images/projects/hd2d-portfolio-hero.svg"
 links:
   github: "https://github.com/gerrymoeis/portfolio"

@@ -22,9 +22,11 @@ const projectsCollection = defineCollection({
     title: z.string(),
     summary: z.string(),
     year: z.number(),
-    status: z.enum(['completed', 'in-progress', 'archived']),
+    status: z.enum(['completed', 'in-progress', 'experimental', 'archived']),
+    category: z.enum(['web', 'backend', 'data-mining', 'all']),
     techStack: z.array(z.string()),
-    heroImage: z.string(),
+    thumbnail: z.string(), // For card display in grid
+    heroImage: z.string().optional(), // Optional, for future use
     links: z.object({
       github: z.string().url().optional(),
       live: z.string().url().optional(),
