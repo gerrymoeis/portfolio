@@ -2,16 +2,15 @@
 /**
  * Projects Listing Page
  * 
- * Displays all projects as scroll-based scenes with parallax effects and HD-2D aesthetic.
- * Each project is rendered as a full-viewport scene with layered parallax.
+ * Displays all projects in a grid layout with filtering by category.
+ * Matches Blogs page hero styling for consistency.
  */
 
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SemiCylindricalNav from '../../components/ui/SemiCylindricalNav.astro';
 import Footer from '../../components/ui/Footer.astro';
-import PageHero from '../../components/ui/PageHero.astro';
-import ProjectScene from '../../components/projects/ProjectScene.astro';
+import Panel from '../../components/ui/Panel.astro';
 import PageBackgroundGradient from '../../components/ui/PageBackgroundGradient.astro';
 import { homeConfig } from '../../config/home';
 
@@ -38,82 +37,39 @@ const sortedProjects = projects.sort((a, b) => b.data.year - a.data.year);
   
   <div class="page-layout depth-mid projects-page">
     <PageBackgroundGradient />
-    <main role="main">
-      <PageHero 
-        title="Projects"
-        description="A collection of projects showcasing web development, design, and creative problem-solving."
-      />
-
-      <div class="projects-scenes depth-mid" role="list" aria-label="Project portfolio">
-        {sortedProjects.map((project) => (
-          <ProjectScene
-            title={project.data.title}
-            summary={project.data.summary}
-            year={project.data.year}
-            status={project.data.status}
-            techStack={project.data.techStack}
-            heroImage={project.data.heroImage}
-            links={project.data.links}
-            slug={project.slug}
-          />
-        ))}
+    <main role="main" class="projects-main">
+      <!-- Hero Section with Panel (matches Blogs page) -->
+      <header class="projects-hero">
+        <Panel variant="elevated" glow={true} class="hero-panel">
+          <h1 class="projects-hero__title" data-bilingual>
+            <span data-lang="en">Projects</span>
+            <span data-lang="id">Proyek</span>
+          </h1>
+          <p class="projects-hero__description" data-bilingual>
+            <span data-lang="en">A collection of projects showcasing web development, design, and creative problem-solving.</span>
+            <span data-lang="id">Koleksi proyek yang menampilkan pengembangan web, desain, dan pemecahan masalah kreatif.</span>
+          </p>
+        </Panel>
+      </header>
+      
+      <div class="projects-content">
+        <!-- TODO: ProjectFilter component will go here -->
+        <!-- TODO: ProjectGrid component will go here -->
+        <p style="text-align: center; color: var(--color-text-secondary); padding: var(--space-12);">
+          Project cards coming in Phase 2...
+        </p>
       </div>
     </main>
     
     <Footer currentPath={currentPath} />
   </div>
-
-  <!-- Initialize parallax effects with lazy loading -->
-  <script>
-    // Lazy load parallax script on first scroll or when scenes are visible
-    // This reduces initial JavaScript payload for the projects page
-    let isInitialized = false;
-
-    async function lazyInitParallax() {
-      if (isInitialized) return;
-      isInitialized = true;
-
-      // Dynamic import - only loads when needed
-      const { initParallax } = await import('../../scripts/parallax');
-      initParallax();
-    }
-
-    // Initialize on first scroll event (lazy loading)
-    function handleFirstScroll() {
-      lazyInitParallax();
-      window.removeEventListener('scroll', handleFirstScroll);
-    }
-
-    // Also use Intersection Observer to detect when first scene is visible
-    const firstScene = document.querySelector('.project-scene');
-    
-    if (firstScene && 'IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            lazyInitParallax();
-            observer.disconnect();
-          }
-        });
-      }, { rootMargin: '100px' });
-
-      observer.observe(firstScene);
-    }
-
-    // Fallback: Initialize on first scroll
-    window.addEventListener('scroll', handleFirstScroll, { passive: true, once: true });
-
-    // Also initialize if user has already scrolled
-    if (window.scrollY > 0) {
-      lazyInitParallax();
-    }
-  </script>
 </BaseLayout>
 
 <style>
   .page-layout {
     position: relative;
-    padding-top: var(--space-20);
+    min-height: 100vh;
+    padding-top: 100px;
     background: var(--bg-elevated);
   }
   
@@ -121,8 +77,80 @@ const sortedProjects = projects.sort((a, b) => b.data.year - a.data.year);
     position: relative;
     z-index: 1;
   }
+  
+  .projects-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+  }
 
-  .projects-scenes {
-    position: relative;
+  /* Hero Section - Matches Blogs page styling */
+  .projects-hero {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: var(--space-12) 0 var(--space-8);
+  }
+  
+  .projects-hero :global(.hero-panel) {
+    text-align: center;
+    padding: var(--space-8);
+  }
+  
+  .projects-hero__title {
+    font-family: var(--font-primary);
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-4) 0;
+  }
+  
+  /* Hide inactive language */
+  .projects-hero__title span[data-lang],
+  .projects-hero__description span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .projects-hero__title span[data-lang="en"],
+  :global(html[lang="id"]) .projects-hero__title span[data-lang="id"],
+  :global(html[lang="en"]) .projects-hero__description span[data-lang="en"],
+  :global(html[lang="id"]) .projects-hero__description span[data-lang="id"] {
+    display: inline;
+  }
+  
+  .projects-hero__description {
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  
+  .projects-content {
+    padding: var(--space-8) 0;
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: var(--breakpoint-md)) {
+    .page-layout {
+      padding-top: 80px;
+    }
+    
+    .projects-hero {
+      padding: var(--space-8) 0 var(--space-6);
+    }
+    
+    .projects-hero :global(.hero-panel) {
+      padding: var(--space-6);
+    }
+    
+    .projects-hero__title {
+      font-size: var(--text-3xl);
+    }
+    
+    .projects-content {
+      padding: var(--space-6) 0;
+    }
   }
 </style>
