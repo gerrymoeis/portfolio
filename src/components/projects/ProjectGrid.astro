@@ -49,31 +49,12 @@ const sortedProjects = allProjects.sort((a, b) =>
     }
   }
 
-  /* Desktop: Alternating 3-col → 2-col pattern */
+  /* Desktop: 3 cards horizontally aligned */
   @media (min-width: 900px) {
     .project-grid {
-      /* Use auto-flow to create alternating pattern */
-      grid-template-columns: repeat(6, 1fr);
-      gap: var(--space-8);
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
       padding: var(--space-8) 0;
-    }
-
-    /* First 3 cards: 3-column layout (each spans 2 columns) */
-    .project-grid > :global(:nth-child(6n + 1)),
-    .project-grid > :global(:nth-child(6n + 2)),
-    .project-grid > :global(:nth-child(6n + 3)) {
-      grid-column: span 2;
-    }
-
-    /* Next 2 cards: 2-column layout (each spans 3 columns) */
-    .project-grid > :global(:nth-child(6n + 4)),
-    .project-grid > :global(:nth-child(6n + 5)) {
-      grid-column: span 3;
-    }
-
-    /* Card 6 starts new cycle: 3-column layout */
-    .project-grid > :global(:nth-child(6n + 6)) {
-      grid-column: span 2;
     }
   }
 

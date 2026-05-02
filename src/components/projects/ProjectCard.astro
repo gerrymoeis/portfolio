@@ -17,7 +17,7 @@
 import { 
   siAstro, siTypescript, siJavascript, siReact, siVuedotjs,
   siNodedotjs, siPython, siTailwindcss, siHtml5, siVite,
-  siAnimedotjs, siLatex
+  siAnimedotjs, siLatex, siCss, siNextdotjs, siGsap
 } from 'simple-icons';
 
 interface Props {
@@ -35,7 +35,7 @@ interface Props {
   };
 }
 
-const { title, summary, year, status, category, techStack, thumbnail, links } = Astro.props;
+const { title, year, status, category, techStack, thumbnail, links } = Astro.props;
 
 // Format status for display with bilingual support
 const statusDisplay = {
@@ -59,6 +59,9 @@ const iconRegistry: Record<string, any> = {
   'Vite': siVite,
   'Anime.js': siAnimedotjs,
   'LaTeX': siLatex,
+  'CSS': siCss,
+  'Next.js': siNextdotjs,
+  'GSAP': siGsap,
 };
 
 // Get icon data for a tech stack item
@@ -245,6 +248,7 @@ function getTechIcon(techName: string) {
   .project-card__content {
     display: flex;
     flex-direction: column;
+    gap: var(--space-3);
     padding: var(--space-5);
     position: relative;
     z-index: 1;
@@ -257,7 +261,6 @@ function getTechIcon(techName: string) {
     height: 240px;
     overflow: hidden;
     border-radius: var(--radius-md);
-    margin-bottom: var(--space-4);
     flex-shrink: 0;
   }
 
@@ -279,7 +282,6 @@ function getTechIcon(techName: string) {
     font-weight: var(--weight-semibold);
     line-height: var(--leading-tight);
     color: var(--color-text-primary);
-    margin-bottom: var(--space-3);
     text-align: center;
     transition: all var(--duration-fast) var(--ease-out);
   }
@@ -321,7 +323,6 @@ function getTechIcon(techName: string) {
     align-items: center;
     gap: var(--space-3);
     flex-wrap: wrap;
-    margin-bottom: var(--space-3);
   }
 
   .project-card__year {
@@ -377,7 +378,6 @@ function getTechIcon(techName: string) {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin-bottom: var(--space-3);
     align-items: center;
   }
 
@@ -389,6 +389,12 @@ function getTechIcon(techName: string) {
     justify-content: center;
     cursor: help;
     transition: all var(--duration-fast) var(--ease-out);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+    box-shadow: 
+      0 0 8px currentColor,
+      0 0 4px currentColor,
+      inset 0 0 4px currentColor;
   }
 
   .project-card__tech-icon svg {
@@ -397,19 +403,11 @@ function getTechIcon(techName: string) {
     fill: currentColor;
   }
 
-  /* Apply moderate glow effect using drop-shadow on SVG shape */
-  .project-card__tech-icon svg {
-    filter: 
-      drop-shadow(0 0 4px currentColor)
-      drop-shadow(0 0 8px currentColor)
-      drop-shadow(0 0 2px currentColor);
-  }
-
-  .project-card__tech-icon:hover svg {
-    filter: 
-      drop-shadow(0 0 6px currentColor)
-      drop-shadow(0 0 12px currentColor)
-      drop-shadow(0 0 3px currentColor);
+  .project-card__tech-icon:hover {
+    box-shadow: 
+      0 0 12px currentColor,
+      0 0 6px currentColor,
+      inset 0 0 6px currentColor;
     transform: scale(1.1);
   }
 
@@ -504,12 +502,10 @@ function getTechIcon(techName: string) {
     
     .project-card__thumbnail {
       height: 200px; /* Smaller on mobile */
-      margin-bottom: var(--space-4);
     }
     
     .project-card__title {
       text-align: left; /* Left align on mobile */
-      margin-bottom: var(--space-3);
     }
   }
 </style>
