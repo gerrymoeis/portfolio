@@ -28,8 +28,14 @@ npm install
 # Start development server
 npm run dev
 
-# Build for production
+# Build for production (Cloudflare Pages)
 npm run build
+
+# Build locally with CV generation
+npm run build:local
+
+# Deploy (generate CV + commit + push)
+npm run deploy
 
 # Preview production build
 npm run preview
