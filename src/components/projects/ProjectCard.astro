@@ -72,7 +72,7 @@ function getTechIcon(techName: string) {
 
 <article class="project-card" data-category={category} role="listitem">
   <div class="project-card__content">
-    <!-- Thumbnail - Larger 16:9 -->
+    <!-- Thumbnail - Left side on desktop -->
     <div class="project-card__thumbnail">
       <img 
         src={thumbnail} 
@@ -82,98 +82,101 @@ function getTechIcon(techName: string) {
       />
     </div>
     
-    <!-- Title - Center aligned for emphasis -->
-    <h2 class="project-card__title" data-bilingual>
-      <span data-lang="en">{title.en}</span>
-      <span data-lang="id">{title.id}</span>
-    </h2>
-    
-    <!-- Meta - Left aligned -->
-    <div class="project-card__meta">
-      <span class="project-card__year">{year}</span>
-      <span class="project-card__status" data-status={status} data-bilingual>
-        <span data-lang="en">{statusDisplay[status].en}</span>
-        <span data-lang="id">{statusDisplay[status].id}</span>
-      </span>
-    </div>
-    
-    <!-- Tech Stack - Left aligned with SVG icons -->
-    <div class="project-card__tech">
-      {techStack.map(tech => {
-        const icon = getTechIcon(tech);
-        return icon ? (
-          <div 
-            class="project-card__tech-icon" 
-            title={tech}
-            data-tech-color={icon.hex}
-          >
-            <svg 
-              role="img" 
-              viewBox="0 0 24 24" 
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label={tech}
-            >
-              <path d={icon.path} fill="currentColor" />
-            </svg>
-          </div>
-        ) : (
-          <span class="project-card__tech-item" title={tech}>
-            {tech}
-          </span>
-        );
-      })}
-    </div>
-    
-    <!-- Links - Left aligned -->
-    {links && (
-      <div class="project-card__links">
-        {links.github && (
-          <a 
-            href={links.github} 
-            class="project-card__link" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            aria-label={`View ${title.en} on GitHub (opens in new tab)`}
-          >
-            <i class="fab fa-github"></i>
-            <span data-bilingual>
-              <span data-lang="en">GitHub</span>
-              <span data-lang="id">GitHub</span>
-            </span>
-          </a>
-        )}
-        {links.live && (
-          <a 
-            href={links.live} 
-            class="project-card__link" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            aria-label={`Visit ${title.en} live site (opens in new tab)`}
-          >
-            <i class="fas fa-external-link-alt"></i>
-            <span data-bilingual>
-              <span data-lang="en">Live</span>
-              <span data-lang="id">Live</span>
-            </span>
-          </a>
-        )}
-        {links.demo && (
-          <a 
-            href={links.demo} 
-            class="project-card__link" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            aria-label={`View ${title.en} demo (opens in new tab)`}
-          >
-            <i class="fas fa-play-circle"></i>
-            <span data-bilingual>
-              <span data-lang="en">Demo</span>
-              <span data-lang="id">Demo</span>
-            </span>
-          </a>
-        )}
+    <!-- Content wrapper - Right side on desktop -->
+    <div class="project-card__info">
+      <!-- Title - Center aligned for emphasis -->
+      <h2 class="project-card__title" data-bilingual>
+        <span data-lang="en">{title.en}</span>
+        <span data-lang="id">{title.id}</span>
+      </h2>
+      
+      <!-- Meta - Left aligned -->
+      <div class="project-card__meta">
+        <span class="project-card__year">{year}</span>
+        <span class="project-card__status" data-status={status} data-bilingual>
+          <span data-lang="en">{statusDisplay[status].en}</span>
+          <span data-lang="id">{statusDisplay[status].id}</span>
+        </span>
       </div>
-    )}
+      
+      <!-- Tech Stack - Left aligned with SVG icons -->
+      <div class="project-card__tech">
+        {techStack.map(tech => {
+          const icon = getTechIcon(tech);
+          return icon ? (
+            <div 
+              class="project-card__tech-icon" 
+              title={tech}
+              data-tech-color={icon.hex}
+            >
+              <svg 
+                role="img" 
+                viewBox="0 0 24 24" 
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label={tech}
+              >
+                <path d={icon.path} fill="currentColor" />
+              </svg>
+            </div>
+          ) : (
+            <span class="project-card__tech-item" title={tech}>
+              {tech}
+            </span>
+          );
+        })}
+      </div>
+      
+      <!-- Links - Left aligned -->
+      {links && (
+        <div class="project-card__links">
+          {links.github && (
+            <a 
+              href={links.github} 
+              class="project-card__link" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label={`View ${title.en} on GitHub (opens in new tab)`}
+            >
+              <i class="fab fa-github"></i>
+              <span data-bilingual>
+                <span data-lang="en">GitHub</span>
+                <span data-lang="id">GitHub</span>
+              </span>
+            </a>
+          )}
+          {links.live && (
+            <a 
+              href={links.live} 
+              class="project-card__link" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label={`Visit ${title.en} live site (opens in new tab)`}
+            >
+              <i class="fas fa-external-link-alt"></i>
+              <span data-bilingual>
+                <span data-lang="en">Live</span>
+                <span data-lang="id">Live</span>
+              </span>
+            </a>
+          )}
+          {links.demo && (
+            <a 
+              href={links.demo} 
+              class="project-card__link" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label={`View ${title.en} demo (opens in new tab)`}
+            >
+              <i class="fas fa-play-circle"></i>
+              <span data-bilingual>
+                <span data-lang="en">Demo</span>
+                <span data-lang="id">Demo</span>
+              </span>
+            </a>
+          )}
+        </div>
+      )}
+    </div>
   </div>
 </article>
 
@@ -191,10 +194,16 @@ function getTechIcon(techName: string) {
       box-shadow var(--duration-medium) var(--ease-out);
     position: relative;
     overflow: hidden;
-    min-height: 420px; /* Minimum height for landscape */
-    height: auto; /* Allow natural growth */
+    height: auto;
     display: flex;
     flex-direction: column;
+  }
+  
+  /* Desktop: Horizontal landscape layout */
+  @media (min-width: 769px) {
+    .project-card {
+      min-height: 280px;
+    }
   }
 
   /* Subtle grain texture overlay */
@@ -248,20 +257,38 @@ function getTechIcon(techName: string) {
   .project-card__content {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    padding: var(--space-5);
+    gap: var(--space-5);
+    padding: var(--space-6);
     position: relative;
     z-index: 1;
     height: 100%;
   }
+  
+  /* Desktop: Horizontal layout with thumbnail on left */
+  @media (min-width: 769px) {
+    .project-card__content {
+      flex-direction: row;
+      gap: var(--space-6);
+      align-items: stretch;
+    }
+  }
 
-  /* Thumbnail - Larger (240px = ~63% of 380px card) */
+  /* Thumbnail */
   .project-card__thumbnail {
     width: 100%;
-    height: 240px;
+    height: 200px;
     overflow: hidden;
     border-radius: var(--radius-md);
     flex-shrink: 0;
+  }
+  
+  /* Desktop: Fixed width thumbnail on left */
+  @media (min-width: 769px) {
+    .project-card__thumbnail {
+      width: 240px;
+      height: auto;
+      min-height: 100%;
+    }
   }
 
   .project-card__image {
@@ -273,6 +300,22 @@ function getTechIcon(techName: string) {
 
   .project-card:hover .project-card__image {
     transform: scale(1.05);
+  }
+  
+  /* Info wrapper - Contains all text content */
+  .project-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    flex: 1;
+    min-width: 0;
+  }
+  
+  /* Desktop: Adjust info layout */
+  @media (min-width: 769px) {
+    .project-card__info {
+      justify-content: space-between;
+    }
   }
 
   /* Title - Center aligned for emphasis */
@@ -321,7 +364,7 @@ function getTechIcon(techName: string) {
   .project-card__meta {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     flex-wrap: wrap;
   }
 
@@ -377,24 +420,52 @@ function getTechIcon(techName: string) {
   .project-card__tech {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
+    gap: var(--space-4);
     align-items: center;
   }
 
   .project-card__tech-icon {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: help;
     transition: all var(--duration-fast) var(--ease-out);
     border-radius: var(--radius-sm);
-    padding: 4px;
+    padding: 6px;
+  }
+  
+  /* Dark theme: Golden glow */
+  :global(html:not([data-theme="light"])) .project-card__tech-icon {
     box-shadow: 
-      0 0 8px currentColor,
-      0 0 4px currentColor,
-      inset 0 0 4px currentColor;
+      0 0 10px rgba(246, 224, 94, 0.4),
+      0 0 6px rgba(246, 224, 94, 0.3),
+      inset 0 0 6px rgba(246, 224, 94, 0.2);
+  }
+  
+  :global(html:not([data-theme="light"])) .project-card__tech-icon:hover {
+    box-shadow: 
+      0 0 16px rgba(246, 224, 94, 0.6),
+      0 0 10px rgba(246, 224, 94, 0.4),
+      inset 0 0 8px rgba(246, 224, 94, 0.3);
+    transform: scale(1.1);
+  }
+  
+  /* Light theme: Red-orange glow */
+  :global([data-theme="light"]) .project-card__tech-icon {
+    box-shadow: 
+      0 0 10px rgba(255, 85, 0, 0.4),
+      0 0 6px rgba(255, 85, 0, 0.3),
+      inset 0 0 6px rgba(255, 85, 0, 0.2);
+  }
+  
+  :global([data-theme="light"]) .project-card__tech-icon:hover {
+    box-shadow: 
+      0 0 16px rgba(255, 85, 0, 0.6),
+      0 0 10px rgba(255, 85, 0, 0.4),
+      inset 0 0 8px rgba(255, 85, 0, 0.3);
+    transform: scale(1.1);
   }
 
   .project-card__tech-icon svg {
@@ -402,13 +473,10 @@ function getTechIcon(techName: string) {
     height: 100%;
     fill: currentColor;
   }
-
-  .project-card__tech-icon:hover {
-    box-shadow: 
-      0 0 12px currentColor,
-      0 0 6px currentColor,
-      inset 0 0 6px currentColor;
-    transform: scale(1.1);
+  
+  /* Override black icons (Next.js, Anime.js) with theme colors */
+  .project-card__tech-icon[data-tech-color="000000"] svg {
+    color: var(--color-text-primary) !important;
   }
 
   /* Fallback text tags for icons not found */
@@ -426,7 +494,7 @@ function getTechIcon(techName: string) {
   /* Links - Left aligned */
   .project-card__links {
     display: flex;
-    gap: var(--space-3);
+    gap: var(--space-4);
     flex-wrap: wrap;
     margin-top: auto;
   }
