@@ -23,6 +23,10 @@ export interface SocialLink {
 export interface NavigationLink {
   label: BilingualText;
   href: string;
+  hrefByLang?: {
+    en: string;
+    id: string;
+  };
   target?: string;
   download?: boolean;
 }
@@ -79,7 +83,11 @@ export const homeConfig: HomeConfig = {
     },
     { 
       label: { id: "CV", en: "CV" }, 
-      href: "/cv.pdf",
+      href: "/Gerry Moeis_CV_EN.pdf", // Will be dynamically updated based on language
+      hrefByLang: {
+        en: "/Gerry Moeis_CV_EN.pdf",
+        id: "/Gerry Moeis_CV_ID.pdf"
+      },
       download: true
     },
   ],

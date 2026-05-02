@@ -170,6 +170,36 @@ const isLinkActive = (linkHref: string): boolean => {
       closeMenu();
     }
   });
+
+  // Update CV link based on language
+  function updateCVLinks() {
+    const lang = document.documentElement.getAttribute('lang') || 'en';
+    const cvLinks = document.querySelectorAll('a[href*="CV_"]');
+    
+    cvLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && href.includes('Gerry Moeis_CV_')) {
+        link.setAttribute('href', lang === 'id' ? '/Gerry Moeis_CV_ID.pdf' : '/Gerry Moeis_CV_EN.pdf');
+      }
+    });
+  }
+
+  // Update CV links on page load
+  updateCVLinks();
+
+  // Listen for language changes
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'lang') {
+        updateCVLinks();
+      }
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['lang']
+  });
 </script>
 
 <style>
