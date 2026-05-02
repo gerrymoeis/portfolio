@@ -72,7 +72,7 @@ function getTechIcon(techName: string) {
 
 <article class="project-card" data-category={category} role="listitem">
   <div class="project-card__content">
-    <!-- Thumbnail - Left side on desktop -->
+    <!-- Thumbnail - Top -->
     <div class="project-card__thumbnail">
       <img 
         src={thumbnail} 
@@ -82,101 +82,98 @@ function getTechIcon(techName: string) {
       />
     </div>
     
-    <!-- Content wrapper - Right side on desktop -->
-    <div class="project-card__info">
-      <!-- Title - Center aligned for emphasis -->
-      <h2 class="project-card__title" data-bilingual>
-        <span data-lang="en">{title.en}</span>
-        <span data-lang="id">{title.id}</span>
-      </h2>
-      
-      <!-- Meta - Left aligned -->
-      <div class="project-card__meta">
-        <span class="project-card__year">{year}</span>
-        <span class="project-card__status" data-status={status} data-bilingual>
-          <span data-lang="en">{statusDisplay[status].en}</span>
-          <span data-lang="id">{statusDisplay[status].id}</span>
-        </span>
-      </div>
-      
-      <!-- Tech Stack - Left aligned with SVG icons -->
-      <div class="project-card__tech">
-        {techStack.map(tech => {
-          const icon = getTechIcon(tech);
-          return icon ? (
-            <div 
-              class="project-card__tech-icon" 
-              title={tech}
-              data-tech-color={icon.hex}
-            >
-              <svg 
-                role="img" 
-                viewBox="0 0 24 24" 
-                xmlns="http://www.w3.org/2000/svg"
-                aria-label={tech}
-              >
-                <path d={icon.path} fill="currentColor" />
-              </svg>
-            </div>
-          ) : (
-            <span class="project-card__tech-item" title={tech}>
-              {tech}
-            </span>
-          );
-        })}
-      </div>
-      
-      <!-- Links - Left aligned -->
-      {links && (
-        <div class="project-card__links">
-          {links.github && (
-            <a 
-              href={links.github} 
-              class="project-card__link" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label={`View ${title.en} on GitHub (opens in new tab)`}
-            >
-              <i class="fab fa-github"></i>
-              <span data-bilingual>
-                <span data-lang="en">GitHub</span>
-                <span data-lang="id">GitHub</span>
-              </span>
-            </a>
-          )}
-          {links.live && (
-            <a 
-              href={links.live} 
-              class="project-card__link" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label={`Visit ${title.en} live site (opens in new tab)`}
-            >
-              <i class="fas fa-external-link-alt"></i>
-              <span data-bilingual>
-                <span data-lang="en">Live</span>
-                <span data-lang="id">Live</span>
-              </span>
-            </a>
-          )}
-          {links.demo && (
-            <a 
-              href={links.demo} 
-              class="project-card__link" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label={`View ${title.en} demo (opens in new tab)`}
-            >
-              <i class="fas fa-play-circle"></i>
-              <span data-bilingual>
-                <span data-lang="en">Demo</span>
-                <span data-lang="id">Demo</span>
-              </span>
-            </a>
-          )}
-        </div>
-      )}
+    <!-- Title - Center aligned for emphasis -->
+    <h2 class="project-card__title" data-bilingual>
+      <span data-lang="en">{title.en}</span>
+      <span data-lang="id">{title.id}</span>
+    </h2>
+    
+    <!-- Meta - Left aligned -->
+    <div class="project-card__meta">
+      <span class="project-card__year">{year}</span>
+      <span class="project-card__status" data-status={status} data-bilingual>
+        <span data-lang="en">{statusDisplay[status].en}</span>
+        <span data-lang="id">{statusDisplay[status].id}</span>
+      </span>
     </div>
+    
+    <!-- Tech Stack - Left aligned with SVG icons -->
+    <div class="project-card__tech">
+      {techStack.map(tech => {
+        const icon = getTechIcon(tech);
+        return icon ? (
+          <div 
+            class="project-card__tech-icon" 
+            title={tech}
+            data-tech-color={icon.hex}
+          >
+            <svg 
+              role="img" 
+              viewBox="0 0 24 24" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-label={tech}
+            >
+              <path d={icon.path} fill="currentColor" />
+            </svg>
+          </div>
+        ) : (
+          <span class="project-card__tech-item" title={tech}>
+            {tech}
+          </span>
+        );
+      })}
+    </div>
+    
+    <!-- Links - Left aligned -->
+    {links && (
+      <div class="project-card__links">
+        {links.github && (
+          <a 
+            href={links.github} 
+            class="project-card__link" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label={`View ${title.en} on GitHub (opens in new tab)`}
+          >
+            <i class="fab fa-github"></i>
+            <span data-bilingual>
+              <span data-lang="en">GitHub</span>
+              <span data-lang="id">GitHub</span>
+            </span>
+          </a>
+        )}
+        {links.live && (
+          <a 
+            href={links.live} 
+            class="project-card__link" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label={`Visit ${title.en} live site (opens in new tab)`}
+          >
+            <i class="fas fa-external-link-alt"></i>
+            <span data-bilingual>
+              <span data-lang="en">Live</span>
+              <span data-lang="id">Live</span>
+            </span>
+          </a>
+        )}
+        {links.demo && (
+          <a 
+            href={links.demo} 
+            class="project-card__link" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label={`View ${title.en} demo (opens in new tab)`}
+          >
+            <i class="fas fa-play-circle"></i>
+            <span data-bilingual>
+              <span data-lang="en">Demo</span>
+              <span data-lang="id">Demo</span>
+            </span>
+          </a>
+        )}
+      </div>
+    )}
   </div>
 </article>
 
@@ -197,13 +194,6 @@ function getTechIcon(techName: string) {
     height: auto;
     display: flex;
     flex-direction: column;
-  }
-  
-  /* Desktop: Horizontal landscape layout */
-  @media (min-width: 769px) {
-    .project-card {
-      min-height: 280px;
-    }
   }
 
   /* Subtle grain texture overlay */
@@ -263,31 +253,20 @@ function getTechIcon(techName: string) {
     z-index: 1;
     height: 100%;
   }
-  
-  /* Desktop: Horizontal layout with thumbnail on left */
-  @media (min-width: 769px) {
-    .project-card__content {
-      flex-direction: row;
-      gap: var(--space-6);
-      align-items: stretch;
-    }
-  }
 
-  /* Thumbnail */
+  /* Thumbnail - Landscape aspect ratio */
   .project-card__thumbnail {
     width: 100%;
-    height: 200px;
+    height: 180px;
     overflow: hidden;
     border-radius: var(--radius-md);
     flex-shrink: 0;
   }
   
-  /* Desktop: Fixed width thumbnail on left */
+  /* Desktop: Wider landscape thumbnail */
   @media (min-width: 769px) {
     .project-card__thumbnail {
-      width: 240px;
-      height: auto;
-      min-height: 100%;
+      height: 200px;
     }
   }
 
@@ -300,22 +279,6 @@ function getTechIcon(techName: string) {
 
   .project-card:hover .project-card__image {
     transform: scale(1.05);
-  }
-  
-  /* Info wrapper - Contains all text content */
-  .project-card__info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    flex: 1;
-    min-width: 0;
-  }
-  
-  /* Desktop: Adjust info layout */
-  @media (min-width: 769px) {
-    .project-card__info {
-      justify-content: space-between;
-    }
   }
 
   /* Title - Center aligned for emphasis */
