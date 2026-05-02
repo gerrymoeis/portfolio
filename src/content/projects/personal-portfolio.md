@@ -1,7 +1,8 @@
 ---
 title: "Personal Portfolio Website"
 summary: "Portfolio website dengan HD-2D aesthetic, audio visualizer legal, dan sistem CV generator otomatis menggunakan LaTeX."
-year: 2024
+date: 2026-01-15
+year: 2026
 status: "in-progress"
 category: "web"
 techStack: ["Astro", "TypeScript", "CSS", "LaTeX"]

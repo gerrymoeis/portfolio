@@ -21,7 +21,8 @@ const projectsCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     summary: z.string(),
-    year: z.number(),
+    date: z.date(), // For precise sorting (internal use)
+    year: z.number(), // For display on frontend
     status: z.enum(['completed', 'in-progress', 'experimental', 'archived']),
     category: z.enum(['web', 'backend', 'data-mining', 'all']),
     techStack: z.array(z.string()),

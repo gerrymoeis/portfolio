@@ -1,0 +1,129 @@
+---
+/**
+ * ProjectGrid - Grid layout for project cards
+ * Alternating 3-column → 2-column → 3-column pattern on desktop
+ * Creates masonry-like visual with uniform card sizes
+ */
+
+import { getCollection } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+
+// Get all projects, sorted by date (newest first)
+const allProjects = await getCollection('projects');
+const sortedProjects = allProjects.sort((a, b) => 
+  b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<div class="project-grid" role="list" aria-label="Projects list">
+  {sortedProjects.map((project) => (
+    <ProjectCard
+      title={project.data.title}
+      summary={project.data.summary}
+      year={project.data.year}
+      status={project.data.status}
+      category={project.data.category}
+      techStack={project.data.techStack}
+      thumbnail={project.data.thumbnail}
+      links={project.data.links}
+    />
+  ))}
+</div>
+
+<style>
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default: single column */
+    gap: var(--space-8);
+    width: 100%;
+    margin: 0;
+    padding: var(--space-8) 0;
+  }
+
+  /* Tablet: 2 columns */
+  @media (min-width: 769px) and (max-width: 899px) {
+    .project-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+      padding: var(--space-6) 0;
+    }
+  }
+
+  /* Desktop: Alternating 3-col → 2-col pattern */
+  @media (min-width: 900px) {
+    .project-grid {
+      /* Use auto-flow to create alternating pattern */
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--space-8);
+      padding: var(--space-8) 0;
+    }
+
+    /* First 3 cards: 3-column layout (each spans 2 columns) */
+    .project-grid > :global(:nth-child(6n + 1)),
+    .project-grid > :global(:nth-child(6n + 2)),
+    .project-grid > :global(:nth-child(6n + 3)) {
+      grid-column: span 2;
+    }
+
+    /* Next 2 cards: 2-column layout (each spans 3 columns) */
+    .project-grid > :global(:nth-child(6n + 4)),
+    .project-grid > :global(:nth-child(6n + 5)) {
+      grid-column: span 3;
+    }
+
+    /* Card 6 starts new cycle: 3-column layout */
+    .project-grid > :global(:nth-child(6n + 6)) {
+      grid-column: span 2;
+    }
+  }
+
+  /* Mobile: Single column (vertical stack) */
+  @media (max-width: 768px) {
+    .project-grid {
+      gap: var(--space-8);
+      padding: var(--space-6) 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .project-grid {
+      gap: var(--space-5);
+      padding: var(--space-6) 0;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Project filtering functionality
+   * Listens for filter changes and shows/hides cards accordingly
+   */
+  
+  function initProjectFilter() {
+    const grid = document.querySelector('.project-grid');
+    if (!grid) return;
+
+    // Listen for custom filter event
+    document.addEventListener('project-filter-change', ((event: CustomEvent) => {
+      const category = event.detail.category;
+      const cards = grid.querySelectorAll('.project-card');
+
+      cards.forEach((card) => {
+        const cardCategory = card.getAttribute('data-category');
+        
+        if (category === 'all' || cardCategory === category) {
+          (card as HTMLElement).style.display = '';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    }) as EventListener);
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProjectFilter);
+  } else {
+    initProjectFilter();
+  }
+</script>

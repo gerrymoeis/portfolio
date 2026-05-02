@@ -1,6 +1,7 @@
 ---
 title: "Innovation Lab Website"
 summary: "Website untuk program coaching intensif persiapan kompetisi Olivia dan Gemastik, dengan scraping otomatis informasi kompetisi."
+date: 2025-04-20
 year: 2025
 status: "completed"
 category: "web"

@@ -1,0 +1,433 @@
+---
+/**
+ * ProjectCard - Individual project card for grid display
+ * Matches BlogCard styling for consistency
+ * 
+ * Props:
+ * - title: Project title
+ * - summary: Project summary
+ * - year: Project year
+ * - status: Project status
+ * - category: Project category
+ * - techStack: Array of technologies used
+ * - thumbnail: Path to thumbnail image
+ * - links: Optional links object (github, live, demo)
+ */
+
+interface Props {
+  title: string;
+  summary: string;
+  year: number;
+  status: 'completed' | 'in-progress' | 'experimental' | 'archived';
+  category: 'web' | 'backend' | 'data-mining' | 'all';
+  techStack: string[];
+  thumbnail: string;
+  links?: {
+    github?: string;
+    live?: string;
+    demo?: string;
+  };
+}
+
+const { title, summary, year, status, category, techStack, thumbnail, links } = Astro.props;
+
+// Format status for display with bilingual support
+const statusDisplay = {
+  'completed': { en: 'Completed', id: 'Selesai' },
+  'in-progress': { en: 'In Progress', id: 'Dalam Proses' },
+  'experimental': { en: 'Experimental', id: 'Eksperimental' },
+  'archived': { en: 'Archived', id: 'Diarsipkan' }
+};
+---
+
+<article class="project-card" data-category={category} role="listitem">
+  <div class="project-card__content">
+    <!-- Thumbnail -->
+    <div class="project-card__thumbnail">
+      <img 
+        src={thumbnail} 
+        alt={`${title} thumbnail`}
+        loading="lazy"
+        class="project-card__image"
+      />
+    </div>
+    
+    <!-- Header -->
+    <div class="project-card__header">
+      <h2 class="project-card__title">{title}</h2>
+      <div class="project-card__meta">
+        <span class="project-card__year">{year}</span>
+        <span class="project-card__status" data-status={status} data-bilingual>
+          <span data-lang="en">{statusDisplay[status].en}</span>
+          <span data-lang="id">{statusDisplay[status].id}</span>
+        </span>
+      </div>
+    </div>
+    
+    <!-- Summary -->
+    <p class="project-card__summary">{summary}</p>
+    
+    <!-- Tech Stack -->
+    <div class="project-card__tech">
+      {techStack.slice(0, 4).map(tech => (
+        <span class="project-card__tech-item" title={tech}>
+          {tech}
+        </span>
+      ))}
+      {techStack.length > 4 && (
+        <span class="project-card__tech-more">+{techStack.length - 4}</span>
+      )}
+    </div>
+    
+    <!-- Links -->
+    {links && (
+      <div class="project-card__links">
+        {links.github && (
+          <a 
+            href={links.github} 
+            class="project-card__link" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label={`View ${title} on GitHub (opens in new tab)`}
+          >
+            <i class="fab fa-github"></i>
+            <span data-bilingual>
+              <span data-lang="en">GitHub</span>
+              <span data-lang="id">GitHub</span>
+            </span>
+          </a>
+        )}
+        {links.live && (
+          <a 
+            href={links.live} 
+            class="project-card__link" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label={`Visit ${title} live site (opens in new tab)`}
+          >
+            <i class="fas fa-external-link-alt"></i>
+            <span data-bilingual>
+              <span data-lang="en">Live</span>
+              <span data-lang="id">Live</span>
+            </span>
+          </a>
+        )}
+        {links.demo && (
+          <a 
+            href={links.demo} 
+            class="project-card__link" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label={`View ${title} demo (opens in new tab)`}
+          >
+            <i class="fas fa-play-circle"></i>
+            <span data-bilingual>
+              <span data-lang="en">Demo</span>
+              <span data-lang="id">Demo</span>
+            </span>
+          </a>
+        )}
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  .project-card {
+    background: var(--bg-elevated);
+    border: 2px solid var(--color-border-accent);
+    border-radius: var(--radius-lg);
+    box-shadow: 
+      0 4px 12px var(--color-shadow-medium),
+      0 2px 4px var(--color-shadow-light);
+    transition: 
+      border-color var(--duration-medium) var(--ease-out),
+      transform var(--duration-medium) var(--ease-out),
+      box-shadow var(--duration-medium) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Subtle grain texture overlay */
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/textures/grain.png');
+    opacity: 0.03;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  .project-card:hover {
+    border-color: var(--color-accent-primary);
+    transform: translateY(-2px);
+  }
+  
+  /* Dark theme hover - golden yellow glow */
+  :global(html:not([data-theme="light"])) .project-card {
+    border-color: rgba(246, 224, 94, 0.4);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.4),
+      0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  :global(html:not([data-theme="light"])) .project-card:hover {
+    border-color: rgba(246, 224, 94, 0.8);
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.5),
+      0 0 30px rgba(246, 224, 94, 0.3),
+      0 0 15px rgba(246, 224, 94, 0.2);
+  }
+  
+  /* Light theme hover - red-orange glow */
+  :global([data-theme="light"]) .project-card {
+    border-color: rgba(255, 85, 0, 0.4);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.15),
+      0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  :global([data-theme="light"]) .project-card:hover {
+    border-color: rgba(255, 85, 0, 0.8);
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.2),
+      0 0 30px rgba(255, 85, 0, 0.25),
+      0 0 15px rgba(255, 85, 0, 0.15);
+  }
+
+  .project-card__content {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6);
+    position: relative;
+    z-index: 1;
+    height: 100%;
+  }
+
+  /* Thumbnail */
+  .project-card__thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-4);
+  }
+
+  .project-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-medium) var(--ease-out);
+  }
+
+  .project-card:hover .project-card__image {
+    transform: scale(1.05);
+  }
+
+  /* Header */
+  .project-card__header {
+    margin-bottom: var(--space-3);
+  }
+
+  .project-card__title {
+    font-family: var(--font-primary);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-2);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .project-card:hover .project-card__title {
+    color: var(--color-accent-primary);
+  }
+
+  .project-card__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .project-card__year {
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+  }
+
+  .project-card__status {
+    font-family: var(--font-primary);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    background: var(--color-social-hover-bg-subtle);
+    border: 1px solid var(--color-border-medium);
+  }
+
+  .project-card__status[data-status="completed"] {
+    color: var(--color-accent-primary);
+    border-color: var(--color-border-accent);
+  }
+
+  .project-card__status[data-status="in-progress"] {
+    color: var(--color-accent-secondary);
+    border-color: var(--color-border-accent);
+  }
+
+  .project-card__status[data-status="experimental"] {
+    color: var(--color-text-secondary);
+    border-color: var(--color-border-medium);
+  }
+
+  .project-card__status[data-status="archived"] {
+    color: var(--color-text-tertiary);
+    border-color: var(--color-border-light);
+  }
+  
+  /* Hide inactive language */
+  .project-card__status span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .project-card__status span[data-lang="en"],
+  :global(html[lang="id"]) .project-card__status span[data-lang="id"] {
+    display: inline;
+  }
+
+  /* Summary */
+  .project-card__summary {
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+    flex-grow: 1;
+  }
+
+  /* Tech Stack */
+  .project-card__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .project-card__tech-item {
+    font-family: var(--font-primary);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    background-color: var(--color-social-hover-bg-subtle);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-medium);
+  }
+
+  .project-card__tech-more {
+    font-family: var(--font-primary);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+    padding: var(--space-1) var(--space-3);
+  }
+
+  /* Links */
+  .project-card__links {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+
+  .project-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    border: 1px solid var(--color-accent-primary);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .project-card__link:hover {
+    background: var(--color-accent-primary);
+    color: var(--bg-elevated);
+  }
+
+  .project-card__link:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+
+  .project-card__link i {
+    font-size: var(--text-sm);
+  }
+  
+  /* Hide inactive language */
+  .project-card__link span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .project-card__link span[data-lang="en"],
+  :global(html[lang="id"]) .project-card__link span[data-lang="id"] {
+    display: inline;
+  }
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .project-card__image,
+    .project-card__title,
+    .project-card__link {
+      transition: none;
+    }
+
+    .project-card:hover {
+      transform: none;
+    }
+
+    .project-card:hover .project-card__image {
+      transform: none;
+    }
+  }
+  
+  /* Mobile: Increase internal spacing */
+  @media (max-width: 768px) {
+    .project-card__content {
+      padding: var(--space-8);
+      gap: var(--space-4);
+    }
+    
+    .project-card__thumbnail {
+      margin-bottom: var(--space-5);
+    }
+    
+    .project-card__header {
+      margin-bottom: var(--space-4);
+    }
+    
+    .project-card__summary {
+      margin-bottom: var(--space-5);
+    }
+    
+    .project-card__tech {
+      margin-bottom: var(--space-5);
+      gap: var(--space-3);
+    }
+  }
+</style>

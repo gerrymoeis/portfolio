@@ -1,0 +1,181 @@
+---
+/**
+ * ProjectFilter - Category filter for projects
+ * Bilingual support (EN/ID)
+ */
+
+const categories = [
+  { value: 'all', label: { en: 'All Projects', id: 'Semua Proyek' } },
+  { value: 'web', label: { en: 'Web Development', id: 'Pengembangan Web' } },
+  { value: 'backend', label: { en: 'Backend', id: 'Backend' } },
+  { value: 'data-mining', label: { en: 'Data Mining', id: 'Data Mining' } },
+];
+---
+
+<div class="project-filter" role="navigation" aria-label="Project category filter">
+  <div class="project-filter__label" data-bilingual>
+    <span data-lang="en">Filter by:</span>
+    <span data-lang="id">Filter berdasarkan:</span>
+  </div>
+  <div class="project-filter__buttons" role="group">
+    {categories.map((category) => (
+      <button
+        class="project-filter__button"
+        data-category={category.value}
+        data-active={category.value === 'all' ? 'true' : 'false'}
+        aria-pressed={category.value === 'all' ? 'true' : 'false'}
+        data-bilingual
+      >
+        <span data-lang="en">{category.label.en}</span>
+        <span data-lang="id">{category.label.id}</span>
+      </button>
+    ))}
+  </div>
+</div>
+
+<style>
+  .project-filter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    flex-wrap: wrap;
+  }
+
+  .project-filter__label {
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Hide inactive language */
+  .project-filter__label span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .project-filter__label span[data-lang="en"],
+  :global(html[lang="id"]) .project-filter__label span[data-lang="id"] {
+    display: inline;
+  }
+
+  .project-filter__buttons {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .project-filter__button {
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .project-filter__button:hover {
+    background: var(--color-social-hover-bg-subtle);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-accent);
+  }
+
+  .project-filter__button[data-active="true"] {
+    background: var(--color-accent-primary);
+    color: var(--bg-elevated);
+    border-color: var(--color-accent-primary);
+  }
+
+  .project-filter__button:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+  
+  /* Hide inactive language */
+  .project-filter__button span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language */
+  :global(html[lang="en"]) .project-filter__button span[data-lang="en"],
+  :global(html[lang="id"]) .project-filter__button span[data-lang="id"] {
+    display: inline;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .project-filter {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    .project-filter__buttons {
+      width: 100%;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+
+    .project-filter__button {
+      flex: 0 1 auto;
+      min-width: fit-content;
+      text-align: center;
+      white-space: nowrap;
+    }
+  }
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .project-filter__button {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Project filter functionality
+   * Dispatches custom event when filter changes
+   */
+  
+  function initFilter() {
+    const buttons = document.querySelectorAll('.project-filter__button');
+    
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const category = button.getAttribute('data-category');
+        
+        // Update active state
+        buttons.forEach((btn) => {
+          btn.setAttribute('data-active', 'false');
+          btn.setAttribute('aria-pressed', 'false');
+        });
+        button.setAttribute('data-active', 'true');
+        button.setAttribute('aria-pressed', 'true');
+        
+        // Dispatch custom event for grid to listen
+        const event = new CustomEvent('project-filter-change', {
+          detail: { category },
+          bubbles: true,
+        });
+        document.dispatchEvent(event);
+      });
+    });
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFilter);
+  } else {
+    initFilter();
+  }
+</script>
