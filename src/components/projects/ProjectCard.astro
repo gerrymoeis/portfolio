@@ -4,8 +4,8 @@
  * Matches BlogCard styling for consistency
  * 
  * Props:
- * - title: Project title
- * - summary: Project summary
+ * - title: Bilingual project title {en, id}
+ * - summary: Bilingual project summary {en, id}
  * - year: Project year
  * - status: Project status
  * - category: Project category
@@ -15,8 +15,8 @@
  */
 
 interface Props {
-  title: string;
-  summary: string;
+  title: { en: string; id: string };
+  summary: { en: string; id: string };
   year: number;
   status: 'completed' | 'in-progress' | 'experimental' | 'archived';
   category: 'web' | 'backend' | 'data-mining' | 'all';
@@ -46,7 +46,7 @@ const statusDisplay = {
     <div class="project-card__thumbnail">
       <img 
         src={thumbnail} 
-        alt={`${title} thumbnail`}
+        alt={`${title.en} thumbnail`}
         loading="lazy"
         class="project-card__image"
       />
@@ -54,7 +54,10 @@ const statusDisplay = {
     
     <!-- Header -->
     <div class="project-card__header">
-      <h2 class="project-card__title">{title}</h2>
+      <h2 class="project-card__title" data-bilingual>
+        <span data-lang="en">{title.en}</span>
+        <span data-lang="id">{title.id}</span>
+      </h2>
       <div class="project-card__meta">
         <span class="project-card__year">{year}</span>
         <span class="project-card__status" data-status={status} data-bilingual>
@@ -65,7 +68,10 @@ const statusDisplay = {
     </div>
     
     <!-- Summary -->
-    <p class="project-card__summary">{summary}</p>
+    <p class="project-card__summary" data-bilingual>
+      <span data-lang="en">{summary.en}</span>
+      <span data-lang="id">{summary.id}</span>
+    </p>
     
     <!-- Tech Stack -->
     <div class="project-card__tech">
@@ -246,6 +252,17 @@ const statusDisplay = {
   .project-card:hover .project-card__title {
     color: var(--color-accent-primary);
   }
+  
+  /* Hide inactive language for title */
+  .project-card__title span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language for title */
+  :global(html[lang="en"]) .project-card__title span[data-lang="en"],
+  :global(html[lang="id"]) .project-card__title span[data-lang="id"] {
+    display: inline;
+  }
 
   .project-card__meta {
     display: flex;
@@ -310,6 +327,17 @@ const statusDisplay = {
     color: var(--color-text-secondary);
     margin-bottom: var(--space-4);
     flex-grow: 1;
+  }
+  
+  /* Hide inactive language for summary */
+  .project-card__summary span[data-lang] {
+    display: none;
+  }
+  
+  /* Show active language for summary */
+  :global(html[lang="en"]) .project-card__summary span[data-lang="en"],
+  :global(html[lang="id"]) .project-card__summary span[data-lang="id"] {
+    display: inline;
   }
 
   /* Tech Stack */

@@ -1,6 +1,10 @@
 ---
-title: "Personal Portfolio Website"
-summary: "Portfolio website dengan HD-2D aesthetic, audio visualizer legal, dan sistem CV generator otomatis menggunakan LaTeX."
+title:
+  en: "Personal Portfolio Website"
+  id: "Website Portfolio Pribadi"
+summary:
+  en: "Portfolio website with HD-2D aesthetic, legal audio visualizer, and automated CV generator system using LaTeX."
+  id: "Website portfolio dengan aesthetic HD-2D, audio visualizer legal, dan sistem CV generator otomatis menggunakan LaTeX."
 date: 2026-01-15
 year: 2026
 status: "in-progress"

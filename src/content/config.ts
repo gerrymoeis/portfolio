@@ -19,8 +19,14 @@ const blogsCollection = defineCollection({
 const projectsCollection = defineCollection({
   type: 'content',
   schema: z.object({
-    title: z.string(),
-    summary: z.string(),
+    title: z.object({
+      en: z.string(),
+      id: z.string(),
+    }),
+    summary: z.object({
+      en: z.string(),
+      id: z.string(),
+    }),
     date: z.date(), // For precise sorting (internal use)
     year: z.number(), // For display on frontend
     status: z.enum(['completed', 'in-progress', 'experimental', 'archived']),

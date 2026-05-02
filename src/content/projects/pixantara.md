@@ -1,6 +1,10 @@
 ---
-title: "Pixantara Competition Website"
-summary: "Website kompetisi game development dengan tema Pixel Nusantara, menampilkan budaya Indonesia dalam retro pixel art aesthetic."
+title:
+  en: "Pixantara Competition Website"
+  id: "Website Kompetisi Pixantara"
+summary:
+  en: "Game development competition website with Pixel Nusantara theme, showcasing Indonesian culture in retro pixel art aesthetic."
+  id: "Website kompetisi game development dengan tema Pixel Nusantara, menampilkan budaya Indonesia dalam retro pixel art aesthetic."
 date: 2025-05-15
 year: 2025
 status: "experimental"
