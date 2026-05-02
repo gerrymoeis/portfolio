@@ -12,8 +12,6 @@ tags: ["ai", "data-extraction", "automation", "python"]
 <div data-bilingual>
 <div data-lang="en">
 
-# AI for Data Extraction: From Brittle Regex to Context-Aware Systems
-
 A few months ago I built a system to scrape Instagram posts about competitions and events. The goal was simple: grab data from captions, extract important information (title, dates, contact, URLs), then insert into database. Sounds straightforward, but turned out way trickier than I thought.
 
 ## The Problem: Messy Text
