@@ -14,7 +14,11 @@
  * - links: Optional links object (github, live, demo)
  */
 
-import * as simpleIcons from 'simple-icons';
+import { 
+  siAstro, siTypescript, siJavascript, siReact, siVuedotjs,
+  siNodedotjs, siPython, siTailwindcss, siHtml5, siVite,
+  siAnimedotjs, siLatex
+} from 'simple-icons';
 
 interface Props {
   title: { en: string; id: string };
@@ -41,61 +45,25 @@ const statusDisplay = {
   'archived': { en: 'Archived', id: 'Diarsipkan' }
 };
 
-// Tech stack name to simple-icons slug mapping
-const techIconMap: Record<string, string> = {
-  'Astro': 'astro',
-  'TypeScript': 'typescript',
-  'JavaScript': 'javascript',
-  'React': 'react',
-  'Vue': 'vuedotjs',
-  'Svelte': 'svelte',
-  'Node.js': 'nodedotjs',
-  'Express': 'express',
-  'FastAPI': 'fastapi',
-  'Python': 'python',
-  'Django': 'django',
-  'Flask': 'flask',
-  'PostgreSQL': 'postgresql',
-  'MongoDB': 'mongodb',
-  'MySQL': 'mysql',
-  'Redis': 'redis',
-  'Docker': 'docker',
-  'Kubernetes': 'kubernetes',
-  'AWS': 'amazonaws',
-  'Vercel': 'vercel',
-  'Netlify': 'netlify',
-  'Git': 'git',
-  'GitHub': 'github',
-  'GitLab': 'gitlab',
-  'Tailwind CSS': 'tailwindcss',
-  'CSS3': 'css3',
-  'HTML5': 'html5',
-  'Sass': 'sass',
-  'Webpack': 'webpack',
-  'Vite': 'vite',
-  'Next.js': 'nextdotjs',
-  'Nuxt.js': 'nuxtdotjs',
-  'GraphQL': 'graphql',
-  'REST API': 'fastapi',
-  'Figma': 'figma',
-  'Adobe XD': 'adobexd',
-  'Photoshop': 'adobephotoshop',
-  'Illustrator': 'adobeillustrator',
+// Icon registry - only icons actually used in projects
+const iconRegistry: Record<string, any> = {
+  'Astro': siAstro,
+  'TypeScript': siTypescript,
+  'JavaScript': siJavascript,
+  'React': siReact,
+  'Vue': siVuedotjs,
+  'Node.js': siNodedotjs,
+  'Python': siPython,
+  'Tailwind CSS': siTailwindcss,
+  'HTML': siHtml5,
+  'Vite': siVite,
+  'Anime.js': siAnimedotjs,
+  'LaTeX': siLatex,
 };
 
 // Get icon data for a tech stack item
 function getTechIcon(techName: string) {
-  const slug = techIconMap[techName];
-  if (!slug) return null;
-  
-  try {
-    // Get icon from simple-icons using slug
-    const iconKey = `si${slug.charAt(0).toUpperCase()}${slug.slice(1).replace(/-/g, '')}`;
-    const icon = (simpleIcons as any)[iconKey];
-    return icon || null;
-  } catch {
-    return null;
-  }
+  return iconRegistry[techName] || null;
 }
 ---
 
@@ -141,8 +109,9 @@ function getTechIcon(techName: string) {
               viewBox="0 0 24 24" 
               xmlns="http://www.w3.org/2000/svg"
               aria-label={tech}
-              set:html={icon.path}
-            />
+            >
+              <path d={icon.path} fill="currentColor" />
+            </svg>
           </div>
         ) : (
           <span class="project-card__tech-item" title={tech}>
@@ -219,7 +188,8 @@ function getTechIcon(techName: string) {
       box-shadow var(--duration-medium) var(--ease-out);
     position: relative;
     overflow: hidden;
-    height: 380px; /* Fixed landscape height */
+    min-height: 420px; /* Minimum height for landscape */
+    height: auto; /* Allow natural growth */
     display: flex;
     flex-direction: column;
   }
