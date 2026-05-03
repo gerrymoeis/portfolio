@@ -1,9 +1,10 @@
 /**
  * Tab Audio Visualizer
- * Captures audio from browser tab and visualizes it in real-time
+ * Captures audio from browser tab (desktop) or microphone (mobile) and visualizes it in real-time
  * 
  * Uses:
- * - Screen Capture API (getDisplayMedia) for tab audio capture
+ * - Screen Capture API (getDisplayMedia) for tab audio capture on desktop
+ * - Media Capture API (getUserMedia) for microphone access on mobile
  * - Web Audio API (AnalyserNode) for frequency analysis
  * - Canvas 2D for rendering mirrored frequency bars
  */
@@ -27,8 +28,19 @@ export class TabAudioVisualizer {
   // Status callback
   private onStatusChange: ((status: string, type: 'info' | 'success' | 'error') => void) | null = null;
 
+  // Device detection
+  private isMobile: boolean = false;
+
   constructor() {
+    this.isMobile = this.detectMobile();
     this.init();
+  }
+
+  /**
+   * Detect if device is mobile
+   */
+  private detectMobile(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
   /**
@@ -85,75 +97,142 @@ export class TabAudioVisualizer {
     }
 
     try {
-      this.updateStatus('Requesting tab audio capture... Please select "This Tab" and check "Share audio"', 'info');
-
-      // Request screen/tab capture with audio
-      this.stream = await navigator.mediaDevices.getDisplayMedia({
-        video: true, // Required by spec (we'll ignore video data)
-        audio: {
-          echoCancellation: false,  // Don't filter out music
-          noiseSuppression: false,  // Don't treat music as noise
-          autoGainControl: false,   // Prevent volume changes
-          sampleRate: 48000         // High quality
-        },
-        // Hints (browser may or may not respect these)
-        preferCurrentTab: true,
-        selfBrowserSurface: 'include',
-        surfaceSwitching: 'include',
-        systemAudio: 'include'
-      } as any); // Type assertion for experimental properties
-
-      // Check if audio track exists
-      const audioTracks = this.stream.getAudioTracks();
-      if (audioTracks.length === 0) {
-        throw new Error('No audio track found! Make sure to check "Share audio" in the browser prompt.');
-      }
-
-      this.updateStatus('Audio captured! Initializing visualizer...', 'success');
-
-      // Create Web Audio API context
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-
-      // Create analyser node
-      this.analyser = this.audioContext.createAnalyser();
-      this.analyser.fftSize = 2048; // Higher = more frequency detail
-      this.analyser.smoothingTimeConstant = 0.8; // Smoothing (0-1)
-
-      // Create source from captured stream
-      this.source = this.audioContext.createMediaStreamSource(this.stream);
-
-      // Connect: source → analyser
-      // Note: We DON'T connect to destination to avoid feedback loop
-      this.source.connect(this.analyser);
-
-      // Update state
-      this.isRunning = true;
-
-      // Start visualization
-      this.visualize();
-
-      this.updateStatus('Visualizing! The visualizer is now synced with the audio.', 'success');
-
-      // Handle stream end (user stops sharing)
-      this.stream.getVideoTracks()[0]?.addEventListener('ended', () => {
-        this.updateStatus('Screen sharing stopped by user', 'error');
-        this.stop();
-      });
-
-    } catch (error: any) {
-      let errorMessage = 'Failed to start visualizer: ';
-      
-      if (error.name === 'NotAllowedError') {
-        errorMessage += 'Permission denied. Please allow screen sharing and make sure to check "Share audio".';
-      } else if (error.name === 'NotFoundError') {
-        errorMessage += 'No audio source found. Make sure audio is playing.';
+      if (this.isMobile) {
+        await this.startMicrophone();
       } else {
-        errorMessage += error.message;
+        await this.startTabAudio();
       }
-      
-      this.updateStatus(errorMessage, 'error');
-      this.stop();
+    } catch (error: any) {
+      this.handleStartError(error);
     }
+  }
+
+  /**
+   * Start tab audio capture (Desktop)
+   */
+  private async startTabAudio(): Promise<void> {
+    this.updateStatus('Requesting tab audio capture... Please select "This Tab" and check "Share audio"', 'info');
+
+    // Request screen/tab capture with audio
+    this.stream = await navigator.mediaDevices.getDisplayMedia({
+      video: true, // Required by spec (we'll ignore video data)
+      audio: {
+        echoCancellation: false,  // Don't filter out music
+        noiseSuppression: false,  // Don't treat music as noise
+        autoGainControl: false,   // Prevent volume changes
+        sampleRate: 48000         // High quality
+      },
+      // Hints (browser may or may not respect these)
+      preferCurrentTab: true,
+      selfBrowserSurface: 'include',
+      surfaceSwitching: 'include',
+      systemAudio: 'include'
+    } as any); // Type assertion for experimental properties
+
+    // Check if audio track exists
+    const audioTracks = this.stream.getAudioTracks();
+    if (audioTracks.length === 0) {
+      throw new Error('No audio track found! Make sure to check "Share audio" in the browser prompt.');
+    }
+
+    this.updateStatus('Audio captured! Initializing visualizer...', 'success');
+
+    // Initialize audio processing
+    await this.initAudioProcessing();
+
+    // Handle stream end (user stops sharing)
+    this.stream.getVideoTracks()[0]?.addEventListener('ended', () => {
+      this.updateStatus('Screen sharing stopped by user', 'error');
+      this.stop();
+    });
+  }
+
+  /**
+   * Start microphone capture (Mobile)
+   */
+  private async startMicrophone(): Promise<void> {
+    this.updateStatus('Requesting microphone access... Please allow microphone permission.', 'info');
+
+    // Request microphone access
+    this.stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: false,  // Don't filter out music
+        noiseSuppression: false,  // Don't treat music as noise
+        autoGainControl: false,   // Prevent volume changes
+        sampleRate: 48000         // High quality
+      }
+    });
+
+    // Check if audio track exists
+    const audioTracks = this.stream.getAudioTracks();
+    if (audioTracks.length === 0) {
+      throw new Error('No audio track found! Please allow microphone access.');
+    }
+
+    this.updateStatus('Microphone access granted! Initializing visualizer...', 'success');
+
+    // Initialize audio processing
+    await this.initAudioProcessing();
+
+    // Handle stream end (user stops microphone)
+    this.stream.getAudioTracks()[0]?.addEventListener('ended', () => {
+      this.updateStatus('Microphone access stopped', 'error');
+      this.stop();
+    });
+  }
+
+  /**
+   * Initialize audio processing (shared by both desktop and mobile)
+   */
+  private async initAudioProcessing(): Promise<void> {
+    if (!this.stream) return;
+
+    // Create Web Audio API context
+    this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+
+    // Create analyser node
+    this.analyser = this.audioContext.createAnalyser();
+    this.analyser.fftSize = 2048; // Higher = more frequency detail
+    this.analyser.smoothingTimeConstant = 0.8; // Smoothing (0-1)
+
+    // Create source from captured stream
+    this.source = this.audioContext.createMediaStreamSource(this.stream);
+
+    // Connect: source → analyser
+    // Note: We DON'T connect to destination to avoid feedback loop
+    this.source.connect(this.analyser);
+
+    // Update state
+    this.isRunning = true;
+
+    // Start visualization
+    this.visualize();
+
+    this.updateStatus('Visualizing! The visualizer is now synced with the audio.', 'success');
+  }
+
+  /**
+   * Handle start errors
+   */
+  private handleStartError(error: any): void {
+    let errorMessage = 'Failed to start visualizer: ';
+    
+    if (error.name === 'NotAllowedError') {
+      if (this.isMobile) {
+        errorMessage += 'Microphone permission denied. Please allow microphone access in your browser settings.';
+      } else {
+        errorMessage += 'Permission denied. Please allow screen sharing and make sure to check "Share audio".';
+      }
+    } else if (error.name === 'NotFoundError') {
+      errorMessage += 'No audio source found. Make sure audio is available.';
+    } else if (error.name === 'NotSupportedError') {
+      errorMessage += 'This feature is not supported on your device/browser.';
+    } else {
+      errorMessage += error.message;
+    }
+    
+    this.updateStatus(errorMessage, 'error');
+    this.stop();
   }
 
   /**

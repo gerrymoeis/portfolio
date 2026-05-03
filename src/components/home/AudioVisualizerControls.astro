@@ -32,11 +32,11 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
       <p class="visualizer-landing__description" data-bilingual="visualizer-description">
         <span data-lang="en">
           This site features a <span class="visualizer-landing__highlight">real-time music visualizer</span> that syncs with <span class="visualizer-landing__highlight">audio playback</span>. 
-          To enable it, we'll need permission to listen to this tab's audio.
+          On desktop, we'll need permission to listen to this tab's audio. On mobile, we'll use your microphone to visualize ambient sound.
         </span>
         <span data-lang="id">
           Situs ini memiliki <span class="visualizer-landing__highlight">visualizer musik real-time</span> yang sinkron dengan <span class="visualizer-landing__highlight">pemutaran audio</span>. 
-          Untuk mengaktifkannya, kami memerlukan izin untuk mendengarkan audio tab ini.
+          Di desktop, kami memerlukan izin untuk mendengarkan audio tab ini. Di mobile, kami akan menggunakan mikrofon Anda untuk memvisualisasikan suara sekitar.
         </span>
       </p>
       <p class="visualizer-landing__privacy" data-bilingual="visualizer-privacy">
@@ -104,32 +104,42 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
       // Status messages
       alreadyRunning: 'Visualizer is already running',
       requesting: 'Requesting tab audio capture... Please select "This Tab" and check "Share audio"',
+      requestingMic: 'Requesting microphone access... Please allow microphone permission.',
       audioCaptured: 'Audio captured! Initializing visualizer...',
+      micGranted: 'Microphone access granted! Initializing visualizer...',
       visualizing: 'Visualizing! The visualizer is now synced with the audio.',
       screenSharingStopped: 'Screen sharing stopped by user',
+      micStopped: 'Microphone access stopped',
       waiting: 'Waiting for music...',
       stopped: 'Visualizer stopped. Click "Start Visualizer" to begin again.',
       
       // Error messages
       permissionDenied: 'Permission denied. Please allow screen sharing and make sure to check "Share audio".',
+      micPermissionDenied: 'Microphone permission denied. Please allow microphone access in your browser settings.',
       noAudioTrack: 'No audio track found! Make sure to check "Share audio" in the browser prompt.',
-      noAudioSource: 'No audio source found. Make sure audio is playing.',
+      noAudioSource: 'No audio source found. Make sure audio is available.',
+      notSupported: 'This feature is not supported on your device/browser.',
       failed: 'Failed to start visualizer: ',
     },
     id: {
       // Status messages
       alreadyRunning: 'Visualizer sudah berjalan',
       requesting: 'Meminta izin tangkapan audio tab... Silakan pilih "This Tab" dan centang "Share audio"',
+      requestingMic: 'Meminta izin akses mikrofon... Harap izinkan akses mikrofon.',
       audioCaptured: 'Audio berhasil ditangkap! Menginisialisasi visualizer...',
+      micGranted: 'Akses mikrofon diberikan! Menginisialisasi visualizer...',
       visualizing: 'Memvisualisasikan! Visualizer sekarang tersinkronisasi dengan audio.',
       screenSharingStopped: 'Berbagi layar dihentikan oleh pengguna',
+      micStopped: 'Akses mikrofon dihentikan',
       waiting: 'Menunggu musik...',
       stopped: 'Visualizer dihentikan. Klik "Mulai Visualizer" untuk memulai lagi.',
       
       // Error messages
       permissionDenied: 'Izin ditolak. Harap izinkan berbagi layar dan pastikan untuk mencentang "Share audio".',
+      micPermissionDenied: 'Izin mikrofon ditolak. Harap izinkan akses mikrofon di pengaturan browser Anda.',
       noAudioTrack: 'Track audio tidak ditemukan! Pastikan untuk mencentang "Share audio" di prompt browser.',
-      noAudioSource: 'Sumber audio tidak ditemukan. Pastikan audio sedang diputar.',
+      noAudioSource: 'Sumber audio tidak ditemukan. Pastikan audio tersedia.',
+      notSupported: 'Fitur ini tidak didukung di perangkat/browser Anda.',
       failed: 'Gagal memulai visualizer: ',
     }
   };
@@ -356,21 +366,33 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
       } else if (message.includes('Requesting tab audio capture')) {
         messageKey = 'requesting';
         translatedMessage = getMessage('requesting');
+      } else if (message.includes('Requesting microphone access')) {
+        messageKey = 'requestingMic';
+        translatedMessage = getMessage('requestingMic');
       } else if (message.includes('Audio captured')) {
         messageKey = 'audioCaptured';
         translatedMessage = getMessage('audioCaptured');
+      } else if (message.includes('Microphone access granted')) {
+        messageKey = 'micGranted';
+        translatedMessage = getMessage('micGranted');
       } else if (message.includes('Visualizing!')) {
         messageKey = 'visualizing';
         translatedMessage = getMessage('visualizing');
       } else if (message.includes('Screen sharing stopped')) {
         messageKey = 'screenSharingStopped';
         translatedMessage = getMessage('screenSharingStopped');
+      } else if (message.includes('Microphone access stopped')) {
+        messageKey = 'micStopped';
+        translatedMessage = getMessage('micStopped');
       } else if (message.includes('Waiting for music')) {
         messageKey = 'waiting';
         translatedMessage = getMessage('waiting');
       } else if (message.includes('stopped')) {
         messageKey = 'stopped';
         translatedMessage = getMessage('stopped');
+      } else if (message.includes('Microphone permission denied')) {
+        messageKey = 'micPermissionDenied';
+        translatedMessage = getMessage('micPermissionDenied');
       } else if (message.includes('Permission denied')) {
         messageKey = 'permissionDenied';
         translatedMessage = getMessage('permissionDenied');
@@ -380,6 +402,9 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
       } else if (message.includes('No audio source')) {
         messageKey = 'noAudioSource';
         translatedMessage = getMessage('noAudioSource');
+      } else if (message.includes('not supported')) {
+        messageKey = 'notSupported';
+        translatedMessage = getMessage('notSupported');
       } else if (message.includes('Failed to start visualizer')) {
         // For "Failed" messages, we keep the dynamic error part in English
         messageKey = 'failed';
