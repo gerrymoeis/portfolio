@@ -10,8 +10,8 @@ year: 2025
 status: "completed"
 category: "web"
 techStack: ["Astro", "Vue", "TypeScript", "Tailwind CSS", "Anime.js"]
-thumbnail: "/images/projects/hd2d-portfolio-hero.svg"
-heroImage: "/images/projects/hd2d-portfolio-hero.svg"
+thumbnail: "/images/projects/innovation-lab-thumb.webp"
+heroImage: "/images/projects/innovation-lab-hero.webp"
 links:
   github: "https://github.com/gerrymoeis/innovation-lab-himafortic"
   live: "https://inlab-himafortic.netlify.app"

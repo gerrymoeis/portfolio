@@ -135,6 +135,23 @@ async function generateCV() {
 }
 
 /**
+ * Optimize project images
+ */
+async function optimizeImages() {
+  log('🖼️  Optimizing project images...', colors.blue);
+  
+  try {
+    exec('node scripts/optimize-images.mjs');
+    logSuccess('Image optimization completed');
+    return true;
+  } catch (error) {
+    logError('Image optimization failed');
+    console.error(error.message);
+    return false;
+  }
+}
+
+/**
  * Check if CV files have changes
  */
 function checkCVChanges() {
@@ -245,7 +262,15 @@ async function main() {
     
     console.log('');
     
-    // Step 2: Generate CV
+    // Step 2: Optimize images
+    const imagesSuccess = await optimizeImages();
+    if (!imagesSuccess) {
+      logWarning('Image optimization failed, but continuing...');
+    }
+    
+    console.log('');
+    
+    // Step 3: Generate CV
     const cvSuccess = await generateCV();
     if (!cvSuccess) {
       logError('Deployment stopped: CV generation failed');
@@ -254,7 +279,7 @@ async function main() {
     
     console.log('');
     
-    // Step 3: Check for changes
+    // Step 4: Check for changes
     log('🔍 Checking for CV changes...', colors.blue);
     const { hasChanges, changedFiles } = checkCVChanges();
     
@@ -265,7 +290,7 @@ async function main() {
     
     console.log('');
     
-    // Step 4: Commit and push
+    // Step 5: Commit and push
     const pushSuccess = await commitAndPush(changedFiles);
     if (!pushSuccess) {
       logError('Deployment failed during commit/push');

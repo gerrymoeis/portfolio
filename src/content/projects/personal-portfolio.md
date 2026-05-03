@@ -10,8 +10,8 @@ year: 2026
 status: "in-progress"
 category: "web"
 techStack: ["Astro", "TypeScript", "CSS", "LaTeX"]
-thumbnail: "/images/projects/hd2d-portfolio-hero.svg"
-heroImage: "/images/projects/hd2d-portfolio-hero.svg"
+thumbnail: "/images/projects/personal-portfolio-thumb.webp"
+heroImage: "/images/projects/personal-portfolio-hero.webp"
 links:
   github: "https://github.com/gerrymoeis/portfolio"
   live: "https://gerrymoeis.pages.dev"

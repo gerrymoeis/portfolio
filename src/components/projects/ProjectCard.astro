@@ -74,12 +74,15 @@ function getTechIcon(techName: string) {
   <div class="project-card__content">
     <!-- Thumbnail - Top -->
     <div class="project-card__thumbnail">
-      <img 
-        src={thumbnail} 
-        alt={`${title.en} thumbnail`}
-        loading="lazy"
-        class="project-card__image"
-      />
+      <picture>
+        <source srcset={thumbnail} type="image/webp" />
+        <img 
+          src={thumbnail.replace('.webp', '.jpg')} 
+          alt={`${title.en} thumbnail`}
+          loading="lazy"
+          class="project-card__image"
+        />
+      </picture>
     </div>
     
     <!-- Title - Center aligned for emphasis -->

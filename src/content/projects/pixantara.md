@@ -10,8 +10,8 @@ year: 2025
 status: "experimental"
 category: "web"
 techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "GSAP"]
-thumbnail: "/images/projects/hd2d-portfolio-hero.svg"
-heroImage: "/images/projects/hd2d-portfolio-hero.svg"
+thumbnail: "/images/projects/pixantara-thumb.webp"
+heroImage: "/images/projects/pixantara-hero.webp"
 links:
   github: "https://github.com/gerrymoeis/pixantara_nextjs"
   live: "https://pixantara.vercel.app"
