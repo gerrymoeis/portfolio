@@ -51,16 +51,44 @@ const filteredSocial = social.filter(link => link.name.toLowerCase() !== 'linked
   <!-- Download CV Button -->
   <div class="social-panel__cv-section">
     <ActionButton
-      href="/cv.pdf"
+      href="/Gerry Moeis_CV_EN.pdf"
       icon="download"
       labelEn="Download CV"
       labelId="Unduh CV"
       variant="inline"
       download={true}
       ariaLabel="Download CV"
+      id="cvDownloadBtn"
     />
   </div>
 </div>
+
+<script>
+  /**
+   * Update CV download link based on current language
+   */
+  function updateCVLink() {
+    const cvBtn = document.getElementById('cvDownloadBtn');
+    if (!cvBtn) return;
+    
+    const currentLang = document.documentElement.getAttribute('lang') || 'en';
+    const cvFile = currentLang === 'id' 
+      ? '/Gerry Moeis_CV_ID.pdf' 
+      : '/Gerry Moeis_CV_EN.pdf';
+    
+    cvBtn.setAttribute('href', cvFile);
+  }
+  
+  // Update on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateCVLink);
+  } else {
+    updateCVLink();
+  }
+  
+  // Listen for language changes
+  window.addEventListener('languagechange', updateCVLink);
+</script>
 
 <style>
   .social-panel {

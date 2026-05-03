@@ -10,6 +10,7 @@ import { writeFile, mkdir, readFile, rm } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { glob } from 'glob';
+import yaml from 'js-yaml';
 
 const execFileAsync = promisify(execFile);
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -39,7 +40,8 @@ function escapeLatex(text) {
 }
 
 /**
- * Parse frontmatter from markdown file
+ * Parse frontmatter from markdown file using js-yaml
+ * Supports nested objects for bilingual content
  */
 function parseFrontmatter(content) {
   // Normalize line endings
@@ -48,31 +50,14 @@ function parseFrontmatter(content) {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
   if (!match) return null;
 
-  const frontmatter = {};
-  const lines = match[1].split('\n');
-  
-  for (const line of lines) {
-    if (!line.includes(':')) continue;
-    
-    const colonIndex = line.indexOf(':');
-    const key = line.substring(0, colonIndex).trim();
-    let value = line.substring(colonIndex + 1).trim();
-    
-    // Handle arrays in bracket notation: ["item1", "item2"]
-    if (value.startsWith('[') && value.endsWith(']')) {
-      value = value.slice(1, -1)
-        .split(',')
-        .map(item => item.trim().replace(/^["']|["']$/g, ''))
-        .filter(Boolean);
-    } else {
-      // Remove quotes from strings
-      value = value.replace(/^["']|["']$/g, '');
-    }
-    
-    frontmatter[key] = value;
+  try {
+    // Use js-yaml to parse YAML frontmatter (supports nested objects)
+    const frontmatter = yaml.load(match[1]);
+    return frontmatter;
+  } catch (error) {
+    console.error('Error parsing frontmatter:', error.message);
+    return null;
   }
-  
-  return frontmatter;
 }
 
 /**
@@ -90,9 +75,18 @@ async function aggregateCVData() {
     const frontmatter = parseFrontmatter(content);
     
     if (frontmatter) {
+      // Handle bilingual title and summary
+      const title = typeof frontmatter.title === 'object' 
+        ? frontmatter.title 
+        : { en: frontmatter.title, id: frontmatter.title };
+      
+      const summary = typeof frontmatter.summary === 'object'
+        ? frontmatter.summary
+        : { en: frontmatter.summary, id: frontmatter.summary };
+      
       projects.push({
-        title: frontmatter.title,
-        summary: frontmatter.summary,
+        title: title,
+        summary: summary,
         year: frontmatter.year || '2025',
         techStack: Array.isArray(frontmatter.techStack) ? frontmatter.techStack : [],
         date: new Date(frontmatter.date || '2025-01-01'),
@@ -151,8 +145,8 @@ async function aggregateCVData() {
           id: 'Surabaya, Indonesia',
         },
         degree: {
-          en: 'Bachelor of Informatics Engineering',
-          id: 'Sarjana Teknik Informatika',
+          en: 'Bachelor of Informatics Management',
+          id: 'Sarjana Terapan Manajemen Informatika',
         },
         period: {
           en: '2023 -- Present',
@@ -221,13 +215,10 @@ async function aggregateCVData() {
       },
     ],
     projects: projects.map(p => ({
-      title: p.title,
+      title: p.title, // Keep as object { en, id }
       techStack: p.techStack,
       period: String(p.year),
-      details: {
-        en: [p.summary],
-        id: [p.summary],
-      },
+      details: p.summary, // Keep as object { en, id }
     })),
     skills: {
       languages: Array.from(languages).sort(),
@@ -394,11 +385,15 @@ ${exp.details[lang].map(detail => `        \\resumeItem{${escapeLatex(detail)}}`
 %-----------PROJECTS-----------
 \\section{${t.projects}}
     \\resumeSubHeadingListStart
-${projects.map(proj => `      \\resumeProjectHeading
-          {\\textbf{${escapeLatex(proj.title)}} $|$ \\emph{${proj.techStack.map(escapeLatex).join(', ')}}}{${escapeLatex(proj.period)}}
+${projects.map(proj => {
+  const projectTitle = typeof proj.title === 'object' ? proj.title[lang] : proj.title;
+  const projectDetails = typeof proj.details === 'object' ? [proj.details[lang]] : [proj.details];
+  return `      \\resumeProjectHeading
+          {\\textbf{${escapeLatex(projectTitle)}} $|$ \\emph{${proj.techStack.map(escapeLatex).join(', ')}}}{${escapeLatex(proj.period)}}
           \\resumeItemListStart
-${proj.details[lang].map(detail => `            \\resumeItem{${escapeLatex(detail)}}`).join('\n')}
-          \\resumeItemListEnd`).join('\n')}
+${projectDetails.map(detail => `            \\resumeItem{${escapeLatex(detail)}}`).join('\n')}
+          \\resumeItemListEnd`;
+}).join('\n')}
     \\resumeSubHeadingListEnd
 
 %-----------TECHNICAL SKILLS-----------
