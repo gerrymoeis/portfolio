@@ -1,7 +1,8 @@
 ---
 /**
  * SoundCloudPlaylistCarousel - Carousel for SoundCloud playlist embeds
- * Optimized with single iframe per playlist using universal amber color (#ffa600)
+ * Optimized with lazy loading using Intersection Observer
+ * Single iframe per playlist using universal amber color (#ffa600)
  */
 
 import NavigationControls from './NavigationControls.astro';
@@ -21,12 +22,15 @@ export interface Props {
   showControls?: boolean;
   /** Additional CSS class names */
   className?: string;
+  /** Enable lazy loading (default: true) */
+  lazyLoad?: boolean;
 }
 
 const { 
   playlists = [],
   showControls = true,
-  className = ''
+  className = '',
+  lazyLoad = true
 } = Astro.props;
 
 // Determine if we should show carousel controls
@@ -48,6 +52,7 @@ const liveRegionId = `${carouselId}-live-region`;
     data-total-playlists={playlists.length}
     data-show-controls={shouldShowControls}
     data-playlists={JSON.stringify(playlists)}
+    data-lazy-load={lazyLoad}
   >
     <!-- Accessibility: Live region for screen reader announcements -->
     <div 
@@ -68,19 +73,36 @@ const liveRegionId = `${carouselId}-live-region`;
         <div 
           class={`carousel-embed ${index === 0 ? 'active' : ''}`}
           data-index={index}
+          data-embed-url={playlist.embedUrl}
+          data-embed-title={playlist.title}
+          data-loaded={!lazyLoad && index === 0 ? 'true' : 'false'}
           style={index === 0 ? '' : 'display: none;'}
         >
-          <iframe 
-            class="soundcloud-iframe"
-            width="100%" 
-            height="450"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-presentation"
-            src={playlist.embedUrl}
-            title={playlist.title}
-            loading={index === 0 ? 'eager' : 'lazy'}
-            style="border: none;"
-          ></iframe>
+          {lazyLoad ? (
+            <!-- Lazy load placeholder -->
+            <div class="soundcloud-placeholder" data-playlist-index={index}>
+              <div class="placeholder-content">
+                <svg class="placeholder-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" fill="currentColor"/>
+                </svg>
+                <p class="placeholder-text">Click to load {playlist.title}</p>
+                <p class="placeholder-artist">{playlist.artist}</p>
+              </div>
+            </div>
+          ) : (
+            <!-- Immediate load -->
+            <iframe 
+              class="soundcloud-iframe"
+              width="100%" 
+              height="450"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-presentation"
+              src={playlist.embedUrl}
+              title={playlist.title}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              style="border: none;"
+            ></iframe>
+          )}
         </div>
       ))}
     </div>
@@ -199,6 +221,62 @@ const liveRegionId = `${carouselId}-live-region`;
     margin-top: 2px;
   }
 
+  /* Lazy load placeholder styling */
+  .soundcloud-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface);
+    border-radius: 8px;
+    border: 2px dashed var(--color-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .soundcloud-placeholder:hover {
+    border-color: var(--color-accent);
+    background: var(--color-surface-elevated);
+  }
+
+  .placeholder-content {
+    text-align: center;
+    padding: var(--space-6);
+  }
+
+  .placeholder-icon {
+    color: var(--color-accent);
+    margin-bottom: var(--space-4);
+    opacity: 0.8;
+  }
+
+  .placeholder-text {
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .placeholder-artist {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  /* Loading state */
+  .soundcloud-placeholder.loading {
+    pointer-events: none;
+  }
+
+  .soundcloud-placeholder.loading .placeholder-icon {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.3; }
+  }
+
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .carousel-embed-container {
@@ -240,7 +318,7 @@ const liveRegionId = `${carouselId}-live-region`;
 </style>
 
 <script>
-  // SoundCloud carousel navigation
+  // SoundCloud carousel navigation with lazy loading
   class SoundCloudPlaylistCarousel {
     private container: HTMLElement;
     private liveRegion: HTMLElement;
@@ -248,6 +326,8 @@ const liveRegionId = `${carouselId}-live-region`;
     private totalPlaylists: number;
     private playlists: any[];
     private embeds: NodeListOf<HTMLElement>;
+    private lazyLoad: boolean;
+    private observer: IntersectionObserver | null = null;
     
     constructor(container: HTMLElement) {
       this.container = container;
@@ -255,15 +335,93 @@ const liveRegionId = `${carouselId}-live-region`;
       this.totalPlaylists = parseInt(container.dataset.totalPlaylists || '0', 10);
       this.playlists = JSON.parse(container.dataset.playlists || '[]');
       this.embeds = container.querySelectorAll('.carousel-embed');
+      this.lazyLoad = container.dataset.lazyLoad === 'true';
       
       this.init();
     }
     
     private init() {
+      if (this.lazyLoad) {
+        this.setupLazyLoading();
+      }
+      
       if (this.totalPlaylists <= 1) return;
       
       this.setupEventListeners();
       this.updateAccessibility();
+    }
+    
+    private setupLazyLoading() {
+      // Setup Intersection Observer for lazy loading
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.loadVisibleEmbeds();
+              // Disconnect after first load
+              if (this.observer) {
+                this.observer.disconnect();
+              }
+            }
+          });
+        },
+        {
+          rootMargin: '100px', // Load 100px before visible
+          threshold: 0.1
+        }
+      );
+      
+      this.observer.observe(this.container);
+      
+      // Setup click handlers for placeholders
+      const placeholders = this.container.querySelectorAll('.soundcloud-placeholder');
+      placeholders.forEach((placeholder, index) => {
+        placeholder.addEventListener('click', () => {
+          this.loadEmbed(index);
+        });
+      });
+    }
+    
+    private loadVisibleEmbeds() {
+      // Load the first (active) embed
+      this.loadEmbed(this.currentIndex);
+    }
+    
+    private loadEmbed(index: number) {
+      const embed = this.embeds[index];
+      if (!embed) return;
+      
+      const isLoaded = embed.dataset.loaded === 'true';
+      if (isLoaded) return;
+      
+      const placeholder = embed.querySelector('.soundcloud-placeholder');
+      if (!placeholder) return;
+      
+      // Add loading state
+      placeholder.classList.add('loading');
+      
+      // Get embed data
+      const embedUrl = embed.dataset.embedUrl;
+      const embedTitle = embed.dataset.embedTitle;
+      
+      if (!embedUrl) return;
+      
+      // Create iframe
+      const iframe = document.createElement('iframe');
+      iframe.className = 'soundcloud-iframe';
+      iframe.width = '100%';
+      iframe.height = '450';
+      iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+      iframe.sandbox.add('allow-forms', 'allow-popups', 'allow-popups-to-escape-sandbox', 'allow-same-origin', 'allow-scripts', 'allow-presentation');
+      iframe.src = embedUrl;
+      iframe.title = embedTitle || `SoundCloud playlist ${index + 1}`;
+      iframe.style.border = 'none';
+      
+      // Replace placeholder with iframe
+      placeholder.replaceWith(iframe);
+      
+      // Mark as loaded
+      embed.dataset.loaded = 'true';
     }
     
     private setupEventListeners() {
@@ -319,6 +477,11 @@ const liveRegionId = `${carouselId}-live-region`;
     private navigateToIndex(index: number) {
       if (index === this.currentIndex || index < 0 || index >= this.totalPlaylists) {
         return;
+      }
+      
+      // Load embed if lazy loading is enabled
+      if (this.lazyLoad) {
+        this.loadEmbed(index);
       }
       
       // Hide current embed
