@@ -27,6 +27,20 @@ const isLinkActive = (linkHref: string): boolean => {
   }
   return currentPath.startsWith(linkHref);
 };
+
+// Helper function to determine if target="_blank" should be rendered
+// Only render target="_blank" on homepage, remove it on /projects and /blogs pages
+const shouldRenderTarget = (linkTarget?: string): string | undefined => {
+  if (!linkTarget) return undefined;
+  
+  // Remove target="_blank" on /projects and /blogs pages
+  if (currentPath.startsWith('/projects') || currentPath.startsWith('/blogs')) {
+    return undefined;
+  }
+  
+  // Keep target="_blank" on homepage and other pages
+  return linkTarget;
+};
 ---
 
 <!-- Mobile hamburger button (visible < 768px) - Outside nav wrapper -->
@@ -47,6 +61,7 @@ const isLinkActive = (linkHref: string): boolean => {
     <ul class="semi-cylindrical-nav__list">
       {links.map((link) => {
         const isActive = isLinkActive(link.href);
+        const targetAttr = shouldRenderTarget(link.target);
         return (
           <li class="semi-cylindrical-nav__item">
             <a 
@@ -54,8 +69,8 @@ const isLinkActive = (linkHref: string): boolean => {
               class={`semi-cylindrical-nav__link ${isActive ? 'semi-cylindrical-nav__link--active' : ''}`}
               aria-label={`Navigate to ${link.label.en}`}
               aria-current={isActive ? 'page' : undefined}
-              target={link.target}
-              rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+              target={targetAttr}
+              rel={targetAttr === '_blank' ? 'noopener noreferrer' : undefined}
               download={link.download}
               data-bilingual="nav"
             >
@@ -80,6 +95,7 @@ const isLinkActive = (linkHref: string): boolean => {
   <ul class="semi-cylindrical-nav__list">
     {links.map((link) => {
       const isActive = isLinkActive(link.href);
+      const targetAttr = shouldRenderTarget(link.target);
       return (
         <li class="semi-cylindrical-nav__item">
           <a 
@@ -87,8 +103,8 @@ const isLinkActive = (linkHref: string): boolean => {
             class={`semi-cylindrical-nav__link ${isActive ? 'semi-cylindrical-nav__link--active' : ''}`}
             aria-label={`Navigate to ${link.label.en}`}
             aria-current={isActive ? 'page' : undefined}
-            target={link.target}
-            rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+            target={targetAttr}
+            rel={targetAttr === '_blank' ? 'noopener noreferrer' : undefined}
             download={link.download}
             data-bilingual="nav"
           >
