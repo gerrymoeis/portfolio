@@ -436,29 +436,9 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
     }
 
     /**
-     * Detect SoundCloud playback
-     */
-    function detectSoundCloudPlayback(): boolean {
-      const iframes = document.querySelectorAll('iframe');
-      for (const iframe of Array.from(iframes)) {
-        if (iframe.src && iframe.src.includes('soundcloud.com')) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    /**
      * Check if should show landing overlay
      */
     function checkFirstVisit(): void {
-      const hasSoundCloud = detectSoundCloudPlayback();
-      
-      if (!hasSoundCloud) {
-        // No SoundCloud, don't show anything
-        return;
-      }
-
       if (!landingManager.hasBeenShown()) {
         // First visit - show landing overlay
         setTimeout(() => {
