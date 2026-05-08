@@ -9,7 +9,7 @@
  * - Non-blocking to page content
  * - Rate limit handling dengan exponential backoff
  * - Request validation
- * - localStorage-based duplicate prevention (24-hour window)
+ * - localStorage-based duplicate prevention (7-day window)
  */
 
 /**
@@ -30,7 +30,7 @@ function isValidSlug(slug: string): boolean {
 
 /**
  * Check if view has been tracked recently
- * Uses localStorage to prevent duplicate counts within 24-hour window
+ * Uses localStorage to prevent duplicate counts within 7-day window
  * 
  * @param slug - The blog post slug
  * @returns True if view was already tracked recently
@@ -44,10 +44,10 @@ function hasRecentView(slug: string): boolean {
     
     const lastViewTime = parseInt(lastView, 10);
     const now = Date.now();
-    const twentyFourHours = 24 * 60 * 60 * 1000;
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
     
-    // Check if last view was within 24 hours
-    return (now - lastViewTime) < twentyFourHours;
+    // Check if last view was within 7 days
+    return (now - lastViewTime) < sevenDays;
   } catch {
     // If localStorage is not available, allow tracking
     return false;
@@ -74,7 +74,7 @@ function markViewTracked(slug: string): void {
  * Sends a POST request to increment the view counter
  * Implements retry logic dengan exponential backoff for 429 responses
  * Fails silently on errors to avoid blocking page functionality
- * Uses localStorage to prevent duplicate tracking within 24 hours
+ * Uses localStorage to prevent duplicate tracking within 7 days
  * 
  * @param slug - The blog post slug
  * @param apiUrl - The base API URL from environment variables
@@ -94,7 +94,7 @@ export async function trackView(slug: string, apiUrl: string): Promise<void> {
       return;
     }
 
-    // Check if view was already tracked recently (24-hour window)
+    // Check if view was already tracked recently (7-day window)
     if (hasRecentView(slug)) {
       if (import.meta.env.DEV) {
         console.log('[ViewCounter] View already tracked recently, skipping');
