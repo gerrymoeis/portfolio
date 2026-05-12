@@ -19,6 +19,8 @@ const IMAGE_MAPPING = {
   'gerrymoeis.pages.dev.jpg': 'personal-portfolio',
   'inlab-himafortic.netlify.app.jpg': 'innovation-lab',
   'pixantara.vercel.app.jpg': 'pixantara',
+  'sistem-absensi-kantor.jpg': 'face-recognition-attendance',
+  'kangen-wisata-tour.jpg': 'kangen-wisata-tour',
 };
 
 // Image dimensions

@@ -17,7 +17,10 @@ pnpm-debug.log*
 .env
 .env.production
 
-# macOS-specifi# jetbrains setting# jetbrains setting folder
+# macOS
+.DS_Store
+
+# JetBrains settings
 .idea/
 
 # Kiro AI assistant
@@ -26,11 +29,13 @@ pnpm-debug.log*
 # VS Code settings
 .vscode
 
+# Environment files
+.env.local
+.env.development
+
 # Documentation (if you want to keep docs out of repo)
 docs
 
 # Wrangler build artifacts
-.wrangler/s
-.wrangler/act
 .wrangler/
 

@@ -9,7 +9,7 @@ date: 2026-01-15
 year: 2026
 status: "in-progress"
 category: "web"
-techStack: ["Astro", "TypeScript", "CSS", "LaTeX"]
+techStack: ["Astro", "TypeScript", "JavaScript", "CSS", "LaTeX"]
 thumbnail: "/images/projects/personal-portfolio-thumb.webp"
 heroImage: "/images/projects/personal-portfolio-hero.webp"
 links:
