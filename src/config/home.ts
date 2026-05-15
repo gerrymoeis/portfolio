@@ -112,12 +112,12 @@ export const personalInfo = {
     en: "State University of Surabaya"
   },
   role: {
-    id: "Kepala Departemen Riset dan Teknologi - Himafortic",
-    en: "Head of Research and Technology Department - Himafortic"
+    id: "Tech & Programming Enthusiast",
+    en: "Tech & Programming Enthusiast"
   },
   bio: {
-    id: "Mahasiswa Teknik Informatika yang berfokus pada pengembangan web, penelitian teknologi, dan inovasi pendidikan pemrograman. Berpengalaman dalam memimpin tim dan mengembangkan solusi teknologi untuk berbagai kebutuhan.",
-    en: "Computer Science student focused on web development, technology research, and programming education innovation. Experienced in leading teams and developing technology solutions for various needs."
+    id: "Mahasiswa Teknik Informatika yang antusias dalam pengembangan web, eksplorasi teknologi baru, dan membangun solusi digital yang bermanfaat.",
+    en: "Computer Science student passionate about web development, exploring new technologies, and building meaningful digital solutions."
   }
 };
 

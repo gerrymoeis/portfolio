@@ -133,7 +133,7 @@ Website ini demonstrate kemampuan untuk build functional, informative website de
 
 ---
 
-**Role**: Head of Research and Technology Department - Himafortic  
+**Role**: Project Lead - Innovation Lab Himafortic  
 **Tech Stack**: Astro, Vue, TypeScript, Tailwind CSS, Anime.js, Netlify  
 **Status**: Completed - Program telah selesai dilaksanakan  
 **Live**: [inlab-himafortic.netlify.app](https://inlab-himafortic.netlify.app)

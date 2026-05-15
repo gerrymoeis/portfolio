@@ -71,4 +71,4 @@ MIT License
 
 **Developer**: Gerry Moeis  
 **University**: State University of Surabaya  
-**Role**: R&D Head, Himafortic
+**Role**: Web Developer & Tech Enthusiast
