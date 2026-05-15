@@ -143,7 +143,7 @@ async function aggregateCVData() {
     personal: {
       name: 'Gerry Moeis M.D.P',
       phone: '088293253626',
-      email: 'gerrymoeis7@gmail.com',
+      email: 'gerrymoeis@gmail.com',
       github: 'github.com/gerrymoeis',
       website: 'gerrymoeis.pages.dev',
     },

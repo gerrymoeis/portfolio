@@ -62,7 +62,7 @@ export const homeConfig: HomeConfig = {
     },
     { 
       name: "Email", 
-      url: "mailto:gerrymoeis7@gmail.com", 
+      url: "mailto:gerrymoeis@gmail.com", 
       icon: "email" 
     },
   ],
@@ -100,7 +100,7 @@ export const homeConfig: HomeConfig = {
 export const personalInfo = {
   fullName: "Gerry Moeis Mahardika Dwi Putra",
   shortName: "Gerry Moeis",
-  email: "gerrymoeis7@gmail.com",
+  email: "gerrymoeis@gmail.com",
   phone: "088293253626",
   github: "github.com/gerrymoeis",
   location: {
