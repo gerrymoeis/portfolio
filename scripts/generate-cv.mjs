@@ -90,6 +90,8 @@ async function aggregateCVData() {
         year: frontmatter.year || '2025',
         techStack: Array.isArray(frontmatter.techStack) ? frontmatter.techStack : [],
         date: new Date(frontmatter.date || '2025-01-01'),
+        status: frontmatter.status || 'completed',
+        priority: frontmatter.priority || 0,
       });
       
       if (Array.isArray(frontmatter.techStack)) {
@@ -98,8 +100,15 @@ async function aggregateCVData() {
     }
   }
   
-  // Sort by date
-  projects.sort((a, b) => b.date - a.date);
+  // Sort by priority (in-progress first) then by date (newest first)
+  projects.sort((a, b) => {
+    if (a.status === 'in-progress' && b.status !== 'in-progress') return -1;
+    if (a.status !== 'in-progress' && b.status === 'in-progress') return 1;
+    if (a.status === 'in-progress' && b.status === 'in-progress') {
+      return (b.priority || 0) - (a.priority || 0);
+    }
+    return b.date - a.date;
+  });
   
   // Categorize tech stack
   const languages = new Set();
@@ -335,8 +344,8 @@ function generateLatexCV(data, lang = 'en') {
 
 \\newcommand{\\resumeProjectHeading}[2]{
     \\item
-    \\begin{tabular*}{0.97\\textwidth}{l@{\\extracolsep{\\fill}}r}
-      \\small#1 & #2 \\\\
+    \\begin{tabular*}{0.97\\textwidth}{p{0.72\\textwidth}@{\\extracolsep{\\fill}}r}
+      \\small\\raggedright #1 & #2 \\\\
     \\end{tabular*}\\vspace{-7pt}
 }
 
