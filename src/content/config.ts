@@ -31,6 +31,7 @@ const projectsCollection = defineCollection({
     year: z.number(), // For display on frontend
     status: z.enum(['completed', 'in-progress', 'experimental', 'archived']),
     category: z.enum(['web', 'backend', 'data-mining', 'all']),
+    priority: z.number().optional(), // Display order for in-progress (higher = first)
     techStack: z.array(z.string()),
     thumbnail: z.string(), // For card display in grid
     heroImage: z.string().optional(), // Optional, for future use

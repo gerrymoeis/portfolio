@@ -8,11 +8,14 @@
 import { getCollection } from 'astro:content';
 import ProjectCard from './ProjectCard.astro';
 
-// Get all projects, sorted by status (in-progress first) then by date (newest first)
+// Get all projects, sorted by priority (in-progress, higher first) then by date (newest first)
 const allProjects = await getCollection('projects');
 const sortedProjects = allProjects.sort((a, b) => {
   if (a.data.status === 'in-progress' && b.data.status !== 'in-progress') return -1;
   if (a.data.status !== 'in-progress' && b.data.status === 'in-progress') return 1;
+  if (a.data.status === 'in-progress' && b.data.status === 'in-progress') {
+    return (b.data.priority || 0) - (a.data.priority || 0);
+  }
   return b.data.date.getTime() - a.data.date.getTime();
 });
 ---

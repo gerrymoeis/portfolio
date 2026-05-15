@@ -20,7 +20,9 @@ const IMAGE_MAPPING = {
   'inlab-himafortic.netlify.app.jpg': 'innovation-lab',
   'pixantara.vercel.app.jpg': 'pixantara',
   'sistem-absensi-kantor.jpg': 'face-recognition-attendance',
-  'kangen-wisata-tour.jpg': 'kangen-wisata-tour',
+  'kangen-wisata.pages.dev.jpg': 'kangen-wisata-tour',
+  'lab-kom-sim.jpg': 'lab-kom-sim',
+  'infortic.gerrymoeis.workers.dev.jpg': 'infortic',
 };
 
 // Image dimensions
