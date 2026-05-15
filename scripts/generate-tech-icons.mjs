@@ -38,6 +38,7 @@ const TECH_STACK_MAP = {
   'Playwright': 'playwright',
   'Framer Motion': 'framer',
   'Google Gemini': 'gemini',
+  'CSS': 'css',
   'TensorFlow': 'tensorflow',
   'JavaScript': null,
   'Gin': null,
