@@ -3,8 +3,8 @@ title:
   en: "Personal Portfolio Website"
   id: "Website Portfolio Pribadi"
 summary:
-  en: "Portfolio website with HD-2D aesthetic, legal audio visualizer, and automated CV generator system using LaTeX."
-  id: "Website portfolio dengan aesthetic HD-2D, audio visualizer legal, dan sistem CV generator otomatis menggunakan LaTeX."
+  en: "Personal portfolio website with minimalistic aesthetic, bilingual support, audio visualizer, and automated LaTeX CV generator."
+  id: "Website portfolio pribadi dengan aesthetic minimalis, dukungan bilingual, audio visualizer, dan CV generator otomatis menggunakan LaTeX."
 date: 2026-01-15
 year: 2026
 status: "in-progress"
@@ -20,44 +20,44 @@ links:
 
 # Personal Portfolio Website
 
-Portfolio website pribadi yang dibangun dengan Astro, menerapkan HD-2D aesthetic terinspirasi dari game Octopath Traveler. Website ini menampilkan proyek, blog, dan CV dengan desain yang fokus pada kedalaman visual dan motion yang tenang.
+Portfolio website pribadi yang dibangun dengan Astro, mengusung desain minimalis dengan fokus pada performa, aksesibilitas, dan pengalaman pengguna yang bersih. Website ini menampilkan proyek, blog, dan CV dengan dukungan theme switch dan language switch.
 
 ## Key Features
 
-### HD-2D Visual Design
-Implementasi aesthetic HD-2D dengan:
-- Layered depth menggunakan CSS transform dan z-index
-- Soft lighting dengan radial gradients dan glow effects
-- Grain texture overlay untuk efek retro
-- Panel framing style seperti JRPG menu systems
+### Minimalistic Design
+Desain yang bersih dan minimalis:
+- Fokus pada konten dengan tata letak yang rapi
+- Typography yang konsisten menggunakan Inter font
+- White space yang cukup untuk readability
+- CSS custom properties untuk design system yang maintainable
+
+### Theme & Language Switch
+Navigasi bilingual dengan toggle theme:
+- Dark/light theme toggle dengan system preference detection
+- Bahasa Indonesia dan English dengan seamless switching
+- LocalStorage persistence untuk preferensi user
+- Smooth transitions antara theme
 
 ### Audio Visualizer
-Integrasi audio visualizer yang legal menggunakan SoundCloud API:
+Integrasi audio visualizer dengan SoundCloud API:
 - Multiple visualizer modes (frequency bars, waveform, circular)
 - Real-time audio analysis dengan Web Audio API
-- Smooth color transitions yang sinkron dengan musik
-- Responsive controls untuk play/pause dan mode switching
-
-### Bilingual Support (EN/ID)
-Sistem i18n dengan toggle language switch:
-- Content dalam Bahasa Indonesia dan English
-- Toggle switch di setiap halaman
-- LocalStorage persistence untuk preferensi user
-- Seamless switching tanpa page reload
+- Smooth visual effects yang sinkron dengan musik
+- Intuitive user controls untuk play/pause dan mode switching
 
 ### CV Generator System
 Automated CV generation menggunakan LaTeX:
-- Data aggregation dari berbagai sumber
+- Data aggregation dari project markdown files
 - LaTeX template generator
-- LaTeXLite API untuk compile LaTeX ke PDF
-- No installation required (cloud-based compilation)
+- Tectonic compiler untuk compile LaTeX ke PDF
+- Bilingual CV (English dan Indonesia)
 
 ### Blog System
 Content management dengan Astro Content Collections:
 - Markdown-based blog posts dengan frontmatter
 - Reading time calculation
 - View counter integration
-- Tag system untuk kategorisasi
+- Clean, readable layout untuk fokus pada konten
 
 ## Technical Highlights
 
@@ -69,65 +69,58 @@ Website dibangun dengan Astro untuk optimal performance:
 - Fast page loads dengan lazy loading
 
 ### Design System
-Comprehensive design system dengan:
+Comprehensive design system:
 - CSS custom properties untuk colors, spacing, typography
-- Consistent motion tokens (duration, easing)
+- Consistent design tokens (duration, easing, sizing)
 - Reusable component patterns
-- Theme switching (dark/light mode)
+- Theme switching dengan CSS variables
 
 ### Custom Cursor
-3D gradient cursor untuk desktop:
-- Custom cursor images dengan gradient effects
+Custom 3D gradient cursor untuk desktop:
 - Smooth cursor trail animation
 - Automatic fallback untuk mobile devices
-- Respects user's reduced motion preferences
+- Menerapkan system reduce motion preferences
 
 ### Performance Optimization
 - Optimized JavaScript bundles
-- Image lazy loading
+- Image lazy loading dan WebP optimization
 - CSS minification
 - Cloudflare Pages deployment dengan CDN
 
 ## Design Process
 
-Proses design dimulai dengan research HD-2D aesthetic:
-1. Analisa visual elements dari Octopath Traveler
-2. Identifikasi key characteristics (depth, lighting, framing)
-3. Translate ke web technologies (CSS, SVG, Canvas)
-4. Build design system dengan tokens
-5. Implement progressive enhancement
+Proses design berfokus pada kesederhanaan dan fungsionalitas:
+1. Define design system dengan CSS custom properties
+2. Prioritaskan content-first layouts
+3. Implement bilingual support dengan data-lang attributes
+4. Build reusable component patterns
+5. Optimasi performa dan accessibility
 
 ## Challenges
 
-Beberapa technical challenges yang dihadapi:
-
-### Audio Visualizer Legality
-Problem: Banyak audio visualizer menggunakan audio files yang tidak legal.
-Solution: Integrasi dengan SoundCloud API untuk streaming legal music, dengan proper attribution dan links ke original tracks.
-
 ### LaTeX Compilation
-Problem: LaTeX installation (MiKTeX) membutuhkan 200MB-4GB storage.
-Solution: Menggunakan LaTeXLite API untuk cloud-based compilation, eliminasi kebutuhan local installation.
+Problem: LaTeX installation (MiKTeX) membutuhkan 200MB-4GB storage, tidak praktis untuk project portfolio.
+Solution: Menggunakan Tectonic LaTeX engine yang lightweight, integrated langsung ke dalam build pipeline via npm scripts.
 
 ### Bilingual Content Management
 Problem: Maintain content dalam 2 bahasa tanpa code duplication.
-Solution: Implement data-lang attributes dengan CSS display toggling, content stored inline untuk better SEO.
+Solution: Implement data-lang attributes dengan CSS display toggling, content stored inline untuk better SEO dan maintainability.
 
-### Performance vs Visual Richness
-Problem: HD-2D aesthetic membutuhkan banyak visual effects yang bisa impact performance.
-Solution: Selective hydration, CSS-based effects where possible, respect reduced motion preferences.
+### Theme Switching
+Problem: Dark/light theme perlu konsisten di seluruh komponen tanpa flash saat load.
+Solution: Inline theme initialization script untuk mencegah FOUC, dan CSS custom properties untuk theme-aware styling.
 
 ## Results
 
 Website berhasil mencapai:
-- Fast load times (< 2s first contentful paint)
-- Smooth animations yang respect user preferences
+- Fast load times dengan static-first architecture
+- Smooth theme dan language switching
 - Clean, maintainable codebase dengan TypeScript
 - Bilingual support yang seamless
-- Legal audio integration dengan proper attribution
-- Automated CV generation tanpa local dependencies
+- Audio visualizer sebagai pelengkap pengalaman website
+- Automated CV generation tanpa local dependencies besar
 
-Website ini serve sebagai portfolio showcase dan juga sebagai learning project untuk explore modern web technologies dan design patterns.
+Website ini serve sebagai portfolio showcase dan juga sebagai sarana untuk mengeksplorasi modern web technologies dengan pendekatan yang minimalis dan fungsional.
 
 ---
 
