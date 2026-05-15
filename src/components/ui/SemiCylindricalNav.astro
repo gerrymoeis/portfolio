@@ -547,20 +547,17 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
       display: none;
     }
 
-    /* Mobile menu container - positioned lower for thumb reach */
+    /* Mobile menu container - full screen height, items at bottom for thumb reach */
     .semi-cylindrical-nav__container--mobile {
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       position: fixed;
-      top: auto;
-      bottom: 0;
+      inset: 0;
       right: -100%;
       width: 280px;
       max-width: 85vw;
-      height: 70vh;
-      min-height: 320px;
-      max-height: 80vh;
+      height: 100vh;
       border-radius: var(--radius-xl) 0 0 0;
       border-right: none !important;
       border-top: none !important;
@@ -572,7 +569,6 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
       background: var(--color-mobile-menu-bg);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
-      /* Border and shadow will be set by theme-specific rules below */
     }
     
     .semi-cylindrical-nav__container--mobile.is-open {
