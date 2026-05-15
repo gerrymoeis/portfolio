@@ -9,7 +9,8 @@
 
 import { getTechIcon } from '../../data/techIcons';
 import {
-  siJavascript, siGin, siHtmx, siAxios, siLatex, siAnimedotjs, siJsonwebtokens
+  siJavascript, siGin, siHtmx, siAxios, siLatex, siAnimedotjs, siJsonwebtokens,
+  siReact, siBootstrap
 } from 'simple-icons';
 
 interface Props {
@@ -70,6 +71,8 @@ if (iconData) {
     'LaTeX': siLatex,
     'Anime.js': siAnimedotjs,
     'JSON Web Tokens': siJsonwebtokens,
+    'React': siReact,
+    'Bootstrap': siBootstrap,
   };
   const icon = fallbackIcons[name];
   if (icon) {
@@ -186,7 +189,7 @@ if (iconData) {
 </style>
 
 <script>
-  const THEME_COLORS = {
+  const THEME_COLORS: Record<string, { dark: string; light: string }> = {
     'JavaScript': { dark: '#f7df1e', light: '#b8960f' },
     'Gin': { dark: '#008ecf', light: '#008ecf' },
     'HTMX': { dark: '#3366cc', light: '#3366cc' },
@@ -194,6 +197,8 @@ if (iconData) {
     'LaTeX': { dark: '#008080', light: '#008080' },
     'Anime.js': { dark: '#f7fafc', light: '#1a202c' },
     'JSON Web Tokens': { dark: '#f7fafc', light: '#1a202c' },
+    'React': { dark: '#61dafb', light: '#0099cc' },
+    'Bootstrap': { dark: '#7952b3', light: '#7952b3' },
   };
 
   function applyFallbackColors() {

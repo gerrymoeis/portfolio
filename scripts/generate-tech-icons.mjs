@@ -17,14 +17,14 @@ const OUTPUT_DIR = join(PROJECT_ROOT, 'src', 'data');
 const TECH_STACK_MAP = {
   'Astro': 'astro',
   'TypeScript': 'typescript',
-  'React': 'react',
+  'React': null, // Use simple-icons for standard React atom icon
   'Vue': 'vuejs',
   'Node.js': 'nodejs',
   'Python': 'python',
   'Next.js': 'nextjs',
   'Go': 'go',
   'SQLite': 'sqlite',
-  'Bootstrap': 'bootstrap',
+  'Bootstrap': null, // Use simple-icons for standard purple Bootstrap icon
   'PostgreSQL': 'postgresql',
   'Drizzle': 'drizzle',
   'Git': 'git',
@@ -38,7 +38,7 @@ const TECH_STACK_MAP = {
   'Playwright': 'playwright',
   'Framer Motion': 'framer',
   'Google Gemini': 'gemini',
-  'CSS': 'css',
+  'CSS': 'css3', // Use css3 for proper blue CSS3 shield icon
   'TensorFlow': 'tensorflow',
   'JavaScript': null,
   'Gin': null,
@@ -52,6 +52,7 @@ const TECH_STACK_MAP = {
 // These icons fall back to simple-icons
 const FALLBACK_TECHS = new Set([
   'JavaScript', 'Gin', 'HTMX', 'Axios', 'LaTeX', 'Anime.js', 'JSON Web Tokens',
+  'React', 'Bootstrap',
 ]);
 
 function extractIconData(packagePath) {
