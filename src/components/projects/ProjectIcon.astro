@@ -3,9 +3,11 @@
  * ProjectIcon - Tech stack icon with light/dark theme support
  * Primary: tech-stack-icons (690+ icons, built-in light/dark variants)
  * Fallback: simple-icons (for techs not in tech-stack-icons)
+ * 
+ * Fixes SVG ID conflicts by making clipPath/gradient IDs unique per instance
  */
 
-import { getTechIcon, type TechIconData } from '../../data/techIcons';
+import { getTechIcon } from '../../data/techIcons';
 import {
   siJavascript, siGin, siHtmx, siAxios, siLatex, siAnimedotjs, siJsonwebtokens
 } from 'simple-icons';
@@ -15,6 +17,32 @@ interface Props {
 }
 
 const { name } = Astro.props;
+
+// Unique ID prefix for this icon instance to avoid SVG ID conflicts
+const uid = name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() + Math.random().toString(36).slice(2, 6);
+
+/**
+ * Make SVG IDs unique by adding a prefix
+ * This prevents clip-path and gradient conflicts when multiple icons render
+ */
+function makeSvgIdsUnique(svg: string, prefix: string): string {
+  const idRegex = /\bid="([^"]+)"/g;
+  const ids = new Set<string>();
+  let match;
+  while ((match = idRegex.exec(svg)) !== null) {
+    ids.add(match[1]);
+  }
+  if (ids.size === 0) return svg;
+
+  let result = svg;
+  for (const id of ids) {
+    const newId = `${prefix}-${id}`;
+    result = result.replaceAll(`id="${id}"`, `id="${newId}"`);
+    result = result.replaceAll(`url(#${id})`, `url(#${newId})`);
+    result = result.replaceAll(`href="#${id}"`, `href="#${newId}"`);
+  }
+  return result;
+}
 
 // Try tech-stack-icons first
 const iconData = getTechIcon(name);
@@ -27,8 +55,12 @@ if (iconData) {
   lightSvg = iconData.light || iconData.svg || '';
   darkSvg = iconData.dark || '';
   hasThemeVariants = !!iconData.dark;
+  // Make SVG IDs unique
+  lightSvg = makeSvgIdsUnique(lightSvg, uid);
+  if (darkSvg) {
+    darkSvg = makeSvgIdsUnique(darkSvg, uid + 'd');
+  }
 } else {
-  // Fallback to simple-icons
   isFallback = true;
   const fallbackIcons: Record<string, any> = {
     'JavaScript': siJavascript,
@@ -51,8 +83,8 @@ if (iconData) {
     <div class="project-icon" title={name}>
       {hasThemeVariants ? (
         <>
-          <div class="project-icon__variant project-icon__light" set:html={lightSvg} />
-          <div class="project-icon__variant project-icon__dark" set:html={darkSvg} />
+          <div class="project-icon__light" set:html={lightSvg} />
+          <div class="project-icon__dark" set:html={darkSvg} />
         </>
       ) : (
         <div class="project-icon__single" set:html={lightSvg} data-fallback={isFallback ? 'true' : 'false'} />
@@ -110,7 +142,8 @@ if (iconData) {
       inset 0 0 8px rgba(255, 85, 0, 0.3);
   }
 
-  .project-icon__variant,
+  .project-icon__light,
+  .project-icon__dark,
   .project-icon__single {
     width: 100%;
     height: 100%;
@@ -119,7 +152,8 @@ if (iconData) {
     justify-content: center;
   }
 
-  .project-icon__variant :global(svg),
+  .project-icon__light :global(svg),
+  .project-icon__dark :global(svg),
   .project-icon__single :global(svg) {
     width: 100%;
     height: 100%;
