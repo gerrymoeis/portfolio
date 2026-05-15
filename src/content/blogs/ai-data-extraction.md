@@ -117,8 +117,6 @@ What used to take months of manual feature engineering and hundreds of thousands
 </div>
 <div data-lang="id">
 
-# AI untuk Ekstraksi Data: Dari Regex Rapuh ke Sistem yang Paham Konteks
-
 Beberapa bulan lalu saya bikin sistem untuk scrape postingan Instagram tentang kompetisi dan event. Tujuannya simpel: ambil data dari caption, ekstrak informasi penting (judul, tanggal, kontak, URL), terus masukkan ke database. Kedengarannya straightforward, tapi ternyata jauh lebih tricky dari yang saya kira.
 
 ## Masalahnya: Teks yang Berantakan
