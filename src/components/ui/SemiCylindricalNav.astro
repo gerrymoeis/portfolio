@@ -547,7 +547,7 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
       display: none;
     }
 
-    /* Mobile menu container - full screen height, items at bottom for thumb reach */
+    /* Mobile menu container - full screen height, items positioned higher */
     .semi-cylindrical-nav__container--mobile {
       display: flex;
       flex-direction: column;
@@ -566,10 +566,13 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
       transition: right var(--duration-medium) var(--ease-out);
       overflow-y: auto;
       padding: var(--space-6);
-      padding-top: 45vh;
       background: var(--color-mobile-menu-bg);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
+    }
+
+    .semi-cylindrical-nav__container--mobile .semi-cylindrical-nav__list {
+      margin-top: 35vh;
     }
     
     .semi-cylindrical-nav__container--mobile.is-open {
