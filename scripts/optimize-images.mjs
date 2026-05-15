@@ -80,8 +80,8 @@ async function processImage(sourceFile, projectSlug) {
     
     await sharp(sourcePath)
       .resize(SIZES.thumbnail.width, SIZES.thumbnail.height, {
-        fit: 'cover',
-        position: 'center',
+        fit: 'contain',
+        background: { r: 26, g: 28, b: 36, alpha: 1 },
       })
       .webp({ quality: QUALITY.webp })
       .toFile(thumbWebp);
@@ -89,8 +89,8 @@ async function processImage(sourceFile, projectSlug) {
     
     await sharp(sourcePath)
       .resize(SIZES.thumbnail.width, SIZES.thumbnail.height, {
-        fit: 'cover',
-        position: 'center',
+        fit: 'contain',
+        background: { r: 247, g: 250, b: 252, alpha: 1 },
       })
       .jpeg({ quality: QUALITY.jpg })
       .toFile(thumbJpg);
@@ -102,8 +102,8 @@ async function processImage(sourceFile, projectSlug) {
     
     await sharp(sourcePath)
       .resize(SIZES.hero.width, SIZES.hero.height, {
-        fit: 'cover',
-        position: 'center',
+        fit: 'contain',
+        background: { r: 26, g: 28, b: 36, alpha: 1 },
       })
       .webp({ quality: QUALITY.webp })
       .toFile(heroWebp);
@@ -111,8 +111,8 @@ async function processImage(sourceFile, projectSlug) {
     
     await sharp(sourcePath)
       .resize(SIZES.hero.width, SIZES.hero.height, {
-        fit: 'cover',
-        position: 'center',
+        fit: 'contain',
+        background: { r: 247, g: 250, b: 252, alpha: 1 },
       })
       .jpeg({ quality: QUALITY.jpg })
       .toFile(heroJpg);

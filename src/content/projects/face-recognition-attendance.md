@@ -8,7 +8,7 @@ summary:
 date: 2026-04-15
 year: 2026
 status: "completed"
-category: "backend"
+category: ["backend"]
 techStack: ["Go", "Gin", "SQLite", "JSON Web Tokens", "JavaScript", "Tailwind CSS"]
 thumbnail: "/images/projects/face-recognition-attendance-thumb.webp"
 heroImage: "/images/projects/face-recognition-attendance-hero.webp"

@@ -9,7 +9,7 @@ date: 2026-05-15
 year: 2026
 status: "in-progress"
 priority: 2
-category: "web"
+category: ["backend"]
 techStack: ["Go", "Gin", "Bootstrap", "HTMX", "Alpine.js", "JavaScript", "PostgreSQL"]
 thumbnail: "/images/projects/lab-kom-sim-thumb.webp"
 heroImage: "/images/projects/lab-kom-sim-hero.webp"

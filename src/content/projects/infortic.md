@@ -9,7 +9,7 @@ date: 2026-05-15
 year: 2026
 status: "in-progress"
 priority: 3
-category: "web"
+category: ["web", "data-mining"]
 techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Python", "Google Gemini", "Playwright", "JavaScript"]
 thumbnail: "/images/projects/infortic-thumb.webp"
 heroImage: "/images/projects/infortic-hero.webp"
@@ -17,6 +17,9 @@ links:
   github: "https://github.com/gerrymoeis/infortic_scraper"
   live: "https://infortic.gerrymoeis.workers.dev"
   demo: "https://github.com/gerrymoeis/infortic_frontend"
+linkTitles:
+  github: "Scraper"
+  demo: "Frontend"
 ---
 
 # Infortic - AI-Powered Opportunity Platform

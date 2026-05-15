@@ -10,6 +10,7 @@
     "build:staging": "cross-env NODE_ENV=production DEPLOYMENT_ENVIRONMENT=staging astro build",
     "build:prod": "cross-env NODE_ENV=production DEPLOYMENT_ENVIRONMENT=production astro build",
     "generate:cv": "node scripts/generate-cv.mjs",
+    "generate:tech-icons": "node scripts/generate-tech-icons.mjs",
     "deploy": "node scripts/deploy.mjs",
     "preview": "astro preview",
     "astro": "astro",
@@ -26,7 +27,8 @@
     "gsap": "^3.14.2",
     "js-yaml": "^4.1.1",
     "sharp": "^0.34.5",
-    "simple-icons": "^16.18.0"
+    "simple-icons": "^16.18.0",
+    "tech-stack-icons": "^3.7.1"
   },
   "devDependencies": {
     "@vitest/ui": "^4.0.17",

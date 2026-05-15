@@ -8,7 +8,7 @@ summary:
 date: 2025-04-20
 year: 2025
 status: "completed"
-category: "web"
+category: ["web"]
 techStack: ["Astro", "Vue", "TypeScript", "JavaScript", "Tailwind CSS", "Anime.js", "Axios"]
 thumbnail: "/images/projects/innovation-lab-thumb.webp"
 heroImage: "/images/projects/innovation-lab-hero.webp"
