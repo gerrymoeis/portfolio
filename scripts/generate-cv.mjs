@@ -116,10 +116,10 @@ async function aggregateCVData() {
   const tools = new Set();
   const libraries = new Set();
   
-  const languagePatterns = ['JavaScript', 'TypeScript', 'Python', 'HTML', 'CSS'];
-  const frameworkPatterns = ['React', 'Next.js', 'Astro', 'Vue', 'Tailwind CSS'];
-  const toolPatterns = ['Git', 'GitHub', 'VS Code', 'Figma', 'Blender'];
-  const libraryPatterns = ['GSAP', 'Anime.js', 'LaTeX'];
+  const languagePatterns = ['JavaScript', 'TypeScript', 'Python', 'HTML', 'CSS', 'Go', 'Node.js'];
+  const frameworkPatterns = ['React', 'Next.js', 'Astro', 'Vue', 'Tailwind CSS', 'Gin', 'Alpine.js', 'HTMX', 'Drizzle'];
+  const toolPatterns = ['Git', 'GitHub', 'VS Code', 'Figma', 'Blender', 'SQLite', 'PostgreSQL', 'Playwright', 'JSON Web Tokens'];
+  const libraryPatterns = ['GSAP', 'Anime.js', 'LaTeX', 'Bootstrap', 'Axios', 'Framer Motion'];
   
   allTechStack.forEach(tech => {
     if (languagePatterns.some(p => tech.includes(p))) {
@@ -134,6 +134,10 @@ async function aggregateCVData() {
       frameworks.add(tech);
     }
   });
+
+  // Hardcode common tools used across all projects
+  tools.add('Git');
+  tools.add('VS Code');
   
   return {
     personal: {
@@ -178,8 +182,8 @@ async function aggregateCVData() {
           id: 'Surabaya, Indonesia',
         },
         period: {
-          en: '2024 -- Present',
-          id: '2024 -- Sekarang',
+          en: '2025',
+          id: '2025',
         },
         details: {
           en: [

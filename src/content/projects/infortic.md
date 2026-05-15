@@ -10,7 +10,7 @@ year: 2026
 status: "in-progress"
 priority: 3
 category: ["web", "data-mining"]
-techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Python", "Google Gemini", "Playwright", "JavaScript"]
+techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Python", "Playwright", "JavaScript"]
 thumbnail: "/images/projects/infortic-thumb.webp"
 heroImage: "/images/projects/infortic-hero.webp"
 links:
