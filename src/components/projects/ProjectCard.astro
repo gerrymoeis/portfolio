@@ -82,7 +82,7 @@ const linkKeys = ['github', 'live', 'demo'] as const;
     
     <div class="project-card__tech">
       {techStack.map(tech => (
-        <div class="project-card__tech-icon" title={tech}>
+        <div class="project-card__tech-icon">
           <ProjectIcon name={tech} />
           <span class="tech-tooltip">{tech}</span>
         </div>
