@@ -81,7 +81,12 @@ function extractIconData(packagePath) {
     }
 
     const pat = pkgName + ':{svg:{';
-    const start = data.indexOf(pat);
+    // Use comma/brace prefix to avoid substring collisions (e.g. "go" matching inside "django")
+    let start = data.indexOf(',' + pat);
+    if (start < 0) {
+      start = data.indexOf('{' + pat); // first entry in the object
+    }
+    if (start >= 0) start += 1; // skip delimiter
     if (start < 0) {
       missing.push(displayName);
       continue;
