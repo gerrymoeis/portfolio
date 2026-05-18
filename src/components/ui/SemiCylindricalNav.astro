@@ -287,13 +287,13 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
     outline-offset: 2px;
   }
 
-  /* Heartbeat animation: rest 1.5s → deg 1 (scale 1.08 + overshoot) → micro rest → deg 2 (scale 1.14 + overshoot) → rest */
+  /* Heartbeat: build-up shrink → deg 1 → build-up shrink → deg 2 (bigger) */
   :global(html:not([data-theme="light"])) .semi-cylindrical-nav__hamburger {
-    animation: hamburger-ubar-dark 3s ease-in-out infinite;
+    animation: hamburger-ubar-dark 4s ease-in-out infinite;
   }
 
   :global([data-theme="light"]) .semi-cylindrical-nav__hamburger {
-    animation: hamburger-ubar-light 3s ease-in-out infinite;
+    animation: hamburger-ubar-light 4s ease-in-out infinite;
   }
 
   .semi-cylindrical-nav__hamburger:hover,
@@ -302,22 +302,29 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
   }
 
   @keyframes hamburger-ubar-dark {
-    0%, 50% {
+    0%, 40% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.3),
         0 0 20px rgba(246, 224, 94, 0.4),
         0 0 10px rgba(246, 224, 94, 0.3);
     }
-    52% {
+    43% {
+      transform: scale(0.97);
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(246, 224, 94, 0.35),
+        0 0 10px rgba(246, 224, 94, 0.25);
+    }
+    46% {
       transform: scale(1.08);
       box-shadow:
         0 6px 20px rgba(0, 0, 0, 0.4),
         0 0 40px rgba(246, 224, 94, 0.6),
         0 0 20px rgba(246, 224, 94, 0.5);
-      animation-timing-function: cubic-bezier(0.05, 2, 0.3, 1.2);
+      animation-timing-function: cubic-bezier(0.05, 1.8, 0.3, 1.15);
     }
-    54% {
+    49% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.3),
@@ -325,20 +332,27 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
         0 0 10px rgba(246, 224, 94, 0.3);
       animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1);
     }
-    65% {
+    60% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.3),
         0 0 20px rgba(246, 224, 94, 0.4),
         0 0 10px rgba(246, 224, 94, 0.3);
     }
-    67% {
+    63% {
+      transform: scale(0.98);
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(246, 224, 94, 0.35),
+        0 0 10px rgba(246, 224, 94, 0.25);
+    }
+    66% {
       transform: scale(1.14);
       box-shadow:
         0 8px 24px rgba(0, 0, 0, 0.45),
         0 0 60px rgba(246, 224, 94, 0.8),
         0 0 30px rgba(246, 224, 94, 0.6);
-      animation-timing-function: cubic-bezier(0.05, 2.2, 0.25, 1.25);
+      animation-timing-function: cubic-bezier(0.04, 2, 0.25, 1.2);
     }
     70% {
       transform: scale(1);
@@ -358,22 +372,29 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
   }
 
   @keyframes hamburger-ubar-light {
-    0%, 50% {
+    0%, 40% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.15),
         0 0 20px rgba(255, 85, 0, 0.4),
         0 0 10px rgba(255, 85, 0, 0.3);
     }
-    52% {
+    43% {
+      transform: scale(0.97);
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        0 0 20px rgba(255, 85, 0, 0.35),
+        0 0 10px rgba(255, 85, 0, 0.25);
+    }
+    46% {
       transform: scale(1.08);
       box-shadow:
         0 6px 20px rgba(0, 0, 0, 0.2),
         0 0 40px rgba(255, 85, 0, 0.6),
         0 0 20px rgba(255, 85, 0, 0.5);
-      animation-timing-function: cubic-bezier(0.05, 2, 0.3, 1.2);
+      animation-timing-function: cubic-bezier(0.05, 1.8, 0.3, 1.15);
     }
-    54% {
+    49% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.15),
@@ -381,20 +402,27 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
         0 0 10px rgba(255, 85, 0, 0.3);
       animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1);
     }
-    65% {
+    60% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.15),
         0 0 20px rgba(255, 85, 0, 0.4),
         0 0 10px rgba(255, 85, 0, 0.3);
     }
-    67% {
+    63% {
+      transform: scale(0.98);
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        0 0 20px rgba(255, 85, 0, 0.35),
+        0 0 10px rgba(255, 85, 0, 0.25);
+    }
+    66% {
       transform: scale(1.14);
       box-shadow:
         0 8px 24px rgba(0, 0, 0, 0.25),
         0 0 60px rgba(255, 85, 0, 0.8),
         0 0 30px rgba(255, 85, 0, 0.6);
-      animation-timing-function: cubic-bezier(0.05, 2.2, 0.25, 1.25);
+      animation-timing-function: cubic-bezier(0.04, 2, 0.25, 1.2);
     }
     70% {
       transform: scale(1);
