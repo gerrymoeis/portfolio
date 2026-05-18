@@ -238,9 +238,9 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
     height: 48px;
     background: var(--bg-elevated);
     border-radius: var(--radius-md);
-    backdrop-filter: blur(var(--blur-backdrop-light));
     cursor: pointer;
-    transition: all var(--duration-medium) var(--ease-out);
+    transition: background var(--duration-medium) var(--ease-out);
+    will-change: transform;
   }
   
   /* Dark theme - golden yellow border with glow */
