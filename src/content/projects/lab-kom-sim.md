@@ -10,7 +10,7 @@ year: 2026
 status: "in-progress"
 priority: 2
 category: ["backend"]
-techStack: ["Go", "Gin", "Bootstrap", "HTMX", "Alpine.js", "JavaScript", "PostgreSQL"]
+techStack: ["Go", "Gin", "Bootstrap", "JavaScript", "SQLite", "PostgreSQL"]
 thumbnail: "/images/projects/lab-kom-sim-thumb.webp"
 heroImage: "/images/projects/lab-kom-sim-hero.webp"
 links:
@@ -83,13 +83,12 @@ Clean Architecture dengan Go dan Gin:
 - Session-based auth dengan cookie store (7-day expiry) dan single-session enforcement
 - Role-based access: admin vs dosen (read-only)
 
-### Bootstrap + HTMX + Alpine.js Frontend
-Frontend modern tanpa JavaScript framework berat:
+### Bootstrap + Vanilla JS Frontend
+Frontend ringan tanpa JavaScript framework berat:
 - Bootstrap 5.3 untuk responsive layout dan komponen siap pakai
-- HTMX untuk dynamic page updates tanpa full reload
-- Alpine.js untuk interactive component state management
+- Vanilla JavaScript untuk interactivity dan AJAX
 - Server-side rendering dengan Go html/template engine
-- HEIC-to-JPEG conversion via CDN WASM untuk photo upload
+- HEIC-to-JPEG conversion via WASM (wazero runtime)
 
 ### AI OCR Pipeline
 Dua-layer AI untuk ekstraksi teks dari logbook:
@@ -101,7 +100,7 @@ Dua-layer AI untuk ekstraksi teks dari logbook:
 
 ### Dual Database Architecture
 Fleksibel antara development dan production:
-- SQLite via mattn/go-sqlite3 untuk local development
+- SQLite via modernc.org/sqlite (pure Go, no CGO) untuk local development
 - PostgreSQL via jackc/pgx/v5 untuk production (Neon DB serverless)
 - Automatis query rewriting untuk cross-database compatibility
 - 11 tabel dengan relasi foreign key yang proper
@@ -127,7 +126,7 @@ Solution: Two-layer AI pipeline (OpenRouter → Gemini) dengan smart prompt engi
 
 ### PC Grid Visualization
 Problem: 40 PCs dalam layout 8x5 membutuhkan visualisasi yang intuitif.
-Solution: Bootstrap grid dengan color-coded status cards, real-time status updates via HTMX, dan detail popup untuk spesifikasi lengkap.
+Solution: Bootstrap grid dengan color-coded status cards, real-time status updates via vanilla JS polling, dan detail popup untuk spesifikasi lengkap.
 
 ### Mobile Deployment
 Problem: Sistem perlu dijalankan di Android (Termux) untuk produksi di lab.
@@ -147,6 +146,6 @@ Sistem ini demonstrate kemampuan membangun enterprise-grade inventory management
 
 ---
 
-**Tech Stack**: Go, Gin, Bootstrap, HTMX, Alpine.js, PostgreSQL, AI OCR (OpenRouter + Gemini), SQLite  
+**Tech Stack**: Go, Gin, Bootstrap, Vanilla JS, SQLite, PostgreSQL, AI OCR (OpenRouter + Gemini)  
 **Status**: In Progress - Continuous improvements  
 **GitHub**: [github.com/gerrymoeis/lab_kom_sim](https://github.com/gerrymoeis/lab_kom_sim)
