@@ -469,18 +469,18 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
      ============================================ */
   
   .semi-cylindrical-nav__overlay {
-    display: none;
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.7);
     z-index: calc(var(--layer-navigation) - 2); /* Below menu AND hamburger button */
     opacity: 0;
+    pointer-events: none;
     transition: opacity var(--duration-medium) var(--ease-out);
   }
 
   .semi-cylindrical-nav__overlay.is-visible {
-    display: block;
     opacity: 1;
+    pointer-events: auto;
   }
 
   /* ============================================
