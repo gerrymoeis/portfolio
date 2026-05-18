@@ -240,7 +240,6 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: background var(--duration-medium) var(--ease-out);
-    will-change: transform;
   }
   
   /* Dark theme - golden yellow border with glow */
@@ -297,7 +296,7 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
   }
 
   .semi-cylindrical-nav__hamburger.is-active {
-    animation-play-state: paused !important;
+    animation: none !important;
   }
 
   @keyframes hamburger-ubar-dark {
