@@ -289,11 +289,11 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
 
   /* Heartbeat: rest → anticipate shrink → deg 1 → micro rest → deg 2 (bigger) → snap shrunken → hold + slow return */
   :global(html:not([data-theme="light"])) .semi-cylindrical-nav__hamburger {
-    animation: hamburger-ubar-dark 3.5s ease-in-out infinite;
+    animation: hamburger-ubar-dark 2.5s ease-in-out infinite;
   }
 
   :global([data-theme="light"]) .semi-cylindrical-nav__hamburger {
-    animation: hamburger-ubar-light 3.5s ease-in-out infinite;
+    animation: hamburger-ubar-light 2.5s ease-in-out infinite;
   }
 
   .semi-cylindrical-nav__hamburger.is-active {
@@ -301,21 +301,21 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
   }
 
   @keyframes hamburger-ubar-dark {
-    0%, 14% {
+    0%, 12% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.3),
         0 0 20px rgba(246, 224, 94, 0.4),
         0 0 10px rgba(246, 224, 94, 0.3);
     }
-    16% {
+    14% {
       transform: scale(0.96);
       box-shadow:
         0 4px 10px rgba(0, 0, 0, 0.28),
         0 0 16px rgba(246, 224, 94, 0.3),
         0 0 8px rgba(246, 224, 94, 0.2);
     }
-    20% {
+    19% {
       transform: scale(1.10);
       box-shadow:
         0 6px 20px rgba(0, 0, 0, 0.4),
@@ -323,7 +323,7 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
         0 0 22px rgba(246, 224, 94, 0.5);
       animation-timing-function: cubic-bezier(0.05, 1.7, 0.3, 1.12);
     }
-    22% {
+    21% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.3),
@@ -331,14 +331,14 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
         0 0 10px rgba(246, 224, 94, 0.3);
       animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1);
     }
-    32% {
+    28% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.3),
         0 0 20px rgba(246, 224, 94, 0.4),
         0 0 10px rgba(246, 224, 94, 0.3);
     }
-    36% {
+    33% {
       transform: scale(1.18);
       box-shadow:
         0 8px 26px rgba(0, 0, 0, 0.48),
@@ -346,7 +346,7 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
         0 0 35px rgba(246, 224, 94, 0.65);
       animation-timing-function: cubic-bezier(0.04, 1.9, 0.25, 1.18);
     }
-    38% {
+    35% {
       transform: scale(0.96);
       box-shadow:
         0 4px 10px rgba(0, 0, 0, 0.28),
@@ -372,21 +372,21 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
   }
 
   @keyframes hamburger-ubar-light {
-    0%, 14% {
+    0%, 12% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.15),
         0 0 20px rgba(255, 85, 0, 0.4),
         0 0 10px rgba(255, 85, 0, 0.3);
     }
-    16% {
+    14% {
       transform: scale(0.96);
       box-shadow:
         0 4px 10px rgba(0, 0, 0, 0.12),
         0 0 16px rgba(255, 85, 0, 0.3),
         0 0 8px rgba(255, 85, 0, 0.2);
     }
-    20% {
+    19% {
       transform: scale(1.10);
       box-shadow:
         0 6px 20px rgba(0, 0, 0, 0.2),
@@ -394,7 +394,7 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
         0 0 22px rgba(255, 85, 0, 0.5);
       animation-timing-function: cubic-bezier(0.05, 1.7, 0.3, 1.12);
     }
-    22% {
+    21% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.15),
@@ -402,14 +402,14 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
         0 0 10px rgba(255, 85, 0, 0.3);
       animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1);
     }
-    32% {
+    28% {
       transform: scale(1);
       box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.15),
         0 0 20px rgba(255, 85, 0, 0.4),
         0 0 10px rgba(255, 85, 0, 0.3);
     }
-    36% {
+    33% {
       transform: scale(1.18);
       box-shadow:
         0 8px 26px rgba(0, 0, 0, 0.28),
@@ -417,7 +417,7 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
         0 0 35px rgba(255, 85, 0, 0.65);
       animation-timing-function: cubic-bezier(0.04, 1.9, 0.25, 1.18);
     }
-    38% {
+    35% {
       transform: scale(0.96);
       box-shadow:
         0 4px 10px rgba(0, 0, 0, 0.12),
