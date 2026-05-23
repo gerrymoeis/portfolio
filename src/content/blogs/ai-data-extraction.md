@@ -7,6 +7,8 @@ summary:
   en: "How AI transformed data extraction from Instagram captions - from fragile pattern matching to systems that actually understand context."
   id: "Bagaimana AI mengubah ekstraksi data dari caption Instagram - dari pattern matching yang rapuh ke sistem yang benar-benar paham konteks."
 tags: ["ai", "data-extraction", "automation", "python"]
+thumbnail: "/images/blogs/ai-data-extraction-thumb.webp"
+heroImage: "/images/blogs/ai-data-extraction-hero.webp"
 ---
 
 <div data-bilingual>

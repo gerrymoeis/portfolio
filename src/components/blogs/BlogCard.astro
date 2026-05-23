@@ -21,9 +21,10 @@ interface Props {
   slug: string;
   tags?: string[];
   readingTime?: number;
+  thumbnail: string;
 }
 
-const { title, date, summary, slug, tags, readingTime } = Astro.props;
+const { title, date, summary, slug, tags, readingTime, thumbnail } = Astro.props;
 
 // Format date for display (simple approach for build compatibility)
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 
@@ -33,38 +34,49 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
 
 <article class="blog-card" role="listitem">
   <a href={`/blogs/${slug}`} class="blog-card__link" aria-label={`Read article: ${title.en}`}>
-    <div class="blog-card__header">
-      <h2 class="blog-card__title" data-bilingual>
-        <span data-lang="en">{title.en}</span>
-        <span data-lang="id">{title.id}</span>
-      </h2>
-      <div class="blog-card__meta">
-        <time class="blog-card__date" datetime={date.toISOString()}>
-          {formattedDate}
-        </time>
-        {readingTime && (
-          <span class="blog-card__reading-time" data-bilingual>
-            <i class="fas fa-clock"></i>
-            <span data-lang="en">{readingTime} min read</span>
-            <span data-lang="id">{readingTime} menit baca</span>
-          </span>
-        )}
-        <ViewCounter slug={slug} />
-      </div>
+    <div class="blog-card__thumbnail">
+      <img 
+        src={thumbnail}
+        alt={`${title.en} thumbnail`}
+        loading="lazy"
+        class="blog-card__image"
+      />
     </div>
     
-    <p class="blog-card__summary" data-bilingual>
-      <span data-lang="en">{summary.en}</span>
-      <span data-lang="id">{summary.id}</span>
-    </p>
-    
-    {tags && tags.length > 0 && (
-      <div class="blog-card__tags" role="list" aria-label="Article tags">
-        {tags.map(tag => (
-          <span class="blog-card__tag" role="listitem">{tag}</span>
-        ))}
+    <div class="blog-card__body">
+      <div class="blog-card__header">
+        <h2 class="blog-card__title" data-bilingual>
+          <span data-lang="en">{title.en}</span>
+          <span data-lang="id">{title.id}</span>
+        </h2>
+        <div class="blog-card__meta">
+          <time class="blog-card__date" datetime={date.toISOString()}>
+            {formattedDate}
+          </time>
+          {readingTime && (
+            <span class="blog-card__reading-time" data-bilingual>
+              <i class="fas fa-clock"></i>
+              <span data-lang="en">{readingTime} min read</span>
+              <span data-lang="id">{readingTime} menit baca</span>
+            </span>
+          )}
+          <ViewCounter slug={slug} />
+        </div>
       </div>
-    )}
+      
+      <p class="blog-card__summary" data-bilingual>
+        <span data-lang="en">{summary.en}</span>
+        <span data-lang="id">{summary.id}</span>
+      </p>
+      
+      {tags && tags.length > 0 && (
+        <div class="blog-card__tags" role="list" aria-label="Article tags">
+          {tags.map(tag => (
+            <span class="blog-card__tag" role="listitem">{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
   </a>
 </article>
 
@@ -132,13 +144,37 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
       0 0 15px rgba(255, 85, 0, 0.15);
   }
 
+  .blog-card__thumbnail {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: var(--color-bg-secondary);
+  }
+
+  .blog-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform var(--duration-medium) var(--ease-out);
+  }
+
+  .blog-card:hover .blog-card__image {
+    transform: scale(1.05);
+  }
+
   .blog-card__link {
     display: block;
-    padding: var(--space-6);
+    padding: 0;
     color: inherit;
     text-decoration: none;
     position: relative;
     z-index: 1;
+  }
+
+  .blog-card__body {
+    padding: var(--space-6);
   }
 
   .blog-card__link:focus-visible {

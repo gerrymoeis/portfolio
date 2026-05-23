@@ -16,6 +16,15 @@ export default defineConfig({
     }),
   ],
   
+  markdown: {
+    shikiConfig: {
+      themes: {
+        dark: 'github-dark',
+        light: 'github-light',
+      },
+    },
+  },
+
   image: {
     domains: [],
     remotePatterns: [],

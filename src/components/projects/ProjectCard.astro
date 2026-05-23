@@ -56,15 +56,12 @@ const linkKeys = ['github', 'live', 'demo'] as const;
 <article class="project-card" data-category={categoriesAttr} role="listitem">
   <div class="project-card__content">
     <div class="project-card__thumbnail">
-      <picture>
-        <source srcset={thumbnail} type="image/webp" />
-        <img 
-          src={thumbnail.replace('.webp', '.jpg')} 
-          alt={`${title.en} thumbnail`}
-          loading="lazy"
-          class="project-card__image"
-        />
-      </picture>
+      <img 
+        src={thumbnail}
+        alt={`${title.en} thumbnail`}
+        loading="lazy"
+        class="project-card__image"
+      />
     </div>
     
     <h2 class="project-card__title" data-bilingual>

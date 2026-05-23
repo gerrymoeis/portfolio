@@ -1,43 +1,47 @@
-/**
- * Image Optimization Script
- * Processes project thumbnails: resize, compress, convert to WebP
- * Run: node scripts/optimize-images.mjs
- */
-
 import sharp from 'sharp';
-import { existsSync, mkdirSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = join(__dirname, '..');
-const SOURCE_DIR = join(PROJECT_ROOT, '..', 'docs_and_backup', 'projects_thumbnails');
-const OUTPUT_DIR = join(PROJECT_ROOT, 'public', 'images', 'projects');
 
-// Mapping source files to project slugs
-const IMAGE_MAPPING = {
-  'gerrymoeis.pages.dev.jpg': 'personal-portfolio',
-  'inlab-himafortic.netlify.app.jpg': 'innovation-lab',
-  'pixantara.vercel.app.jpg': 'pixantara',
-  'sistem-absensi-kantor.jpg': 'face-recognition-attendance',
-  'kangen-wisata.pages.dev.jpg': 'kangen-wisata-tour',
-  'lab-kom-sim.jpg': 'lab-kom-sim',
-  'infortic.gerrymoeis.workers.dev.jpg': 'infortic',
-};
+const THUMBNAIL_ROOT = join(PROJECT_ROOT, '..', 'thumbnails');
 
-// Image dimensions
 const SIZES = {
   thumbnail: { width: 800, height: 450 },
   hero: { width: 1600, height: 900 },
 };
 
-// Quality settings
 const QUALITY = {
-  webp: 85,
-  jpg: 90,
+  webp: 82,
 };
 
-// ANSI colors
+const collections = [
+  {
+    name: 'projects',
+    sourceDir: join(THUMBNAIL_ROOT, 'projects'),
+    outputDir: join(PROJECT_ROOT, 'public', 'images', 'projects'),
+    images: {
+      'gerrymoeis.pages.dev.jpg': 'personal-portfolio',
+      'inlab-himafortic.netlify.app.jpg': 'innovation-lab',
+      'pixantara.vercel.app.jpg': 'pixantara',
+      'sistem-absensi-kantor.jpg': 'face-recognition-attendance',
+      'kangen-wisata.pages.dev.jpg': 'kangen-wisata-tour',
+      'lab-kom-sim.jpg': 'lab-kom-sim',
+      'infortic.gerrymoeis.workers.dev.jpg': 'infortic',
+    },
+  },
+  {
+    name: 'blogs',
+    sourceDir: join(THUMBNAIL_ROOT, 'blogs'),
+    outputDir: join(PROJECT_ROOT, 'public', 'images', 'blogs'),
+    images: {
+      'instagram-scraper-blog-1.jpg': 'ai-data-extraction',
+    },
+  },
+];
+
 const colors = {
   reset: '\x1b[0m',
   green: '\x1b[32m',
@@ -50,121 +54,88 @@ function log(message, color = colors.reset) {
   console.log(`${color}${message}${colors.reset}`);
 }
 
-/**
- * Ensure output directory exists
- */
-function ensureOutputDir() {
-  if (!existsSync(OUTPUT_DIR)) {
-    mkdirSync(OUTPUT_DIR, { recursive: true });
-    log(`✅ Created output directory: ${OUTPUT_DIR}`, colors.green);
+function ensureDir(dir) {
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
   }
 }
 
-/**
- * Process single image: generate thumbnail and hero versions
- */
-async function processImage(sourceFile, projectSlug) {
-  const sourcePath = join(SOURCE_DIR, sourceFile);
-  
+async function processImage(sourcePath, slug, outDir) {
   if (!existsSync(sourcePath)) {
-    log(`❌ Source file not found: ${sourceFile}`, colors.red);
+    log(`  ❌ Source not found: ${sourcePath}`, colors.red);
     return false;
   }
-  
-  log(`\n📸 Processing: ${sourceFile} → ${projectSlug}`, colors.cyan);
-  
+
   try {
-    // Generate thumbnail (800x450)
-    const thumbWebp = join(OUTPUT_DIR, `${projectSlug}-thumb.webp`);
-    const thumbJpg = join(OUTPUT_DIR, `${projectSlug}-thumb.jpg`);
-    
+    const thumb = join(outDir, `${slug}-thumb.webp`);
+
     await sharp(sourcePath)
       .resize(SIZES.thumbnail.width, SIZES.thumbnail.height, {
         fit: 'contain',
         background: { r: 26, g: 28, b: 36, alpha: 1 },
       })
       .webp({ quality: QUALITY.webp })
-      .toFile(thumbWebp);
-    log(`  ✓ Thumbnail WebP: ${projectSlug}-thumb.webp`, colors.green);
-    
-    await sharp(sourcePath)
-      .resize(SIZES.thumbnail.width, SIZES.thumbnail.height, {
-        fit: 'contain',
-        background: { r: 247, g: 250, b: 252, alpha: 1 },
-      })
-      .jpeg({ quality: QUALITY.jpg })
-      .toFile(thumbJpg);
-    log(`  ✓ Thumbnail JPG: ${projectSlug}-thumb.jpg`, colors.green);
-    
-    // Generate hero (1600x900)
-    const heroWebp = join(OUTPUT_DIR, `${projectSlug}-hero.webp`);
-    const heroJpg = join(OUTPUT_DIR, `${projectSlug}-hero.jpg`);
-    
+      .toFile(thumb);
+    log(`  ✓ thumb.webp (${SIZES.thumbnail.width}x${SIZES.thumbnail.height}, q${QUALITY.webp})`, colors.green);
+
+    const hero = join(outDir, `${slug}-hero.webp`);
+
     await sharp(sourcePath)
       .resize(SIZES.hero.width, SIZES.hero.height, {
         fit: 'contain',
         background: { r: 26, g: 28, b: 36, alpha: 1 },
       })
       .webp({ quality: QUALITY.webp })
-      .toFile(heroWebp);
-    log(`  ✓ Hero WebP: ${projectSlug}-hero.webp`, colors.green);
-    
-    await sharp(sourcePath)
-      .resize(SIZES.hero.width, SIZES.hero.height, {
-        fit: 'contain',
-        background: { r: 247, g: 250, b: 252, alpha: 1 },
-      })
-      .jpeg({ quality: QUALITY.jpg })
-      .toFile(heroJpg);
-    log(`  ✓ Hero JPG: ${projectSlug}-hero.jpg`, colors.green);
-    
+      .toFile(hero);
+    log(`  ✓ hero.webp (${SIZES.hero.width}x${SIZES.hero.height}, q${QUALITY.webp})`, colors.green);
+
     return true;
   } catch (error) {
-    log(`❌ Error processing ${sourceFile}: ${error.message}`, colors.red);
+    log(`  ❌ Error: ${error.message}`, colors.red);
     return false;
   }
 }
 
-/**
- * Main function
- */
 async function main() {
   console.log('\n' + '='.repeat(60));
-  log('🖼️  Image Optimization Script', colors.cyan);
+  log(' Image Optimization Script', colors.cyan);
   console.log('='.repeat(60) + '\n');
-  
-  // Check source directory
-  if (!existsSync(SOURCE_DIR)) {
-    log(`❌ Source directory not found: ${SOURCE_DIR}`, colors.red);
-    process.exit(1);
-  }
-  
-  // Ensure output directory exists
-  ensureOutputDir();
-  
-  // Process all images
-  let successCount = 0;
-  let failCount = 0;
-  
-  for (const [sourceFile, projectSlug] of Object.entries(IMAGE_MAPPING)) {
-    const success = await processImage(sourceFile, projectSlug);
-    if (success) {
-      successCount++;
-    } else {
-      failCount++;
+
+  let totalSuccess = 0;
+  let totalFail = 0;
+
+  for (const collection of collections) {
+    log(`[${collection.name}]`, colors.yellow);
+    console.log('-'.repeat(40));
+
+    if (!existsSync(collection.sourceDir)) {
+      log(`  Skipped — source not found: ${collection.sourceDir}`, colors.yellow);
+      console.log();
+      continue;
     }
+
+    ensureDir(collection.outputDir);
+
+    let success = 0;
+    let fail = 0;
+
+    for (const [sourceFile, slug] of Object.entries(collection.images)) {
+      log(`  ${sourceFile}  ->  ${slug}`, colors.cyan);
+      const ok = await processImage(join(collection.sourceDir, sourceFile), slug, collection.outputDir);
+      if (ok) success++; else fail++;
+    }
+
+    log(`  Done: ${success} ok, ${fail} failed`, success > 0 ? colors.green : colors.red);
+    totalSuccess += success;
+    totalFail += fail;
+    console.log();
   }
-  
-  // Summary
-  console.log('\n' + '='.repeat(60));
-  log(`✅ Processed: ${successCount} images`, colors.green);
-  if (failCount > 0) {
-    log(`❌ Failed: ${failCount} images`, colors.red);
-  }
-  log(`📁 Output: ${OUTPUT_DIR}`, colors.cyan);
+
+  console.log('='.repeat(60));
+  log(` Total: ${totalSuccess} images processed, ${totalFail} failed`, colors.green);
   console.log('='.repeat(60) + '\n');
-  
-  process.exit(failCount > 0 ? 1 : 0);
+
+  process.exit(totalFail > 0 ? 1 : 0);
 }
 
 main();

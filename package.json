@@ -33,10 +33,7 @@
     "tech-stack-icons": "^3.7.1"
   },
   "devDependencies": {
-    "@vitest/ui": "^4.0.17",
     "cross-env": "^7.0.3",
-    "fast-check": "^4.5.3",
-    "vitest": "^4.0.17",
-    "wrangler": "^4.59.3"
+    "vitest": "^4.0.17"
   }
 }

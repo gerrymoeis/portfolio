@@ -146,9 +146,9 @@ a:focus-visible {
 /* Code blocks */
 code,
 pre {
-  font-family: var(--font-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
   font-size: var(--text-sm);
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
 }
 
 pre {
@@ -168,6 +168,39 @@ code {
 pre code {
   padding: 0;
   background-color: transparent;
+}
+
+/* Astro Shiki code blocks */
+.astro-code {
+  font-size: var(--text-sm) !important;
+  padding: var(--space-4) !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--color-border-medium) !important;
+  background: var(--bg-elevated) !important;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.astro-code code {
+  counter-reset: step;
+  counter-increment: step 0;
+}
+
+.astro-code .line {
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+/* Dual theme support for Shiki */
+:global([data-theme="light"]) .astro-code span {
+  color: var(--shiki-light, var(--color-text-primary)) !important;
+  background: var(--shiki-light-bg, transparent) !important;
+  font-style: var(--shiki-light-font-style, normal) !important;
+  text-decoration: var(--shiki-light-text-decoration, none) !important;
+}
+
+:global([data-theme="light"]) .astro-code {
+  background: var(--bg-elevated) !important;
 }
 
 /* Blockquotes */
