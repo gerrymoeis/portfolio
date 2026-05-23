@@ -1,5 +1,6 @@
 ---
 import ProjectIcon from './ProjectIcon.astro';
+import CraftBadge from '../ui/CraftBadge.astro';
 
 interface Props {
   title: { en: string; id: string };
@@ -7,6 +8,7 @@ interface Props {
   year: number;
   status: 'completed' | 'in-progress' | 'experimental' | 'archived';
   category: string | string[];
+  craft?: 'ai' | 'hand-crafted';
   techStack: string[];
   thumbnail: string;
   links?: {
@@ -21,7 +23,7 @@ interface Props {
   };
 }
 
-const { title, year, status, category, techStack, thumbnail, links, linkTitles } = Astro.props;
+const { title, year, status, category, craft, techStack, thumbnail, links, linkTitles } = Astro.props;
 
 const statusDisplay = {
   'completed': { en: 'Completed', id: 'Selesai' },
@@ -54,6 +56,7 @@ const linkKeys = ['github', 'live', 'demo'] as const;
 ---
 
 <article class="project-card" data-category={categoriesAttr} role="listitem">
+  {craft && <CraftBadge craft={craft} context="project" />}
   <div class="project-card__content">
     <div class="project-card__thumbnail">
       <img 

@@ -9,6 +9,7 @@ date: 2024-10-15
 year: 2024
 status: "completed"
 category: ["web"]
+craft: ai
 techStack: ["Astro", "Tailwind CSS", "TypeScript", "JavaScript"]
 thumbnail: "/images/projects/kangen-wisata-tour-thumb.webp"
 heroImage: "/images/projects/kangen-wisata-tour-hero.webp"

@@ -6,7 +6,8 @@ date: 2026-04-30
 summary:
   en: "How AI transformed data extraction from Instagram captions - from fragile pattern matching to systems that actually understand context."
   id: "Bagaimana AI mengubah ekstraksi data dari caption Instagram - dari pattern matching yang rapuh ke sistem yang benar-benar paham konteks."
-tags: ["ai", "data-extraction", "automation", "python"]
+tags: ["ai", "data-extraction", "automation", "python", "playwright"]
+craft: ai
 thumbnail: "/images/blogs/ai-data-extraction-thumb.webp"
 heroImage: "/images/blogs/ai-data-extraction-hero.webp"
 ---
@@ -113,7 +114,7 @@ What used to take months of manual feature engineering and hundreds of thousands
 
 ---
 
-**Tech Stack**: Python, Google Gemini API, Javascript, Playwright, PostgreSQL, NeonDB  
+**Tech Stack**: Python, Javascript, Playwright, PostgreSQL, NeonDB  
 **Related**: Information Extraction, NLP, Data Engineering
 
 </div>
@@ -218,7 +219,7 @@ Yang dulu butuh berbulan-bulan manual feature engineering dan ratusan ribu train
 
 ---
 
-**Tech Stack**: Python, Google Gemini API, Javascript, Playwright, PostgreSQL, NeonDB  
+**Tech Stack**: Python, Javascript, Playwright, PostgreSQL, NeonDB  
 **Related**: Information Extraction, NLP, Data Engineering
 
 </div>

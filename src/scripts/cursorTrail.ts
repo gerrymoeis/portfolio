@@ -7,9 +7,6 @@ import gsap from 'gsap';
 
 interface Particle {
   element: HTMLElement;
-  x: number;
-  y: number;
-  life: number;
 }
 
 interface TrailOptions {
@@ -24,7 +21,6 @@ export class CursorTrail {
   private mouseX = 0;
   private mouseY = 0;
   private lastSpawnTime = 0;
-  private animationFrame: number | null = null;
   private options: Required<Omit<TrailOptions, 'color'>>;
   private isActive = false;
   private isVisible = true;
@@ -32,10 +28,10 @@ export class CursorTrail {
 
   constructor(options: TrailOptions = {}) {
     this.options = {
-      particleCount: options.particleCount || 50,
-      particleSize: options.particleSize || 10,
-      particleLifetime: options.particleLifetime || 1000, // ms
-      spawnRate: options.spawnRate || 30, // ms between spawns
+      particleCount: options.particleCount || 8,
+      particleSize: options.particleSize || 6,
+      particleLifetime: options.particleLifetime || 600,
+      spawnRate: options.spawnRate || 40,
     };
     
     // Detect initial theme
@@ -77,7 +73,6 @@ export class CursorTrail {
 
     this.attachEventListeners();
     this.attachThemeListener();
-    this.startAnimation();
     this.isActive = true;
   }
 
@@ -138,12 +133,7 @@ export class CursorTrail {
     this.particles.forEach((particle) => {
       particle.element.style.background = newColor;
       
-      // Update box-shadow with new color
-      particle.element.style.boxShadow = `
-        0 0 ${this.options.particleSize * 1.5}px ${newColor},
-        0 0 ${this.options.particleSize * 3}px ${newColor.replace('0.9', '0.6')},
-        0 0 ${this.options.particleSize * 5}px ${newColor.replace('0.9', '0.3')}
-      `;
+      particle.element.style.boxShadow = `0 0 ${this.options.particleSize * 2}px ${newColor}`;
     });
   }
 
@@ -213,10 +203,7 @@ export class CursorTrail {
       pointer-events: none;
       z-index: 9998;
       will-change: transform, opacity;
-      box-shadow: 
-        0 0 ${this.options.particleSize * 1.5}px ${color},
-        0 0 ${this.options.particleSize * 3}px ${color.replace('0.9', '0.6')},
-        0 0 ${this.options.particleSize * 5}px ${color.replace('0.9', '0.3')};
+      box-shadow: 0 0 ${this.options.particleSize * 2}px ${color};
       left: 0;
       top: 0;
       transition: background 0.3s ease, box-shadow 0.3s ease;
@@ -229,12 +216,7 @@ export class CursorTrail {
     const spawnX = this.mouseX + cursorCenter;
     const spawnY = this.mouseY + cursorCenter;
 
-    const particleData: Particle = {
-      element: particle,
-      x: spawnX,
-      y: spawnY,
-      life: 1,
-    };
+    const particleData: Particle = { element: particle };
 
     this.particles.push(particleData);
 
@@ -273,32 +255,10 @@ export class CursorTrail {
   }
 
   /**
-   * Start animation loop
-   */
-  private startAnimation(): void {
-    const animate = () => {
-      if (!this.isActive) return;
-      
-      // Update particles (if needed for physics)
-      this.particles.forEach((particle) => {
-        particle.life -= 0.016; // Approximate frame time
-      });
-
-      this.animationFrame = requestAnimationFrame(animate);
-    };
-
-    animate();
-  }
-
-  /**
    * Destroy trail
    */
   destroy(): void {
     this.isActive = false;
-    
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-    }
 
     this.particles.forEach((particle) => {
       particle.element.remove();
@@ -315,10 +275,10 @@ export function initCursorTrail(): CursorTrail | null {
   if (typeof window === 'undefined') return null;
   
   const trail = new CursorTrail({
-    particleCount: 20,
-    particleSize: 8,
-    particleLifetime: 800,
-    spawnRate: 20,
+    particleCount: 8,
+    particleSize: 6,
+    particleLifetime: 600,
+    spawnRate: 40,
   });
   
   trail.init();

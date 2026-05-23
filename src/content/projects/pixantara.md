@@ -9,6 +9,7 @@ date: 2025-05-15
 year: 2025
 status: "experimental"
 category: ["web"]
+craft: ai
 techStack: ["Next.js", "React", "TypeScript", "JavaScript", "Tailwind CSS", "GSAP"]
 thumbnail: "/images/projects/pixantara-thumb.webp"
 heroImage: "/images/projects/pixantara-hero.webp"

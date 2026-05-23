@@ -1,18 +1,7 @@
 ---
-/**
- * BlogCard - Individual blog preview card
- * Displays blog post metadata and summary with a link to the full post
- * 
- * Props:
- * - title: Blog post title (bilingual object)
- * - date: Publication date
- * - summary: Brief description (bilingual object)
- * - slug: URL slug for the blog post
- * - tags: Optional array of tags
- * - readingTime: Reading time in minutes
- */
 
 import ViewCounter from './ViewCounter.astro';
+import CraftBadge from '../ui/CraftBadge.astro';
 
 interface Props {
   title: { en: string; id: string };
@@ -20,11 +9,12 @@ interface Props {
   summary: { en: string; id: string };
   slug: string;
   tags?: string[];
+  craft?: 'ai' | 'hand-crafted';
   readingTime?: number;
   thumbnail: string;
 }
 
-const { title, date, summary, slug, tags, readingTime, thumbnail } = Astro.props;
+const { title, date, summary, slug, tags, craft, readingTime, thumbnail } = Astro.props;
 
 // Format date for display (simple approach for build compatibility)
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 
@@ -33,6 +23,7 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
 ---
 
 <article class="blog-card" role="listitem">
+  {craft && <CraftBadge craft={craft} context="blog" />}
   <a href={`/blogs/${slug}`} class="blog-card__link" aria-label={`Read article: ${title.en}`}>
     <div class="blog-card__thumbnail">
       <img 

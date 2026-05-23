@@ -10,6 +10,7 @@ year: 2026
 status: "in-progress"
 priority: 1
 category: ["web"]
+craft: ai
 techStack: ["Astro", "TypeScript", "JavaScript", "CSS", "LaTeX"]
 thumbnail: "/images/projects/personal-portfolio-thumb.webp"
 heroImage: "/images/projects/personal-portfolio-hero.webp"

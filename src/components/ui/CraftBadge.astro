@@ -1,0 +1,70 @@
+---
+import { craftBadgeLabels } from '../../data/craftBadges'
+
+interface Props {
+  craft: 'ai' | 'hand-crafted'
+  context: 'project' | 'blog'
+}
+
+const { craft, context } = Astro.props
+const labels = craftBadgeLabels[craft][context]
+---
+
+<div class="craft-badge" data-craft={craft}>
+  <span data-lang="en">{labels.en}</span>
+  <span data-lang="id">{labels.id}</span>
+</div>
+
+<style>
+  .craft-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 5;
+    padding: 4px 3em;
+    font-family: var(--font-primary);
+    font-size: 11px;
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    line-height: 1.4;
+    color: var(--color-text-primary);
+    text-align: center;
+    white-space: nowrap;
+    transform:
+      translateY(-100%)
+      rotate(90deg)
+      translateX(70.71067811865476%)
+      rotate(-45deg);
+    transform-origin: bottom right;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .craft-badge[data-craft="ai"] {
+    background: #dc2626;
+  }
+
+  .craft-badge[data-craft="hand-crafted"] {
+    background: #2563eb;
+  }
+
+  :global([data-theme="light"]) .craft-badge[data-craft="ai"] {
+    background: #f87171;
+  }
+
+  :global([data-theme="light"]) .craft-badge[data-craft="hand-crafted"] {
+    background: #60a5fa;
+  }
+
+  .craft-badge span[data-lang] { display: none; }
+  :global(html[lang="en"]) .craft-badge span[data-lang="en"],
+  :global(html[lang="id"]) .craft-badge span[data-lang="id"] { display: inline; }
+
+  @media (max-width: 768px) {
+    .craft-badge {
+      padding: 3px 2em;
+      font-size: 9px;
+    }
+  }
+</style>
