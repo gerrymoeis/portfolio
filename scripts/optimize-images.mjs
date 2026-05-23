@@ -71,8 +71,7 @@ async function processImage(sourcePath, slug, outDir) {
 
     await sharp(sourcePath)
       .resize(SIZES.thumbnail.width, SIZES.thumbnail.height, {
-        fit: 'contain',
-        background: { r: 26, g: 28, b: 36, alpha: 1 },
+        fit: 'cover',
       })
       .webp({ quality: QUALITY.webp })
       .toFile(thumb);
@@ -82,8 +81,7 @@ async function processImage(sourcePath, slug, outDir) {
 
     await sharp(sourcePath)
       .resize(SIZES.hero.width, SIZES.hero.height, {
-        fit: 'contain',
-        background: { r: 26, g: 28, b: 36, alpha: 1 },
+        fit: 'cover',
       })
       .webp({ quality: QUALITY.webp })
       .toFile(hero);

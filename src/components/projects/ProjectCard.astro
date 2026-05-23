@@ -188,23 +188,14 @@ const linkKeys = ['github', 'live', 'demo'] as const;
   }
 
   .project-card__thumbnail {
-    width: 100%;
-    height: 180px;
     overflow: hidden;
     border-radius: var(--radius-md);
     flex-shrink: 0;
   }
-  
-  @media (min-width: 769px) {
-    .project-card__thumbnail {
-      height: 200px;
-    }
-  }
 
   .project-card__image {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
+    display: block;
     transition: transform var(--duration-medium) var(--ease-out);
   }
 
@@ -422,7 +413,6 @@ const linkKeys = ['github', 'live', 'demo'] as const;
   @media (max-width: 768px) {
     .project-card { height: auto; }
     .project-card__content { padding: var(--space-6); }
-    .project-card__thumbnail { height: 200px; }
     .project-card__title { text-align: left; }
   }
 </style>

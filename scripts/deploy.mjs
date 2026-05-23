@@ -93,12 +93,17 @@ async function main() {
     exec('npx astro build');
   });
 
-  // Step 5: Stage all changes
+  // Step 5: Strip HTML comments from build output
+  allSuccess &= await step('Strip HTML Comments', () => {
+    exec('node scripts/strip-html-comments.mjs');
+  });
+
+  // Step 6: Stage all changes
   allSuccess &= await step('Stage All Changes', () => {
     exec('git add -A');
   });
 
-  // Step 6: Commit changes
+  // Step 7: Commit changes
   allSuccess &= await step('Commit Changes', () => {
     const timestamp = new Date().toISOString().split('T')[0];
     const commitMessage = `deploy: ${timestamp}`;
@@ -114,7 +119,7 @@ async function main() {
     }
   });
 
-  // Step 7: Push to remote
+  // Step 8: Push to remote
   allSuccess &= await step('Push to Remote', () => {
     const branch = exec('git rev-parse --abbrev-ref HEAD', { silent: true }).trim();
     exec(`git push origin ${branch}`);

@@ -32,12 +32,16 @@ export default defineConfig({
   
   build: {
     inlineStylesheets: 'auto',
+    compressHTML: true,
   },
   
   vite: {
     test: {
       globals: true,
       environment: 'node',
+    },
+    esbuild: {
+      drop: ['console'],
     },
     build: {
       minify: 'esbuild',
