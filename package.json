@@ -10,7 +10,6 @@
     "build:prod": "cross-env NODE_ENV=production DEPLOYMENT_ENVIRONMENT=production astro build && node scripts/strip-html-comments.mjs",
     "generate:cv": "node scripts/generate-cv.mjs",
     "generate:tech-icons": "node scripts/generate-tech-icons.mjs",
-    "predeploy": "node scripts/generate-tech-icons.mjs && node scripts/optimize-images.mjs && node scripts/generate-cv.mjs",
     "build:local": "npm run generate:tech-icons && npm run optimize-images && npm run generate:cv && npm run build",
     "optimize-images": "node scripts/optimize-images.mjs",
     "deploy": "node scripts/deploy.mjs",
