@@ -9,8 +9,8 @@ const PROJECT_ROOT = join(__dirname, '..');
 const THUMBNAIL_ROOT = join(PROJECT_ROOT, '..', 'thumbnails');
 
 const SIZES = {
-  thumbnail: { width: 800, height: 450 },
-  hero: { width: 1600, height: 900 },
+  thumbnail: { width: 800 },
+  hero: { width: 1600 },
 };
 
 const QUALITY = {
@@ -70,22 +70,18 @@ async function processImage(sourcePath, slug, outDir) {
     const thumb = join(outDir, `${slug}-thumb.webp`);
 
     await sharp(sourcePath)
-      .resize(SIZES.thumbnail.width, SIZES.thumbnail.height, {
-        fit: 'cover',
-      })
+      .resize({ width: SIZES.thumbnail.width, fit: 'inside' })
       .webp({ quality: QUALITY.webp })
       .toFile(thumb);
-    log(`  ✓ thumb.webp (${SIZES.thumbnail.width}x${SIZES.thumbnail.height}, q${QUALITY.webp})`, colors.green);
+    log(`  ✓ thumb.webp (max ${SIZES.thumbnail.width}px wide, q${QUALITY.webp})`, colors.green);
 
     const hero = join(outDir, `${slug}-hero.webp`);
 
     await sharp(sourcePath)
-      .resize(SIZES.hero.width, SIZES.hero.height, {
-        fit: 'cover',
-      })
+      .resize({ width: SIZES.hero.width, fit: 'inside' })
       .webp({ quality: QUALITY.webp })
       .toFile(hero);
-    log(`  ✓ hero.webp (${SIZES.hero.width}x${SIZES.hero.height}, q${QUALITY.webp})`, colors.green);
+    log(`  ✓ hero.webp (max ${SIZES.hero.width}px wide, q${QUALITY.webp})`, colors.green);
 
     return true;
   } catch (error) {

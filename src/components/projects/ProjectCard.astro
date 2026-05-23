@@ -132,16 +132,6 @@ const linkKeys = ['github', 'live', 'demo'] as const;
     flex-direction: column;
   }
 
-  .project-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url('/textures/grain.png');
-    opacity: 0.03;
-    pointer-events: none;
-    mix-blend-mode: overlay;
-  }
-
   .project-card:hover {
     border-color: var(--color-accent-primary);
     transform: translateY(-2px);

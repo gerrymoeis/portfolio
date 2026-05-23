@@ -96,17 +96,6 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     overflow: hidden;
   }
 
-  /* Subtle grain texture overlay */
-  .blog-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url('/textures/grain.png');
-    opacity: 0.03;
-    pointer-events: none;
-    mix-blend-mode: overlay;
-  }
-
   .blog-card:hover {
     border-color: var(--color-accent-primary);
     transform: translateY(-2px);
