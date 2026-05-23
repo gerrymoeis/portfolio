@@ -138,9 +138,22 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
   }
   
   .blog-hero {
+    position: relative;
     margin: 0 0 var(--space-10);
     border-radius: var(--radius-lg);
     overflow: hidden;
+  }
+
+  .blog-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      linear-gradient(to top, var(--bg-elevated) 0%, transparent 10%),
+      linear-gradient(to right, var(--bg-elevated) 0%, transparent 5%),
+      linear-gradient(to left, var(--bg-elevated) 0%, transparent 5%);
   }
 
   .blog-hero__image {
