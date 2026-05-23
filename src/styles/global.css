@@ -191,16 +191,11 @@ pre code {
   line-height: 1.7;
 }
 
-/* Dual theme support for Shiki */
-:global([data-theme="light"]) .astro-code span {
-  color: var(--shiki-light, var(--color-text-primary)) !important;
-  background: var(--shiki-light-bg, transparent) !important;
-  font-style: var(--shiki-light-font-style, normal) !important;
-  text-decoration: var(--shiki-light-text-decoration, none) !important;
-}
-
-:global([data-theme="light"]) .astro-code {
-  background: var(--bg-elevated) !important;
+/* Dark theme: use Shiki's --shiki-dark custom properties */
+html:not([data-theme="light"]) .astro-code span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style, normal) !important;
+  text-decoration: var(--shiki-dark-text-decoration, none) !important;
 }
 
 /* Blockquotes */

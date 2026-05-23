@@ -447,7 +447,7 @@ body {
 
 /* Apply transitions to all themed elements */
 * {
-  transition-property: background-color, color, border-color, box-shadow;
+  transition-property: background-color, color, border-color;
   transition-duration: 0.3s;
   transition-timing-function: ease;
 }
