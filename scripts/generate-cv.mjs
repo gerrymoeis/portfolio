@@ -117,9 +117,9 @@ async function aggregateCVData() {
   const libraries = new Set();
   
   const languagePatterns = ['JavaScript', 'TypeScript', 'Python', 'HTML', 'CSS', 'Go', 'Node.js'];
-  const frameworkPatterns = ['React', 'Next.js', 'Astro', 'Vue', 'Tailwind CSS', 'Gin', 'Alpine.js', 'HTMX', 'Drizzle'];
-  const toolPatterns = ['Git', 'GitHub', 'VS Code', 'Figma', 'Blender', 'SQLite', 'PostgreSQL', 'Playwright', 'JSON Web Tokens'];
-  const libraryPatterns = ['GSAP', 'Anime.js', 'LaTeX', 'Bootstrap', 'Axios', 'Framer Motion'];
+  const frameworkPatterns = ['React', 'Next.js', 'Astro', 'Vue', 'Gin', 'Alpine.js', 'HTMX', 'Drizzle', 'Playwright'];
+  const toolPatterns = ['Git', 'GitHub', 'Zed Editor', 'Figma', 'Blender'];
+  const libraryPatterns = ['GSAP', 'Anime.js', 'LaTeX', 'Bootstrap', 'Axios', 'Framer Motion', 'SQLite', 'PostgreSQL', 'JSON Web Tokens', 'Tailwind CSS'];
   
   allTechStack.forEach(tech => {
     if (languagePatterns.some(p => tech.includes(p))) {
@@ -135,9 +135,8 @@ async function aggregateCVData() {
     }
   });
 
-  // Hardcode common tools used across all projects
   tools.add('Git');
-  tools.add('VS Code');
+  tools.add('Zed Editor');
   
   return {
     personal: {
