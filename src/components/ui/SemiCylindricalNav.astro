@@ -30,8 +30,12 @@ const isLinkActive = (linkHref: string): boolean => {
 
 // Helper function to determine if target="_blank" should be rendered
 // Only render target="_blank" on homepage, remove it on /projects and /blogs pages
-const shouldRenderTarget = (linkTarget?: string): string | undefined => {
+// CV links (with hrefByLang) always get target="_blank" regardless of page
+const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string | undefined => {
   if (!linkTarget) return undefined;
+  
+  // CV links always open in new tab
+  if (alwaysRender) return linkTarget;
   
   // Remove target="_blank" on /projects and /blogs pages
   if (currentPath.startsWith('/projects') || currentPath.startsWith('/blogs')) {
@@ -61,7 +65,8 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
     <ul class="semi-cylindrical-nav__list">
       {links.map((link) => {
         const isActive = isLinkActive(link.href);
-        const targetAttr = shouldRenderTarget(link.target);
+        const isCvLink = !!link.hrefByLang;
+        const targetAttr = shouldRenderTarget(link.target, isCvLink);
         return (
           <li class="semi-cylindrical-nav__item">
             <a 
@@ -95,7 +100,8 @@ const shouldRenderTarget = (linkTarget?: string): string | undefined => {
   <ul class="semi-cylindrical-nav__list">
     {links.map((link) => {
       const isActive = isLinkActive(link.href);
-      const targetAttr = shouldRenderTarget(link.target);
+      const isCvLink = !!link.hrefByLang;
+      const targetAttr = shouldRenderTarget(link.target, isCvLink);
       return (
         <li class="semi-cylindrical-nav__item">
           <a 
