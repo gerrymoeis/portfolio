@@ -364,7 +364,7 @@ select:focus-visible {
 
 /* Pure CSS custom cursor - no JS needed */
 body:not([data-theme="light"]) {
-  cursor: url('/gradient-citrine-cursor.png') 32 32, auto;
+  cursor: url('/gradient-citrine-cursor.png') 16 16, auto;
 }
 body:not([data-theme="light"]) a,
 body:not([data-theme="light"]) button,
@@ -372,10 +372,10 @@ body:not([data-theme="light"]) [role="button"],
 body:not([data-theme="light"]) input,
 body:not([data-theme="light"]) textarea,
 body:not([data-theme="light"]) select {
-  cursor: url('/gradient-citrine-pointer.png') 32 32, pointer;
+  cursor: url('/gradient-citrine-pointer.png') 16 16, pointer !important;
 }
 [data-theme="light"] {
-  cursor: url('/gradient-fox-cursor.png') 32 32, auto;
+  cursor: url('/gradient-fox-cursor.png') 16 16, auto;
 }
 [data-theme="light"] a,
 [data-theme="light"] button,
@@ -383,5 +383,5 @@ body:not([data-theme="light"]) select {
 [data-theme="light"] input,
 [data-theme="light"] textarea,
 [data-theme="light"] select {
-  cursor: url('/gradient-fox-pointer.png') 32 32, pointer;
+  cursor: url('/gradient-fox-pointer.png') 16 16, pointer !important;
 }
