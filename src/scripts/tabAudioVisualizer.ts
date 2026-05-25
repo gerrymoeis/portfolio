@@ -192,7 +192,7 @@ export class TabAudioVisualizer {
 
     // Create analyser node
     this.analyser = this.audioContext.createAnalyser();
-    this.analyser.fftSize = 2048; // Higher = more frequency detail
+    this.analyser.fftSize = 1024;
     this.analyser.smoothingTimeConstant = 0.8; // Smoothing (0-1)
 
     // Create source from captured stream

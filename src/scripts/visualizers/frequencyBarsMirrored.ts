@@ -12,6 +12,7 @@
 
 // Global base hue for gradient animation
 let globalHueOffset = 0;
+let dataArray: Uint8Array | null = null;
 
 export function visualizeFrequencyBarsMirrored(
   ctx: CanvasRenderingContext2D,
@@ -20,24 +21,23 @@ export function visualizeFrequencyBarsMirrored(
 ): void {
   // Get frequency data
   const bufferLength = analyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
+  if (!dataArray || dataArray.length !== bufferLength) {
+    dataArray = new Uint8Array(bufferLength);
+  }
   analyser.getByteFrequencyData(dataArray);
 
-  // Clear canvas with fade effect (transparent background)
+  // Clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Continuously shift the base hue of the gradient (animation)
+  // Continuously shift the base hue
   globalHueOffset -= 0.15;
   if (globalHueOffset >= 360) {
     globalHueOffset = 0;
   }
 
-  // SIMPLE: Use same calculation as left-to-right but mirror from center
   const centerX = canvas.width / 2;
-  // Increase bar width multiplier to reduce gaps (2.5 → 3.5)
-  // This makes bars wider and fills more space
-  const barWidth = (centerX / bufferLength) * 3.5; // Increased from 2.5 to 3.5
-  const barGap = 0.5; // Small gap between bars (was 1)
+  const barWidth = (centerX / bufferLength) * 3.5;
+  const barGap = 0.5;
   
   for (let i = 0; i < bufferLength; i++) {
     let barHeight = (dataArray[i] / 255) * canvas.height;
