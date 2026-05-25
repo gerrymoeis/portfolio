@@ -361,3 +361,27 @@ select:focus-visible {
     radial-gradient(circle at 30% 20%, var(--gradient-particle-warm) 0%, transparent 50%),
     radial-gradient(circle at 70% 80%, var(--gradient-particle-cool) 0%, transparent 50%);
 }
+
+/* Pure CSS custom cursor - no JS needed */
+body:not([data-theme="light"]) {
+  cursor: url('/gradient-citrine-cursor.png') 32 32, auto;
+}
+body:not([data-theme="light"]) a,
+body:not([data-theme="light"]) button,
+body:not([data-theme="light"]) [role="button"],
+body:not([data-theme="light"]) input,
+body:not([data-theme="light"]) textarea,
+body:not([data-theme="light"]) select {
+  cursor: url('/gradient-citrine-pointer.png') 32 32, pointer;
+}
+[data-theme="light"] {
+  cursor: url('/gradient-fox-cursor.png') 32 32, auto;
+}
+[data-theme="light"] a,
+[data-theme="light"] button,
+[data-theme="light"] [role="button"],
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  cursor: url('/gradient-fox-pointer.png') 32 32, pointer;
+}
