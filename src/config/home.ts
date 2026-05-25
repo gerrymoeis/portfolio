@@ -88,7 +88,7 @@ export const homeConfig: HomeConfig = {
         en: "/Gerry Moeis_CV_EN.pdf",
         id: "/Gerry Moeis_CV_ID.pdf"
       },
-      download: true
+      target: "_blank",
     },
   ],
 };

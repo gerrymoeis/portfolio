@@ -56,7 +56,7 @@ const filteredSocial = social.filter(link => link.name.toLowerCase() !== 'linked
       labelEn="Download CV"
       labelId="Unduh CV"
       variant="inline"
-      download={true}
+      target="_blank"
       ariaLabel="Download CV"
       id="cvDownloadBtn"
     />
@@ -77,6 +77,9 @@ const filteredSocial = social.filter(link => link.name.toLowerCase() !== 'linked
       : '/Gerry Moeis_CV_EN.pdf';
     
     cvBtn.setAttribute('href', cvFile);
+    cvBtn.setAttribute('target', '_blank');
+    cvBtn.setAttribute('rel', 'noopener noreferrer');
+    cvBtn.removeAttribute('download');
   }
   
   // Update on page load

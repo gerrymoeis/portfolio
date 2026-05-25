@@ -26,6 +26,7 @@ export interface Props {
   labelId: string;
   variant?: 'fixed' | 'inline';
   download?: boolean;
+  target?: string;
   className?: string;
   ariaLabel?: string;
   id?: string;
@@ -39,6 +40,7 @@ const {
   labelId,
   variant = 'inline',
   download = false,
+  target,
   className = '',
   ariaLabel,
   id
@@ -46,7 +48,7 @@ const {
 
 const Tag = href ? 'a' : 'button';
 const additionalProps = href 
-  ? { href, ...(download && { download: true }) } 
+  ? { href, ...(download && { download: true }), ...(target && { target, rel: 'noopener noreferrer' }) } 
   : { type: 'button' as const };
 ---
 
