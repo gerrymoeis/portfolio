@@ -363,25 +363,25 @@ select:focus-visible {
 }
 
 /* Pure CSS custom cursor - no JS needed */
-body:not([data-theme="light"]) {
+html:not([data-theme="light"]) {
   cursor: url('/gradient-citrine-cursor.png') 16 16, auto;
 }
-body:not([data-theme="light"]) a,
-body:not([data-theme="light"]) button,
-body:not([data-theme="light"]) [role="button"],
-body:not([data-theme="light"]) input,
-body:not([data-theme="light"]) textarea,
-body:not([data-theme="light"]) select {
+html:not([data-theme="light"]) a,
+html:not([data-theme="light"]) button,
+html:not([data-theme="light"]) [role="button"],
+html:not([data-theme="light"]) input,
+html:not([data-theme="light"]) textarea,
+html:not([data-theme="light"]) select {
   cursor: url('/gradient-citrine-pointer.png') 16 16, pointer !important;
 }
-[data-theme="light"] {
+html[data-theme="light"] {
   cursor: url('/gradient-fox-cursor.png') 16 16, auto;
 }
-[data-theme="light"] a,
-[data-theme="light"] button,
-[data-theme="light"] [role="button"],
-[data-theme="light"] input,
-[data-theme="light"] textarea,
-[data-theme="light"] select {
+html[data-theme="light"] a,
+html[data-theme="light"] button,
+html[data-theme="light"] [role="button"],
+html[data-theme="light"] input,
+html[data-theme="light"] textarea,
+html[data-theme="light"] select {
   cursor: url('/gradient-fox-pointer.png') 16 16, pointer !important;
 }
