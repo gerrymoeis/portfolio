@@ -82,6 +82,11 @@ export const homeConfig: HomeConfig = {
       target: "_blank"
     },
     { 
+      label: { id: "Musik", en: "Music" }, 
+      href: "/music",
+      target: "_blank"
+    },
+    { 
       label: { id: "CV", en: "CV" }, 
       href: "/Gerry Moeis_CV_EN.pdf", // Will be dynamically updated based on language
       hrefByLang: {
