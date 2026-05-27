@@ -44,7 +44,7 @@ const sortedProjects = allProjects.sort((a, b) => {
     gap: var(--space-8);
     width: 100%;
     margin: 0;
-    padding: var(--space-8) 0;
+    padding: 0;
   }
 
   /* Tablet: 2 columns */
@@ -52,7 +52,7 @@ const sortedProjects = allProjects.sort((a, b) => {
     .project-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: var(--space-6);
-      padding: var(--space-6) 0;
+      padding: 0;
     }
   }
 
@@ -61,7 +61,7 @@ const sortedProjects = allProjects.sort((a, b) => {
     .project-grid {
       grid-template-columns: repeat(3, 1fr);
       gap: var(--space-8);
-      padding: var(--space-8) 0;
+    padding: 0;
     }
   }
 
@@ -69,14 +69,14 @@ const sortedProjects = allProjects.sort((a, b) => {
   @media (max-width: 768px) {
     .project-grid {
       gap: var(--space-8);
-      padding: var(--space-6) 0;
+      padding: 0;
     }
   }
 
   @media (max-width: 480px) {
     .project-grid {
       gap: var(--space-6);
-      padding: var(--space-6) 0;
+      padding: 0;
     }
   }
 </style>

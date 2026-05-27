@@ -10,34 +10,9 @@ import Panel from '../components/ui/Panel.astro';
 import SemiCylindricalNav from '../components/ui/SemiCylindricalNav.astro';
 import Hero from '../components/home/Hero.astro';
 import SocialPanel from '../components/home/SocialPanel.astro';
-import SoundCloudPlaylistCarousel from '../components/home/SoundCloudPlaylistCarousel.astro';
-import AudioVisualizer from '../components/home/AudioVisualizer.astro';
-import AudioVisualizerControls from '../components/home/AudioVisualizerControls.astro';
 import { homeConfig } from '../config/home';
 
 const { hero, social, navigation } = homeConfig;
-
-// SoundCloud playlists with universal amber color
-const soundCloudPlaylists = [
-  {
-    id: 'octopath-1',
-    title: 'Octopath Traveler OST',
-    artist: 'RoxlinkZ 🌀',
-    embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A561457083&color=%23ffa600&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true'
-  },
-  {
-    id: 'octopath-2',
-    title: 'Octopath Traveler 2 Soundtrack',
-    artist: 'InfiniteShadow',
-    embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A1925643635&color=%23ffa600&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true'
-  },
-  {
-    id: 'octopath-0',
-    title: 'OCTOPATH TRAVELER 0 OST',
-    artist: 'RoxlinkZ 🌀',
-    embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2155948367&color=%23ffa600&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true'
-  }
-];
 ---
 
 <BaseLayout 
@@ -62,27 +37,15 @@ const soundCloudPlaylists = [
       </Panel>
     </section>
 
-    <!-- Row 2: Two blocks - Social (left, smaller) + Music (right, larger) -->
+    <!-- Row 2: Social panel -->
     <div class="home__bottom-row">
       <aside class="home__social-block" aria-label="Social media links">
         <Panel variant="atmospheric" depth="mid" class="content-block content-block--social">
           <SocialPanel social={social} />
         </Panel>
       </aside>
-
-      <aside class="home__music-block" aria-label="SoundCloud music player">
-        <Panel variant="atmospheric" depth="mid" class="content-block content-block--music">
-          <SoundCloudPlaylistCarousel playlists={soundCloudPlaylists} />
-        </Panel>
-      </aside>
     </div>
   </main>
-
-  <!-- Audio Visualizer BEFORE main content in DOM for proper stacking -->
-  <AudioVisualizer height={180} />
-  
-  <!-- Audio Visualizer Controls -->
-  <AudioVisualizerControls />
 </BaseLayout>
 
 <style>
@@ -92,8 +55,8 @@ const soundCloudPlaylists = [
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 200px var(--space-6) 200px;
-    gap: var(--space-12);
+    padding: var(--space-32) var(--space-6) var(--space-32);
+    gap: calc(var(--space-32) / 3);
   }
 
   .home__hero-block,
@@ -105,11 +68,6 @@ const soundCloudPlaylists = [
   .home__bottom-row {
     display: flex;
     flex-direction: column;
-    gap: var(--space-12);
-  }
-
-  .home__music-block {
-    min-height: 400px;
   }
 
   :global(.content-block--hero) {
@@ -117,36 +75,29 @@ const soundCloudPlaylists = [
     padding: var(--panel-padding);
   }
 
-  :global(.content-block--social),
-  :global(.content-block--music) {
+  :global(.content-block--social) {
     padding: var(--panel-padding);
   }
 
   @media (max-width: 480px) {
     .home {
-      padding: 200px var(--space-4) 200px;
-      gap: var(--space-12);
+      padding: var(--space-16) var(--space-4) var(--space-16);
+      gap: calc(var(--space-16) / 3);
     }
   }
 
   @media (min-width: 901px) {
     .home {
-      padding: 200px var(--space-8) 200px;
+      padding: var(--space-32) var(--space-8) var(--space-32);
     }
     
     .home__bottom-row {
       flex-direction: row;
-      gap: var(--space-12);
     }
     
     .home__social-block {
       flex: 1;
       min-width: 300px;
-    }
-    
-    .home__music-block {
-      flex: 2;
-      min-width: 400px;
     }
   }
 </style>

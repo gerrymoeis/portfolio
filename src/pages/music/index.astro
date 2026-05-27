@@ -1,0 +1,174 @@
+---
+/**
+ * Music Page - Dedicated music listening page
+ * Features SoundCloud playlist carousel and real-time audio visualizer
+ * Copied from home page (home page keeps its copy intact)
+ */
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SemiCylindricalNav from '../../components/ui/SemiCylindricalNav.astro';
+import Footer from '../../components/ui/Footer.astro';
+import Panel from '../../components/ui/Panel.astro';
+import PageBackgroundGradient from '../../components/ui/PageBackgroundGradient.astro';
+import SoundCloudPlaylistCarousel from '../../components/home/SoundCloudPlaylistCarousel.astro';
+import AudioVisualizer from '../../components/home/AudioVisualizer.astro';
+import AudioVisualizerControls from '../../components/home/AudioVisualizerControls.astro';
+import { homeConfig } from '../../config/home';
+
+const navLinks = homeConfig.navigation;
+const currentPath = Astro.url.pathname;
+
+const soundCloudPlaylists = [
+  {
+    id: 'octopath-1',
+    title: 'Octopath Traveler OST',
+    artist: 'RoxlinkZ 🌀',
+    embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A561457083&color=%23ffa600&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true'
+  },
+  {
+    id: 'octopath-2',
+    title: 'Octopath Traveler 2 Soundtrack',
+    artist: 'InfiniteShadow',
+    embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A1925643635&color=%23ffa600&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true'
+  },
+  {
+    id: 'octopath-0',
+    title: 'OCTOPATH TRAVELER 0 OST',
+    artist: 'RoxlinkZ 🌀',
+    embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2155948367&color=%23ffa600&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true'
+  }
+];
+---
+
+<BaseLayout
+  title="Music | Gerry Moeis"
+  description="Listen to curated SoundCloud playlists with a real-time audio visualizer experience."
+  ogType="website"
+>
+  <SemiCylindricalNav links={navLinks} currentPath={currentPath} />
+
+  <div class="page-layout depth-mid music-page">
+    <PageBackgroundGradient />
+    <main role="main" class="music-main">
+      <header class="music-hero">
+        <Panel variant="elevated" glow={true} class="hero-panel">
+          <h1 class="music-hero__title" data-bilingual>
+            <span data-lang="en">Music</span>
+            <span data-lang="id">Musik</span>
+          </h1>
+          <p class="music-hero__description" data-bilingual>
+            <span data-lang="en">Curated SoundCloud playlists with a real-time audio visualizer. Press start to enhance your listening experience.</span>
+            <span data-lang="id">Daftar putar SoundCloud pilihan dengan visualizer audio real-time. Tekan mulai untuk meningkatkan pengalaman mendengarkan.</span>
+          </p>
+        </Panel>
+      </header>
+
+      <div class="music-content">
+        <Panel variant="atmospheric" depth="mid" class="music-player-panel">
+          <SoundCloudPlaylistCarousel playlists={soundCloudPlaylists} />
+        </Panel>
+      </div>
+    </main>
+
+    <Footer currentPath={currentPath} />
+  </div>
+
+  <AudioVisualizer height={180} />
+  <AudioVisualizerControls />
+</BaseLayout>
+
+<style>
+  .page-layout {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 0;
+    background: var(--bg-elevated);
+  }
+
+  .page-layout > :global(*:not(.page-gradient)) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .music-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-6);
+  }
+
+  .music-hero {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 0 calc(var(--space-32) / 3);
+  }
+
+  :global(.hero-panel) {
+    padding: var(--space-8) var(--space-6);
+    text-align: center;
+  }
+
+  .music-hero__title {
+    font-family: var(--font-primary);
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-3) 0;
+    line-height: var(--leading-tight);
+  }
+
+  .music-hero__title span[data-lang] {
+    display: none;
+  }
+
+  :global(html[lang="en"]) .music-hero__title span[data-lang="en"],
+  :global(html[lang="id"]) .music-hero__title span[data-lang="id"] {
+    display: inline;
+  }
+
+  .music-hero__description {
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  .music-hero__description span[data-lang] {
+    display: none;
+  }
+
+  :global(html[lang="en"]) .music-hero__description span[data-lang="en"],
+  :global(html[lang="id"]) .music-hero__description span[data-lang="id"] {
+    display: inline;
+  }
+
+  .music-content {
+    padding-bottom: 0;
+  }
+
+  .music-player-panel {
+    min-height: 400px;
+  }
+
+  @media (max-width: 768px) {
+    .music-main {
+      padding: var(--space-16) var(--space-4);
+    }
+
+    .music-hero {
+      padding: 0 0 calc(var(--space-16) / 3);
+    }
+
+    :global(.hero-panel) {
+      padding: var(--space-6) var(--space-4);
+    }
+
+    .music-hero__title {
+      font-size: var(--text-3xl);
+    }
+
+    .music-hero__description {
+      font-size: var(--text-sm);
+    }
+  }
+</style>
