@@ -29,20 +29,24 @@ const isLinkActive = (linkHref: string): boolean => {
 };
 
 // Helper function to determine if target="_blank" should be rendered
-// Only render target="_blank" on homepage, remove it on /projects and /blogs pages
+// Music page: all links open in new tab
+// Home, projects, blogs pages: no target except CV
 // CV links (with hrefByLang) always get target="_blank" regardless of page
 const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string | undefined => {
+  // CV links always open in new tab
+  if (alwaysRender) return '_blank';
+  
+  // Music page: ALL non-CV links open in new tab
+  if (currentPath === '/music') return '_blank';
+  
+  // If link has no target configured, don't add one
   if (!linkTarget) return undefined;
   
-  // CV links always open in new tab
-  if (alwaysRender) return linkTarget;
-  
-  // Remove target="_blank" on /projects and /blogs pages
-  if (currentPath.startsWith('/projects') || currentPath.startsWith('/blogs')) {
+  // Home, projects, blogs pages: remove target from non-CV links
+  if (currentPath === '/' || currentPath.startsWith('/projects') || currentPath.startsWith('/blogs')) {
     return undefined;
   }
   
-  // Keep target="_blank" on homepage and other pages
   return linkTarget;
 };
 ---
