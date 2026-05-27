@@ -92,8 +92,8 @@ const soundCloudPlaylists = [
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 200px var(--space-6) 200px;
-    gap: var(--space-12);
+    padding: var(--space-32) var(--space-6) var(--space-32);
+    gap: calc(var(--space-32) / 3);
   }
 
   .home__hero-block,
@@ -124,14 +124,14 @@ const soundCloudPlaylists = [
 
   @media (max-width: 480px) {
     .home {
-      padding: 200px var(--space-4) 200px;
-      gap: var(--space-12);
+      padding: var(--space-16) var(--space-4) var(--space-16);
+      gap: calc(var(--space-16) / 3);
     }
   }
 
   @media (min-width: 901px) {
     .home {
-      padding: 200px var(--space-8) 200px;
+      padding: var(--space-32) var(--space-8) var(--space-32);
     }
     
     .home__bottom-row {

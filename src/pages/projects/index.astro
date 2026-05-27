@@ -61,7 +61,7 @@ const currentPath = Astro.url.pathname;
   .page-layout {
     position: relative;
     min-height: 100vh;
-    padding-top: 100px;
+    padding-top: 0;
     background: var(--bg-elevated);
   }
   
@@ -73,14 +73,14 @@ const currentPath = Astro.url.pathname;
   .projects-main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 var(--space-6);
+    padding: var(--space-32) var(--space-6);
   }
 
-  /* Hero Section - Matches Blogs page styling */
+  /* Hero Section - Matches music page padding */
   .projects-hero {
     max-width: 700px;
     margin: 0 auto;
-    padding: var(--space-12) 0 var(--space-8);
+    padding: 0 0 calc(var(--space-32) / 3);
   }
   
   :global(.hero-panel) {
@@ -128,21 +128,17 @@ const currentPath = Astro.url.pathname;
   }
   
   .projects-content {
-    padding-bottom: var(--space-12);
+    padding-bottom: 0;
   }
   
   /* Mobile */
   @media (max-width: 768px) {
-    .page-layout {
-      padding-top: 80px;
-    }
-    
     .projects-main {
-      padding: 0 var(--space-4);
+      padding: var(--space-16) var(--space-4);
     }
     
     .projects-hero {
-      padding: var(--space-8) 0 var(--space-8);
+      padding: 0 0 calc(var(--space-16) / 3);
     }
     
     :global(.hero-panel) {
@@ -158,7 +154,7 @@ const currentPath = Astro.url.pathname;
     }
     
     .projects-content {
-      padding-bottom: var(--space-8);
+      padding-bottom: 0;
     }
   }
   
