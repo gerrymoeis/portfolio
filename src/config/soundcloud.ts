@@ -42,5 +42,19 @@ export const soundCloudPlaylists: SoundCloudPlaylist[] = [
     artist: 'RoxlinkZ 🌀',
     embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2155948367&color=%23ffa600&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true',
     description: 'OCTOPATH TRAVELER 0 Original Soundtrack'
+  },
+  {
+    id: 'undertale-ost',
+    title: 'Full Game - Undertale OST',
+    artist: 'Undertale OST',
+    embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A670781298&color=%23ffa600&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true',
+    description: 'Complete Undertale Original Soundtrack'
+  },
+  {
+    id: 'deltarune-ost',
+    title: 'Deltarune Chapter 1-4 OST',
+    artist: 'lodestreza',
+    embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A1318980133&color=%23ffa600&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true',
+    description: 'Deltarune Chapters 1-4 Original Soundtrack'
   }
 ];
