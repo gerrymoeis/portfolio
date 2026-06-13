@@ -68,8 +68,7 @@ const socialLinks = [
 <style>
   .page-layout {
     position: relative;
-    height: 100dvh;
-    overflow-y: hidden;
+    min-height: 100dvh;
     background: var(--bg-elevated);
   }
 
@@ -82,8 +81,8 @@ const socialLinks = [
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    height: 100%;
-    padding: var(--space-20) var(--space-6) var(--space-8);
+    min-height: 100dvh;
+    padding: var(--space-24) var(--space-6) var(--space-6);
     width: 100%;
     box-sizing: border-box;
   }
@@ -91,18 +90,17 @@ const socialLinks = [
   .home-panel {
     width: 100%;
     max-width: var(--max-width);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
+  }
+
+  .home-panel.panel.panel--elevated {
+    padding: var(--space-6);
   }
 
   .home-panel__top {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-8);
+    gap: var(--space-6);
     align-items: start;
-    flex-shrink: 0;
   }
 
   .home-panel__hero {
@@ -114,6 +112,8 @@ const socialLinks = [
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-2);
+    border-top: 1px solid var(--color-border-medium);
+    padding-top: var(--space-3);
   }
 
   .home-panel__socials-heading {
@@ -177,13 +177,12 @@ const socialLinks = [
   .home-panel__divider {
     border: none;
     border-top: 1px solid var(--color-border-medium);
-    margin: var(--space-4) 0;
-    flex-shrink: 0;
+    margin: var(--space-3) 0;
   }
 
   .home-panel__cta {
     display: inline-block;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
     font-size: var(--text-base);
     font-weight: var(--weight-medium);
     color: var(--color-accent-primary);
@@ -191,7 +190,6 @@ const socialLinks = [
     transition:
       color var(--duration-fast) var(--ease-out),
       transform var(--duration-fast) var(--ease-out);
-    flex-shrink: 0;
   }
 
   .home-panel__cta:hover {
@@ -203,21 +201,8 @@ const socialLinks = [
   :global(html[lang="id"]) .home-panel__cta span[data-lang="id"] { display: inline; }
 
   @media (max-width: 767px) {
-    .page-layout {
-      height: auto;
-      min-height: 100dvh;
-      overflow-y: visible;
-    }
-
     .home-main {
-      min-height: 100%;
-      padding: var(--space-16) var(--space-4) var(--space-12);
-      align-items: center;
-    }
-
-    .home-panel {
-      height: auto;
-      min-height: auto;
+      padding: var(--space-16) var(--space-4) var(--space-10);
     }
 
     .home-panel__top {
