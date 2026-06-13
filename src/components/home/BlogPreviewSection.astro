@@ -1,0 +1,125 @@
+---
+import { getCollection } from 'astro:content';
+import BlogCard from '../blogs/BlogCard.astro';
+import { getReadingTimeFromMarkdown } from '../../utils/readingTime';
+
+const allBlogs = await getCollection('blogs');
+const recentBlogs = allBlogs
+  .map((blog) => ({
+    ...blog,
+    readingTime: getReadingTimeFromMarkdown(blog.body),
+  }))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 2);
+---
+
+<section class="blog-preview" aria-label="Latest blog posts">
+  <h2 class="blog-preview__heading" data-bilingual>
+    <span data-lang="en">Latest Blog Posts</span>
+    <span data-lang="id">Artikel Blog Terbaru</span>
+  </h2>
+  {recentBlogs.length === 0 ? (
+    <p class="blog-preview__empty" data-bilingual>
+      <span data-lang="en">No blog posts yet. Check back soon!</span>
+      <span data-lang="id">Belum ada artikel blog. Nantikan segera!</span>
+    </p>
+  ) : (
+    <div class="blog-preview__grid" role="list">
+      {recentBlogs.map((blog) => (
+        <BlogCard
+          title={blog.data.title}
+          date={blog.data.date}
+          summary={blog.data.summary}
+          slug={blog.slug}
+          tags={blog.data.tags}
+          craft={blog.data.craft}
+          readingTime={blog.readingTime}
+          thumbnail={blog.data.thumbnail}
+        />
+      ))}
+    </div>
+  )}
+  {allBlogs.length > 2 && (
+    <a href="/blogs" class="blog-preview__link" data-bilingual>
+      <span data-lang="en">Read more blogs →</span>
+      <span data-lang="id">Baca blog lainnya →</span>
+    </a>
+  )}
+</section>
+
+<style>
+  .blog-preview {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-4) var(--space-16);
+    width: 100%;
+  }
+
+  .blog-preview__heading {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-6) 0;
+    text-align: center;
+  }
+
+  .blog-preview__heading span[data-lang] { display: none; }
+  :global(html[lang="en"]) .blog-preview__heading span[data-lang="en"],
+  :global(html[lang="id"]) .blog-preview__heading span[data-lang="id"] { display: inline; }
+
+  .blog-preview__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .blog-preview__empty {
+    text-align: center;
+    color: var(--color-text-tertiary);
+    padding: var(--space-8) 0;
+  }
+
+  .blog-preview__link {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .blog-preview__link:hover {
+    transform: translateX(4px);
+  }
+
+  .blog-preview__link span[data-lang] { display: none; }
+  :global(html[lang="en"]) .blog-preview__link span[data-lang="en"],
+  :global(html[lang="id"]) .blog-preview__link span[data-lang="id"] { display: inline; }
+
+  @media (min-width: 900px) {
+    .blog-preview__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-8);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .blog-preview {
+      padding: var(--space-6) var(--space-4) var(--space-12);
+    }
+
+    .blog-preview__heading {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-4);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blog-preview__link:hover {
+      transform: none;
+    }
+  }
+</style>

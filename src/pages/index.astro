@@ -1,103 +1,101 @@
 ---
-/**
- * Home Page - Redesigned Layout
- * Single-screen layout with semi-cylindrical nav, 3-block grid, and particle effects
- * Minimalist aesthetic with subtle fantasy influences
- */
-
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Panel from '../components/ui/Panel.astro';
 import SemiCylindricalNav from '../components/ui/SemiCylindricalNav.astro';
-import Hero from '../components/home/Hero.astro';
-import SocialPanel from '../components/home/SocialPanel.astro';
+import PageBackgroundGradient from '../components/ui/PageBackgroundGradient.astro';
+import HeroCompact from '../components/home/HeroCompact.astro';
+import FeaturedProjectsSection from '../components/home/FeaturedProjectsSection.astro';
+import BlogPreviewSection from '../components/home/BlogPreviewSection.astro';
 import { homeConfig } from '../config/home';
 
-const { hero, social, navigation } = homeConfig;
+const navLinks = homeConfig.navigation;
 ---
 
-<BaseLayout 
-  title="Gerry Moeis | Web Developer & Tech Enthusiast" 
+<BaseLayout
+  title="Gerry Moeis | Web Developer & Tech Enthusiast"
   description="Computer Science student at State University of Surabaya passionate about web development, modern technologies, and building meaningful digital solutions."
-  noScroll={false}
   ogType="website"
 >
-  <!-- Semi-cylindrical navigation at top -->
-  <SemiCylindricalNav links={navigation} currentPath="/" />
+  <SemiCylindricalNav links={navLinks} currentPath="/" />
 
-  <!-- Main content with radial gradient background -->
-  <main class="home page-background-radial depth-mid" role="main">
-    <!-- Row 1: One long horizontal block (Hero) -->
-    <section class="home__hero-block" aria-label="Introduction">
-      <Panel variant="elevated" depth="near" glow={true} class="content-block content-block--hero">
-        <Hero 
-          title={hero.title}
-          subtitle={hero.subtitle}
-          description={hero.description}
-        />
-      </Panel>
-    </section>
+  <div class="page-layout depth-mid home-page">
+    <PageBackgroundGradient />
+    <main role="main" class="home-main">
+      <section class="home-section home-section--hero">
+        <HeroCompact />
+      </section>
 
-    <!-- Row 2: Social panel -->
-    <div class="home__bottom-row">
-      <aside class="home__social-block" aria-label="Social media links">
-        <Panel variant="atmospheric" depth="mid" class="content-block content-block--social">
-          <SocialPanel social={social} />
-        </Panel>
-      </aside>
-    </div>
-  </main>
+      <section class="home-section home-section--featured">
+        <FeaturedProjectsSection />
+      </section>
+
+      <section class="home-section home-section--blog">
+        <BlogPreviewSection />
+      </section>
+    </main>
+  </div>
 </BaseLayout>
 
 <style>
-  .home {
+  .page-layout {
+    position: relative;
+    min-height: 100vh;
+    background: var(--bg-elevated);
+  }
+
+  .page-layout > :global(*:not(.page-gradient)) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .home-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .home-section {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: var(--space-32) var(--space-6) var(--space-32);
-    gap: calc(var(--space-32) / 3);
   }
 
-  .home__hero-block,
-  .home__bottom-row {
-    width: 100%;
-    max-width: var(--max-width);
+  .home-section--hero {
+    flex: 1;
+    padding-top: calc(var(--space-32) + var(--space-8));
+    padding-bottom: var(--space-8);
   }
 
-  .home__bottom-row {
-    display: flex;
-    flex-direction: column;
+  .home-section--featured {
+    flex: 2;
+    padding: var(--space-8) 0;
   }
 
-  :global(.content-block--hero) {
-    text-align: center;
-    padding: var(--panel-padding);
+  .home-section--blog {
+    flex: 1;
+    padding-bottom: var(--space-16);
   }
 
-  :global(.content-block--social) {
-    padding: var(--panel-padding);
+  @media (max-width: 768px) {
+    .home-section--hero {
+      padding-top: calc(var(--space-20) + var(--space-8));
+      padding-bottom: var(--space-4);
+    }
+
+    .home-section--featured {
+      padding: var(--space-4) 0;
+    }
+
+    .home-section--blog {
+      padding-bottom: var(--space-12);
+    }
   }
 
   @media (max-width: 480px) {
-    .home {
-      padding: var(--space-16) var(--space-4) var(--space-16);
-      gap: calc(var(--space-16) / 3);
-    }
-  }
-
-  @media (min-width: 901px) {
-    .home {
-      padding: var(--space-32) var(--space-8) var(--space-32);
-    }
-    
-    .home__bottom-row {
-      flex-direction: row;
-    }
-    
-    .home__social-block {
-      flex: 1;
-      min-width: 300px;
+    .home-section--hero {
+      padding-top: calc(var(--space-16) + var(--space-8));
+      padding-bottom: var(--space-2);
     }
   }
 </style>

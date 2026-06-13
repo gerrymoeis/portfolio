@@ -1,0 +1,166 @@
+---
+import Icon from '../ui/Icon.astro';
+
+const socialLinks = [
+  { name: "GitHub", url: "https://github.com/gerrymoeis", icon: "github" },
+  { name: "Email", url: "mailto:gerrymoeis@gmail.com", icon: "email" },
+];
+---
+
+<section class="hero-compact" aria-label="Introduction">
+  <h1 class="hero-compact__name">Gerry Moeis</h1>
+  <p class="hero-compact__headline" data-bilingual>
+    <span data-lang="en">Web Developer &amp; Tech Enthusiast</span>
+    <span data-lang="id">Web Developer &amp; Penggemar Teknologi</span>
+  </p>
+  <p class="hero-compact__tagline" data-bilingual>
+    <span data-lang="en">Just an average programmer who loves tech and coding and trying to be better every day.</span>
+    <span data-lang="id">Cuma programmer biasa yang suka teknologi dan coding, dan selalu berusaha jadi lebih baik setiap hari.</span>
+  </p>
+  <div class="hero-compact__social">
+    {socialLinks.map((link) => (
+      <a
+        href={link.url}
+        class="hero-compact__social-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Visit ${link.name}`}
+      >
+        <Icon name={link.icon} class="hero-compact__social-icon" />
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .hero-compact {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .hero-compact__name {
+    font-size: var(--text-5xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-3) 0;
+    line-height: var(--leading-tight);
+  }
+
+  .hero-compact__headline {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-medium);
+    color: var(--color-accent-primary);
+    margin: 0 0 var(--space-2) 0;
+    line-height: var(--leading-normal);
+  }
+
+  .hero-compact__tagline {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-6) 0;
+    line-height: var(--leading-relaxed);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-compact__social {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .hero-compact__social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--color-border-accent);
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    transition:
+      color var(--duration-medium) var(--ease-out),
+      border-color var(--duration-medium) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-medium) var(--ease-out);
+  }
+
+  .hero-compact__social-icon {
+    font-size: var(--text-xl);
+  }
+
+  .hero-compact__social-link:hover {
+    color: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
+    transform: translateY(-2px);
+  }
+
+  :global(html:not([data-theme="light"])) .hero-compact__social-link:hover {
+    box-shadow:
+      0 0 20px rgba(246, 224, 94, 0.4),
+      0 0 10px rgba(246, 224, 94, 0.2);
+  }
+
+  :global([data-theme="light"]) .hero-compact__social-link:hover {
+    box-shadow:
+      0 0 20px rgba(255, 85, 0, 0.3),
+      0 0 10px rgba(255, 85, 0, 0.15);
+  }
+
+  .hero-compact__social-link:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+
+  .hero-compact__headline span[data-lang],
+  .hero-compact__tagline span[data-lang] {
+    display: none;
+  }
+
+  :global(html[lang="en"]) .hero-compact__headline span[data-lang="en"],
+  :global(html[lang="id"]) .hero-compact__headline span[data-lang="id"],
+  :global(html[lang="en"]) .hero-compact__tagline span[data-lang="en"],
+  :global(html[lang="id"]) .hero-compact__tagline span[data-lang="id"] {
+    display: inline;
+  }
+
+  @media (max-width: 480px) {
+    .hero-compact {
+      padding: var(--space-6) var(--space-4);
+    }
+
+    .hero-compact__name {
+      font-size: var(--text-3xl);
+    }
+
+    .hero-compact__headline {
+      font-size: var(--text-base);
+    }
+
+    .hero-compact__tagline {
+      font-size: var(--text-sm);
+    }
+
+    .hero-compact__social-link {
+      width: 40px;
+      height: 40px;
+    }
+
+    .hero-compact__social-icon {
+      font-size: var(--text-lg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-compact__social-link {
+      transition: none;
+    }
+
+    .hero-compact__social-link:hover {
+      transform: none;
+    }
+  }
+</style>

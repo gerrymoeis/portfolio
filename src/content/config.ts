@@ -34,6 +34,7 @@ const projectsCollection = defineCollection({
     year: z.number(), // For display on frontend
     status: z.enum(['completed', 'in-progress', 'experimental', 'archived']),
     priority: z.number().optional(), // Display order for in-progress (higher = first)
+    featured: z.boolean().optional().default(false),
     category: z.union([
       z.enum(['web', 'backend', 'data-mining']),
       z.array(z.enum(['web', 'backend', 'data-mining'])),

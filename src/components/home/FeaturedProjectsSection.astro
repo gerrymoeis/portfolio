@@ -1,0 +1,124 @@
+---
+import { getCollection } from 'astro:content';
+import FeaturedProjectCard from './FeaturedProjectCard.astro';
+
+const allProjects = await getCollection('projects');
+const featured = allProjects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => {
+    const pa = a.data.priority || 0;
+    const pb = b.data.priority || 0;
+    if (pa !== pb) return pb - pa;
+    return b.data.date.getTime() - a.data.date.getTime();
+  });
+---
+
+<section class="featured-section" aria-label="Featured projects">
+  <h2 class="featured-section__heading" data-bilingual>
+    <span data-lang="en">Featured Projects</span>
+    <span data-lang="id">Proyek Unggulan</span>
+  </h2>
+  <div class="featured-section__scroll">
+    {featured.map((project) => (
+      <FeaturedProjectCard
+        title={project.data.title}
+        summary={project.data.summary}
+        status={project.data.status}
+        thumbnail={project.data.thumbnail}
+        link={project.data.links?.live || project.data.links?.github}
+        slug={project.slug}
+      />
+    ))}
+  </div>
+  <a href="/projects" class="featured-section__link" data-bilingual>
+    <span data-lang="en">See all projects →</span>
+    <span data-lang="id">Lihat semua proyek →</span>
+  </a>
+</section>
+
+<style>
+  .featured-section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-4);
+    width: 100%;
+  }
+
+  .featured-section__heading {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-6) 0;
+    text-align: center;
+  }
+
+  .featured-section__heading span[data-lang] { display: none; }
+  :global(html[lang="en"]) .featured-section__heading span[data-lang="en"],
+  :global(html[lang="id"]) .featured-section__heading span[data-lang="id"] { display: inline; }
+
+  .featured-section__scroll {
+    display: flex;
+    gap: var(--space-6);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--space-2) 0 var(--space-4);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-accent) transparent;
+  }
+
+  .featured-section__scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .featured-section__scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .featured-section__scroll::-webkit-scrollbar-thumb {
+    background: var(--color-border-accent);
+    border-radius: 3px;
+  }
+
+  .featured-section__link {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .featured-section__link:hover {
+    transform: translateX(4px);
+  }
+
+  .featured-section__link span[data-lang] { display: none; }
+  :global(html[lang="en"]) .featured-section__link span[data-lang="en"],
+  :global(html[lang="id"]) .featured-section__link span[data-lang="id"] { display: inline; }
+
+  @media (max-width: 480px) {
+    .featured-section {
+      padding: var(--space-6) var(--space-4);
+    }
+
+    .featured-section__heading {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-4);
+    }
+
+    .featured-section__scroll {
+      gap: var(--space-4);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .featured-section__link:hover {
+      transform: none;
+    }
+  }
+</style>
