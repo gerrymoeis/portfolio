@@ -12,9 +12,14 @@ interface Props {
     live?: string;
     demo?: string;
   };
+  linkTitles?: {
+    github?: string;
+    live?: string;
+    demo?: string;
+  };
 }
 
-const { title, year, status, techStack, thumbnail, links } = Astro.props;
+const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.props;
 
 const statusDisplay = {
   'completed': { en: 'Completed', id: 'Selesai' },
@@ -23,12 +28,24 @@ const statusDisplay = {
   'archived': { en: 'Archived', id: 'Diarsipkan' }
 };
 
-const linkKeys = ['github', 'live', 'demo'] as const;
+function linkLabel(key: string): string {
+  if (linkTitles && linkTitles[key as keyof typeof linkTitles]) {
+    return linkTitles[key as keyof typeof linkTitles]!;
+  }
+  const defaults: Record<string, string> = { github: 'GitHub', live: 'Live', demo: 'Demo' };
+  return defaults[key] || key;
+}
 
 function linkIcon(key: string): string {
+  if (linkTitles && linkTitles[key as keyof typeof linkTitles]) {
+    const label = linkTitles[key as keyof typeof linkTitles]!;
+    if (label !== 'Live' && label !== 'Demo') return 'fab fa-github';
+  }
   const icons: Record<string, string> = { github: 'fab fa-github', live: 'fas fa-external-link-alt', demo: 'fas fa-play-circle' };
   return icons[key] || 'fas fa-link';
 }
+
+const linkKeys = ['github', 'live', 'demo'] as const;
 ---
 
 <article class="featured-card">
@@ -66,16 +83,20 @@ function linkIcon(key: string): string {
         {linkKeys.map(key => {
           const url = links[key];
           if (!url) return null;
+          const label = linkLabel(key);
           return (
             <a
               href={url}
               class="featured-card__link"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${key} - ${title.en}`}
+              aria-label={`${label} - ${title.en}`}
             >
               <i class={linkIcon(key)}></i>
-              <span>{key === 'github' ? 'GitHub' : key === 'live' ? 'Live' : 'Demo'}</span>
+              <span data-bilingual>
+                <span data-lang="en">{label}</span>
+                <span data-lang="id">{label}</span>
+              </span>
             </a>
           );
         })}
@@ -287,7 +308,7 @@ function linkIcon(key: string): string {
 
   .featured-card__links {
     display: flex;
-    gap: var(--space-3);
+    gap: var(--space-4);
     flex-wrap: wrap;
     margin-top: auto;
   }
@@ -295,14 +316,16 @@ function linkIcon(key: string): string {
   .featured-card__link {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-3);
-    font-size: var(--text-xs);
-    font-weight: var(--weight-medium);
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-5);
+    background: transparent;
     color: var(--color-accent-primary);
     text-decoration: none;
     border: 1px solid var(--color-accent-primary);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-full);
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     transition: all var(--duration-fast) var(--ease-out);
   }
 
@@ -312,13 +335,17 @@ function linkIcon(key: string): string {
   }
 
   .featured-card__link i {
-    font-size: var(--text-xs);
+    font-size: var(--text-sm);
   }
 
   .featured-card__link:focus-visible {
     outline: 2px solid var(--color-accent-primary);
     outline-offset: 2px;
   }
+
+  .featured-card__link span[data-lang] { display: none; }
+  :global(html[lang="en"]) .featured-card__link span[data-lang="en"],
+  :global(html[lang="id"]) .featured-card__link span[data-lang="id"] { display: inline; }
 
   @media (prefers-reduced-motion: reduce) {
     .featured-card,
@@ -329,5 +356,6 @@ function linkIcon(key: string): string {
     }
     .featured-card:hover { transform: none; }
     .featured-card:hover .featured-card__image { transform: none; }
+    .featured-card__link:hover { background: transparent; }
   }
 </style>

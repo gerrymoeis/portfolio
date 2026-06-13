@@ -12,7 +12,8 @@ const navLinks = homeConfig.navigation;
 
 const socialLinks = [
   { name: "GitHub", url: "https://github.com/gerrymoeis", icon: "github" },
-  { name: "Email", url: "mailto:gerrymoeis@gmail.com", icon: "email" },
+  { name: "Gmail", url: "mailto:gerrymoeis@gmail.com", icon: "email" },
+  { name: "YouTube", url: "https://www.youtube.com/@gerrymoeis", icon: "youtube" },
 ];
 ---
 
@@ -31,16 +32,21 @@ const socialLinks = [
           <div class="home-panel__hero">
             <HeroCompact />
           </div>
-          <div class="home-panel__connect">
+          <div class="home-panel__socials">
+            <p class="home-panel__socials-heading" data-bilingual>
+              <span data-lang="en">Find me on</span>
+              <span data-lang="id">Temui saya di</span>
+            </p>
             {socialLinks.map((link) => (
               <a
                 href={link.url}
-                class="home-panel__connect-link"
+                class="home-panel__social-link"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Visit ${link.name}`}
               >
-                <Icon name={link.icon} class="home-panel__connect-icon" />
+                <Icon name={link.icon} size="lg" />
+                <span>{link.name}</span>
               </a>
             ))}
           </div>
@@ -62,7 +68,8 @@ const socialLinks = [
 <style>
   .page-layout {
     position: relative;
-    min-height: 100vh;
+    height: 100dvh;
+    overflow-y: hidden;
     background: var(--bg-elevated);
   }
 
@@ -74,47 +81,65 @@ const socialLinks = [
   .home-main {
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: calc(var(--space-32) + var(--space-8)) var(--space-6) var(--space-16);
+    align-items: flex-start;
+    height: 100%;
+    padding: var(--space-20) var(--space-6) var(--space-8);
     width: 100%;
+    box-sizing: border-box;
   }
 
   .home-panel {
     width: 100%;
     max-width: var(--max-width);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
 
   .home-panel__top {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-8);
-    align-items: flex-start;
+    align-items: start;
+    flex-shrink: 0;
   }
 
   .home-panel__hero {
-    flex: 2 1 280px;
+    min-width: 0;
   }
 
-  .home-panel__connect {
-    flex: 1 1 140px;
+  .home-panel__socials {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    gap: var(--space-3);
-    padding-top: var(--space-2);
+    align-items: flex-start;
+    gap: var(--space-2);
   }
 
-  .home-panel__connect-link {
+  .home-panel__socials-heading {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    margin: 0;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .home-panel__socials-heading span[data-lang] { display: none; }
+  :global(html[lang="en"]) .home-panel__socials-heading span[data-lang="en"],
+  :global(html[lang="id"]) .home-panel__socials-heading span[data-lang="id"] { display: inline; }
+
+  .home-panel__social-link {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-5);
     border: 2px solid var(--color-border-accent);
     border-radius: var(--radius-full);
     color: var(--color-text-secondary);
     text-decoration: none;
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
     transition:
       color var(--duration-medium) var(--ease-out),
       border-color var(--duration-medium) var(--ease-out),
@@ -122,42 +147,43 @@ const socialLinks = [
       box-shadow var(--duration-medium) var(--ease-out);
   }
 
-  .home-panel__connect-icon {
-    font-size: var(--text-xl);
-  }
-
-  .home-panel__connect-link:hover {
+  .home-panel__social-link:hover {
     color: var(--color-accent-primary);
     border-color: var(--color-accent-primary);
     transform: translateY(-2px);
   }
 
-  :global(html:not([data-theme="light"])) .home-panel__connect-link:hover {
+  :global(html:not([data-theme="light"])) .home-panel__social-link:hover {
     box-shadow:
       0 0 20px rgba(246, 224, 94, 0.4),
       0 0 10px rgba(246, 224, 94, 0.2);
   }
 
-  :global([data-theme="light"]) .home-panel__connect-link:hover {
+  :global([data-theme="light"]) .home-panel__social-link:hover {
     box-shadow:
       0 0 20px rgba(255, 85, 0, 0.3),
       0 0 10px rgba(255, 85, 0, 0.15);
   }
 
-  .home-panel__connect-link:focus-visible {
+  .home-panel__social-link:focus-visible {
     outline: 2px solid var(--color-accent-primary);
     outline-offset: 2px;
+  }
+
+  .home-panel__social-link i {
+    font-size: var(--text-lg);
   }
 
   .home-panel__divider {
     border: none;
     border-top: 1px solid var(--color-border-medium);
-    margin: var(--space-6) 0;
+    margin: var(--space-4) 0;
+    flex-shrink: 0;
   }
 
   .home-panel__cta {
     display: inline-block;
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
     font-size: var(--text-base);
     font-weight: var(--weight-medium);
     color: var(--color-accent-primary);
@@ -165,6 +191,7 @@ const socialLinks = [
     transition:
       color var(--duration-fast) var(--ease-out),
       transform var(--duration-fast) var(--ease-out);
+    flex-shrink: 0;
   }
 
   .home-panel__cta:hover {
@@ -175,24 +202,52 @@ const socialLinks = [
   :global(html[lang="en"]) .home-panel__cta span[data-lang="en"],
   :global(html[lang="id"]) .home-panel__cta span[data-lang="id"] { display: inline; }
 
-  @media (max-width: 480px) {
-    .home-main {
-      padding: calc(var(--space-16) + var(--space-8)) var(--space-4) var(--space-12);
+  @media (max-width: 767px) {
+    .page-layout {
+      height: auto;
+      min-height: 100dvh;
+      overflow-y: visible;
     }
 
-    .home-panel__connect {
-      flex-direction: row;
+    .home-main {
+      min-height: 100%;
+      padding: var(--space-16) var(--space-4) var(--space-12);
       align-items: center;
+    }
+
+    .home-panel {
+      height: auto;
+      min-height: auto;
+    }
+
+    .home-panel__top {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .home-panel__socials {
+      align-items: stretch;
+    }
+
+    .home-panel__social-link {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .home-main {
+      padding: var(--space-14) var(--space-3) var(--space-10);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .home-panel__connect-link,
+    .home-panel__social-link,
     .home-panel__cta {
       transition: none;
     }
 
-    .home-panel__connect-link:hover {
+    .home-panel__social-link:hover {
       transform: none;
     }
 

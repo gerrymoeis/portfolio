@@ -32,6 +32,11 @@ export const socialIcons: Record<string, IconConfig> = {
     faClass: 'fas fa-envelope',
     label: 'Email'
   },
+  youtube: {
+    name: 'youtube',
+    faClass: 'fab fa-youtube',
+    label: 'YouTube'
+  },
   website: {
     name: 'website',
     faClass: 'fas fa-globe',
