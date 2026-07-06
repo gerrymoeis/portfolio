@@ -7,7 +7,7 @@ summary:
   id: "Sistem absensi kantor berbasis web dengan face recognition untuk login dan verifikasi absensi, IP restriction, dan fitur keamanan komprehensif."
 date: 2026-04-15
 year: 2026
-status: "completed"
+status: "experimental"
 category: ["backend"]
 craft: ai
 techStack: ["Go", "Gin", "SQLite", "JSON Web Tokens", "JavaScript", "Tailwind CSS"]
