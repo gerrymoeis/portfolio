@@ -239,8 +239,8 @@ async function aggregateCVData() {
           id: 'Indonesia',
         },
         period: {
-          en: '2024',
-          id: '2024',
+          en: '2026',
+          id: '2026',
         },
         details: {
           en: [
@@ -250,15 +250,14 @@ async function aggregateCVData() {
             'Deployed executable for Windows and Android XR platforms',
           ],
           id: [
-            'Mengembangkan prototipe VR simulasi perkantoran end-to-end dari konsep hingga deployment',
-            'Membangun lingkungan 3D kantor, furnitur, aset gudang, dan karakter NPC menggunakan Blender',
-            'Mengimplementasikan interaksi VR (sistem interview, navigasi kantor, penyortiran gudang) menggunakan Unity XR Interaction Toolkit',
-            'Melakukan deployment executable untuk platform Windows dan Android XR',
+            'Mengembangkan prototipe VR simulasi perkantoran secara menyeluruh dari konsep awal hingga menjadi produk siap pakai',
+            'Merancang dan mengimplementasikan berbagai skenario interaktif seperti simulasi wawancara, navigasi kantor, dan sortir barang',
+            'Berhasil mendeploy aplikasi VR ke platform Windows dan Android XR sebagai bukti kemampuan pengembangan lintas platform',
           ],
         },
       },
     ],
-    projects: projects.map(p => ({
+    projects: projects.filter(p => p.status !== 'experimental').map(p => ({
       title: p.title, // Keep as object { en, id }
       techStack: p.techStack,
       period: String(p.year),
