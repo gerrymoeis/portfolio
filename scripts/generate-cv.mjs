@@ -169,8 +169,8 @@ async function aggregateCVData() {
     experience: [
       {
         title: {
-          en: 'Independent Study - VR Office Simulation',
-          id: 'Studi Independen - Simulasi VR Perkantoran',
+          en: 'Independent Study \u2013 VR Office Simulation',
+          id: 'Studi Independen \u2013 VR Simulasi Perkantoran',
         },
         organization: {
           en: 'PT. Raja Teknik Solusi (MBKM Independent Study)',
@@ -186,12 +186,12 @@ async function aggregateCVData() {
         },
         details: {
           en: [
-            'Developed a VR office simulation end-to-end with job interview and warehouse sorting gameplay',
-            'Built 3D office assets, environment, and NPC characters using Blender with Unity XR toolkit',
+            'Developed an end-to-end Virtual Reality office simulation using Unity, delivering an interactive workplace experience featuring job interview and warehouse sorting scenarios.',
+            'Created complete 3D office environments, interior assets, and fully animated NPC characters in Blender, then integrated them into Unity with XR Interaction Toolkit to build an immersive VR application.',
           ],
           id: [
-            'Mengembangkan VR simulasi perkantoran end-to-end dengan gameplay wawancara dan sortir barang',
-            'Membangun aset 3D kantor, lingkungan, dan karakter NPC menggunakan Blender dan Unity XR',
+            'Mengembangkan aplikasi Virtual Reality simulasi perkantoran secara end-to-end menggunakan Unity, menghadirkan pengalaman interaktif melalui skenario job interview dan warehouse sorting.',
+            'Membangun lingkungan kantor tiga dimensi, aset interior, serta karakter NPC lengkap menggunakan Blender, kemudian mengintegrasikannya ke dalam Unity dengan XR Interaction Toolkit untuk menghasilkan aplikasi VR yang imersif.',
           ],
         },
       },
@@ -231,8 +231,8 @@ async function aggregateCVData() {
           id: 'Penerima Pendanaan PKM 2024',
         },
         organization: {
-          en: 'Ministry of Education and Culture',
-          id: 'Kementerian Pendidikan dan Kebudayaan',
+          en: 'Ministry of Education, Culture, Research, and Technology',
+          id: 'Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi',
         },
         location: {
           en: 'Indonesia',
@@ -244,12 +244,12 @@ async function aggregateCVData() {
         },
         details: {
           en: [
-            'Secured government funding for BugHunter project',
-            'Developed prototype for programming education game concept',
+            'Received competitive government funding through the Student Creativity Program (PKM) for proposing BugHunter, a programming education game concept.',
+            'Designed the initial solution concept, user flow, and low-fidelity prototype in Figma to communicate the proposed learning experience and gameplay mechanics.',
           ],
           id: [
-            'Mendapatkan pendanaan pemerintah untuk proyek BugHunter',
-            'Mengembangkan prototipe konsep game edukasi pemrograman',
+            'Meraih pendanaan Program Kreativitas Mahasiswa (PKM) melalui proposal inovasi BugHunter sebagai konsep game edukasi pemrograman.',
+            'Merancang konsep solusi, alur pengguna, dan prototipe awal menggunakan Figma untuk memvisualisasikan pengalaman belajar serta mekanisme permainan yang diusulkan.',
           ],
         },
       },
