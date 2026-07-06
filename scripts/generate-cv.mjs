@@ -169,34 +169,6 @@ async function aggregateCVData() {
     experience: [
       {
         title: {
-          en: 'Independent Study - VR Office Simulation',
-          id: 'Studi Independen - Simulasi VR Perkantoran',
-        },
-        organization: {
-          en: 'PT. Raja Teknik Solusi (MBKM Independent Study)',
-          id: 'PT. Raja Teknik Solusi (MBKM Studi Independen)',
-        },
-        location: {
-          en: 'Indonesia',
-          id: 'Indonesia',
-        },
-        period: {
-          en: '2026',
-          id: '2026',
-        },
-        details: {
-          en: [
-            'Self-directed development of a VR office simulation from concept to deployment',
-            'Cross-platform deployment for Windows and Android XR',
-          ],
-          id: [
-            'Pengembangan mandiri prototipe VR simulasi perkantoran dari konsep hingga deployment',
-            'Deployment lintas platform untuk Windows dan Android XR',
-          ],
-        },
-      },
-      {
-        title: {
           en: 'Head of Research and Technology Department',
           id: 'Kepala Departemen Riset dan Teknologi',
         },
@@ -244,17 +216,17 @@ async function aggregateCVData() {
         },
         details: {
           en: [
-            'Secured government funding for BugHunter project',
-            'Developed prototype for programming education game concept',
+            'Developed a VR office simulation end-to-end with job interview and warehouse sorting gameplay',
+            'Built 3D office assets, environment, and NPC characters using Blender with Unity XR toolkit',
           ],
           id: [
-            'Mendapatkan pendanaan pemerintah untuk proyek BugHunter',
-            'Mengembangkan prototipe konsep game edukasi pemrograman',
+            'Mengembangkan VR simulasi perkantoran end-to-end dengan gameplay wawancara dan sortir barang',
+            'Membangun aset 3D kantor, lingkungan, dan karakter NPC menggunakan Blender dan Unity XR',
           ],
         },
       },
     ],
-    projects: projects.filter(p => p.status !== 'experimental').map(p => ({
+    projects: projects.map(p => ({
       title: p.title, // Keep as object { en, id }
       techStack: p.techStack,
       period: String(p.year),
