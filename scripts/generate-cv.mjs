@@ -169,7 +169,7 @@ async function aggregateCVData() {
     experience: [
       {
         title: {
-          en: 'Studi Independen - VR Office Simulation',
+          en: 'Independent Study - VR Office Simulation',
           id: 'Studi Independen - Simulasi VR Perkantoran',
         },
         organization: {
@@ -186,15 +186,12 @@ async function aggregateCVData() {
         },
         details: {
           en: [
-            'Developed end-to-end VR office simulation prototype from concept to deployment',
-            'Built 3D office environment, furniture, warehouse assets, and NPC characters using Blender',
-            'Implemented VR interactions (interview system, office navigation, warehouse sorting) using Unity XR Interaction Toolkit',
-            'Deployed executable for Windows and Android XR platforms',
+            'Self-directed development of a VR office simulation from concept to deployment',
+            'Cross-platform deployment for Windows and Android XR',
           ],
           id: [
-            'Mengembangkan prototipe VR simulasi perkantoran secara menyeluruh dari konsep awal hingga menjadi produk siap pakai',
-            'Merancang dan mengimplementasikan berbagai skenario interaktif seperti simulasi wawancara, navigasi kantor, dan sortir barang',
-            'Berhasil mendeploy aplikasi VR ke platform Windows dan Android XR sebagai bukti kemampuan pengembangan lintas platform',
+            'Pengembangan mandiri prototipe VR simulasi perkantoran dari konsep hingga deployment',
+            'Deployment lintas platform untuk Windows dan Android XR',
           ],
         },
       },
