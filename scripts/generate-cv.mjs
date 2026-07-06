@@ -225,6 +225,38 @@ async function aggregateCVData() {
           ],
         },
       },
+      {
+        title: {
+          en: 'VR Office Simulation Developer',
+          id: 'Pengembang VR Simulasi Perkantoran',
+        },
+        organization: {
+          en: 'PT. Raja Teknik Solusi (MBKM Independent Study)',
+          id: 'PT. Raja Teknik Solusi (MBKM Studi Independen)',
+        },
+        location: {
+          en: 'Indonesia',
+          id: 'Indonesia',
+        },
+        period: {
+          en: '2024',
+          id: '2024',
+        },
+        details: {
+          en: [
+            'Developed end-to-end VR office simulation prototype from concept to deployment',
+            'Built 3D office environment, furniture, warehouse assets, and NPC characters using Blender',
+            'Implemented VR interactions (interview system, office navigation, warehouse sorting) using Unity XR Interaction Toolkit',
+            'Deployed executable for Windows and Android XR platforms',
+          ],
+          id: [
+            'Mengembangkan prototipe VR simulasi perkantoran end-to-end dari konsep hingga deployment',
+            'Membangun lingkungan 3D kantor, furnitur, aset gudang, dan karakter NPC menggunakan Blender',
+            'Mengimplementasikan interaksi VR (sistem interview, navigasi kantor, penyortiran gudang) menggunakan Unity XR Interaction Toolkit',
+            'Melakukan deployment executable untuk platform Windows dan Android XR',
+          ],
+        },
+      },
     ],
     projects: projects.map(p => ({
       title: p.title, // Keep as object { en, id }
