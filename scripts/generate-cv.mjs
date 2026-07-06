@@ -169,6 +169,37 @@ async function aggregateCVData() {
     experience: [
       {
         title: {
+          en: 'Studi Independen - VR Office Simulation',
+          id: 'Studi Independen - Simulasi VR Perkantoran',
+        },
+        organization: {
+          en: 'PT. Raja Teknik Solusi (MBKM Independent Study)',
+          id: 'PT. Raja Teknik Solusi (MBKM Studi Independen)',
+        },
+        location: {
+          en: 'Indonesia',
+          id: 'Indonesia',
+        },
+        period: {
+          en: '2026',
+          id: '2026',
+        },
+        details: {
+          en: [
+            'Developed end-to-end VR office simulation prototype from concept to deployment',
+            'Built 3D office environment, furniture, warehouse assets, and NPC characters using Blender',
+            'Implemented VR interactions (interview system, office navigation, warehouse sorting) using Unity XR Interaction Toolkit',
+            'Deployed executable for Windows and Android XR platforms',
+          ],
+          id: [
+            'Mengembangkan prototipe VR simulasi perkantoran secara menyeluruh dari konsep awal hingga menjadi produk siap pakai',
+            'Merancang dan mengimplementasikan berbagai skenario interaktif seperti simulasi wawancara, navigasi kantor, dan sortir barang',
+            'Berhasil mendeploy aplikasi VR ke platform Windows dan Android XR sebagai bukti kemampuan pengembangan lintas platform',
+          ],
+        },
+      },
+      {
+        title: {
           en: 'Head of Research and Technology Department',
           id: 'Kepala Departemen Riset dan Teknologi',
         },
@@ -222,37 +253,6 @@ async function aggregateCVData() {
           id: [
             'Mendapatkan pendanaan pemerintah untuk proyek BugHunter',
             'Mengembangkan prototipe konsep game edukasi pemrograman',
-          ],
-        },
-      },
-      {
-        title: {
-          en: 'VR Office Simulation Developer',
-          id: 'Pengembang VR Simulasi Perkantoran',
-        },
-        organization: {
-          en: 'PT. Raja Teknik Solusi (MBKM Independent Study)',
-          id: 'PT. Raja Teknik Solusi (MBKM Studi Independen)',
-        },
-        location: {
-          en: 'Indonesia',
-          id: 'Indonesia',
-        },
-        period: {
-          en: '2026',
-          id: '2026',
-        },
-        details: {
-          en: [
-            'Developed end-to-end VR office simulation prototype from concept to deployment',
-            'Built 3D office environment, furniture, warehouse assets, and NPC characters using Blender',
-            'Implemented VR interactions (interview system, office navigation, warehouse sorting) using Unity XR Interaction Toolkit',
-            'Deployed executable for Windows and Android XR platforms',
-          ],
-          id: [
-            'Mengembangkan prototipe VR simulasi perkantoran secara menyeluruh dari konsep awal hingga menjadi produk siap pakai',
-            'Merancang dan mengimplementasikan berbagai skenario interaktif seperti simulasi wawancara, navigasi kantor, dan sortir barang',
-            'Berhasil mendeploy aplikasi VR ke platform Windows dan Android XR sebagai bukti kemampuan pengembangan lintas platform',
           ],
         },
       },
