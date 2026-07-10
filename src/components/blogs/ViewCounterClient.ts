@@ -61,11 +61,15 @@ export class ViewCounter {
   }
 }
 
+let initialized = false;
+
 /**
  * Initialize all view counters on the page
  * This function is called when the component is hydrated
  */
 export function initViewCounters(): void {
+  if (initialized) return;
+  initialized = true;
   const counters = document.querySelectorAll<HTMLElement>('[data-view-counter]');
 
   counters.forEach((element) => {

@@ -44,7 +44,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
 ---
 
 <BaseLayout
-  title={entry.data.title.en}
+  title={`${entry.data.title.en} | Gerry Moeis`}
   description={entry.data.summary.en}
   ogType="article"
 >
@@ -106,11 +106,6 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
     <Footer currentPath={currentPath} />
   </div>
   
-  <!-- Load view counter client script -->
-  <script>
-    import { initViewCounters } from '../../components/blogs/ViewCounterClient';
-    initViewCounters();
-  </script>
 </BaseLayout>
 
 <style>
