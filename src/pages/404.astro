@@ -128,16 +128,7 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     line-height: var(--leading-tight);
   }
   
-  /* Hide inactive language */
-  .error-page__title span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .error-page__title span[data-lang="en"],
-  :global(html[lang="id"]) .error-page__title span[data-lang="id"] {
-    display: inline;
-  }
+
 
   /* Description - Smaller with better contrast */
   .error-page__description {
@@ -159,16 +150,7 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     color: var(--color-text-secondary);
   }
   
-  /* Hide inactive language */
-  .error-page__description span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .error-page__description span[data-lang="en"],
-  :global(html[lang="id"]) .error-page__description span[data-lang="id"] {
-    display: inline;
-  }
+
 
   /* Home Link - Smaller */
   .error-page__home-link {
@@ -242,16 +224,7 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     font-size: var(--text-lg); /* Reduced from 2xl */
   }
   
-  /* Hide inactive language */
-  .error-page__home-link span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .error-page__home-link span[data-lang="en"],
-  :global(html[lang="id"]) .error-page__home-link span[data-lang="id"] {
-    display: inline;
-  }
+
 
   /* Responsive adjustments */
   @media (max-width: 768px) {

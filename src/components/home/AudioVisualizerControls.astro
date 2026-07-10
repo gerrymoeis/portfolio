@@ -564,16 +564,7 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
     line-height: 1.2;
   }
   
-  /* Hide inactive language */
-  .visualizer-landing__title span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .visualizer-landing__title span[data-lang="en"],
-  :global(html[lang="id"]) .visualizer-landing__title span[data-lang="id"] {
-    display: inline;
-  }
+
 
   .visualizer-landing__description {
     font-size: var(--font-size-base);
@@ -583,16 +574,7 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
     font-weight: 400;
   }
   
-  /* Hide inactive language */
-  .visualizer-landing__description span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .visualizer-landing__description span[data-lang="en"],
-  :global(html[lang="id"]) .visualizer-landing__description span[data-lang="id"] {
-    display: inline;
-  }
+
 
   .visualizer-landing__highlight {
     color: var(--color-accent-primary);
@@ -618,16 +600,7 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
     border-top: var(--panel-border-width) var(--panel-border-style) var(--color-border-light);
   }
   
-  /* Hide inactive language */
-  .visualizer-landing__privacy span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .visualizer-landing__privacy span[data-lang="en"],
-  :global(html[lang="id"]) .visualizer-landing__privacy span[data-lang="id"] {
-    display: inline;
-  }
+
 
   .visualizer-landing__privacy-highlight {
     color: var(--color-text-primary);
@@ -653,16 +626,7 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
     white-space: nowrap;
   }
   
-  /* Hide inactive language for buttons */
-  .visualizer-landing__button span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language for buttons */
-  :global(html[lang="en"]) .visualizer-landing__button span[data-lang="en"],
-  :global(html[lang="id"]) .visualizer-landing__button span[data-lang="id"] {
-    display: inline;
-  }
+
 
   /* Dark theme secondary button - improved contrast */
   :global(html:not([data-theme="light"])) .visualizer-landing__button--secondary {

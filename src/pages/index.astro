@@ -10,11 +10,7 @@ import { homeConfig } from '../config/home';
 
 const navLinks = homeConfig.navigation;
 
-const socialLinks = [
-  { name: "GitHub", url: "https://github.com/gerrymoeis", icon: "github" },
-  { name: "Gmail", url: "mailto:gerrymoeis@gmail.com", icon: "email" },
-  { name: "YouTube", url: "https://www.youtube.com/@gerrymoeis", icon: "youtube" },
-];
+const socialLinks = homeConfig.social;
 ---
 
 <BaseLayout
@@ -67,17 +63,6 @@ const socialLinks = [
 </BaseLayout>
 
 <style>
-  .page-layout {
-    position: relative;
-    min-height: 100dvh;
-    background: var(--bg-elevated);
-  }
-
-  .page-layout > :global(*:not(.page-gradient)) {
-    position: relative;
-    z-index: 1;
-  }
-
   .home-main {
     display: flex;
     justify-content: center;
@@ -132,9 +117,7 @@ const socialLinks = [
     text-transform: uppercase;
   }
 
-  .home-panel__socials-heading span[data-lang] { display: none; }
-  :global(html[lang="en"]) .home-panel__socials-heading span[data-lang="en"],
-  :global(html[lang="id"]) .home-panel__socials-heading span[data-lang="id"] { display: inline; }
+
 
   .home-panel__social-link {
     display: inline-flex;
@@ -203,9 +186,7 @@ const socialLinks = [
     transform: translateX(4px);
   }
 
-  .home-panel__cta span[data-lang] { display: none; }
-  :global(html[lang="en"]) .home-panel__cta span[data-lang="en"],
-  :global(html[lang="id"]) .home-panel__cta span[data-lang="id"] { display: inline; }
+
 
   @media (max-width: 767px) {
     .home-main {

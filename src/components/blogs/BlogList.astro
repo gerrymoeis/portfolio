@@ -41,7 +41,6 @@ const sortedBlogs = allBlogs
           summary={blog.data.summary}
           slug={blog.slug}
           tags={blog.data.tags}
-          craft={blog.data.craft}
           readingTime={blog.readingTime}
           thumbnail={blog.data.thumbnail}
         />
@@ -85,16 +84,7 @@ const sortedBlogs = allBlogs
     margin: 0;
   }
   
-  /* Hide inactive language */
-  .blog-list__empty-text span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .blog-list__empty-text span[data-lang="en"],
-  :global(html[lang="id"]) .blog-list__empty-text span[data-lang="id"] {
-    display: inline;
-  }
+
 
   /* Desktop - 2 columns */
   @media (min-width: 900px) {

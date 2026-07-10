@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { getIcon, getIconClass, getIconLabel, socialIcons, uiIcons } from '../config/icons';
+import { getIcon, socialIcons, uiIcons } from '../config/icons';
 
 describe('Icon Configuration', () => {
   it('should return correct icon configuration for social icons', () => {
@@ -15,29 +15,12 @@ describe('Icon Configuration', () => {
     expect(githubIcon?.label).toBe('GitHub');
   });
 
-  it('should return correct FontAwesome classes', () => {
-    expect(getIconClass('github')).toBe('fab fa-github');
-    expect(getIconClass('twitter')).toBe('fab fa-twitter');
-    expect(getIconClass('linkedin')).toBe('fab fa-linkedin');
-    expect(getIconClass('home')).toBe('fas fa-home');
-    expect(getIconClass('projects')).toBe('fas fa-folder-open');
-  });
-
-  it('should return correct labels', () => {
-    expect(getIconLabel('github')).toBe('GitHub');
-    expect(getIconLabel('twitter')).toBe('Twitter');
-    expect(getIconLabel('linkedin')).toBe('LinkedIn');
-    expect(getIconLabel('home')).toBe('Home');
-  });
-
   it('should handle unknown icons gracefully', () => {
     expect(getIcon('unknown')).toBeUndefined();
-    expect(getIconClass('unknown')).toBe('');
-    expect(getIconLabel('unknown')).toBe('unknown');
   });
 
   it('should have all required social icons', () => {
-    const requiredSocialIcons = ['github', 'twitter', 'linkedin'];
+    const requiredSocialIcons = ['github', 'linkedin'];
     requiredSocialIcons.forEach(iconName => {
       expect(socialIcons[iconName]).toBeDefined();
       expect(socialIcons[iconName].faClass).toContain('fa-');
@@ -55,7 +38,7 @@ describe('Icon Configuration', () => {
   it('should use consistent FontAwesome prefixes', () => {
     // Social icons should use 'fab' (FontAwesome Brands)
     Object.values(socialIcons).forEach(icon => {
-      if (['github', 'twitter', 'linkedin'].includes(icon.name)) {
+      if (['github', 'linkedin'].includes(icon.name)) {
         expect(icon.faClass).toMatch(/^fab fa-/);
       }
     });

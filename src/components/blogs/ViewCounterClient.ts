@@ -81,11 +81,4 @@ export function initViewCounters(): void {
   });
 }
 
-// Auto-initialize if this script is loaded
-if (typeof window !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initViewCounters);
-  } else {
-    initViewCounters();
-  }
-}
+

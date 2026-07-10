@@ -2,34 +2,7 @@
 /* Cinematic animation and transition utilities inspired by Octopath Traveler */
 
 :root {
-  /* ============================================
-     HD-2D DURATIONS
-     Slower, more cinematic timing
-     ============================================ */
-  
-  --duration-fast: 200ms;
-  --duration-medium: 400ms;
-  --duration-slow: 600ms;
-  --duration-slower: 1000ms;
-  --duration-cinematic: 1500ms;
-  
-  /* ============================================
-     HD-2D EASING FUNCTIONS
-     Smooth, atmospheric curves
-     ============================================ */
-  
-  --ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --ease-out: cubic-bezier(0, 0, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
-  --ease-atmospheric: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-cinematic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  
-  /* ============================================
-     HD-2D PARALLAX SPEEDS
-     Layered depth movement
-     ============================================ */
-  
+  /* Parallax speeds — layered depth movement */
   --parallax-far: 0.2;
   --parallax-mid: 0.5;
   --parallax-near: 0.8;

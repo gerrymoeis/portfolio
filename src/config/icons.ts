@@ -17,11 +17,6 @@ export const socialIcons: Record<string, IconConfig> = {
     faClass: 'fab fa-github',
     label: 'GitHub'
   },
-  twitter: {
-    name: 'twitter',
-    faClass: 'fab fa-twitter',
-    label: 'Twitter'
-  },
   linkedin: {
     name: 'linkedin',
     faClass: 'fab fa-linkedin',
@@ -120,22 +115,3 @@ export function getIcon(iconName: string): IconConfig | undefined {
   return allIcons[iconName];
 }
 
-/**
- * Get FontAwesome class for an icon
- * @param iconName - The name of the icon
- * @returns FontAwesome class string or empty string if not found
- */
-export function getIconClass(iconName: string): string {
-  const icon = getIcon(iconName);
-  return icon ? icon.faClass : '';
-}
-
-/**
- * Get accessible label for an icon
- * @param iconName - The name of the icon
- * @returns Accessible label string or the icon name if not found
- */
-export function getIconLabel(iconName: string): string {
-  const icon = getIcon(iconName);
-  return icon ? icon.label : iconName;
-}

@@ -58,18 +58,6 @@ const currentPath = Astro.url.pathname;
 </BaseLayout>
 
 <style>
-  .page-layout {
-    position: relative;
-    min-height: 100vh;
-    padding-top: 0;
-    background: var(--bg-elevated);
-  }
-
-  .page-layout > :global(*:not(.page-gradient)) {
-    position: relative;
-    z-index: 1;
-  }
-
   .music-main {
     max-width: 1200px;
     margin: 0 auto;
@@ -96,14 +84,7 @@ const currentPath = Astro.url.pathname;
     line-height: var(--leading-tight);
   }
 
-  .music-hero__title span[data-lang] {
-    display: none;
-  }
 
-  :global(html[lang="en"]) .music-hero__title span[data-lang="en"],
-  :global(html[lang="id"]) .music-hero__title span[data-lang="id"] {
-    display: inline;
-  }
 
   .music-hero__description {
     font-family: var(--font-primary);
@@ -113,14 +94,7 @@ const currentPath = Astro.url.pathname;
     margin: 0;
   }
 
-  .music-hero__description span[data-lang] {
-    display: none;
-  }
 
-  :global(html[lang="en"]) .music-hero__description span[data-lang="en"],
-  :global(html[lang="id"]) .music-hero__description span[data-lang="id"] {
-    display: inline;
-  }
 
   .music-content {
     padding-bottom: 0;

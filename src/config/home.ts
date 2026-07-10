@@ -50,20 +50,25 @@ export const homeConfig: HomeConfig = {
     },
   },
   social: [
-    { 
-      name: "GitHub", 
-      url: "https://github.com/gerrymoeis", 
-      icon: "github" 
+    {
+      name: "GitHub",
+      url: "https://github.com/gerrymoeis",
+      icon: "github"
     },
-    { 
-      name: "LinkedIn", 
-      url: "https://linkedin.com/in/gerrymoeis", 
-      icon: "linkedin" 
+    {
+      name: "LinkedIn",
+      url: "https://linkedin.com/in/gerrymoeis",
+      icon: "linkedin"
     },
-    { 
-      name: "Email", 
-      url: "mailto:gerrymoeis@gmail.com", 
-      icon: "email" 
+    {
+      name: "Email",
+      url: "mailto:gerrymoeis@gmail.com",
+      icon: "email"
+    },
+    {
+      name: "YouTube",
+      url: "https://www.youtube.com/@gerrymoeis",
+      icon: "youtube"
     },
   ],
   navigation: [
@@ -126,12 +131,4 @@ export const personalInfo = {
   }
 };
 
-/**
- * Helper function to get text in current language
- */
-export function getText(bilingualText: BilingualText): string {
-  if (typeof window === 'undefined') return bilingualText.en;
-  
-  const lang = localStorage.getItem('portfolio-language') || 'en';
-  return bilingualText[lang as 'en' | 'id'] || bilingualText.en;
-}
+

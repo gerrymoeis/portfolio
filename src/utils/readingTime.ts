@@ -17,19 +17,6 @@ export function calculateReadingTime(text: string): number {
 }
 
 /**
- * Format reading time for display
- * @param minutes - Reading time in minutes
- * @param lang - Language code ('en' or 'id')
- * @returns Formatted reading time string
- */
-export function formatReadingTime(minutes: number, lang: 'en' | 'id' = 'en'): string {
-  if (lang === 'id') {
-    return `${minutes} menit baca`;
-  }
-  return `${minutes} min read`;
-}
-
-/**
  * Get reading time from markdown content
  * Strips frontmatter and markdown syntax before counting
  * @param markdown - Raw markdown content

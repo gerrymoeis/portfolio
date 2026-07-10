@@ -3,14 +3,13 @@ import { craftBadgeLabels } from '../../data/craftBadges'
 
 interface Props {
   craft: 'ai' | 'hand-crafted'
-  context: 'project' | 'blog'
 }
 
-const { craft, context } = Astro.props
-const labels = craftBadgeLabels[craft][context]
+const { craft } = Astro.props
+const labels = craftBadgeLabels[craft]
 ---
 
-<div class="craft-badge" data-craft={craft}>
+<div class="craft-badge" data-craft={craft} data-bilingual>
   <span data-lang="en">{labels.en}</span>
   <span data-lang="id">{labels.id}</span>
 </div>
@@ -21,20 +20,20 @@ const labels = craftBadgeLabels[craft][context]
     top: 0;
     right: 0;
     z-index: 5;
-    padding: 4px 3em;
+    padding: 3px 2.5em;
     font-family: var(--font-primary);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: var(--weight-bold);
-    letter-spacing: 0.8px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    line-height: 1.4;
+    line-height: 1.3;
     color: var(--color-text-primary);
     text-align: center;
     white-space: nowrap;
     transform:
       translateY(-100%)
       rotate(90deg)
-      translateX(70.71067811865476%)
+      translateX(50%)
       rotate(-45deg);
     transform-origin: bottom right;
     pointer-events: none;
@@ -57,14 +56,12 @@ const labels = craftBadgeLabels[craft][context]
     background: #60a5fa;
   }
 
-  .craft-badge span[data-lang] { display: none; }
-  :global(html[lang="en"]) .craft-badge span[data-lang="en"],
-  :global(html[lang="id"]) .craft-badge span[data-lang="id"] { display: inline; }
+
 
   @media (max-width: 768px) {
     .craft-badge {
-      padding: 3px 2em;
-      font-size: 9px;
+      padding: 2px 1.5em;
+      font-size: 8px;
     }
   }
 </style>

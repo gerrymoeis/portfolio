@@ -52,16 +52,7 @@ const categories = [
     letter-spacing: 0.05em;
   }
   
-  /* Hide inactive language */
-  .project-filter__label span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .project-filter__label span[data-lang="en"],
-  :global(html[lang="id"]) .project-filter__label span[data-lang="id"] {
-    display: inline;
-  }
+
 
   .project-filter__buttons {
     display: flex;
@@ -99,16 +90,7 @@ const categories = [
     outline-offset: 2px;
   }
   
-  /* Hide inactive language */
-  .project-filter__button span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .project-filter__button span[data-lang="en"],
-  :global(html[lang="id"]) .project-filter__button span[data-lang="id"] {
-    display: inline;
-  }
+
 
   /* Mobile adjustments */
   @media (max-width: 768px) {

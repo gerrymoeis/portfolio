@@ -8,12 +8,11 @@
  */
 
 import Icon from './Icon.astro';
+import { homeConfig } from '../../config/home';
 
-// Social links - GitHub and Email only
-const socialLinks = [
-  { name: "GitHub", url: "https://github.com/gerrymoeis", icon: "github" },
-  { name: "Email", url: "mailto:gerrymoeis@gmail.com", icon: "email" },
-];
+const socialLinks = homeConfig.social.filter(
+  s => s.name === 'GitHub' || s.name === 'Email'
+);
 
 const currentYear = new Date().getFullYear();
 ---

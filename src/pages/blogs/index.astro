@@ -55,18 +55,6 @@ const currentPath = Astro.url.pathname;
 </BaseLayout>
 
 <style>
-  .page-layout {
-    position: relative;
-    min-height: 100vh;
-    padding-top: 0;
-    background: var(--bg-elevated);
-  }
-  
-  .page-layout > :global(*:not(.page-gradient)) {
-    position: relative;
-    z-index: 1;
-  }
-  
   .blogs-main {
     max-width: 1200px;
     margin: 0 auto;
@@ -94,16 +82,7 @@ const currentPath = Astro.url.pathname;
     line-height: var(--leading-tight);
   }
   
-  /* Hide inactive language */
-  .blogs-hero__title span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .blogs-hero__title span[data-lang="en"],
-  :global(html[lang="id"]) .blogs-hero__title span[data-lang="id"] {
-    display: inline;
-  }
+
   
   .blogs-hero__description {
     font-family: var(--font-primary);
@@ -113,16 +92,7 @@ const currentPath = Astro.url.pathname;
     margin: 0;
   }
   
-  /* Hide inactive language */
-  .blogs-hero__description span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .blogs-hero__description span[data-lang="en"],
-  :global(html[lang="id"]) .blogs-hero__description span[data-lang="id"] {
-    display: inline;
-  }
+
 
   .blogs-content {
     padding-bottom: 0;
@@ -155,26 +125,5 @@ const currentPath = Astro.url.pathname;
     }
   }
   
-  /* @media (max-width: 480px) {
-    .blogs-main {
-      padding: 0 var(--space-3);
-    }
-    
-    .blogs-hero {
-      padding: var(--space-6) 0 var(--space-4);
-    }
-    
-    :global(.hero-panel) {
-      padding: var(--space-4) var(--space-3);
-    }
-    
-    .blogs-hero__title {
-      font-size: var(--text-2xl);
-      margin-bottom: var(--space-2);
-    }
-    
-    .blogs-hero__description {
-      font-size: var(--text-xs);
-    }
-  } */
+
 </style>

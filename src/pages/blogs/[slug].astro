@@ -111,18 +111,6 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
 </BaseLayout>
 
 <style>
-  .page-layout {
-    position: relative;
-    min-height: 100vh;
-    padding-top: 0;
-    background: var(--bg-elevated);
-  }
-  
-  .page-layout > :global(*:not(.page-gradient)) {
-    position: relative;
-    z-index: 1;
-  }
-
   .blog-detail {
     max-width: 1100px;
     margin: 0 auto;
@@ -193,14 +181,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
     margin-bottom: var(--space-6);
   }
   
-  .blog-title span[data-lang] {
-    display: none;
-  }
-  
-  :global(html[lang="en"]) .blog-title span[data-lang="en"],
-  :global(html[lang="id"]) .blog-title span[data-lang="id"] {
-    display: inline;
-  }
+
   
   .blog-meta {
     display: flex;
@@ -238,14 +219,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
     font-style: italic;
   }
   
-  .blog-summary span[data-lang] {
-    display: none;
-  }
-  
-  :global(html[lang="en"]) .blog-summary span[data-lang="en"],
-  :global(html[lang="id"]) .blog-summary span[data-lang="id"] {
-    display: inline;
-  }
+
   
   .blog-content {
     font-size: 1.0625rem;
@@ -253,14 +227,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
     color: var(--color-text-primary);
   }
   
-  .blog-content :global([data-bilingual] [data-lang]) {
-    display: none;
-  }
-  
-  :global(html[lang="en"]) .blog-content :global([data-bilingual] [data-lang="en"]),
-  :global(html[lang="id"]) .blog-content :global([data-bilingual] [data-lang="id"]) {
-    display: block;
-  }
+
   
   .blog-content :global(h1),
   .blog-content :global(h2),

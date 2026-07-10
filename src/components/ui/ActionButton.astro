@@ -95,16 +95,7 @@ const additionalProps = href
     z-index: 1000;
   }
   
-  /* Hide inactive language */
-  .action-button span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .action-button span[data-lang="en"],
-  :global(html[lang="id"]) .action-button span[data-lang="id"] {
-    display: inline;
-  }
+
   
   .action-button__icon,
   .action-button svg {

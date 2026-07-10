@@ -385,3 +385,34 @@ html[data-theme="light"] textarea,
 html[data-theme="light"] select {
   cursor: url('/gradient-fox-pointer.png') 16 16, pointer !important;
 }
+
+/* ============================================
+   GLOBAL BILINGUAL DISPLAY UTILITY
+   Single source of truth — replaces duplicate
+   span[data-lang]{display:none} in every page
+   ============================================ */
+
+[data-bilingual] [data-lang] {
+  display: none;
+}
+
+html[lang="en"] [data-bilingual] [data-lang="en"],
+html[lang="id"] [data-bilingual] [data-lang="id"] {
+  display: revert;
+}
+
+/* ============================================
+   PAGE LAYOUT UTILITY
+   Shared layout for all content pages
+   ============================================ */
+
+.page-layout {
+  position: relative;
+  min-height: 100dvh;
+  background: var(--bg-elevated);
+}
+
+.page-layout > *:not(.page-gradient) {
+  position: relative;
+  z-index: 1;
+}

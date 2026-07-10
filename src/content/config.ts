@@ -13,7 +13,6 @@ const blogsCollection = defineCollection({
       id: z.string(),
     }),
     tags: z.array(z.string()).optional(),
-    craft: z.enum(['ai', 'hand-crafted']).optional(),
     thumbnail: z.string(),       // For card display, e.g. "/images/blogs/{slug}-thumb.webp"
     heroImage: z.string(),       // For detail page banner, e.g. "/images/blogs/{slug}-hero.webp"
   }),

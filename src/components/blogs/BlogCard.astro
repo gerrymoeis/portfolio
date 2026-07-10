@@ -1,7 +1,6 @@
 ---
 
 import ViewCounter from './ViewCounter.astro';
-import CraftBadge from '../ui/CraftBadge.astro';
 
 interface Props {
   title: { en: string; id: string };
@@ -9,12 +8,11 @@ interface Props {
   summary: { en: string; id: string };
   slug: string;
   tags?: string[];
-  craft?: 'ai' | 'hand-crafted';
   readingTime?: number;
   thumbnail: string;
 }
 
-const { title, date, summary, slug, tags, craft, readingTime, thumbnail } = Astro.props;
+const { title, date, summary, slug, tags, readingTime, thumbnail } = Astro.props;
 
 // Format date for display (simple approach for build compatibility)
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 
@@ -23,7 +21,6 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
 ---
 
 <article class="blog-card" role="listitem">
-  {craft && <CraftBadge craft={craft} context="blog" />}
   <a href={`/blogs/${slug}`} class="blog-card__link" aria-label={`Read article: ${title.en}`}>
     <div class="blog-card__thumbnail">
       <img 
@@ -179,16 +176,7 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     transition: color var(--duration-fast) var(--ease-out);
   }
   
-  /* Hide inactive language */
-  .blog-card__title span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .blog-card__title span[data-lang="en"],
-  :global(html[lang="id"]) .blog-card__title span[data-lang="id"] {
-    display: inline;
-  }
+
 
   .blog-card:hover .blog-card__title {
     color: var(--color-accent-primary);
@@ -216,16 +204,7 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     opacity: 0.7;
   }
   
-  /* Hide inactive language */
-  .blog-card__reading-time span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .blog-card__reading-time span[data-lang="en"],
-  :global(html[lang="id"]) .blog-card__reading-time span[data-lang="id"] {
-    display: inline;
-  }
+
 
   .blog-card__summary {
     font-family: var(--font-primary);
@@ -235,16 +214,7 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     margin-bottom: var(--space-4);
   }
   
-  /* Hide inactive language */
-  .blog-card__summary span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .blog-card__summary span[data-lang="en"],
-  :global(html[lang="id"]) .blog-card__summary span[data-lang="id"] {
-    display: inline;
-  }
+
 
   .blog-card__tags {
     display: flex;

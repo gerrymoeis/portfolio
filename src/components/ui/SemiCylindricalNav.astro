@@ -634,16 +634,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
     white-space: nowrap;
   }
   
-  /* Hide inactive language */
-  .semi-cylindrical-nav__link span[data-lang] {
-    display: none;
-  }
-  
-  /* Show active language */
-  :global(html[lang="en"]) .semi-cylindrical-nav__link span[data-lang="en"],
-  :global(html[lang="id"]) .semi-cylindrical-nav__link span[data-lang="id"] {
-    display: inline;
-  }
+
 
   .semi-cylindrical-nav__link:hover {
     color: var(--color-text-primary);

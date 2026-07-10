@@ -1,12 +1,14 @@
 ---
 import ProjectIcon from './ProjectIcon.astro';
 import CraftBadge from '../ui/CraftBadge.astro';
+import { statusDisplay, linkKeys, linkDefaults, linkIcons } from '../../config/projectConfig';
+import type { ProjectStatus } from '../../config/projectConfig';
 
 interface Props {
   title: { en: string; id: string };
   summary: { en: string; id: string };
   year: number;
-  status: 'completed' | 'in-progress' | 'experimental' | 'archived';
+  status: ProjectStatus;
   category: string | string[];
   craft?: 'ai' | 'hand-crafted';
   techStack: string[];
@@ -25,13 +27,6 @@ interface Props {
 
 const { title, year, status, category, craft, techStack, thumbnail, links, linkTitles } = Astro.props;
 
-const statusDisplay = {
-  'completed': { en: 'Completed', id: 'Selesai' },
-  'in-progress': { en: 'In Progress', id: 'Dalam Proses' },
-  'experimental': { en: 'Experimental', id: 'Eksperimental' },
-  'archived': { en: 'Archived', id: 'Diarsipkan' }
-};
-
 const categories = Array.isArray(category) ? category : [category];
 const categoriesAttr = categories.join(' ');
 
@@ -39,8 +34,7 @@ function linkLabel(key: string): string {
   if (linkTitles && linkTitles[key as keyof typeof linkTitles]) {
     return linkTitles[key as keyof typeof linkTitles]!;
   }
-  const defaults: Record<string, string> = { github: 'GitHub', live: 'Live', demo: 'Demo' };
-  return defaults[key] || key;
+  return linkDefaults[key] || key;
 }
 
 function linkIcon(key: string): string {
@@ -48,15 +42,12 @@ function linkIcon(key: string): string {
     const label = linkTitles[key as keyof typeof linkTitles]!;
     if (label !== 'Live' && label !== 'Demo') return 'fab fa-github';
   }
-  const icons: Record<string, string> = { github: 'fab fa-github', live: 'fas fa-external-link-alt', demo: 'fas fa-play-circle' };
-  return icons[key] || 'fas fa-link';
+  return linkIcons[key] || 'fas fa-link';
 }
-
-const linkKeys = ['github', 'live', 'demo'] as const;
 ---
 
 <article class="project-card" data-category={categoriesAttr} role="listitem">
-  {craft && <CraftBadge craft={craft} context="project" />}
+  {craft && <CraftBadge craft={craft} />}
   <div class="project-card__content">
     <div class="project-card__thumbnail">
       <img 
@@ -224,9 +215,7 @@ const linkKeys = ['github', 'live', 'demo'] as const;
       0 0 10px rgba(255, 85, 0, 0.3);
   }
   
-  .project-card__title span[data-lang] { display: none; }
-  :global(html[lang="en"]) .project-card__title span[data-lang="en"],
-  :global(html[lang="id"]) .project-card__title span[data-lang="id"] { display: inline; }
+
 
   .project-card__meta {
     display: flex;
@@ -312,9 +301,7 @@ const linkKeys = ['github', 'live', 'demo'] as const;
     background: rgba(107, 114, 128, 0.1);
   }
   
-  .project-card__status span[data-lang] { display: none; }
-  :global(html[lang="en"]) .project-card__status span[data-lang="en"],
-  :global(html[lang="id"]) .project-card__status span[data-lang="id"] { display: inline; }
+
 
   .project-card__tech {
     display: flex;
@@ -388,9 +375,7 @@ const linkKeys = ['github', 'live', 'demo'] as const;
     font-size: var(--text-sm);
   }
   
-  .project-card__link span[data-lang] { display: none; }
-  :global(html[lang="en"]) .project-card__link span[data-lang="en"],
-  :global(html[lang="id"]) .project-card__link span[data-lang="id"] { display: inline; }
+
 
   @media (prefers-reduced-motion: reduce) {
     .project-card,
