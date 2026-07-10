@@ -18,6 +18,9 @@ import '../styles/global.css';
 import '../styles/typography.css';
 import '../styles/motion.css';
 import '../styles/scrollbar.css';
+import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
+import '@fortawesome/fontawesome-free/css/brands.min.css';
+import '@fortawesome/fontawesome-free/css/solid.min.css';
 
 import { getLangFromUrl } from '../i18n/utils';
 
@@ -88,8 +91,6 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : 
     <!-- Preconnect to critical third-party origins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    
     <!-- Preconnect to SoundCloud (for lazy-loaded widget) -->
     <link rel="dns-prefetch" href="https://w.soundcloud.com">
     <link rel="dns-prefetch" href="https://widget.sndcdn.com">
@@ -149,7 +150,7 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : 
     </script>
     
     <!-- FontAwesome Icons - Latest CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   </head>
   <body class:list={[{ 'no-scroll': noScroll }]}>
     <slot />

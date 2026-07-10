@@ -1,5 +1,6 @@
 ---
 import ProjectIcon from '../projects/ProjectIcon.astro';
+import OptimizedImage from '../ui/OptimizedImage.astro';
 import { statusDisplay, linkKeys, linkDefaults, linkIcons } from '../../config/projectConfig';
 import type { ProjectStatus } from '../../config/projectConfig';
 
@@ -41,10 +42,11 @@ function linkIcon(key: string): string {
 
 <article class="featured-card">
   <div class="featured-card__thumbnail">
-    <img
+    <OptimizedImage
       src={thumbnail}
       alt={`${title.en} thumbnail`}
-      loading="lazy"
+      width={800}
+      height={450}
       class="featured-card__image"
     />
   </div>

@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
+    "@fortawesome/fontawesome-free": "^7.3.0",
     "astro": "^5.16.10",
     "glob": "^13.0.6",
     "js-yaml": "^4.1.1",

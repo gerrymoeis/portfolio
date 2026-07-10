@@ -1,6 +1,7 @@
 ---
 import ProjectIcon from './ProjectIcon.astro';
 import CraftBadge from '../ui/CraftBadge.astro';
+import OptimizedImage from '../ui/OptimizedImage.astro';
 import { statusDisplay, linkKeys, linkDefaults, linkIcons } from '../../config/projectConfig';
 import type { ProjectStatus } from '../../config/projectConfig';
 
@@ -50,10 +51,11 @@ function linkIcon(key: string): string {
   {craft && <CraftBadge craft={craft} />}
   <div class="project-card__content">
     <div class="project-card__thumbnail">
-      <img 
+      <OptimizedImage 
         src={thumbnail}
         alt={`${title.en} thumbnail`}
-        loading="lazy"
+        width={800}
+        height={450}
         class="project-card__image"
       />
     </div>

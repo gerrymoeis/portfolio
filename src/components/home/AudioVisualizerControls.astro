@@ -93,379 +93,82 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
 
 <script>
   import { getTabAudioVisualizer } from '../../scripts/tabAudioVisualizer';
-  import { getCurrentLanguage } from '../../scripts/language';
+  import { ToastManager } from '../../scripts/visualizer/toastManager';
+  import { LandingManager } from '../../scripts/visualizer/landingManager';
+  import { StartButtonManager } from '../../scripts/visualizer/startButtonManager';
+  import { getMessage } from '../../scripts/visualizer/messages';
 
-  // Local storage key for first visit
-  const FIRST_VISIT_KEY = 'visualizer_first_visit_shown';
+  const MSG_MAP: [string, Parameters<typeof getMessage>[0]][] = [
+    ['already running', 'alreadyRunning'],
+    ['Requesting tab audio capture', 'requesting'],
+    ['Requesting microphone access', 'requestingMic'],
+    ['Audio captured', 'audioCaptured'],
+    ['Microphone access granted', 'micGranted'],
+    ['Visualizing!', 'visualizing'],
+    ['Screen sharing stopped', 'screenSharingStopped'],
+    ['Microphone access stopped', 'micStopped'],
+    ['Waiting for music', 'waiting'],
+    ['stopped', 'stopped'],
+    ['Microphone permission denied', 'micPermissionDenied'],
+    ['Permission denied', 'permissionDenied'],
+    ['No audio track found', 'noAudioTrack'],
+    ['No audio source', 'noAudioSource'],
+    ['not supported', 'notSupported'],
+    ['Failed to start visualizer', 'failed'],
+  ];
 
-  // Bilingual messages
-  const MESSAGES = {
-    en: {
-      // Status messages
-      alreadyRunning: 'Visualizer is already running',
-      requesting: 'Requesting tab audio capture... Please select "This Tab" and check "Share audio"',
-      requestingMic: 'Requesting microphone access... Please allow microphone permission.',
-      audioCaptured: 'Audio captured! Initializing visualizer...',
-      micGranted: 'Microphone access granted! Initializing visualizer...',
-      visualizing: 'Visualizing! The visualizer is now synced with the audio.',
-      screenSharingStopped: 'Screen sharing stopped by user',
-      micStopped: 'Microphone access stopped',
-      waiting: 'Waiting for music...',
-      stopped: 'Visualizer stopped. Click "Start Visualizer" to begin again.',
-      
-      // Error messages
-      permissionDenied: 'Permission denied. Please allow screen sharing and make sure to check "Share audio".',
-      micPermissionDenied: 'Microphone permission denied. Please allow microphone access in your browser settings.',
-      noAudioTrack: 'No audio track found! Make sure to check "Share audio" in the browser prompt.',
-      noAudioSource: 'No audio source found. Make sure audio is available.',
-      notSupported: 'This feature is not supported on your device/browser.',
-      failed: 'Failed to start visualizer: ',
-    },
-    id: {
-      // Status messages
-      alreadyRunning: 'Visualizer sudah berjalan',
-      requesting: 'Meminta izin tangkapan audio tab... Silakan pilih "This Tab" dan centang "Share audio"',
-      requestingMic: 'Meminta izin akses mikrofon... Harap izinkan akses mikrofon.',
-      audioCaptured: 'Audio berhasil ditangkap! Menginisialisasi visualizer...',
-      micGranted: 'Akses mikrofon diberikan! Menginisialisasi visualizer...',
-      visualizing: 'Memvisualisasikan! Visualizer sekarang tersinkronisasi dengan audio.',
-      screenSharingStopped: 'Berbagi layar dihentikan oleh pengguna',
-      micStopped: 'Akses mikrofon dihentikan',
-      waiting: 'Menunggu musik...',
-      stopped: 'Visualizer dihentikan. Klik "Mulai Visualizer" untuk memulai lagi.',
-      
-      // Error messages
-      permissionDenied: 'Izin ditolak. Harap izinkan berbagi layar dan pastikan untuk mencentang "Share audio".',
-      micPermissionDenied: 'Izin mikrofon ditolak. Harap izinkan akses mikrofon di pengaturan browser Anda.',
-      noAudioTrack: 'Track audio tidak ditemukan! Pastikan untuk mencentang "Share audio" di prompt browser.',
-      noAudioSource: 'Sumber audio tidak ditemukan. Pastikan audio tersedia.',
-      notSupported: 'Fitur ini tidak didukung di perangkat/browser Anda.',
-      failed: 'Gagal memulai visualizer: ',
-    }
-  };
-
-  /**
-   * Get translated message using existing i18n system
-   */
-  function getMessage(key: keyof typeof MESSAGES.en): string {
-    const lang = getCurrentLanguage();
-    return MESSAGES[lang][key];
-  }
-
-  // Toast notification manager
-  class ToastManager {
-    private toast: HTMLElement;
-    private toastText: HTMLElement;
-    private toastProgress: HTMLElement;
-    private closeBtn: HTMLElement;
-    private autoHideTimer: number | null = null;
-    private progressTimer: number | null = null;
-    private isVisible: boolean = false;
-    private currentMessageKey: keyof typeof MESSAGES.en | undefined = undefined;
-    private currentType: 'info' | 'success' | 'error' = 'info';
-
-    constructor() {
-      this.toast = document.getElementById('visualizerToast') as HTMLElement;
-      this.toastText = document.getElementById('toastText') as HTMLElement;
-      this.toastProgress = document.getElementById('toastProgress') as HTMLElement;
-      this.closeBtn = document.getElementById('toastClose') as HTMLElement;
-
-      this.init();
-    }
-
-    private init(): void {
-      this.closeBtn.addEventListener('click', () => {
-        this.hide();
-      });
-      
-      // Listen for language changes to update visible toast
-      window.addEventListener('languagechange', () => {
-        if (this.isVisible && this.currentMessageKey) {
-          this.toastText.textContent = getMessage(this.currentMessageKey);
-        }
-      });
-    }
-
-    public show(message: string, type: 'info' | 'success' | 'error', duration: number = 5000, messageKey?: keyof typeof MESSAGES.en): void {
-      this.toastText.textContent = message;
-      this.currentMessageKey = messageKey;
-      this.currentType = type;
-      this.toast.className = `visualizer-toast visualizer-toast--${type} visualizer-toast--visible`;
-      this.toast.style.display = 'block';
-      this.isVisible = true;
-
-      this.clearTimers();
-      this.toastProgress.style.width = '100%';
-      this.startProgress(duration);
-
-      this.autoHideTimer = window.setTimeout(() => {
-        this.hide();
-      }, duration);
-    }
-
-    private startProgress(duration: number): void {
-      const startTime = Date.now();
-      
-      const updateProgress = () => {
-        if (!this.isVisible) return;
-
-        const elapsed = Date.now() - startTime;
-        const progress = Math.max(0, 100 - (elapsed / duration) * 100);
-        this.toastProgress.style.width = `${progress}%`;
-
-        if (progress > 0) {
-          this.progressTimer = window.requestAnimationFrame(updateProgress);
-        }
-      };
-
-      updateProgress();
-    }
-
-    public hide(): void {
-      this.toast.classList.remove('visualizer-toast--visible');
-      this.isVisible = false;
-      
-      setTimeout(() => {
-        if (!this.isVisible) {
-          this.toast.style.display = 'none';
-        }
-      }, 300);
-
-      this.clearTimers();
-    }
-
-    private clearTimers(): void {
-      if (this.autoHideTimer) {
-        clearTimeout(this.autoHideTimer);
-        this.autoHideTimer = null;
-      }
-      if (this.progressTimer) {
-        cancelAnimationFrame(this.progressTimer);
-        this.progressTimer = null;
-      }
-    }
-  }
-
-  // Landing overlay manager
-  class LandingManager {
-    private landing: HTMLElement;
-    private skipBtn: HTMLElement;
-    private enableBtn: HTMLElement;
-    private onEnableCallback: (() => void) | null = null;
-    private onSkipCallback: (() => void) | null = null;
-
-    constructor() {
-      this.landing = document.getElementById('visualizerLanding') as HTMLElement;
-      this.skipBtn = document.getElementById('landingSkip') as HTMLElement;
-      this.enableBtn = document.getElementById('landingEnable') as HTMLElement;
-
-      this.init();
-    }
-
-    private init(): void {
-      this.skipBtn.addEventListener('click', () => {
-        this.hide();
-        if (this.onSkipCallback) {
-          this.onSkipCallback();
-        }
-      });
-      
-      this.enableBtn.addEventListener('click', () => {
-        this.hide();
-        if (this.onEnableCallback) {
-          this.onEnableCallback();
-        }
-      });
-
-      // Close on Escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && this.isVisible()) {
-          this.skipBtn.click();
-        }
-      });
-    }
-
-    public show(onEnable: () => void, onSkip: () => void): void {
-      this.onEnableCallback = onEnable;
-      this.onSkipCallback = onSkip;
-      this.landing.style.display = 'flex';
-      
-      requestAnimationFrame(() => {
-        this.landing.classList.add('visualizer-landing--visible');
-      });
-
-      document.body.style.overflow = 'hidden';
-    }
-
-    public hide(): void {
-      this.landing.classList.remove('visualizer-landing--visible');
-      
-      setTimeout(() => {
-        this.landing.style.display = 'none';
-        document.body.style.overflow = '';
-      }, 300);
-
-      // Mark as shown
-      localStorage.setItem(FIRST_VISIT_KEY, 'true');
-    }
-
-    public isVisible(): boolean {
-      return this.landing.style.display === 'flex';
-    }
-
-    public hasBeenShown(): boolean {
-      return localStorage.getItem(FIRST_VISIT_KEY) === 'true';
-    }
-  }
-
-  // Start button manager
-  class StartButtonManager {
-    private button: HTMLElement;
-    private onClick: (() => void) | null = null;
-
-    constructor() {
-      this.button = document.getElementById('visualizerStartBtn') as HTMLElement;
-      this.init();
-    }
-
-    private init(): void {
-      this.button.addEventListener('click', () => {
-        if (this.onClick) {
-          this.onClick();
-        }
-      });
-    }
-
-    public show(onClick: () => void): void {
-      this.onClick = onClick;
-      this.button.style.display = 'flex';
-    }
-
-    public hide(): void {
-      this.button.style.display = 'none';
-    }
-  }
-
-  // Initialize when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     const toastManager = new ToastManager();
     const landingManager = new LandingManager();
     const startButtonManager = new StartButtonManager();
     const visualizer = getTabAudioVisualizer();
 
-    // Setup status callback
     visualizer.setStatusCallback((message: string, type: 'info' | 'success' | 'error') => {
-      // Translate message to current language and get message key
       let translatedMessage = message;
-      let messageKey: keyof typeof MESSAGES.en | undefined = undefined;
-      
-      // Map English messages to translation keys
-      if (message.includes('already running')) {
-        messageKey = 'alreadyRunning';
-        translatedMessage = getMessage('alreadyRunning');
-      } else if (message.includes('Requesting tab audio capture')) {
-        messageKey = 'requesting';
-        translatedMessage = getMessage('requesting');
-      } else if (message.includes('Requesting microphone access')) {
-        messageKey = 'requestingMic';
-        translatedMessage = getMessage('requestingMic');
-      } else if (message.includes('Audio captured')) {
-        messageKey = 'audioCaptured';
-        translatedMessage = getMessage('audioCaptured');
-      } else if (message.includes('Microphone access granted')) {
-        messageKey = 'micGranted';
-        translatedMessage = getMessage('micGranted');
-      } else if (message.includes('Visualizing!')) {
-        messageKey = 'visualizing';
-        translatedMessage = getMessage('visualizing');
-      } else if (message.includes('Screen sharing stopped')) {
-        messageKey = 'screenSharingStopped';
-        translatedMessage = getMessage('screenSharingStopped');
-      } else if (message.includes('Microphone access stopped')) {
-        messageKey = 'micStopped';
-        translatedMessage = getMessage('micStopped');
-      } else if (message.includes('Waiting for music')) {
-        messageKey = 'waiting';
-        translatedMessage = getMessage('waiting');
-      } else if (message.includes('stopped')) {
-        messageKey = 'stopped';
-        translatedMessage = getMessage('stopped');
-      } else if (message.includes('Microphone permission denied')) {
-        messageKey = 'micPermissionDenied';
-        translatedMessage = getMessage('micPermissionDenied');
-      } else if (message.includes('Permission denied')) {
-        messageKey = 'permissionDenied';
-        translatedMessage = getMessage('permissionDenied');
-      } else if (message.includes('No audio track found')) {
-        messageKey = 'noAudioTrack';
-        translatedMessage = getMessage('noAudioTrack');
-      } else if (message.includes('No audio source')) {
-        messageKey = 'noAudioSource';
-        translatedMessage = getMessage('noAudioSource');
-      } else if (message.includes('not supported')) {
-        messageKey = 'notSupported';
-        translatedMessage = getMessage('notSupported');
-      } else if (message.includes('Failed to start visualizer')) {
-        // For "Failed" messages, we keep the dynamic error part in English
-        messageKey = 'failed';
-        const errorPart = message.replace('Failed to start visualizer: ', '');
-        translatedMessage = getMessage('failed') + errorPart;
+      let messageKey: typeof MSG_MAP[0][1] | undefined;
+
+      for (const [search, key] of MSG_MAP) {
+        if (message.includes(search)) {
+          messageKey = key;
+          const errorPart = search === 'Failed to start visualizer'
+            ? message.replace('Failed to start visualizer: ', '')
+            : '';
+          translatedMessage = errorPart ? getMessage(key) + errorPart : getMessage(key);
+          break;
+        }
       }
-      
+
       const duration = type === 'error' ? 7000 : type === 'success' ? 4000 : 5000;
       toastManager.show(translatedMessage, type, duration, messageKey);
 
-      // Show start button when stopped
       if (message.includes('stopped') || message.includes('denied') || message.includes('Failed')) {
         startButtonManager.show(() => startVisualizer());
       }
     });
 
-    /**
-     * Start the visualizer
-     */
     async function startVisualizer(): Promise<void> {
       startButtonManager.hide();
-      
       try {
         await visualizer.start();
-      } catch (error) {
-        console.error('Failed to start visualizer:', error);
+      } catch {
         startButtonManager.show(() => startVisualizer());
       }
     }
 
-    /**
-     * Check if should show landing overlay
-     */
     function checkFirstVisit(): void {
       if (!landingManager.hasBeenShown()) {
-        // First visit - show landing overlay
         setTimeout(() => {
-          landingManager.show(
-            // On enable
-            () => {
-              startVisualizer();
-            },
-            // On skip
-            () => {
-              startButtonManager.show(() => startVisualizer());
-            }
-          );
-        }, 1000); // Small delay after page load
+          landingManager.show(() => startVisualizer(), () => startButtonManager.show(() => startVisualizer()));
+        }, 1000);
       } else {
-        // Not first visit - show start button
         startButtonManager.show(() => startVisualizer());
       }
     }
 
-    // Check on page load
     if (document.readyState === 'complete') {
       checkFirstVisit();
     } else {
-      window.addEventListener('load', () => {
-        checkFirstVisit();
-      });
+      window.addEventListener('load', () => checkFirstVisit());
     }
   });
 </script>

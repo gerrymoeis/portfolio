@@ -10,6 +10,7 @@ import SemiCylindricalNav from '../../components/ui/SemiCylindricalNav.astro';
 import Footer from '../../components/ui/Footer.astro';
 import ViewCounter from '../../components/blogs/ViewCounter.astro';
 import PageBackgroundGradient from '../../components/ui/PageBackgroundGradient.astro';
+import OptimizedImage from '../../components/ui/OptimizedImage.astro';
 import { homeConfig } from '../../config/home';
 
 // Generate static paths for all blog posts at build time
@@ -56,11 +57,13 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
       <article class="blog-article">
         <!-- Hero Image -->
         <figure class="blog-hero">
-          <img 
+          <OptimizedImage 
             src={entry.data.heroImage}
             alt={`${entry.data.title.en} hero image`}
+            width={1200}
+            height={675}
             loading="eager"
-            decoding="async"
+            fetchpriority="high"
             class="blog-hero__image"
           />
         </figure>

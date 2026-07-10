@@ -254,42 +254,23 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
     transition: background var(--duration-medium) var(--ease-out);
   }
   
-  /* Dark theme - golden yellow border with glow */
   :global(html:not([data-theme="light"])) .semi-cylindrical-nav__hamburger {
-    border: 2px solid rgba(246, 224, 94, 0.8);
-    box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.3),
-      0 0 20px rgba(246, 224, 94, 0.4),
-      0 0 10px rgba(246, 224, 94, 0.3);
+    --hb-border-color: rgba(246, 224, 94, 0.8);
+    --hb-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 20px rgba(246,224,94,0.4), 0 0 10px rgba(246,224,94,0.3);
+    --hb-shadow-hover: 0 6px 20px rgba(0,0,0,0.45), 0 0 50px rgba(246,224,94,0.7), 0 0 25px rgba(246,224,94,0.5);
   }
-  
-  /* Light theme - red-orange border with glow */
   :global([data-theme="light"]) .semi-cylindrical-nav__hamburger {
-    border: 2px solid rgba(255, 85, 0, 0.8);
-    box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.15),
-      0 0 20px rgba(255, 85, 0, 0.4),
-      0 0 10px rgba(255, 85, 0, 0.3);
+    --hb-border-color: rgba(255, 85, 0, 0.8);
+    --hb-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 20px rgba(255,85,0,0.4), 0 0 10px rgba(255,85,0,0.3);
+    --hb-shadow-hover: 0 6px 20px rgba(0,0,0,0.25), 0 0 50px rgba(255,85,0,0.7), 0 0 25px rgba(255,85,0,0.5);
   }
-
+  .semi-cylindrical-nav__hamburger {
+    border: 2px solid var(--hb-border-color);
+    box-shadow: var(--hb-shadow);
+  }
   .semi-cylindrical-nav__hamburger:hover {
     filter: brightness(1.12) saturate(1.3);
-  }
-  
-  /* Dark theme hover - intensified golden pulse */
-  :global(html:not([data-theme="light"])) .semi-cylindrical-nav__hamburger:hover {
-    box-shadow: 
-      0 6px 20px rgba(0, 0, 0, 0.45),
-      0 0 50px rgba(246, 224, 94, 0.7),
-      0 0 25px rgba(246, 224, 94, 0.5);
-  }
-  
-  /* Light theme hover - intensified orange pulse */
-  :global([data-theme="light"]) .semi-cylindrical-nav__hamburger:hover {
-    box-shadow: 
-      0 6px 20px rgba(0, 0, 0, 0.25),
-      0 0 50px rgba(255, 85, 0, 0.7),
-      0 0 25px rgba(255, 85, 0, 0.5);
+    box-shadow: var(--hb-shadow-hover);
   }
 
   .semi-cylindrical-nav__hamburger:focus-visible {
@@ -297,159 +278,35 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
     outline-offset: 2px;
   }
 
-  /* Heartbeat: rest → anticipate shrink → deg 1 → micro rest → deg 2 (bigger) → snap shrunken → hold + slow return */
   :global(html:not([data-theme="light"])) .semi-cylindrical-nav__hamburger {
-    animation: hamburger-ubar-dark 2.5s ease-in-out infinite;
+    --h1: 0 4px 12px rgba(0,0,0,0.3), 0 0 20px rgba(246,224,94,0.4), 0 0 10px rgba(246,224,94,0.3);
+    --h2: 0 4px 10px rgba(0,0,0,0.28), 0 0 16px rgba(246,224,94,0.3), 0 0 8px rgba(246,224,94,0.2);
+    --h3: 0 6px 20px rgba(0,0,0,0.4), 0 0 45px rgba(246,224,94,0.65), 0 0 22px rgba(246,224,94,0.5);
+    --h4: 0 8px 26px rgba(0,0,0,0.48), 0 0 65px rgba(246,224,94,0.85), 0 0 35px rgba(246,224,94,0.65);
+    --h5: 0 4px 10px rgba(0,0,0,0.28), 0 0 14px rgba(246,224,94,0.28), 0 0 7px rgba(246,224,94,0.18);
+    animation: hamburger-ubar 2.5s ease-in-out infinite;
   }
-
   :global([data-theme="light"]) .semi-cylindrical-nav__hamburger {
-    animation: hamburger-ubar-light 2.5s ease-in-out infinite;
+    --h1: 0 4px 12px rgba(0,0,0,0.15), 0 0 20px rgba(255,85,0,0.4), 0 0 10px rgba(255,85,0,0.3);
+    --h2: 0 4px 10px rgba(0,0,0,0.12), 0 0 16px rgba(255,85,0,0.3), 0 0 8px rgba(255,85,0,0.2);
+    --h3: 0 6px 20px rgba(0,0,0,0.2), 0 0 45px rgba(255,85,0,0.65), 0 0 22px rgba(255,85,0,0.5);
+    --h4: 0 8px 26px rgba(0,0,0,0.28), 0 0 65px rgba(255,85,0,0.85), 0 0 35px rgba(255,85,0,0.65);
+    --h5: 0 4px 10px rgba(0,0,0,0.12), 0 0 14px rgba(255,85,0,0.28), 0 0 7px rgba(255,85,0,0.18);
+    animation: hamburger-ubar 2.5s ease-in-out infinite;
   }
-
   .semi-cylindrical-nav__hamburger.is-active {
     animation: none !important;
   }
-
-  @keyframes hamburger-ubar-dark {
-    0%, 12% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(246, 224, 94, 0.4),
-        0 0 10px rgba(246, 224, 94, 0.3);
-    }
-    14% {
-      transform: scale(0.96);
-      box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.28),
-        0 0 16px rgba(246, 224, 94, 0.3),
-        0 0 8px rgba(246, 224, 94, 0.2);
-    }
-    19% {
-      transform: scale(1.10);
-      box-shadow:
-        0 6px 20px rgba(0, 0, 0, 0.4),
-        0 0 45px rgba(246, 224, 94, 0.65),
-        0 0 22px rgba(246, 224, 94, 0.5);
-      animation-timing-function: cubic-bezier(0.05, 1.7, 0.3, 1.12);
-    }
-    21% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(246, 224, 94, 0.4),
-        0 0 10px rgba(246, 224, 94, 0.3);
-      animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1);
-    }
-    28% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(246, 224, 94, 0.4),
-        0 0 10px rgba(246, 224, 94, 0.3);
-    }
-    33% {
-      transform: scale(1.18);
-      box-shadow:
-        0 8px 26px rgba(0, 0, 0, 0.48),
-        0 0 65px rgba(246, 224, 94, 0.85),
-        0 0 35px rgba(246, 224, 94, 0.65);
-      animation-timing-function: cubic-bezier(0.04, 1.9, 0.25, 1.18);
-    }
-    35% {
-      transform: scale(0.96);
-      box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.28),
-        0 0 14px rgba(246, 224, 94, 0.28),
-        0 0 7px rgba(246, 224, 94, 0.18);
-      animation-timing-function: cubic-bezier(0.2, 1.2, 0.3, 1);
-    }
-    72% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(246, 224, 94, 0.4),
-        0 0 10px rgba(246, 224, 94, 0.3);
-      animation-timing-function: cubic-bezier(0.2, 0.1, 0.3, 1.05);
-    }
-    100% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(246, 224, 94, 0.4),
-        0 0 10px rgba(246, 224, 94, 0.3);
-    }
-  }
-
-  @keyframes hamburger-ubar-light {
-    0%, 12% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.15),
-        0 0 20px rgba(255, 85, 0, 0.4),
-        0 0 10px rgba(255, 85, 0, 0.3);
-    }
-    14% {
-      transform: scale(0.96);
-      box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.12),
-        0 0 16px rgba(255, 85, 0, 0.3),
-        0 0 8px rgba(255, 85, 0, 0.2);
-    }
-    19% {
-      transform: scale(1.10);
-      box-shadow:
-        0 6px 20px rgba(0, 0, 0, 0.2),
-        0 0 45px rgba(255, 85, 0, 0.65),
-        0 0 22px rgba(255, 85, 0, 0.5);
-      animation-timing-function: cubic-bezier(0.05, 1.7, 0.3, 1.12);
-    }
-    21% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.15),
-        0 0 20px rgba(255, 85, 0, 0.4),
-        0 0 10px rgba(255, 85, 0, 0.3);
-      animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1);
-    }
-    28% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.15),
-        0 0 20px rgba(255, 85, 0, 0.4),
-        0 0 10px rgba(255, 85, 0, 0.3);
-    }
-    33% {
-      transform: scale(1.18);
-      box-shadow:
-        0 8px 26px rgba(0, 0, 0, 0.28),
-        0 0 65px rgba(255, 85, 0, 0.85),
-        0 0 35px rgba(255, 85, 0, 0.65);
-      animation-timing-function: cubic-bezier(0.04, 1.9, 0.25, 1.18);
-    }
-    35% {
-      transform: scale(0.96);
-      box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.12),
-        0 0 14px rgba(255, 85, 0, 0.28),
-        0 0 7px rgba(255, 85, 0, 0.18);
-      animation-timing-function: cubic-bezier(0.2, 1.2, 0.3, 1);
-    }
-    72% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.15),
-        0 0 20px rgba(255, 85, 0, 0.4),
-        0 0 10px rgba(255, 85, 0, 0.3);
-      animation-timing-function: cubic-bezier(0.2, 0.1, 0.3, 1.05);
-    }
-    100% {
-      transform: scale(1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.15),
-        0 0 20px rgba(255, 85, 0, 0.4),
-        0 0 10px rgba(255, 85, 0, 0.3);
-    }
+  @keyframes hamburger-ubar {
+    0%, 12% { transform: scale(1); box-shadow: var(--h1); }
+    14% { transform: scale(0.96); box-shadow: var(--h2); }
+    19% { transform: scale(1.10); box-shadow: var(--h3); animation-timing-function: cubic-bezier(0.05, 1.7, 0.3, 1.12); }
+    21% { transform: scale(1); box-shadow: var(--h1); animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1); }
+    28% { transform: scale(1); box-shadow: var(--h1); }
+    33% { transform: scale(1.18); box-shadow: var(--h4); animation-timing-function: cubic-bezier(0.04, 1.9, 0.25, 1.18); }
+    35% { transform: scale(0.96); box-shadow: var(--h5); animation-timing-function: cubic-bezier(0.2, 1.2, 0.3, 1); }
+    72% { transform: scale(1); box-shadow: var(--h1); animation-timing-function: cubic-bezier(0.2, 0.1, 0.3, 1.05); }
+    100% { transform: scale(1); box-shadow: var(--h1); }
   }
 
   .semi-cylindrical-nav__hamburger-line {
