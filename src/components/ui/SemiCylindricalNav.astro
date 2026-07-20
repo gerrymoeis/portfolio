@@ -230,6 +230,42 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
 
 <style>
   /* ============================================
+     COMPONENT-SCOPED SHADOW VARIABLES
+     Black shadow opacities vary by theme (dark = stronger, light = softer)
+     ============================================ */
+  
+  :global(html:not([data-theme="light"])) {
+    --nav-container-bg: rgba(26, 28, 36, 0.7);
+    --nav-black-strong: 0.4;
+    --nav-black-medium: 0.3;
+    --nav-black-hover: 0.45;
+    --nav-black-h1: 0.3;
+    --nav-black-h2: 0.28;
+    --nav-black-h3: 0.4;
+    --nav-black-h4: 0.48;
+    --nav-black-h5: 0.28;
+    --nav-black-mobile: 0.4;
+    --nav-accent-glow-1: 0.6;
+    --nav-accent-glow-2: 0.5;
+    --nav-accent-glow-3: 0.3;
+  }
+  :global([data-theme="light"]) {
+    --nav-container-bg: rgba(247, 250, 252, 0.7);
+    --nav-black-strong: 0.15;
+    --nav-black-medium: 0.1;
+    --nav-black-hover: 0.25;
+    --nav-black-h1: 0.15;
+    --nav-black-h2: 0.12;
+    --nav-black-h3: 0.2;
+    --nav-black-h4: 0.28;
+    --nav-black-h5: 0.12;
+    --nav-black-mobile: 0.15;
+    --nav-accent-glow-1: 0.5;
+    --nav-accent-glow-2: 0.4;
+    --nav-accent-glow-3: 0.2;
+  }
+
+  /* ============================================
      MOBILE HAMBURGER BUTTON
      Position: Bottom RIGHT (changed from top right)
      ============================================ */
@@ -254,19 +290,18 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
     transition: background var(--duration-medium) var(--ease-out);
   }
   
-  :global(html:not([data-theme="light"])) .semi-cylindrical-nav__hamburger {
-    --hb-border-color: rgba(var(--accent-rgb), 0.8);
-    --hb-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 20px rgba(var(--accent-rgb), 0.4), 0 0 10px rgba(var(--accent-rgb), 0.3);
-    --hb-shadow-hover: 0 6px 20px rgba(0,0,0,0.45), 0 0 50px rgba(var(--accent-rgb), 0.7), 0 0 25px rgba(var(--accent-rgb), 0.5);
-  }
-  :global([data-theme="light"]) .semi-cylindrical-nav__hamburger {
-    --hb-border-color: rgba(var(--accent-rgb), 0.8);
-    --hb-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 20px rgba(var(--accent-rgb), 0.4), 0 0 10px rgba(var(--accent-rgb), 0.3);
-    --hb-shadow-hover: 0 6px 20px rgba(0,0,0,0.25), 0 0 50px rgba(var(--accent-rgb), 0.7), 0 0 25px rgba(var(--accent-rgb), 0.5);
-  }
   .semi-cylindrical-nav__hamburger {
+    --hb-border-color: rgba(var(--accent-rgb), 0.8);
+    --hb-shadow: 0 4px 12px rgba(0,0,0,var(--nav-black-medium)), 0 0 20px rgba(var(--accent-rgb), 0.4), 0 0 10px rgba(var(--accent-rgb), 0.3);
+    --hb-shadow-hover: 0 6px 20px rgba(0,0,0,var(--nav-black-hover)), 0 0 50px rgba(var(--accent-rgb), 0.7), 0 0 25px rgba(var(--accent-rgb), 0.5);
+    --h1: 0 4px 12px rgba(0,0,0,var(--nav-black-h1)), 0 0 20px rgba(var(--accent-rgb), 0.4), 0 0 10px rgba(var(--accent-rgb), 0.3);
+    --h2: 0 4px 10px rgba(0,0,0,var(--nav-black-h2)), 0 0 16px rgba(var(--accent-rgb), 0.3), 0 0 8px rgba(var(--accent-rgb), 0.2);
+    --h3: 0 6px 20px rgba(0,0,0,var(--nav-black-h3)), 0 0 45px rgba(var(--accent-rgb), 0.65), 0 0 22px rgba(var(--accent-rgb), 0.5);
+    --h4: 0 8px 26px rgba(0,0,0,var(--nav-black-h4)), 0 0 65px rgba(var(--accent-rgb), 0.85), 0 0 35px rgba(var(--accent-rgb), 0.65);
+    --h5: 0 4px 10px rgba(0,0,0,var(--nav-black-h5)), 0 0 14px rgba(var(--accent-rgb), 0.28), 0 0 7px rgba(var(--accent-rgb), 0.18);
     border: 2px solid var(--hb-border-color);
     box-shadow: var(--hb-shadow);
+    animation: hamburger-ubar 2.5s ease-in-out infinite;
   }
   .semi-cylindrical-nav__hamburger:hover {
     filter: brightness(1.12) saturate(1.3);
@@ -276,23 +311,6 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
   .semi-cylindrical-nav__hamburger:focus-visible {
     outline: 2px solid var(--color-accent-primary);
     outline-offset: 2px;
-  }
-
-  :global(html:not([data-theme="light"])) .semi-cylindrical-nav__hamburger {
-    --h1: 0 4px 12px rgba(0,0,0,0.3), 0 0 20px rgba(var(--accent-rgb), 0.4), 0 0 10px rgba(var(--accent-rgb), 0.3);
-    --h2: 0 4px 10px rgba(0,0,0,0.28), 0 0 16px rgba(var(--accent-rgb), 0.3), 0 0 8px rgba(var(--accent-rgb), 0.2);
-    --h3: 0 6px 20px rgba(0,0,0,0.4), 0 0 45px rgba(var(--accent-rgb), 0.65), 0 0 22px rgba(var(--accent-rgb), 0.5);
-    --h4: 0 8px 26px rgba(0,0,0,0.48), 0 0 65px rgba(var(--accent-rgb), 0.85), 0 0 35px rgba(var(--accent-rgb), 0.65);
-    --h5: 0 4px 10px rgba(0,0,0,0.28), 0 0 14px rgba(var(--accent-rgb), 0.28), 0 0 7px rgba(var(--accent-rgb), 0.18);
-    animation: hamburger-ubar 2.5s ease-in-out infinite;
-  }
-  :global([data-theme="light"]) .semi-cylindrical-nav__hamburger {
-    --h1: 0 4px 12px rgba(0,0,0,0.15), 0 0 20px rgba(var(--accent-rgb), 0.4), 0 0 10px rgba(var(--accent-rgb), 0.3);
-    --h2: 0 4px 10px rgba(0,0,0,0.12), 0 0 16px rgba(var(--accent-rgb), 0.3), 0 0 8px rgba(var(--accent-rgb), 0.2);
-    --h3: 0 6px 20px rgba(0,0,0,0.2), 0 0 45px rgba(var(--accent-rgb), 0.65), 0 0 22px rgba(var(--accent-rgb), 0.5);
-    --h4: 0 8px 26px rgba(0,0,0,0.28), 0 0 65px rgba(var(--accent-rgb), 0.85), 0 0 35px rgba(var(--accent-rgb), 0.65);
-    --h5: 0 4px 10px rgba(0,0,0,0.12), 0 0 14px rgba(var(--accent-rgb), 0.28), 0 0 7px rgba(var(--accent-rgb), 0.18);
-    animation: hamburger-ubar 2.5s ease-in-out infinite;
   }
   .semi-cylindrical-nav__hamburger.is-active {
     animation: none !important;
@@ -384,23 +402,12 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
     max-width: 100%;
   }
   
-  :global(html:not([data-theme="light"])) .semi-cylindrical-nav__container {
-    background: rgba(26, 28, 36, 0.7);
+  .semi-cylindrical-nav__container {
+    background: var(--nav-container-bg);
     border: 2px solid rgba(var(--accent-rgb), 0.8);
     box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.4),
-      0 2px 8px rgba(0, 0, 0, 0.3),
-      0 0 30px rgba(var(--accent-rgb), 0.5),
-      0 0 15px rgba(var(--accent-rgb), 0.4),
-      inset 0 1px 0 rgba(var(--accent-rgb), 0.2);
-  }
-  
-  :global([data-theme="light"]) .semi-cylindrical-nav__container {
-    background: rgba(247, 250, 252, 0.7);
-    border: 2px solid rgba(var(--accent-rgb), 0.8);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.15),
-      0 2px 8px rgba(0, 0, 0, 0.1),
+      0 4px 16px rgba(0, 0, 0, var(--nav-black-strong)),
+      0 2px 8px rgba(0, 0, 0, var(--nav-black-medium)),
       0 0 30px rgba(var(--accent-rgb), 0.5),
       0 0 15px rgba(var(--accent-rgb), 0.4),
       inset 0 1px 0 rgba(var(--accent-rgb), 0.2);
@@ -493,13 +500,9 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
 
   .semi-cylindrical-nav__link:hover {
     color: var(--color-text-primary);
-    background-color: var(--color-nav-hover-bg);
+    background-color: rgba(var(--accent-rgb), 0.25);
     transform: translateY(-1px);
     box-shadow: var(--subtle-glow);
-  }
-  
-  .semi-cylindrical-nav__link:hover {
-    background-color: rgba(var(--accent-rgb), 0.25);
   }
 
   .semi-cylindrical-nav__link:focus-visible {
@@ -509,13 +512,9 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
 
   .semi-cylindrical-nav__link--active {
     color: var(--color-text-primary);
-    background-color: var(--color-nav-active-bg);
+    background-color: rgba(var(--accent-rgb), 0.35);
     font-weight: var(--weight-semibold);
     box-shadow: var(--subtle-glow);
-  }
-  
-  .semi-cylindrical-nav__link--active {
-    background-color: rgba(var(--accent-rgb), 0.35);
   }
 
   .semi-cylindrical-nav__link--active::after {
@@ -578,27 +577,15 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
       right: 0;
     }
     
-    :global(html:not([data-theme="light"])) .semi-cylindrical-nav__container--mobile {
+    .semi-cylindrical-nav__container--mobile {
       border-top: 2px solid rgba(var(--accent-rgb), 0.8);
       border-left: 2px solid rgba(var(--accent-rgb), 0.8);
       box-shadow: 
-        -4px 0 24px rgba(0, 0, 0, 0.4),
-        0 -4px 24px rgba(0, 0, 0, 0.4),
-        -6px -6px 30px rgba(var(--accent-rgb), 0.6),
-        -3px -3px 15px rgba(var(--accent-rgb), 0.5),
-        inset 3px 3px 10px rgba(var(--accent-rgb), 0.3),
-        inset 1px 1px 0 rgba(var(--accent-rgb), 0.9);
-    }
-    
-    :global([data-theme="light"]) .semi-cylindrical-nav__container--mobile {
-      border-top: 2px solid rgba(var(--accent-rgb), 0.8);
-      border-left: 2px solid rgba(var(--accent-rgb), 0.8);
-      box-shadow: 
-        -4px 0 24px rgba(0, 0, 0, 0.15),
-        0 -4px 24px rgba(0, 0, 0, 0.15),
-        -6px -6px 30px rgba(var(--accent-rgb), 0.5),
-        -3px -3px 15px rgba(var(--accent-rgb), 0.4),
-        inset 3px 3px 10px rgba(var(--accent-rgb), 0.2),
+        -4px 0 24px rgba(0, 0, 0, var(--nav-black-mobile)),
+        0 -4px 24px rgba(0, 0, 0, var(--nav-black-mobile)),
+        -6px -6px 30px rgba(var(--accent-rgb), var(--nav-accent-glow-1)),
+        -3px -3px 15px rgba(var(--accent-rgb), var(--nav-accent-glow-2)),
+        inset 3px 3px 10px rgba(var(--accent-rgb), var(--nav-accent-glow-3)),
         inset 1px 1px 0 rgba(var(--accent-rgb), 0.9);
     }
 
