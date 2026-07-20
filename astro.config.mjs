@@ -54,9 +54,6 @@ export default defineConfig({
             if (id.includes('/scripts/mouseBackground')) {
               return 'mouse-background';
             }
-            if (id.includes('/scripts/parallax')) {
-              return 'parallax';
-            }
             if (id.includes('/scripts/viewCounter') || id.includes('ViewCounterClient')) {
               return 'view-counter';
             }
