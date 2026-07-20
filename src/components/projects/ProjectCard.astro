@@ -339,45 +339,11 @@ function linkIcon(key: string): string {
 </style>
 
 <script>
-  /**
-   * Mobile tooltip toggle for tech icons
-   */
-  function initTechTooltips() {
-    const icons = document.querySelectorAll('.project-card__tech-icon');
-    
-    icons.forEach((icon) => {
-      icon.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const tooltip = icon.querySelector('.tech-tooltip');
-        if (!tooltip) return;
-        
-        // Hide all other tooltips
-        document.querySelectorAll('.tech-tooltip.visible').forEach(t => {
-          if (t !== tooltip) t.classList.remove('visible');
-        });
-        
-        tooltip.classList.toggle('visible');
-        
-        // Auto-hide after 2s
-        if (tooltip.classList.contains('visible')) {
-          setTimeout(() => tooltip.classList.remove('visible'), 2000);
-        }
-      });
-    });
-
-    // Close tooltips on click outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.project-card__tech-icon')) {
-        document.querySelectorAll('.tech-tooltip.visible').forEach(t => {
-          t.classList.remove('visible');
-        });
-      }
-    });
-  }
+  import { initTechTooltips } from '../../scripts/techTooltips';
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTechTooltips);
+    document.addEventListener('DOMContentLoaded', () => initTechTooltips('.project-card__tech-icon'));
   } else {
-    initTechTooltips();
+    initTechTooltips('.project-card__tech-icon');
   }
 </script>

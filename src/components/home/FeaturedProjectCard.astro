@@ -68,7 +68,10 @@ function linkIcon(key: string): string {
 
     <div class="featured-card__tech">
       {techStack.map(tech => (
-        <ProjectIcon name={tech} />
+        <div class="featured-card__tech-icon">
+          <ProjectIcon name={tech} />
+          <span class="tech-tooltip">{tech}</span>
+        </div>
       ))}
     </div>
 
@@ -238,6 +241,34 @@ function linkIcon(key: string): string {
     align-items: center;
   }
 
+  .featured-card__tech-icon {
+    position: relative;
+  }
+
+  .featured-card__tech-icon .tech-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-text-primary);
+    color: var(--bg-elevated);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: var(--font-primary);
+    white-space: nowrap;
+    z-index: var(--layer-tooltip, 40);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+
+  .featured-card__tech-icon:hover .tech-tooltip,
+  .featured-card__tech-icon:focus-within .tech-tooltip,
+  .featured-card__tech-icon .tech-tooltip.visible {
+    opacity: 1;
+  }
+
   .featured-card__links {
     display: flex;
     gap: var(--space-4);
@@ -289,3 +320,13 @@ function linkIcon(key: string): string {
     .featured-card__link:hover { background: transparent; }
   }
 </style>
+
+<script>
+  import { initTechTooltips } from '../../scripts/techTooltips';
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => initTechTooltips('.featured-card__tech-icon'));
+  } else {
+    initTechTooltips('.featured-card__tech-icon');
+  }
+</script>

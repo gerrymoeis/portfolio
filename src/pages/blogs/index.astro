@@ -33,7 +33,7 @@ const currentPath = Astro.url.pathname;
     <main role="main" class="blogs-main">
       <!-- Hero Section with Panel -->
       <header class="blogs-hero">
-        <Panel variant="elevated" glow={true} class="hero-panel">
+        <Panel variant="elevated" glow={true} class="hero-panel hero-panel-base">
           <h1 class="blogs-hero__title" data-bilingual>
             <span data-lang="en">Blogs</span>
             <span data-lang="id">Blog</span>
@@ -66,11 +66,6 @@ const currentPath = Astro.url.pathname;
     max-width: 700px;
     margin: 0 auto;
     padding: 0 0 calc(var(--space-32) / 3);
-  }
-  
-  :global(.hero-panel) {
-    padding: var(--space-8) var(--space-6);
-    text-align: center;
   }
   
   .blogs-hero__title {
@@ -106,10 +101,6 @@ const currentPath = Astro.url.pathname;
     
     .blogs-hero {
       padding: 0 0 calc(var(--space-16) / 3);
-    }
-    
-    :global(.hero-panel) {
-      padding: var(--space-6) var(--space-4);
     }
     
     .blogs-hero__title {

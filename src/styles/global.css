@@ -416,3 +416,19 @@ html[lang="id"] [data-bilingual] [data-lang="id"] {
   position: relative;
   z-index: 1;
 }
+
+/* ============================================
+   HERO PANEL BASE
+   Shared hero panel padding for listing pages
+   ============================================ */
+
+.hero-panel-base {
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .hero-panel-base {
+    padding: var(--space-6) var(--space-4);
+  }
+}
