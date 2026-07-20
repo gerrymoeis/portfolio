@@ -8,8 +8,6 @@ import HeroCompact from '../components/home/HeroCompact.astro';
 import FeaturedProjectsSection from '../components/home/FeaturedProjectsSection.astro';
 import { homeConfig } from '../config/home';
 
-const navLinks = homeConfig.navigation;
-
 const socialLinks = homeConfig.social;
 ---
 
@@ -19,7 +17,7 @@ const socialLinks = homeConfig.social;
   ogImage="/images/projects/personal-portfolio-hero.webp"
   ogType="website"
 >
-  <SemiCylindricalNav links={navLinks} currentPath="/" />
+  <SemiCylindricalNav links={homeConfig.navigation} currentPath="/" />
 
   <div class="page-layout depth-mid">
     <PageBackgroundGradient />
@@ -221,18 +219,4 @@ const socialLinks = homeConfig.social;
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .home-panel__social-link,
-    .home-panel__cta {
-      transition: none;
-    }
-
-    .home-panel__social-link:hover {
-      transform: none;
-    }
-
-    .home-panel__cta:hover {
-      transform: none;
-    }
-  }
 </style>

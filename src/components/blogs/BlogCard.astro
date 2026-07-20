@@ -1,12 +1,12 @@
 ---
-
 import ViewCounter from './ViewCounter.astro';
 import OptimizedImage from '../ui/OptimizedImage.astro';
+import type { BilingualText } from '../../types';
 
 interface Props {
-  title: { en: string; id: string };
+  title: BilingualText;
   date: Date;
-  summary: { en: string; id: string };
+  summary: BilingualText;
   slug: string;
   tags?: string[];
   readingTime?: number;
@@ -233,18 +233,4 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     border: 1px solid var(--color-border-medium);
   }
 
-  /* Respect reduced motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    .blog-card {
-      transition: none;
-    }
-
-    .blog-card:hover {
-      transform: none;
-    }
-
-    .blog-card__title {
-      transition: none;
-    }
-  }
 </style>

@@ -1,0 +1,62 @@
+---
+import Panel from './Panel.astro';
+
+export interface Props {
+  title: { en: string; id: string };
+  description: { en: string; id: string };
+}
+
+const { title, description } = Astro.props;
+---
+
+<header class="listing-hero">
+  <Panel variant="elevated" glow={true} class="hero-panel hero-panel-base">
+    <h1 class="listing-hero__title" data-bilingual>
+      <span data-lang="en">{title.en}</span>
+      <span data-lang="id">{title.id}</span>
+    </h1>
+    <p class="listing-hero__description" data-bilingual>
+      <span data-lang="en">{description.en}</span>
+      <span data-lang="id">{description.id}</span>
+    </p>
+  </Panel>
+</header>
+
+<style>
+  .listing-hero {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 0 calc(var(--space-32) / 3);
+  }
+
+  .listing-hero__title {
+    font-family: var(--font-primary);
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-3) 0;
+    line-height: var(--leading-tight);
+  }
+
+  .listing-hero__description {
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .listing-hero {
+      padding: 0 0 calc(var(--space-16) / 3);
+    }
+
+    .listing-hero__title {
+      font-size: var(--text-3xl);
+    }
+
+    .listing-hero__description {
+      font-size: var(--text-sm);
+    }
+  }
+</style>

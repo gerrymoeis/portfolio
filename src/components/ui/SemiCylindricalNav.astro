@@ -791,21 +791,6 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
     }
   }
 
-  /* Reduced motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    .semi-cylindrical-nav__link,
-    .semi-cylindrical-nav__hamburger,
-    .semi-cylindrical-nav__hamburger-line,
-    .semi-cylindrical-nav__container,
-    .semi-cylindrical-nav__overlay {
-      transition: none;
-    }
-
-    .semi-cylindrical-nav__link:hover {
-      transform: none;
-    }
-  }
-  
 
   /* Safe area adjustments for devices with notches */
   @supports (padding: max(0px)) {

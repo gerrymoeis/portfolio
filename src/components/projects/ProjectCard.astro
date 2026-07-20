@@ -3,49 +3,27 @@ import ProjectIcon from './ProjectIcon.astro';
 import CraftBadge from '../ui/CraftBadge.astro';
 import OptimizedImage from '../ui/OptimizedImage.astro';
 import '../../styles/project-status.css';
-import { statusDisplay, linkKeys, linkDefaults, linkIcons } from '../../config/projectConfig';
+import { statusDisplay, linkKeys, linkLabel, linkIcon } from '../../config/projectConfig';
 import type { ProjectStatus } from '../../config/projectConfig';
+import type { BilingualText, ProjectLinks, ProjectLinkTitles } from '../../types';
 
 interface Props {
-  title: { en: string; id: string };
-  summary: { en: string; id: string };
+  title: BilingualText;
+  summary: BilingualText;
   year: number;
   status: ProjectStatus;
   category: string | string[];
   craft?: 'ai' | 'hand-crafted';
   techStack: string[];
   thumbnail: string;
-  links?: {
-    github?: string;
-    live?: string;
-    demo?: string;
-  };
-  linkTitles?: {
-    github?: string;
-    live?: string;
-    demo?: string;
-  };
+  links?: ProjectLinks;
+  linkTitles?: ProjectLinkTitles;
 }
 
 const { title, year, status, category, craft, techStack, thumbnail, links, linkTitles } = Astro.props;
 
 const categories = Array.isArray(category) ? category : [category];
 const categoriesAttr = categories.join(' ');
-
-function linkLabel(key: string): string {
-  if (linkTitles && linkTitles[key as keyof typeof linkTitles]) {
-    return linkTitles[key as keyof typeof linkTitles]!;
-  }
-  return linkDefaults[key] || key;
-}
-
-function linkIcon(key: string): string {
-  if (linkTitles && linkTitles[key as keyof typeof linkTitles]) {
-    const label = linkTitles[key as keyof typeof linkTitles]!;
-    if (label !== 'Live' && label !== 'Demo') return 'fab fa-github';
-  }
-  return linkIcons[key] || 'fas fa-link';
-}
 ---
 
 <article class="project-card" data-category={categoriesAttr} role="listitem">
@@ -88,7 +66,7 @@ function linkIcon(key: string): string {
         {linkKeys.map(key => {
           const url = links[key];
           if (!url) return null;
-          const label = linkLabel(key);
+          const label = linkLabel(key, linkTitles);
           return (
             <a 
               href={url} 
@@ -97,7 +75,7 @@ function linkIcon(key: string): string {
               rel="noopener noreferrer"
               aria-label={`${label} - ${title.en}`}
             >
-              <i class={linkIcon(key)}></i>
+              <i class={linkIcon(key, linkTitles)}></i>
               <span data-bilingual>
                 <span data-lang="en">{label}</span>
                 <span data-lang="id">{label}</span>
@@ -318,18 +296,6 @@ function linkIcon(key: string): string {
     font-size: var(--text-sm);
   }
   
-
-
-  @media (prefers-reduced-motion: reduce) {
-    .project-card,
-    .project-card__image,
-    .project-card__title,
-    .project-card__link {
-      transition: none;
-    }
-    .project-card:hover { transform: none; }
-    .project-card:hover .project-card__image { transform: none; }
-  }
   
   @media (max-width: 768px) {
     .project-card { height: auto; }

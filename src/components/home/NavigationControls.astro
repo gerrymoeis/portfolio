@@ -281,24 +281,7 @@ const shouldRender = showControls && totalPlaylists > 1;
     }
   }
 
-  /* Reduced motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    .nav-button,
-    .nav-button__icon {
-      transition: none;
-    }
-    
-    .nav-button:hover:not(:disabled) {
-      transform: none;
-    }
-    
-    .nav-button:hover:not(:disabled) .nav-button__icon,
-    .nav-button--previous:hover:not(:disabled) .nav-button__icon,
-    .nav-button--next:hover:not(:disabled) .nav-button__icon {
-      transform: none;
-    }
-  }
-
+  
   /* High contrast mode support */
   @media (prefers-contrast: high) {
     .nav-button {

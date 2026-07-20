@@ -2,43 +2,21 @@
 import ProjectIcon from '../projects/ProjectIcon.astro';
 import OptimizedImage from '../ui/OptimizedImage.astro';
 import '../../styles/project-status.css';
-import { statusDisplay, linkKeys, linkDefaults, linkIcons } from '../../config/projectConfig';
+import { statusDisplay, linkKeys, linkLabel, linkIcon } from '../../config/projectConfig';
 import type { ProjectStatus } from '../../config/projectConfig';
+import type { BilingualText, ProjectLinks, ProjectLinkTitles } from '../../types';
 
 interface Props {
-  title: { en: string; id: string };
+  title: BilingualText;
   year: number;
   status: ProjectStatus;
   techStack: string[];
   thumbnail: string;
-  links?: {
-    github?: string;
-    live?: string;
-    demo?: string;
-  };
-  linkTitles?: {
-    github?: string;
-    live?: string;
-    demo?: string;
-  };
+  links?: ProjectLinks;
+  linkTitles?: ProjectLinkTitles;
 }
 
 const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.props;
-
-function linkLabel(key: string): string {
-  if (linkTitles && linkTitles[key as keyof typeof linkTitles]) {
-    return linkTitles[key as keyof typeof linkTitles]!;
-  }
-  return linkDefaults[key] || key;
-}
-
-function linkIcon(key: string): string {
-  if (linkTitles && linkTitles[key as keyof typeof linkTitles]) {
-    const label = linkTitles[key as keyof typeof linkTitles]!;
-    if (label !== 'Live' && label !== 'Demo') return 'fab fa-github';
-  }
-  return linkIcons[key] || 'fas fa-link';
-}
 ---
 
 <article class="featured-card">
@@ -80,7 +58,7 @@ function linkIcon(key: string): string {
         {linkKeys.map(key => {
           const url = links[key];
           if (!url) return null;
-          const label = linkLabel(key);
+          const label = linkLabel(key, linkTitles);
           return (
             <a
               href={url}
@@ -89,7 +67,7 @@ function linkIcon(key: string): string {
               rel="noopener noreferrer"
               aria-label={`${label} - ${title.en}`}
             >
-              <i class={linkIcon(key)}></i>
+              <i class={linkIcon(key, linkTitles)}></i>
               <span data-bilingual>
                 <span data-lang="en">{label}</span>
                 <span data-lang="id">{label}</span>
@@ -308,17 +286,6 @@ function linkIcon(key: string): string {
 
 
 
-  @media (prefers-reduced-motion: reduce) {
-    .featured-card,
-    .featured-card__image,
-    .featured-card__title,
-    .featured-card__link {
-      transition: none;
-    }
-    .featured-card:hover { transform: none; }
-    .featured-card:hover .featured-card__image { transform: none; }
-    .featured-card__link:hover { background: transparent; }
-  }
 </style>
 
 <script>

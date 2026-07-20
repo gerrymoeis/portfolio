@@ -137,12 +137,4 @@ const apiUrl = import.meta.env.VIEW_COUNTER_API_URL || '';
     }
   }
   
-  /* Reduced motion support */
-  @media (prefers-reduced-motion: reduce) {
-    .view-count-number:empty::before,
-    .view-count-number:contains("—")::before {
-      animation: none;
-      opacity: 0.5;
-    }
-  }
 </style>

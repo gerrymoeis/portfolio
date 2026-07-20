@@ -1,13 +1,8 @@
 ---
-/**
- * Music Page - Dedicated music listening page
- * Features SoundCloud playlist carousel and real-time audio visualizer
- * Copied from home page (home page keeps its copy intact)
- */
-
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SemiCylindricalNav from '../../components/ui/SemiCylindricalNav.astro';
 import Footer from '../../components/ui/Footer.astro';
+import ListingHero from '../../components/ui/ListingHero.astro';
 import Panel from '../../components/ui/Panel.astro';
 import PageBackgroundGradient from '../../components/ui/PageBackgroundGradient.astro';
 import SoundCloudPlaylistCarousel from '../../components/home/SoundCloudPlaylistCarousel.astro';
@@ -16,7 +11,6 @@ import AudioVisualizerControls from '../../components/home/AudioVisualizerContro
 import { homeConfig } from '../../config/home';
 import { soundCloudPlaylists } from '../../config/soundcloud';
 
-const navLinks = homeConfig.navigation;
 const currentPath = Astro.url.pathname;
 ---
 
@@ -26,23 +20,15 @@ const currentPath = Astro.url.pathname;
   ogImage="/images/projects/personal-portfolio-hero.webp"
   ogType="website"
 >
-  <SemiCylindricalNav links={navLinks} currentPath={currentPath} />
+  <SemiCylindricalNav links={homeConfig.navigation} currentPath={currentPath} />
 
   <div class="page-layout depth-mid music-page">
     <PageBackgroundGradient />
     <main role="main" class="music-main">
-      <header class="music-hero">
-        <Panel variant="elevated" glow={true} class="hero-panel hero-panel-base">
-          <h1 class="music-hero__title" data-bilingual>
-            <span data-lang="en">Music</span>
-            <span data-lang="id">Musik</span>
-          </h1>
-          <p class="music-hero__description" data-bilingual>
-            <span data-lang="en">Curated SoundCloud playlists with a real-time audio visualizer. Press start to enhance your listening experience.</span>
-            <span data-lang="id">Daftar putar SoundCloud pilihan dengan visualizer audio real-time. Tekan mulai untuk meningkatkan pengalaman mendengarkan.</span>
-          </p>
-        </Panel>
-      </header>
+      <ListingHero
+        title={{ en: 'Music', id: 'Musik' }}
+        description={{ en: 'Curated SoundCloud playlists with a real-time audio visualizer. Press start to enhance your listening experience.', id: 'Daftar putar SoundCloud pilihan dengan visualizer audio real-time. Tekan mulai untuk meningkatkan pengalaman mendengarkan.' }}
+      />
 
       <div class="music-content">
         <Panel variant="atmospheric" depth="mid" class="music-player-panel">
@@ -65,33 +51,6 @@ const currentPath = Astro.url.pathname;
     padding: var(--space-32) var(--space-6);
   }
 
-  .music-hero {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 0 0 calc(var(--space-32) / 3);
-  }
-
-  .music-hero__title {
-    font-family: var(--font-primary);
-    font-size: var(--text-4xl);
-    font-weight: var(--weight-bold);
-    color: var(--color-text-primary);
-    margin: 0 0 var(--space-3) 0;
-    line-height: var(--leading-tight);
-  }
-
-
-
-  .music-hero__description {
-    font-family: var(--font-primary);
-    font-size: var(--text-base);
-    color: var(--color-text-secondary);
-    line-height: var(--leading-relaxed);
-    margin: 0;
-  }
-
-
-
   .music-content {
     padding-bottom: 0;
   }
@@ -103,18 +62,6 @@ const currentPath = Astro.url.pathname;
   @media (max-width: 768px) {
     .music-main {
       padding: var(--space-16) var(--space-4);
-    }
-
-    .music-hero {
-      padding: 0 0 calc(var(--space-16) / 3);
-    }
-
-    .music-hero__title {
-      font-size: var(--text-3xl);
-    }
-
-    .music-hero__description {
-      font-size: var(--text-sm);
     }
   }
 </style>

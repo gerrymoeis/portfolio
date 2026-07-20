@@ -208,24 +208,7 @@ const totalPlaylists = playlists.length;
     }
   }
 
-  /* Reduced motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    .pagination-dot,
-    .pagination-dot__indicator,
-    .pagination-dot__indicator::before {
-      transition: none;
-    }
-    
-    .pagination-dot:hover:not(:disabled) {
-      transform: none;
-    }
-    
-    .pagination-dot--active .pagination-dot__indicator {
-      transform: scale(1.1); /* Reduced scale change */
-      box-shadow: none; /* Remove animated glow */
-    }
-  }
-
+  
   /* High contrast mode support */
   @media (prefers-contrast: high) {
     .pagination-dot__indicator {

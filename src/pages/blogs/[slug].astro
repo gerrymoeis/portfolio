@@ -29,10 +29,6 @@ const { entry } = Astro.props;
 // Render the markdown content to HTML
 const { Content } = await entry.render();
 
-// Get navigation links from config (single source of truth)
-const navLinks = homeConfig.navigation;
-
-// Get current path for active state
 const currentPath = Astro.url.pathname;
 
 // Format date for display
@@ -50,7 +46,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
   ogType="article"
 >
   <!-- Semi-Cylindrical Navigation (Fixed at top) -->
-  <SemiCylindricalNav links={navLinks} currentPath={currentPath} />
+  <SemiCylindricalNav links={homeConfig.navigation} currentPath={currentPath} />
   
   <div class="page-layout depth-mid">
     <PageBackgroundGradient />
@@ -389,9 +385,4 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
     }
   }
   
-  @media (prefers-reduced-motion: reduce) {
-    .blog-article {
-      animation: none;
-    }
-  }
 </style>

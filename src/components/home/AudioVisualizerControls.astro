@@ -622,22 +622,4 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
     }
   }
 
-  /* Reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    .visualizer-landing,
-    .visualizer-landing__content,
-    .visualizer-toast {
-      transition: opacity 0.1s;
-      transform: none;
-      animation: none;
-    }
-
-    .visualizer-landing--visible .visualizer-landing__content {
-      transform: none;
-    }
-
-    .visualizer-toast--visible {
-      transform: none;
-    }
-  }
 </style>

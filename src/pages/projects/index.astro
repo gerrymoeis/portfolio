@@ -1,24 +1,13 @@
 ---
-/**
- * Projects Listing Page
- * 
- * Displays all projects in a grid layout with filtering by category.
- * Matches Blogs page hero styling for consistency.
- */
-
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SemiCylindricalNav from '../../components/ui/SemiCylindricalNav.astro';
 import Footer from '../../components/ui/Footer.astro';
-import Panel from '../../components/ui/Panel.astro';
+import ListingHero from '../../components/ui/ListingHero.astro';
 import PageBackgroundGradient from '../../components/ui/PageBackgroundGradient.astro';
 import ProjectFilter from '../../components/projects/ProjectFilter.astro';
 import ProjectGrid from '../../components/projects/ProjectGrid.astro';
 import { homeConfig } from '../../config/home';
 
-// Get navigation links from config (single source of truth)
-const navLinks = homeConfig.navigation;
-
-// Get current path for active state
 const currentPath = Astro.url.pathname;
 ---
 
@@ -28,25 +17,15 @@ const currentPath = Astro.url.pathname;
   ogImage="/images/projects/personal-portfolio-hero.webp"
   ogType="website"
 >
-  <!-- Semi-Cylindrical Navigation (Fixed at top) -->
-  <SemiCylindricalNav links={navLinks} currentPath={currentPath} />
+  <SemiCylindricalNav links={homeConfig.navigation} currentPath={currentPath} />
   
   <div class="page-layout depth-mid projects-page">
     <PageBackgroundGradient />
     <main role="main" class="projects-main">
-      <!-- Hero Section with Panel (matches Blogs page) -->
-      <header class="projects-hero">
-        <Panel variant="elevated" glow={true} class="hero-panel hero-panel-base">
-          <h1 class="projects-hero__title" data-bilingual>
-            <span data-lang="en">Projects</span>
-            <span data-lang="id">Proyek</span>
-          </h1>
-          <p class="projects-hero__description" data-bilingual>
-            <span data-lang="en">A collection of projects showcasing web development, design, and creative problem-solving.</span>
-            <span data-lang="id">Koleksi proyek yang menampilkan pengembangan web, desain, dan pemecahan masalah kreatif.</span>
-          </p>
-        </Panel>
-      </header>
+      <ListingHero
+        title={{ en: 'Projects', id: 'Proyek' }}
+        description={{ en: 'A collection of projects showcasing web development, design, and creative problem-solving.', id: 'Koleksi proyek yang menampilkan pengembangan web, desain, dan pemecahan masalah kreatif.' }}
+      />
       
       <div class="projects-content">
         <ProjectFilter />
@@ -59,68 +38,19 @@ const currentPath = Astro.url.pathname;
 </BaseLayout>
 
 <style>
-
-  
   .projects-main {
     max-width: 1200px;
     margin: 0 auto;
     padding: var(--space-32) var(--space-6);
   }
 
-  /* Hero Section - Matches music page padding */
-  .projects-hero {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 0 0 calc(var(--space-32) / 3);
-  }
-  
-  .projects-hero__title {
-    font-family: var(--font-primary);
-    font-size: var(--text-4xl);
-    font-weight: var(--weight-bold);
-    color: var(--color-text-primary);
-    margin: 0 0 var(--space-3) 0;
-    line-height: var(--leading-tight);
-  }
-  
-
-  
-  .projects-hero__description {
-    font-family: var(--font-primary);
-    font-size: var(--text-base);
-    color: var(--color-text-secondary);
-    line-height: var(--leading-relaxed);
-    margin: 0;
-  }
-  
-
-  
   .projects-content {
     padding-bottom: 0;
   }
   
-  /* Mobile */
   @media (max-width: 768px) {
     .projects-main {
       padding: var(--space-16) var(--space-4);
     }
-    
-    .projects-hero {
-      padding: 0 0 calc(var(--space-16) / 3);
-    }
-    
-    .projects-hero__title {
-      font-size: var(--text-3xl);
-    }
-    
-    .projects-hero__description {
-      font-size: var(--text-sm);
-    }
-    
-    .projects-content {
-      padding-bottom: 0;
-    }
   }
-  
-
 </style>
