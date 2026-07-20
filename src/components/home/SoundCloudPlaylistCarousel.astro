@@ -227,16 +227,16 @@ const liveRegionId = `${carouselId}-live-region`;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-surface);
+    background: var(--bg-surface);
     border-radius: 8px;
-    border: 2px dashed var(--color-border);
+    border: 2px dashed var(--color-border-medium);
     cursor: pointer;
     transition: all 0.3s ease;
   }
 
   .soundcloud-placeholder:hover {
-    border-color: var(--color-accent);
-    background: var(--color-surface-elevated);
+    border-color: var(--color-accent-primary);
+    background: var(--bg-elevated);
   }
 
   .placeholder-content {
@@ -245,20 +245,20 @@ const liveRegionId = `${carouselId}-live-region`;
   }
 
   .placeholder-icon {
-    color: var(--color-accent);
+    color: var(--color-accent-primary);
     margin-bottom: var(--space-4);
     opacity: 0.8;
   }
 
   .placeholder-text {
-    font-size: var(--font-size-base);
+    font-size: var(--text-base);
     font-weight: 500;
     color: var(--color-text-primary);
     margin-bottom: var(--space-2);
   }
 
   .placeholder-artist {
-    font-size: var(--font-size-sm);
+    font-size: var(--text-sm);
     color: var(--color-text-secondary);
   }
 
@@ -277,7 +277,7 @@ const liveRegionId = `${carouselId}-live-region`;
   }
 
   /* Responsive adjustments */
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-lg)) {
     .carousel-embed-container {
       height: 400px;
       /* Show scrollbar hint on mobile */

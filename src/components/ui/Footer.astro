@@ -145,7 +145,7 @@ const currentYear = new Date().getFullYear();
   }
 
   /* Responsive adjustments */
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-lg)) {
     .footer__container {
       padding: var(--space-12);
     }
@@ -179,7 +179,7 @@ const currentYear = new Date().getFullYear();
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: var(--breakpoint-sm)) {
     .footer__container {
       padding: var(--space-12) var(--space-4) var(--space-12);
     }

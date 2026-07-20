@@ -294,9 +294,7 @@ select:focus-visible {
 }
 
 /* Depth layers */
-.depth-near { z-index: var(--layer-elevated); }
 .depth-mid { z-index: var(--layer-content); }
-.depth-far { z-index: var(--layer-base); }
 
 /* ============================================
    PAGE BACKGROUND UTILITIES
@@ -427,7 +425,7 @@ html[lang="id"] [data-bilingual] [data-lang="id"] {
   text-align: center;
 }
 
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-lg)) {
   .hero-panel-base {
     padding: var(--space-6) var(--space-4);
   }

@@ -341,7 +341,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
     margin: 2.5rem 0;
   }
   
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-lg)) {
     .blog-detail {
       padding: var(--space-16) var(--space-4);
     }
@@ -375,7 +375,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
     }
   }
   
-  @media (max-width: 480px) {
+  @media (max-width: var(--breakpoint-sm)) {
     .blog-detail {
       padding: var(--space-16) var(--space-3);
     }

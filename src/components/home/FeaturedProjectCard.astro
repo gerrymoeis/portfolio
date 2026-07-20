@@ -2,6 +2,8 @@
 import ProjectIcon from '../projects/ProjectIcon.astro';
 import OptimizedImage from '../ui/OptimizedImage.astro';
 import '../../styles/project-status.css';
+import '../../styles/tech-tooltip.css';
+import '../../styles/card-shadows.css';
 import { statusDisplay, linkKeys, linkLabel, linkIcon } from '../../config/projectConfig';
 import type { ProjectStatus } from '../../config/projectConfig';
 import type { BilingualText, ProjectLinks, ProjectLinkTitles } from '../../types';
@@ -19,7 +21,7 @@ interface Props {
 const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.props;
 ---
 
-<article class="featured-card">
+<article class="featured-card card-shadow">
   <div class="featured-card__thumbnail">
     <OptimizedImage
       src={thumbnail}
@@ -101,36 +103,6 @@ const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.p
   .featured-card:hover {
     border-color: var(--color-accent-primary);
     transform: translateY(-2px);
-  }
-
-  :global(html:not([data-theme="light"])) .featured-card {
-    border-color: rgba(var(--accent-rgb), 0.4);
-    box-shadow:
-      0 4px 16px rgba(0, 0, 0, 0.4),
-      0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-
-  :global(html:not([data-theme="light"])) .featured-card:hover {
-    border-color: rgba(var(--accent-rgb), 0.8);
-    box-shadow:
-      0 8px 24px rgba(0, 0, 0, 0.5),
-      0 0 30px rgba(var(--accent-rgb), 0.3),
-      0 0 15px rgba(var(--accent-rgb), 0.2);
-  }
-
-  :global([data-theme="light"]) .featured-card {
-    border-color: rgba(var(--accent-rgb), 0.4);
-    box-shadow:
-      0 4px 16px rgba(0, 0, 0, 0.15),
-      0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  :global([data-theme="light"]) .featured-card:hover {
-    border-color: rgba(var(--accent-rgb), 0.8);
-    box-shadow:
-      0 8px 24px rgba(0, 0, 0, 0.2),
-      0 0 30px rgba(var(--accent-rgb), 0.25),
-      0 0 15px rgba(var(--accent-rgb), 0.15);
   }
 
   .featured-card__thumbnail {
@@ -221,24 +193,6 @@ const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.p
 
   .featured-card__tech-icon {
     position: relative;
-  }
-
-  .featured-card__tech-icon .tech-tooltip {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-text-primary);
-    color: var(--bg-elevated);
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-family: var(--font-primary);
-    white-space: nowrap;
-    z-index: var(--layer-tooltip, 40);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--duration-fast) var(--ease-out);
   }
 
   .featured-card__tech-icon:hover .tech-tooltip,

@@ -1,6 +1,7 @@
 ---
 import ViewCounter from './ViewCounter.astro';
 import OptimizedImage from '../ui/OptimizedImage.astro';
+import '../../styles/card-shadows.css';
 import type { BilingualText } from '../../types';
 
 interface Props {
@@ -21,7 +22,7 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June',
 const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 ---
 
-<article class="blog-card" role="listitem">
+<article class="blog-card card-shadow" role="listitem">
   <a href={`/blogs/${slug}`} class="blog-card__link" aria-label={`Read article: ${title.en}`}>
     <div class="blog-card__thumbnail">
       <OptimizedImage 
@@ -91,36 +92,6 @@ const formattedDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getF
     transform: translateY(-2px);
   }
   
-  :global(html:not([data-theme="light"])) .blog-card {
-    border-color: rgba(var(--accent-rgb), 0.4);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.4),
-      0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-  
-  :global(html:not([data-theme="light"])) .blog-card:hover {
-    border-color: rgba(var(--accent-rgb), 0.8);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.5),
-      0 0 30px rgba(var(--accent-rgb), 0.3),
-      0 0 15px rgba(var(--accent-rgb), 0.2);
-  }
-  
-  :global([data-theme="light"]) .blog-card {
-    border-color: rgba(var(--accent-rgb), 0.4);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.15),
-      0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  :global([data-theme="light"]) .blog-card:hover {
-    border-color: rgba(var(--accent-rgb), 0.8);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.2),
-      0 0 30px rgba(var(--accent-rgb), 0.25),
-      0 0 15px rgba(var(--accent-rgb), 0.15);
-  }
-
   .blog-card__thumbnail {
     width: 100%;
     overflow: hidden;

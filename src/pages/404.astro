@@ -215,7 +215,7 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
 
 
   /* Responsive adjustments */
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-lg)) {
     .error-page {
       padding: var(--space-4);
     }
@@ -254,7 +254,7 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: var(--breakpoint-sm)) {
     .error-page__toggles {
       gap: var(--space-2);
       margin-top: var(--space-4);

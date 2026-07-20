@@ -105,7 +105,7 @@ html {
    ============================================ */
 
 /* Thinner scrollbar on mobile */
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-lg)) {
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -118,7 +118,7 @@ html {
 }
 
 /* Hide scrollbar on very small screens but keep functionality */
-@media (max-width: 480px) {
+@media (max-width: var(--breakpoint-sm)) {
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;

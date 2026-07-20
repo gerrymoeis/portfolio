@@ -3,6 +3,8 @@ import ProjectIcon from './ProjectIcon.astro';
 import CraftBadge from '../ui/CraftBadge.astro';
 import OptimizedImage from '../ui/OptimizedImage.astro';
 import '../../styles/project-status.css';
+import '../../styles/tech-tooltip.css';
+import '../../styles/card-shadows.css';
 import { statusDisplay, linkKeys, linkLabel, linkIcon } from '../../config/projectConfig';
 import type { ProjectStatus } from '../../config/projectConfig';
 import type { BilingualText, ProjectLinks, ProjectLinkTitles } from '../../types';
@@ -26,7 +28,7 @@ const categories = Array.isArray(category) ? category : [category];
 const categoriesAttr = categories.join(' ');
 ---
 
-<article class="project-card" data-category={categoriesAttr} role="listitem">
+<article class="project-card card-shadow" data-category={categoriesAttr} role="listitem">
   {craft && <CraftBadge craft={craft} />}
   <div class="project-card__content">
     <div class="project-card__thumbnail">
@@ -112,36 +114,6 @@ const categoriesAttr = categories.join(' ');
     transform: translateY(-2px);
   }
   
-  :global(html:not([data-theme="light"])) .project-card {
-    border-color: rgba(var(--accent-rgb), 0.4);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.4),
-      0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-  
-  :global(html:not([data-theme="light"])) .project-card:hover {
-    border-color: rgba(var(--accent-rgb), 0.8);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.5),
-      0 0 30px rgba(var(--accent-rgb), 0.3),
-      0 0 15px rgba(var(--accent-rgb), 0.2);
-  }
-  
-  :global([data-theme="light"]) .project-card {
-    border-color: rgba(var(--accent-rgb), 0.4);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.15),
-      0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  :global([data-theme="light"]) .project-card:hover {
-    border-color: rgba(var(--accent-rgb), 0.8);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.2),
-      0 0 30px rgba(var(--accent-rgb), 0.25),
-      0 0 15px rgba(var(--accent-rgb), 0.15);
-  }
-
   .project-card__content {
     display: flex;
     flex-direction: column;
@@ -235,24 +207,6 @@ const categoriesAttr = categories.join(' ');
     position: relative;
   }
 
-  .tech-tooltip {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-text-primary);
-    color: var(--bg-elevated);
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-family: var(--font-primary);
-    white-space: nowrap;
-    z-index: var(--layer-tooltip, 40);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--duration-fast) var(--ease-out);
-  }
-
   .project-card__tech-icon:hover .tech-tooltip,
   .project-card__tech-icon:focus-within .tech-tooltip,
   .project-card__tech-icon .tech-tooltip.visible {
@@ -297,7 +251,7 @@ const categoriesAttr = categories.join(' ');
   }
   
   
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-lg)) {
     .project-card { height: auto; }
     .project-card__content { padding: var(--space-6); }
     .project-card__title { text-align: left; }

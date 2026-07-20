@@ -1,0 +1,17 @@
+.tech-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-text-primary);
+  color: var(--bg-elevated);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: var(--font-primary);
+  white-space: nowrap;
+  z-index: var(--layer-tooltip, 40);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}

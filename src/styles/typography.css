@@ -142,64 +142,6 @@
   text-shadow: 0 0 6px rgba(237, 137, 54, 0.3);
 }
 
-/* Monospace text - Using Inter for consistency, styled for code appearance */
-.text-mono {
-  font-family: var(--font-primary);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-normal);
-  line-height: var(--leading-normal);
-  color: var(--color-text-secondary);
-  background-color: var(--color-surface-dark);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  letter-spacing: 0.02em;
-}
-
-/* Link styles with HD-2D glow effects */
-.text-link {
-  color: var(--color-accent-primary);
-  text-decoration: none;
-  transition: 
-    color var(--duration-fast) var(--ease-out),
-    text-shadow var(--duration-fast) var(--ease-out);
-  position: relative;
-}
-
-.text-link:hover {
-  color: var(--color-accent-secondary);
-  text-shadow: 0 0 8px rgba(246, 224, 94, 0.4);
-}
-
-.text-link:focus-visible {
-  outline: 2px solid var(--color-accent-primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-/* Atmospheric text effects */
-.text-atmospheric {
-  background: linear-gradient(
-    135deg,
-    var(--color-text-primary) 0%,
-    var(--color-accent-primary) 50%,
-    var(--color-text-primary) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% 200%;
-  animation: atmosphericShimmer 3s ease-in-out infinite;
-}
-
-@keyframes atmosphericShimmer {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
 /* ============================================
    RESPONSIVE TYPOGRAPHY UTILITIES
    Mobile-first responsive text classes

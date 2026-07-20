@@ -46,7 +46,7 @@ const { title, description } = Astro.props;
     margin: 0;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-lg)) {
     .listing-hero {
       padding: 0 0 calc(var(--space-16) / 3);
     }

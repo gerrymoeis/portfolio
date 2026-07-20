@@ -41,24 +41,16 @@ const labels = craftBadgeLabels[craft]
   }
 
   .craft-badge[data-craft="ai"] {
-    background: #dc2626;
+    background: var(--craft-ai-bg);
   }
 
   .craft-badge[data-craft="hand-crafted"] {
-    background: #2563eb;
-  }
-
-  :global([data-theme="light"]) .craft-badge[data-craft="ai"] {
-    background: #f87171;
-  }
-
-  :global([data-theme="light"]) .craft-badge[data-craft="hand-crafted"] {
-    background: #60a5fa;
+    background: var(--craft-handcrafted-bg);
   }
 
 
 
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-lg)) {
     .craft-badge {
       padding: 2px 1.5em;
       font-size: 8px;

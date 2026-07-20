@@ -1,0 +1,29 @@
+html:not([data-theme="light"]) .card-shadow {
+  border-color: rgba(var(--accent-rgb), 0.4);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+html:not([data-theme="light"]) .card-shadow:hover {
+  border-color: rgba(var(--accent-rgb), 0.8);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(var(--accent-rgb), 0.3),
+    0 0 15px rgba(var(--accent-rgb), 0.2);
+}
+
+[data-theme="light"] .card-shadow {
+  border-color: rgba(var(--accent-rgb), 0.4);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .card-shadow:hover {
+  border-color: rgba(var(--accent-rgb), 0.8);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.2),
+    0 0 30px rgba(var(--accent-rgb), 0.25),
+    0 0 15px rgba(var(--accent-rgb), 0.15);
+}

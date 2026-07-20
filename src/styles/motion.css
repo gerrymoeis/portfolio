@@ -7,6 +7,10 @@
   --parallax-mid: 0.5;
   --parallax-near: 0.8;
   --parallax-foreground: 1.0;
+
+  /* Tilt-shift filter values */
+  --tilt-shift-far: blur(2px) brightness(0.7);
+  --tilt-shift-near: blur(0px) brightness(1);
 }
 
 /* ============================================
@@ -109,84 +113,6 @@
   animation: panel-shimmer 2s ease-in-out infinite;
 }
 
-/* Staggered entrance animations */
-.animate-stagger-1 {
-  animation-delay: 0.1s;
-}
-
-.animate-stagger-2 {
-  animation-delay: 0.2s;
-}
-
-.animate-stagger-3 {
-  animation-delay: 0.3s;
-}
-
-.animate-stagger-4 {
-  animation-delay: 0.4s;
-}
-
-/* ============================================
-   HD-2D TRANSITION UTILITIES
-   ============================================ */
-
-.transition-atmospheric {
-  transition: 
-    opacity var(--duration-medium) var(--ease-atmospheric),
-    transform var(--duration-medium) var(--ease-atmospheric),
-    filter var(--duration-medium) var(--ease-atmospheric);
-}
-
-.transition-depth {
-  transition: 
-    filter var(--duration-slow) var(--ease-cinematic),
-    transform var(--duration-slow) var(--ease-cinematic);
-}
-
-.transition-glow {
-  transition: 
-    box-shadow var(--duration-medium) var(--ease-smooth),
-    text-shadow var(--duration-medium) var(--ease-smooth);
-}
-
-.transition-panel {
-  transition: 
-    background-color var(--duration-medium) var(--ease-atmospheric),
-    border-color var(--duration-medium) var(--ease-atmospheric),
-    box-shadow var(--duration-medium) var(--ease-atmospheric);
-}
-
-/* ============================================
-   HD-2D HOVER EFFECTS
-   ============================================ */
-
-.hover-lift {
-  transition: transform var(--duration-fast) var(--ease-out);
-}
-
-.hover-lift:hover {
-  transform: translateY(-2px);
-}
-
-.hover-glow {
-  transition: 
-    box-shadow var(--duration-medium) var(--ease-smooth),
-    filter var(--duration-medium) var(--ease-smooth);
-}
-
-.hover-glow:hover {
-  box-shadow: var(--atmospheric-glow);
-  filter: brightness(1.05);
-}
-
-.hover-depth {
-  transition: filter var(--duration-medium) var(--ease-atmospheric);
-}
-
-.hover-depth:hover {
-  filter: var(--tilt-shift-near);
-}
-
 /* ============================================
    REDUCED MOTION SUPPORT
    Respect user preferences for reduced motion
@@ -217,14 +143,5 @@
   
   .animate-atmospheric-glow {
     animation: none !important;
-  }
-  
-  /* Maintain accessibility while reducing motion */
-  .hover-lift:hover {
-    transform: none;
-  }
-  
-  .hover-glow:hover {
-    box-shadow: var(--subtle-glow);
   }
 }

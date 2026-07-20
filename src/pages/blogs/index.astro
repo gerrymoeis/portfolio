@@ -46,7 +46,7 @@ const currentPath = Astro.url.pathname;
     padding-bottom: 0;
   }
   
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-lg)) {
     .blogs-main {
       padding: var(--space-16) var(--space-4);
     }

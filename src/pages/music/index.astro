@@ -59,7 +59,7 @@ const currentPath = Astro.url.pathname;
     min-height: 400px;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-lg)) {
     .music-main {
       padding: var(--space-16) var(--space-4);
     }
