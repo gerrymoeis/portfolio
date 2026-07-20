@@ -85,15 +85,4 @@ export function getTechIcon(name: string): TechIconData | null {
   return iconRegistry[name] || null;
 }
 
-// These icons use simple-icons as fallback
-export const FALLBACK_TECHS: string[] = [
-  "Anime.js",
-  "Axios",
-  "Bootstrap",
-  "Gin",
-  "HTMX",
-  "JSON Web Tokens",
-  "JavaScript",
-  "LaTeX",
-  "React"
-];
+

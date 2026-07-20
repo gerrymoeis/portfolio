@@ -8,9 +8,6 @@
   --parallax-near: 0.8;
   --parallax-foreground: 1.0;
 
-  /* Tilt-shift filter values */
-  --tilt-shift-far: blur(2px) brightness(0.7);
-  --tilt-shift-near: blur(0px) brightness(1);
 }
 
 /* ============================================

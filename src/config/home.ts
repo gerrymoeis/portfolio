@@ -107,12 +107,10 @@ export const homeConfig: HomeConfig = {
  * Personal Information
  * Used for CV generation and meta tags
  */
+import { personal } from './personal.js';
+
 export const personalInfo = {
-  fullName: "Gerry Moeis Mahardika Dwi Putra",
-  shortName: "Gerry Moeis",
-  email: "gerrymoeis@gmail.com",
-  phone: "088293253626",
-  github: "github.com/gerrymoeis",
+  ...personal,
   location: {
     id: "Surabaya, Indonesia",
     en: "Surabaya, Indonesia"

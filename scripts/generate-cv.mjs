@@ -11,6 +11,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { glob } from 'glob';
 import yaml from 'js-yaml';
+import { personal } from '../src/config/personal.js';
 
 const execFileAsync = promisify(execFile);
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -139,13 +140,7 @@ async function aggregateCVData() {
   tools.add('Zed Editor');
   
   return {
-    personal: {
-      name: 'Gerry Moeis M.D.P',
-      phone: '088293253626',
-      email: 'gerrymoeis@gmail.com',
-      github: 'github.com/gerrymoeis',
-      website: 'gerrymoeis.pages.dev',
-    },
+    personal,
     education: [
       {
         institution: {

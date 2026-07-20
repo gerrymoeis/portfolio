@@ -23,14 +23,14 @@
     "@astrojs/sitemap": "^3.7.0",
     "@fortawesome/fontawesome-free": "^7.3.0",
     "astro": "^5.16.10",
-    "glob": "^13.0.6",
-    "js-yaml": "^4.1.1",
-    "sharp": "^0.34.5",
-    "simple-icons": "^16.18.0",
-    "tech-stack-icons": "^3.7.1"
+    "simple-icons": "^16.18.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "glob": "^13.0.6",
+    "js-yaml": "^4.1.1",
+    "sharp": "^0.34.5",
+    "tech-stack-icons": "^3.7.1",
     "vitest": "^4.0.17"
   }
 }

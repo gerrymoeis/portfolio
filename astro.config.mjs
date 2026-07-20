@@ -36,12 +36,6 @@ export default defineConfig({
   },
   
   vite: {
-    test: {
-      globals: true,
-      environment: 'node',
-    },
-    esbuild: {
-    },
     build: {
       minify: 'esbuild',
       rollupOptions: {

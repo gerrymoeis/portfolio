@@ -189,7 +189,11 @@
   --blur-md: 4px;
   --blur-lg: 8px;
   --blur-backdrop: 12px;
-  
+
+  /* Tilt-shift filter values */
+  --tilt-shift-far: blur(2px) brightness(0.7);
+  --tilt-shift-near: blur(0px) brightness(1);
+
   /* Link colors */
   --color-link: var(--color-accent-primary);
   --color-link-hover: var(--color-accent-secondary);
