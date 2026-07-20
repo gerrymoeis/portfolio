@@ -1,8 +1,13 @@
 ---
+interface Props {
+  name?: string;
+}
+
+const { name = "Gerry Moeis" } = Astro.props;
 ---
 
 <div class="hero-compact">
-  <h1 class="hero-compact__name">Gerry Moeis</h1>
+  <h1 class="hero-compact__name">{name}</h1>
   <p class="hero-compact__headline" data-bilingual>
     <span data-lang="en">Web Developer &amp; Tech Enthusiast</span>
     <span data-lang="id">Web Developer &amp; Penggemar Teknologi</span>
