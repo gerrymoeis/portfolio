@@ -93,12 +93,7 @@ async function main() {
     exec('npx astro build');
   });
 
-  // Step 5: Strip HTML comments from build output
-  allSuccess &= await step('Strip HTML Comments', () => {
-    exec('node scripts/strip-html-comments.mjs');
-  });
-
-  // Step 6: Stage all changes
+  // Step 5: Stage all changes
   allSuccess &= await step('Stage All Changes', () => {
     exec('git add -A');
   });
