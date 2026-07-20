@@ -41,7 +41,6 @@ export default defineConfig({
       environment: 'node',
     },
     esbuild: {
-      drop: ['console'],
     },
     build: {
       minify: 'esbuild',

@@ -37,6 +37,7 @@
   
   /* Accent colors - Golden/amber theme (DARK THEME ONLY) */
   --color-accent-primary: #f6e05e;    /* Primary accent - warm gold */
+  --accent-rgb: 246, 224, 94;         /* Accent as RGB for rgba() usage */
   --color-accent-secondary: #ed8936;  /* Secondary accent - warm orange */
   --color-accent-tertiary: #d69e2e;   /* Tertiary accent - deeper gold */
   
@@ -326,6 +327,7 @@
   
   /* Accent colors - Bright red-orange theme */
   --color-accent-primary: #ff5500;    /* Primary accent - bright red-orange */
+  --accent-rgb: 255, 85, 0;           /* Accent as RGB for rgba() usage */
   --color-accent-secondary: #FF4500;  /* Secondary accent - orange-red */
   --color-accent-tertiary: #CC2200;   /* Tertiary accent - darker red */
   

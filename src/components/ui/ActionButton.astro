@@ -114,76 +114,60 @@ const additionalProps = href
     outline-offset: 2px;
   }
   
-  /* Dark theme styling - solid bg, hover = transparent bg + glow border */
+  /* Dark theme styling */
   :global(html:not([data-theme="light"])) .action-button {
-    background: #f6e05e;
+    background: var(--color-accent-primary);
     color: #0a0b0f;
-    border-color: #f6e05e;
-    box-shadow: 0 4px 12px rgba(246, 224, 94, 0.3) !important;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3) !important;
   }
   
   :global(html:not([data-theme="light"])) .action-button:hover {
     background: var(--bg-elevated);
-    color: #f6e05e;
-    border-color: #f6e05e;
+    color: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
     box-shadow: 
-      0 0 40px rgba(246, 224, 94, 0.8),
-      0 0 20px rgba(246, 224, 94, 0.6),
-      inset 0 0 20px rgba(246, 224, 94, 0.15) !important;
-    text-shadow: 0 0 10px rgba(246, 224, 94, 0.8);
+      0 0 40px rgba(var(--accent-rgb), 0.8),
+      0 0 20px rgba(var(--accent-rgb), 0.6),
+      inset 0 0 20px rgba(var(--accent-rgb), 0.15) !important;
+    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.8);
     transform: translateY(-2px);
   }
   
-  /* Light theme styling - solid bg, hover = transparent bg + glow border */
+  /* Light theme styling */
   :global([data-theme="light"]) .action-button {
-    background: #ff5500 !important;
+    background: var(--color-accent-primary) !important;
     color: #ffffff !important;
-    border-color: #ff5500 !important;
-    box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3) !important;
+    border-color: var(--color-accent-primary) !important;
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3) !important;
   }
   
   :global([data-theme="light"]) .action-button:hover {
     background: rgba(255, 255, 255, 1) !important;
-    color: #ff5500 !important;
-    border-color: #ff5500 !important;
+    color: var(--color-accent-primary) !important;
+    border-color: var(--color-accent-primary) !important;
     box-shadow: 
-      0 0 40px rgba(255, 85, 0, 0.8),
-      0 0 20px rgba(255, 85, 0, 0.6),
-      inset 0 0 20px rgba(255, 85, 0, 0.15) !important;
-    text-shadow: 0 0 10px rgba(255, 85, 0, 0.8);
+      0 0 40px rgba(var(--accent-rgb), 0.8),
+      0 0 20px rgba(var(--accent-rgb), 0.6),
+      inset 0 0 20px rgba(var(--accent-rgb), 0.15) !important;
+    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.8);
     transform: translateY(-2px);
   }
   
-  /* Fixed variant - pulse animation */
-  :global(html:not([data-theme="light"])) .action-button--fixed {
-    animation: pulse-glow-dark 2s ease-in-out infinite;
-  }
-  
-  :global([data-theme="light"]) .action-button--fixed {
-    animation: pulse-glow-light 2s ease-in-out infinite;
+  .action-button--fixed {
+    animation: pulse-glow 2s ease-in-out infinite;
   }
   
   .action-button--fixed:hover {
     animation: none !important;
   }
   
-  /* Dark theme pulse animation */
-  @keyframes pulse-glow-dark {
+  @keyframes pulse-glow {
     0%, 100% {
-      box-shadow: 0 4px 12px rgba(246, 224, 94, 0.3) !important;
+      box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3) !important;
     }
     50% {
-      box-shadow: 0 4px 16px rgba(246, 224, 94, 0.5) !important;
-    }
-  }
-  
-  /* Light theme pulse animation */
-  @keyframes pulse-glow-light {
-    0%, 100% {
-      box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3) !important;
-    }
-    50% {
-      box-shadow: 0 4px 16px rgba(255, 85, 0, 0.5) !important;
+      box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.5) !important;
     }
   }
   

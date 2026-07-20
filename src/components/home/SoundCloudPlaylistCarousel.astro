@@ -179,14 +179,13 @@ const liveRegionId = `${carouselId}-live-region`;
     transition: background-color 0.3s ease;
   }
   
-  /* Dark theme - golden yellow tint */
+  /* Theme overlay */
   :global(html:not([data-theme="light"])) .carousel-theme-overlay {
-    background-color: rgba(246, 224, 94, 0.15);
+    background-color: rgba(var(--accent-rgb), 0.15);
   }
   
-  /* Light theme - red-orange tint */
   :global([data-theme="light"]) .carousel-theme-overlay {
-    background-color: rgba(255, 85, 0, 0.08);
+    background-color: rgba(var(--accent-rgb), 0.08);
   }
 
   .carousel-embed {
@@ -283,7 +282,7 @@ const liveRegionId = `${carouselId}-live-region`;
       height: 400px;
       /* Show scrollbar hint on mobile */
       scrollbar-width: thin;
-      scrollbar-color: rgba(246, 224, 94, 0.5) transparent;
+      scrollbar-color: rgba(var(--accent-rgb), 0.5) transparent;
     }
     
     /* Webkit scrollbar styling for mobile */
@@ -296,12 +295,12 @@ const liveRegionId = `${carouselId}-live-region`;
     }
     
     .carousel-embed-container::-webkit-scrollbar-thumb {
-      background: rgba(246, 224, 94, 0.5);
+      background: rgba(var(--accent-rgb), 0.5);
       border-radius: 4px;
     }
     
     .carousel-embed-container::-webkit-scrollbar-thumb:hover {
-      background: rgba(246, 224, 94, 0.7);
+      background: rgba(var(--accent-rgb), 0.7);
     }
     
     .carousel-embed iframe {

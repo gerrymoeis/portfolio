@@ -108,24 +108,14 @@ const totalPlaylists = playlists.length;
     }
   }
   
-  /* Dark theme hover and focus */
-  :global([data-theme="dark"]) .pagination-dot:focus-visible {
-    background-color: rgba(246, 224, 94, 0.1);
+  /* Hover and focus states */
+  .pagination-dot:focus-visible {
+    background-color: rgba(var(--accent-rgb), 0.1);
   }
   
-  :global([data-theme="dark"]) .pagination-dot:hover:not(:disabled) {
+  .pagination-dot:hover:not(:disabled) {
     transform: scale(1.1);
-    background-color: rgba(246, 224, 94, 0.05);
-  }
-  
-  /* Light theme hover and focus */
-  :global([data-theme="light"]) .pagination-dot:focus-visible {
-    background-color: rgba(255, 85, 0, 0.1);
-  }
-  
-  :global([data-theme="light"]) .pagination-dot:hover:not(:disabled) {
-    transform: scale(1.1);
-    background-color: rgba(255, 85, 0, 0.05);
+    background-color: rgba(var(--accent-rgb), 0.05);
   }
 
   .pagination-dot__indicator {
@@ -150,14 +140,8 @@ const totalPlaylists = playlists.length;
     }
   }
   
-  /* Dark theme inner glow */
-  :global([data-theme="dark"]) .pagination-dot__indicator::before {
-    background: radial-gradient(circle, transparent 60%, rgba(246, 224, 94, 0.1) 100%);
-  }
-  
-  /* Light theme inner glow */
-  :global([data-theme="light"]) .pagination-dot__indicator::before {
-    background: radial-gradient(circle, transparent 60%, rgba(255, 85, 0, 0.1) 100%);
+  .pagination-dot__indicator::before {
+    background: radial-gradient(circle, transparent 60%, rgba(var(--accent-rgb), 0.1) 100%);
   }
 
   /* Active state styling using primary accent color */
@@ -170,32 +154,16 @@ const totalPlaylists = playlists.length;
     }
   }
   
-  /* Dark theme - golden yellow glow */
-  :global([data-theme="dark"]) .pagination-dot--active .pagination-dot__indicator {
+  .pagination-dot--active .pagination-dot__indicator {
     box-shadow: 
-      0 0 8px rgba(246, 224, 94, 0.4),
-      0 0 16px rgba(246, 224, 94, 0.2);
-  }
-  
-  /* Light theme - red-orange glow */
-  :global([data-theme="light"]) .pagination-dot--active .pagination-dot__indicator {
-    box-shadow: 
-      0 0 8px rgba(255, 85, 0, 0.4),
-      0 0 16px rgba(255, 85, 0, 0.2);
+      0 0 8px rgba(var(--accent-rgb), 0.4),
+      0 0 16px rgba(var(--accent-rgb), 0.2);
   }
 
-  /* Enhanced hover state for active dot - dark theme */
-  :global([data-theme="dark"]) .pagination-dot--active:hover:not(:disabled) .pagination-dot__indicator {
+  .pagination-dot--active:hover:not(:disabled) .pagination-dot__indicator {
     box-shadow: 
-      0 0 12px rgba(246, 224, 94, 0.6),
-      0 0 24px rgba(246, 224, 94, 0.3);
-  }
-  
-  /* Enhanced hover state for active dot - light theme */
-  :global([data-theme="light"]) .pagination-dot--active:hover:not(:disabled) .pagination-dot__indicator {
-    box-shadow: 
-      0 0 12px rgba(255, 85, 0, 0.6),
-      0 0 24px rgba(255, 85, 0, 0.3);
+      0 0 12px rgba(var(--accent-rgb), 0.6),
+      0 0 24px rgba(var(--accent-rgb), 0.3);
   }
 
   /* Screen reader only text */

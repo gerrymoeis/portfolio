@@ -60,7 +60,9 @@ export function initMouseBackground(): () => void {
   });
 
   if (layers.length === 0) {
-    console.warn('No mouse background layers found');
+    if (import.meta.env.DEV) {
+      console.warn('No mouse background layers found');
+    }
     return () => {};
   }
 

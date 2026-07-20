@@ -145,14 +145,14 @@ const socialLinks = homeConfig.social;
 
   :global(html:not([data-theme="light"])) .home-panel__social-link:hover {
     box-shadow:
-      0 0 20px rgba(246, 224, 94, 0.4),
-      0 0 10px rgba(246, 224, 94, 0.2);
+      0 0 20px rgba(var(--accent-rgb), 0.4),
+      0 0 10px rgba(var(--accent-rgb), 0.2);
   }
 
   :global([data-theme="light"]) .home-panel__social-link:hover {
     box-shadow:
-      0 0 20px rgba(255, 85, 0, 0.3),
-      0 0 10px rgba(255, 85, 0, 0.15);
+      0 0 20px rgba(var(--accent-rgb), 0.3),
+      0 0 10px rgba(var(--accent-rgb), 0.15);
   }
 
   .home-panel__social-link:focus-visible {
