@@ -3,10 +3,7 @@
  * Bilingual support (Indonesian & English)
  */
 
-export interface BilingualText {
-  id: string; // Indonesian
-  en: string; // English
-}
+import type { BilingualText } from '../types';
 
 export interface HeroConfig {
   title: string; // Name (same in both languages)
