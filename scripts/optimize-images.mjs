@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = join(__dirname, '..');
 
-const THUMBNAIL_ROOT = join(PROJECT_ROOT, '..', 'thumbnails');
+const THUMBNAIL_ROOT = process.env.THUMBNAILS_DIR || join(PROJECT_ROOT, '..', 'thumbnails');
 
 const SIZES = {
   thumbnail: { width: 800 },

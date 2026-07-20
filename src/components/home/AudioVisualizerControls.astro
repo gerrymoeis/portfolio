@@ -95,8 +95,26 @@ const playIconSvg = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
   import { getTabAudioVisualizer } from '../../scripts/tabAudioVisualizer';
   import { ToastManager } from '../../scripts/visualizer/toastManager';
   import { LandingManager } from '../../scripts/visualizer/landingManager';
-  import { StartButtonManager } from '../../scripts/visualizer/startButtonManager';
   import { getMessage } from '../../scripts/visualizer/messages';
+
+  class StartButtonManager {
+    private button: HTMLElement;
+    private onClick: (() => void) | null = null;
+
+    constructor() {
+      this.button = document.getElementById('visualizerStartBtn') as HTMLElement;
+      this.button.addEventListener('click', () => this.onClick?.());
+    }
+
+    public show(onClick: () => void): void {
+      this.onClick = onClick;
+      this.button.style.display = 'flex';
+    }
+
+    public hide(): void {
+      this.button.style.display = 'none';
+    }
+  }
 
   const MSG_MAP: [string, Parameters<typeof getMessage>[0]][] = [
     ['already running', 'alreadyRunning'],

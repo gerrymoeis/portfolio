@@ -7,6 +7,7 @@
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Panel from '../components/ui/Panel.astro';
+import Icon from '../components/ui/Icon.astro';
 import ThemeToggle from '../components/ui/ThemeToggle.astro';
 import LanguageToggle from '../components/ui/LanguageToggle.astro';
 ---
@@ -36,7 +37,7 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
           
           <!-- Home Link -->
           <a href="/" class="error-page__home-link">
-            <i class="fas fa-home"></i>
+            <Icon name="home" class="error-page__home-icon" />
             <span data-bilingual>
               <span data-lang="en">Go Home</span>
               <span data-lang="id">Kembali ke Beranda</span>
@@ -208,8 +209,8 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
     transform: translateY(0);
   }
   
-  .error-page__home-link i {
-    font-size: var(--text-lg); /* Reduced from 2xl */
+  :global(.error-page__home-icon) {
+    font-size: var(--text-lg);
   }
   
 
@@ -249,7 +250,7 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
       font-size: var(--text-base);
     }
     
-    .error-page__home-link i {
+    :global(.error-page__home-icon) {
       font-size: var(--text-base);
     }
   }
@@ -281,7 +282,7 @@ import LanguageToggle from '../components/ui/LanguageToggle.astro';
       font-size: var(--text-sm);
     }
     
-    .error-page__home-link i {
+    :global(.error-page__home-icon) {
       font-size: var(--text-base);
     }
   }

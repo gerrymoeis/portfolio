@@ -54,7 +54,7 @@ export const uiIcons: Record<string, IconConfig> = {
   blog: {
     name: 'blog',
     faClass: 'fas fa-blog',
-    label: 'Blog'
+    label: 'Blogs'
   },
   external: {
     name: 'external',
