@@ -23,6 +23,7 @@ import '@fortawesome/fontawesome-free/css/brands.min.css';
 import '@fortawesome/fontawesome-free/css/solid.min.css';
 
 import { getLangFromUrl } from '../i18n/utils';
+import { personalInfo, homeConfig } from '../config/home';
 
 interface Props {
   title: string;
@@ -51,6 +52,44 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 // Default Open Graph image (use favicon if no image provided)
 const defaultOgImage = new URL('/favicon.svg', Astro.site || Astro.url.origin);
 const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : defaultOgImage;
+
+// Build JSON-LD structured data
+const siteUrl = Astro.site?.origin || Astro.url.origin;
+const sameAsLinks = homeConfig.social.map(s => s.url);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: 'Gerry Moeis Portfolio',
+      url: siteUrl,
+      description: 'Personal portfolio website of Gerry Moeis — web developer & technology enthusiast.',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${siteUrl}/?q={search_term_string}`
+        },
+        'query-input': 'required name=search_term_string'
+      }
+    },
+    {
+      '@type': 'Person',
+      name: personalInfo.fullName,
+      givenName: personalInfo.shortName,
+      url: siteUrl,
+      sameAs: sameAsLinks,
+      email: personalInfo.email,
+      jobTitle: personalInfo.role.en,
+      alumniOf: personalInfo.university.en,
+      homeLocation: {
+        '@type': 'Place',
+        name: personalInfo.location.en
+      }
+    }
+  ]
+};
 ---
 
 <!DOCTYPE html>
@@ -103,6 +142,9 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : 
     <meta name="theme-color" content="#1a1c24" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+    
     <!-- Theme initialization (inline to prevent FOUC) -->
     <script is:inline>
       // Initialize theme immediately to prevent flash
@@ -127,7 +169,7 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : 
         document.documentElement.setAttribute('data-theme', theme);
       })();
       
-      // Initialize language immediately to prevent flash
+      // Initialize language — only override SSR lang if preference differs
       (function() {
         const LANG_KEY = 'portfolio-language';
         
@@ -144,8 +186,11 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site || Astro.url.origin) : 
           return browserLang.startsWith('id') ? 'id' : 'en';
         }
         
-        const lang = getStoredLanguage() || getBrowserLanguage();
-        document.documentElement.setAttribute('lang', lang);
+        const preferredLang = getStoredLanguage() || getBrowserLanguage();
+        const currentLang = document.documentElement.getAttribute('lang');
+        if (preferredLang !== currentLang) {
+          document.documentElement.setAttribute('lang', preferredLang);
+        }
       })();
     </script>
     
