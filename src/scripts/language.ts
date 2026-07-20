@@ -73,7 +73,3 @@ export function initLanguage(): void {
   document.documentElement.setAttribute('lang', lang);
 }
 
-// Auto-initialize
-if (typeof window !== 'undefined') {
-  initLanguage();
-}

@@ -93,7 +93,3 @@ export function initTheme(): void {
   });
 }
 
-// Auto-initialize on script load (for inline script)
-if (typeof window !== 'undefined') {
-  initTheme();
-}
