@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
-    "@fortawesome/fontawesome-free": "^7.3.0",
     "astro": "^5.16.10",
     "simple-icons": "^16.18.0"
   },

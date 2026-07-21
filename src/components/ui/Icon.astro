@@ -1,15 +1,4 @@
 ---
-/**
- * Icon - FontAwesome icon component
- * Centralized icon component that uses the icon configuration
- * 
- * Props:
- * - name: Icon name from the icon configuration (required)
- * - class: Additional CSS classes (optional)
- * - size: Icon size ('sm' | 'md' | 'lg' | 'xl') (optional)
- * - label: Custom aria-label (optional, uses config label by default)
- */
-
 import { getIcon } from '../../config/icons';
 
 interface Props {
@@ -32,25 +21,55 @@ if (!iconConfig && import.meta.env.DEV) {
   console.warn(`Icon "${name}" not found in icon configuration`);
 }
 
-const iconClass = iconConfig ? iconConfig.faClass : 'fas fa-question';
-const iconLabel = label || (iconConfig ? iconConfig.label : name);
+const fallbackSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 448c-110.532 0-200-89.431-200-200 0-110.495 89.472-200 200-200 110.491 0 200 89.471 200 200 0 110.51-89.471 200-200 200zm107.244-255.2c0 67.052-72.421 68.084-72.421 92.863V300c0 6.627-5.373 12-12 12h-45.647c-6.627 0-12-5.373-12-12v-8.659c0-35.745 27.1-50.034 47.579-61.516 17.561-9.845 28.324-16.541 28.324-29.579 0-17.246-21.999-28.924-44.441-28.924-24.916 0-44.135 14.387-51.979 26.471-3.454 5.333-10.144 6.922-15.564 3.84l-20.028-12.121c-5.449-3.291-7.17-10.279-3.947-15.693 10.454-17.603 31.973-37.037 66.654-43.943 16.677-3.515 44.719-4.835 64.833 14.944 20.613 19.993 26.546 49.074 26.546 67.299z"/>';
 
-const sizeClasses = {
-  sm: 'fa-sm',
+const svgHtml = iconConfig ? iconConfig.svg : fallbackSvg;
+
+const sizeClasses: Record<string, string> = {
+  sm: 'icon--sm',
   md: '',
-  lg: 'fa-lg',
-  xl: 'fa-2x'
+  lg: 'icon--lg',
+  xl: 'icon--xl'
 };
 
-const classes = [
-  iconClass,
-  sizeClasses[size],
-  className
-].filter(Boolean).join(' ');
+const iconLabel = label || (iconConfig ? iconConfig.label : name);
+const classes = [sizeClasses[size], className].filter(Boolean).join(' ');
 ---
 
-<i 
-  class={classes}
+<span 
+  class={`icon ${classes}`}
   aria-label={iconLabel}
   role="img"
-></i>
+  set:html={svgHtml}
+></span>
+
+<style>
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+  }
+
+  .icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .icon--sm {
+    width: 0.875em;
+    height: 0.875em;
+  }
+
+  .icon--lg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+
+  .icon--xl {
+    width: 2em;
+    height: 2em;
+  }
+</style>

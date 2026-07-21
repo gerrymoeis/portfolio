@@ -1,9 +1,4 @@
 ---
-/**
- * Theme Toggle Component
- * Button to switch between light and dark themes
- * Uses FontAwesome icons for sun and moon
- */
 ---
 
 <button
@@ -13,8 +8,12 @@
   title="Toggle theme"
   type="button"
 >
-  <i class="theme-icon sun-icon fa-solid fa-sun" aria-hidden="true"></i>
-  <i class="theme-icon moon-icon fa-solid fa-moon" aria-hidden="true"></i>
+  <svg class="theme-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
+    <path d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5l-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6 0 31l94.7 47.3-33.5 100.4c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0-49.9-49.9-49.9-131.1 0-181 49.9-49.9 131.1-49.9 181 0 49.9 49.9 49.9 131.1 0 181z"/>
+  </svg>
+  <svg class="theme-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
+    <path d="M283.211 512c78.962 0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-39.203 7.494-79.461 4.641-117.081-9.289-47.144-17.41-84.174-53.57-103.319-97.87-19.146-44.299-18.439-94.009 2.084-137.742 15.564-33.111 40.498-61.447 71.598-82.386 9.276-6.238 6.18-20.076-4.815-21.824C322.507 5.538 306.394 0 289.422 0 152.505 0 20.773 113.405 2.056 249.046c-2.718 19.729 14.141 37.259 33.918 37.259h4.076c7.404 0 13.994-4.502 18.433-9.689 13.918-16.266 30.299-30.388 49.366-41.506 15.009-8.755 17.808-29.278 5.918-42.029-5.877-6.305-9.848-13.949-11.17-22.44-1.156-7.567.719-15.729 5.686-21.876 5.166-6.399 12.651-10.132 20.742-10.132h2.628c20.656 0 39.064 11.656 46.794 29.509 10.163 23.456 34.235 37.647 59.478 37.647 8.809 0 17.203-1.721 24.787-4.742 20.613-8.203 45.455-9.222 68.398-1.709 18.099 5.925 34.56 16.871 47.314 31.933 7.173 8.486 17.468 13.555 28.684 15.833 11.104 2.251 21.195.654 30.379-2.066 3.563-1.054 7.358.759 8.595 4.13 6.023 16.441 8.676 33.738 8.676 50.79 0 57.193-30.174 110.278-80.782 139.576-23.362 13.531-49.997 20.734-78.144 20.734-10.29 0-20.634-1.041-30.96-3.107-5.059-1.012-10.175 1.632-11.357 5.523-1.112 3.688.605 7.889 4.469 9.349 4.145 1.568 8.369 2.918 12.665 4.047 11.344 2.979 23.17 4.492 35.22 4.492z"/>
+  </svg>
 </button>
 
 <style>
@@ -55,13 +54,13 @@
   
   .theme-icon {
     position: absolute;
-    font-size: 18px;
+    width: 18px;
+    height: 18px;
     transition: opacity 0.3s ease, transform 0.3s ease;
     opacity: 0;
     transform: scale(0);
   }
   
-  /* Dark theme: show sun icon (to switch to light) */
   :global([data-theme="dark"]) .sun-icon {
     opacity: 1;
     transform: rotate(0deg) scale(1);
@@ -72,7 +71,6 @@
     transform: rotate(90deg) scale(0);
   }
   
-  /* Light theme: show moon icon (to switch to dark) */
   :global([data-theme="light"]) .sun-icon {
     opacity: 0;
     transform: rotate(-90deg) scale(0);
@@ -88,12 +86,10 @@
 <script>
   import { toggleTheme, getCurrentTheme } from '../../scripts/theme';
   
-  // Initialize all theme toggle buttons
   function initThemeToggle() {
     const buttons = document.querySelectorAll('[data-theme-toggle]');
     if (!buttons.length) return;
     
-    // Update button aria-label based on current theme
     function updateAriaLabel() {
       const theme = getCurrentTheme();
       const label = theme === 'dark' 
@@ -106,10 +102,8 @@
       });
     }
     
-    // Initial update
     updateAriaLabel();
     
-    // Handle click for each button
     buttons.forEach(button => {
       button.addEventListener('click', () => {
         toggleTheme();
@@ -117,17 +111,14 @@
       });
     });
     
-    // Listen for theme changes from other sources
     window.addEventListener('themechange', updateAriaLabel);
   }
   
-  // Initialize on page load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initThemeToggle);
   } else {
     initThemeToggle();
   }
   
-  // Re-initialize on page navigation (for SPA-like behavior)
   document.addEventListener('astro:page-load', initThemeToggle);
 </script>

@@ -1,6 +1,6 @@
 import { getCurrentLanguage } from '../language';
 
-export const MESSAGES = {
+const MESSAGES = {
   en: {
     alreadyRunning: 'Visualizer is already running',
     requesting: 'Requesting tab audio capture... Please select "This Tab" and check "Share audio"',

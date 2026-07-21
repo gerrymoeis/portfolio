@@ -4,6 +4,7 @@ import OptimizedImage from '../ui/OptimizedImage.astro';
 import '../../styles/project-status.css';
 import '../../styles/tech-tooltip.css';
 import '../../styles/card-shadows.css';
+import Icon from '../ui/Icon.astro';
 import { statusDisplay, linkKeys, linkLabel, linkIcon } from '../../config/projectConfig';
 import type { ProjectStatus } from '../../config/projectConfig';
 import type { BilingualText, ProjectLinks, ProjectLinkTitles } from '../../types';
@@ -69,7 +70,7 @@ const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.p
               rel="noopener noreferrer"
               aria-label={`${label} - ${title.en}`}
             >
-              <i class={linkIcon(key, linkTitles)}></i>
+              <Icon name={linkIcon(key, linkTitles)} size="sm" />
               <span data-bilingual>
                 <span data-lang="en">{label}</span>
                 <span data-lang="id">{label}</span>
@@ -229,8 +230,9 @@ const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.p
     color: var(--bg-elevated);
   }
 
-  .featured-card__link i {
-    font-size: var(--text-sm);
+  .featured-card__link :global(.icon) {
+    width: 0.875em;
+    height: 0.875em;
   }
 
   .featured-card__link:focus-visible {

@@ -1,8 +1,3 @@
-/**
- * Icon Configuration Tests
- * Validates that icon configuration is working correctly
- */
-
 import { describe, it, expect } from 'vitest';
 import { getIcon, socialIcons, uiIcons } from '../config/icons';
 
@@ -11,7 +6,10 @@ describe('Icon Configuration', () => {
     const githubIcon = getIcon('github');
     expect(githubIcon).toBeDefined();
     expect(githubIcon?.name).toBe('github');
-    expect(githubIcon?.faClass).toBe('fab fa-github');
+    expect(githubIcon?.svg).toContain('<svg');
+    expect(githubIcon?.svg).toContain('xmlns="http://www.w3.org/2000/svg"');
+    expect(githubIcon?.svg).toContain('fill="currentColor"');
+    expect(githubIcon?.svg).toContain('<path');
     expect(githubIcon?.label).toBe('GitHub');
   });
 
@@ -23,7 +21,7 @@ describe('Icon Configuration', () => {
     const requiredSocialIcons = ['github', 'linkedin'];
     requiredSocialIcons.forEach(iconName => {
       expect(socialIcons[iconName]).toBeDefined();
-      expect(socialIcons[iconName].faClass).toContain('fa-');
+      expect(socialIcons[iconName].svg).toContain('<svg');
     });
   });
 
@@ -31,21 +29,21 @@ describe('Icon Configuration', () => {
     const requiredUIIcons = ['home', 'projects', 'blog', 'external', 'arrow'];
     requiredUIIcons.forEach(iconName => {
       expect(uiIcons[iconName]).toBeDefined();
-      expect(uiIcons[iconName].faClass).toContain('fa-');
+      expect(uiIcons[iconName].svg).toContain('<svg');
     });
   });
 
-  it('should use consistent FontAwesome prefixes', () => {
-    // Social icons should use 'fab' (FontAwesome Brands)
+  it('should have valid SVG markup for all icons', () => {
     Object.values(socialIcons).forEach(icon => {
-      if (['github', 'linkedin'].includes(icon.name)) {
-        expect(icon.faClass).toMatch(/^fab fa-/);
-      }
+      expect(icon.svg).toContain('<svg');
+      expect(icon.svg).toContain('</svg>');
+      expect(icon.svg).toContain('fill="currentColor"');
     });
 
-    // UI icons should use 'fas' (FontAwesome Solid)
     Object.values(uiIcons).forEach(icon => {
-      expect(icon.faClass).toMatch(/^fas fa-/);
+      expect(icon.svg).toContain('<svg');
+      expect(icon.svg).toContain('</svg>');
+      expect(icon.svg).toContain('fill="currentColor"');
     });
   });
 });

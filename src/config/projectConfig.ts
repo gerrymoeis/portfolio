@@ -20,10 +20,7 @@ export function linkLabel(key: string, linkTitles?: Record<string, string | unde
   return linkDefaults[key] || key;
 }
 
-export function linkIcon(key: string, linkTitles?: Record<string, string | undefined>): string {
-  if (linkTitles && linkTitles[key]) {
-    const label = linkTitles[key]!;
-    if (label !== 'Live' && label !== 'Demo') return 'fab fa-github';
-  }
-  return projectIcons[key]?.faClass || 'fas fa-link';
+export function linkIcon(key: string, _linkTitles?: Record<string, string | undefined>): string {
+  if (projectIcons[key]) return key;
+  return 'external';
 }
