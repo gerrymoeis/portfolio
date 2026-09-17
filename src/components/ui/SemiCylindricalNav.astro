@@ -398,8 +398,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
     -webkit-backdrop-filter: blur(10px);
     padding: var(--space-3) var(--space-10);
     position: relative;
-    overflow: hidden;
-    max-width: 100%;
+    width: fit-content;
   }
   
   .semi-cylindrical-nav__container {
@@ -456,7 +455,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
   
   /* Controls item with separator */
   .semi-cylindrical-nav__item--controls {
-    padding-left: var(--space-8); /* Space after separator line */
+    padding-left: var(--space-4); /* Equal to list gap — single property controls symmetry */
     position: relative;
   }
   
@@ -598,7 +597,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
     .semi-cylindrical-nav__list {
       flex-direction: column;
       align-items: stretch;
-      gap: var(--space-1);
+      gap: var(--space-4); /* Single value: same as item--controls padding-top for equal separator spacing */
     }
 
     .semi-cylindrical-nav__item {
@@ -607,8 +606,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
 
     .semi-cylindrical-nav__item--controls {
       margin-left: 0;
-      margin-top: var(--space-4);
-      padding-top: var(--space-4);
+      padding-top: var(--space-4); /* Equal to list gap — one property controls both sides of separator */
       padding-left: 0; /* Remove left padding on mobile */
       border-top: 2px solid var(--color-border-medium);
     }
@@ -721,7 +719,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
     }
     
     .semi-cylindrical-nav__item--controls {
-      padding-left: var(--space-8); /* More space after separator */
+      padding-left: var(--space-6); /* Equal to list gap */
     }
     
     .semi-cylindrical-nav__controls {
@@ -736,17 +734,12 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
 
   /* Ultra-wide screens - even more spacing */
   @media (min-width: 1200px) {
-    .semi-cylindrical-nav__container {
-      max-width: 700px; /* Wider max-width */
-      padding: var(--space-3) var(--space-10);
-    }
-    
     .semi-cylindrical-nav__list {
       gap: var(--space-8); /* Even larger gap between navlinks */
     }
     
     .semi-cylindrical-nav__item--controls {
-      padding-left: var(--space-10);
+      padding-left: var(--space-8); /* Equal to list gap */
     }
     
     .semi-cylindrical-nav__controls {
