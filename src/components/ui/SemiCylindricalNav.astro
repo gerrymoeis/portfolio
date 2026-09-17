@@ -641,7 +641,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
      ============================================ */
 
   /* Extra small devices - very compact navigation */
-  @media (max-width: var(--breakpoint-xs)) {
+  @media (max-width: 360px) {
     .semi-cylindrical-nav {
       top: var(--space-2);
       max-width: calc(100vw - var(--space-2));
@@ -663,7 +663,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
   }
 
   /* Small devices - compact but readable */
-  @media (min-width: var(--breakpoint-xs)) and (max-width: var(--breakpoint-sm)) {
+  @media (min-width: 360px) and (max-width: 480px) {
     .semi-cylindrical-nav {
       top: var(--space-3);
       max-width: calc(100vw - var(--space-3));
@@ -685,7 +685,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
   }
 
   /* Medium devices - balanced sizing */
-  @media (min-width: var(--breakpoint-sm)) and (max-width: var(--breakpoint-lg)) {
+  @media (min-width: 480px) and (max-width: 768px) {
     .semi-cylindrical-nav {
       top: var(--space-4);
       max-width: calc(100vw - var(--space-4));
@@ -706,7 +706,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
   }
 
   /* Large devices - full sizing with proper spacing */
-  @media (min-width: var(--breakpoint-lg)) {
+  @media (min-width: 768px) {
     .semi-cylindrical-nav {
       top: var(--space-6);
       max-width: calc(100vw - var(--space-6));
@@ -735,7 +735,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
   }
 
   /* Ultra-wide screens - even more spacing */
-  @media (min-width: var(--breakpoint-2xl)) {
+  @media (min-width: 1200px) {
     .semi-cylindrical-nav__container {
       max-width: 700px; /* Wider max-width */
       padding: var(--space-3) var(--space-10);
@@ -755,7 +755,7 @@ const shouldRenderTarget = (linkTarget?: string, alwaysRender?: boolean): string
   }
 
   /* Landscape orientation on mobile - adjust for limited height */
-  @media (max-height: 600px) and (orientation: landscape) and (max-width: var(--breakpoint-lg)) {
+  @media (max-height: 600px) and (orientation: landscape) and (max-width: 768px) {
     .semi-cylindrical-nav {
       top: var(--space-2);
     }

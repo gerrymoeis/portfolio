@@ -98,7 +98,7 @@ const glowHeight = Math.max(height * 2.2, 400);
   }
   
   /* Responsive: Scale down on smaller screens */
-  @media (max-width: var(--breakpoint-lg)) {
+  @media (max-width: 768px) {
     .audio-visualizer {
       /* Scale to 80% of configured height, min 80px, max 100px */
       height: clamp(80px, calc(var(--visualizer-height, 180px) * 0.8), 100px);
@@ -109,7 +109,7 @@ const glowHeight = Math.max(height * 2.2, 400);
     }
   }
   
-  @media (max-width: var(--breakpoint-md)) {
+  @media (max-width: 640px) {
     .audio-visualizer {
       /* Scale to 60% of configured height, min 60px, max 80px */
       height: clamp(60px, calc(var(--visualizer-height, 180px) * 0.6), 80px);
@@ -120,7 +120,7 @@ const glowHeight = Math.max(height * 2.2, 400);
     }
   }
   
-  @media (max-width: var(--breakpoint-sm)) {
+  @media (max-width: 480px) {
     .audio-visualizer {
       /* Scale to 40% of configured height, min 40px, max 60px */
       height: clamp(40px, calc(var(--visualizer-height, 180px) * 0.4), 60px);

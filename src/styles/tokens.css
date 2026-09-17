@@ -335,7 +335,7 @@
 
 .hidden-mobile { display: none; }
 
-@media (min-width: var(--breakpoint-md)) {
+@media (min-width: 640px) {
   .hidden-mobile { display: block; }
 }
 

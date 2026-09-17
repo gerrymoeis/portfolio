@@ -425,7 +425,7 @@ html[lang="id"] [data-bilingual] [data-lang="id"] {
   text-align: center;
 }
 
-@media (max-width: var(--breakpoint-lg)) {
+@media (max-width: 768px) {
   .hero-panel-base {
     padding: var(--space-6) var(--space-4);
   }
