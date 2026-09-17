@@ -38,7 +38,6 @@ const projectsCollection = defineCollection({
       z.enum(['web', 'backend', 'data-mining']),
       z.array(z.enum(['web', 'backend', 'data-mining'])),
     ]).optional().default('web'),
-    craft: z.enum(['ai', 'hand-crafted']).optional(),
     techStack: z.array(z.string()),
     thumbnail: z.string(), // For card display in grid
     heroImage: z.string().optional(), // Optional, for future use

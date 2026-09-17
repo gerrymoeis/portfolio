@@ -253,10 +253,6 @@
   --color-status-archived-border: rgba(156, 163, 175, 0.5);
   --color-status-archived-bg: rgba(156, 163, 175, 0.1);
 
-  /* Craft badge colors - Dark theme */
-  --craft-ai-bg: #dc2626;
-  --craft-handcrafted-bg: #2563eb;
-
   /* Toast notification colors - Dark theme */
   --toast-success-text: #4ade80;
   --toast-success-border: #4ade80;

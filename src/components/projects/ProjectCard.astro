@@ -1,6 +1,5 @@
 ---
 import ProjectIcon from './ProjectIcon.astro';
-import CraftBadge from '../ui/CraftBadge.astro';
 import OptimizedImage from '../ui/OptimizedImage.astro';
 import '../../styles/project-status.css';
 import '../../styles/tech-tooltip.css';
@@ -16,21 +15,19 @@ interface Props {
   year: number;
   status: ProjectStatus;
   category: string | string[];
-  craft?: 'ai' | 'hand-crafted';
   techStack: string[];
   thumbnail: string;
   links?: ProjectLinks;
   linkTitles?: ProjectLinkTitles;
 }
 
-const { title, year, status, category, craft, techStack, thumbnail, links, linkTitles } = Astro.props;
+const { title, year, status, category, techStack, thumbnail, links, linkTitles } = Astro.props;
 
 const categories = Array.isArray(category) ? category : [category];
 const categoriesAttr = categories.join(' ');
 ---
 
 <article class="project-card card-shadow" data-category={categoriesAttr} role="listitem">
-  {craft && <CraftBadge craft={craft} />}
   <div class="project-card__content">
     <div class="project-card__thumbnail">
       <OptimizedImage 

@@ -62,11 +62,6 @@ export const homeConfig: HomeConfig = {
       url: "mailto:gerrymoeis@gmail.com",
       icon: "email"
     },
-    {
-      name: "YouTube",
-      url: "https://www.youtube.com/@gerrymoeis",
-      icon: "youtube"
-    },
   ],
   navigation: [
     { 
