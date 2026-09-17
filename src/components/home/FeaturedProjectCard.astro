@@ -93,7 +93,6 @@ const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.p
       0 2px 4px var(--color-shadow-light);
     transition:
       border-color var(--duration-medium) var(--ease-out),
-      transform var(--duration-medium) var(--ease-out),
       box-shadow var(--duration-medium) var(--ease-out);
     overflow: hidden;
     display: flex;
@@ -101,10 +100,6 @@ const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.p
     max-height: 360px;
   }
 
-  .featured-card:hover {
-    border-color: var(--color-accent-primary);
-    transform: translateY(-2px);
-  }
 
   .featured-card__thumbnail {
     width: 100%;
@@ -117,11 +112,6 @@ const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.p
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform var(--duration-medium) var(--ease-out);
-  }
-
-  .featured-card:hover .featured-card__image {
-    transform: scale(1.05);
   }
 
   .featured-card__body {
@@ -139,28 +129,7 @@ const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.p
     color: var(--color-text-primary);
     line-height: var(--leading-tight);
     margin: 0;
-    transition: color var(--duration-fast) var(--ease-out);
   }
-
-  .featured-card:hover .featured-card__title {
-    color: var(--color-accent-primary);
-  }
-
-  :global(html:not([data-theme="light"])) .featured-card:hover .featured-card__title {
-    color: var(--color-accent-primary);
-    text-shadow:
-      0 0 20px rgba(var(--accent-rgb), 0.6),
-      0 0 10px rgba(var(--accent-rgb), 0.4);
-  }
-
-  :global([data-theme="light"]) .featured-card:hover .featured-card__title {
-    color: var(--color-accent-primary);
-    text-shadow:
-      0 0 20px rgba(var(--accent-rgb), 0.5),
-      0 0 10px rgba(var(--accent-rgb), 0.3);
-  }
-
-
 
   .featured-card__meta {
     display: flex;
@@ -206,7 +175,6 @@ const { title, year, status, techStack, thumbnail, links, linkTitles } = Astro.p
     display: flex;
     gap: var(--space-4);
     flex-wrap: wrap;
-    margin-top: auto;
   }
 
   .featured-card__link {
