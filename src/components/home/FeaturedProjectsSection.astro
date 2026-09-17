@@ -81,28 +81,29 @@ for (let i = 0; i < featured.length; i += 2) {
     const track = document.querySelector<HTMLElement>('[data-carousel-track]');
     if (!track) return;
 
-    const viewport = track.closest('.carousel__viewport') as HTMLElement;
     const prevBtn = document.querySelector<HTMLButtonElement>('[data-carousel-prev]');
     const nextBtn = document.querySelector<HTMLButtonElement>('[data-carousel-next]');
     const dots = document.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]');
+    const totalSlides = track.children.length;
 
     function getSlideIndex(): number {
-      if (!track) return 0;
       const slideWidth = track.children[0]?.clientWidth || 1;
       return Math.round(track.scrollLeft / slideWidth);
     }
 
-    function updateDots() {
+    function updateUI() {
       const active = getSlideIndex();
       dots.forEach((dot, i) => {
         dot.classList.toggle('is-active', i === active);
       });
+      if (prevBtn) prevBtn.disabled = active === 0;
+      if (nextBtn) nextBtn.disabled = active >= totalSlides - 1;
     }
 
     function scrollToSlide(index: number) {
-      if (!track) return;
+      const clamped = Math.max(0, Math.min(index, totalSlides - 1));
       const slideWidth = track.children[0]?.clientWidth || 0;
-      track.scrollTo({ left: index * slideWidth, behavior: 'smooth' });
+      track.scrollTo({ left: clamped * slideWidth, behavior: 'smooth' });
     }
 
     prevBtn?.addEventListener('click', () => {
@@ -120,9 +121,8 @@ for (let i = 0; i < featured.length; i += 2) {
       });
     });
 
-    track.addEventListener('scroll', updateDots, { passive: true });
-
-    updateDots();
+    track.addEventListener('scroll', updateUI, { passive: true });
+    updateUI();
   })();
 </script>
 
@@ -175,7 +175,6 @@ for (let i = 0; i < featured.length; i += 2) {
 
   .carousel__single > * {
     width: calc(50% - var(--space-3));
-    max-width: 480px;
   }
 
   .carousel__btn {
@@ -214,6 +213,12 @@ for (let i = 0; i < featured.length; i += 2) {
   .carousel__btn:focus-visible {
     outline: 2px solid var(--color-accent-primary);
     outline-offset: 2px;
+  }
+
+  .carousel__btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   .carousel__btn--prev {
