@@ -325,32 +325,6 @@
   --color-bg-deep: #0a0b0f;
   --color-bg-primary: var(--bg-page);
 
-  /* Status badge colors - Light theme */
-  --color-status-completed: #16a34a;
-  --color-status-completed-border: rgba(22, 163, 74, 0.5);
-  --color-status-completed-bg: rgba(22, 163, 74, 0.1);
-  --color-status-in-progress: #2563eb;
-  --color-status-in-progress-border: rgba(37, 99, 235, 0.5);
-  --color-status-in-progress-bg: rgba(37, 99, 235, 0.1);
-  --color-status-experimental: #9333ea;
-  --color-status-experimental-border: rgba(147, 51, 234, 0.5);
-  --color-status-experimental-bg: rgba(147, 51, 234, 0.1);
-  --color-status-archived: #6b7280;
-  --color-status-archived-border: rgba(107, 114, 128, 0.5);
-  --color-status-archived-bg: rgba(107, 114, 128, 0.1);
-
-  /* Craft badge colors - Light theme */
-  --craft-ai-bg: #f87171;
-  --craft-handcrafted-bg: #60a5fa;
-
-  /* Toast notification colors - Light theme */
-  --toast-success-text: #15803d;
-  --toast-success-border: #16a34a;
-  --toast-success-progress: #16a34a;
-  --toast-error-text: #b91c1c;
-  --toast-error-border: #dc2626;
-  --toast-error-progress: #dc2626;
-
   /* ============================================
       LAYOUT UTILITIES
      ============================================ */
@@ -464,6 +438,28 @@
   --subtle-glow: 
     0 0 10px rgba(255, 85, 0, 0.15);
   
+  /* Status badge colors - Light theme */
+  --color-status-completed: #16a34a;
+  --color-status-completed-border: rgba(22, 163, 74, 0.5);
+  --color-status-completed-bg: rgba(22, 163, 74, 0.1);
+  --color-status-in-progress: #2563eb;
+  --color-status-in-progress-border: rgba(37, 99, 235, 0.5);
+  --color-status-in-progress-bg: rgba(37, 99, 235, 0.1);
+  --color-status-experimental: #9333ea;
+  --color-status-experimental-border: rgba(147, 51, 234, 0.5);
+  --color-status-experimental-bg: rgba(147, 51, 234, 0.1);
+  --color-status-archived: #6b7280;
+  --color-status-archived-border: rgba(107, 114, 128, 0.5);
+  --color-status-archived-bg: rgba(107, 114, 128, 0.1);
+
+  /* Toast notification colors - Light theme */
+  --toast-success-text: #15803d;
+  --toast-success-border: #16a34a;
+  --toast-success-progress: #16a34a;
+  --toast-error-text: #b91c1c;
+  --toast-error-border: #dc2626;
+  --toast-error-progress: #dc2626;
+
   /* ============================================
      GLASSMORPHISM MOBILE MENU - LIGHT THEME
      Lower opacity for visible blur effect
