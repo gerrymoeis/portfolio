@@ -9,7 +9,6 @@ date: 2026-04-15
 year: 2026
 status: "experimental"
 category: ["backend"]
-craft: ai
 techStack: ["Go", "Gin", "SQLite", "JSON Web Tokens", "JavaScript", "Tailwind CSS"]
 thumbnail: "/images/projects/face-recognition-attendance-thumb.webp"
 heroImage: "/images/projects/face-recognition-attendance-hero.webp"
