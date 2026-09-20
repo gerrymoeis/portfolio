@@ -5,7 +5,7 @@ title:
 summary:
   en: "Web-based inventory management system for university computer labs with AI-powered OCR attendance logbook, device tracking, and course scheduling."
   id: "Sistem manajemen inventaris laboratorium komputer berbasis web dengan absensi logbook berbasis AI OCR, pelacakan perangkat, dan jadwal kuliah."
-date: 2026-05-15
+date: 2026-05-10
 year: 2026
 status: "completed"
 priority: 2

@@ -5,7 +5,7 @@ title:
 summary:
   en: "Web-based office attendance system with face recognition authentication and attendance verification, IP restriction, and comprehensive security features."
   id: "Sistem absensi kantor berbasis web dengan face recognition untuk login dan verifikasi absensi, IP restriction, dan fitur keamanan komprehensif."
-date: 2026-04-15
+date: 2026-04-10
 year: 2026
 status: "experimental"
 category: ["backend"]

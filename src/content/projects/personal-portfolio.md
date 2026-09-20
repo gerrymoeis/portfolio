@@ -5,7 +5,7 @@ title:
 summary:
   en: "Personal portfolio website with minimalistic aesthetic, bilingual support, audio visualizer, and automated LaTeX CV generator."
   id: "Website portfolio pribadi dengan aesthetic minimalis, dukungan bilingual, audio visualizer, dan CV generator otomatis menggunakan LaTeX."
-date: 2026-01-15
+date: 2026-04-20
 year: 2026
 status: "completed"
 priority: 1
