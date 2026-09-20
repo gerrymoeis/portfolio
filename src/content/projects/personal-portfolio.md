@@ -7,7 +7,7 @@ summary:
   id: "Website portfolio pribadi dengan aesthetic minimalis, dukungan bilingual, audio visualizer, dan CV generator otomatis menggunakan LaTeX."
 date: 2026-01-15
 year: 2026
-status: "in-progress"
+status: "completed"
 priority: 1
 category: ["web"]
 techStack: ["Astro", "TypeScript", "JavaScript", "CSS", "LaTeX"]

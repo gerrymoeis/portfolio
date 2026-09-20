@@ -7,7 +7,7 @@ summary:
   id: "Sistem manajemen inventaris laboratorium komputer berbasis web dengan absensi logbook berbasis AI OCR, pelacakan perangkat, dan jadwal kuliah."
 date: 2026-05-15
 year: 2026
-status: "in-progress"
+status: "completed"
 priority: 2
 category: ["backend"]
 techStack: ["Go", "Gin", "Bootstrap", "JavaScript", "SQLite", "PostgreSQL"]

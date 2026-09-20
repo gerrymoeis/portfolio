@@ -7,7 +7,7 @@ summary:
   id: "Platform end-to-end yang secara otomatis mengambil peluang dari Instagram menggunakan ekstraksi AI dan menampilkan kompetisi, beasiswa, dan magang yang dikurasi."
 date: 2026-05-15
 year: 2026
-status: "in-progress"
+status: "completed"
 priority: 3
 category: ["web", "data-mining"]
 techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Python", "Playwright", "JavaScript"]
