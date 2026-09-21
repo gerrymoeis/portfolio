@@ -122,10 +122,10 @@ async function aggregateCVData() {
   const libraryPatterns = ['GSAP', 'Anime.js', 'LaTeX', 'Bootstrap', 'Axios', 'Framer Motion', 'SQLite', 'PostgreSQL', 'JSON Web Tokens'];
   
   allTechStack.forEach(tech => {
-    if (languagePatterns.some(p => tech.includes(p))) {
-      languages.add(tech);
-    } else if (frameworkPatterns.some(p => tech.includes(p))) {
+    if (frameworkPatterns.some(p => tech.includes(p))) {
       frameworks.add(tech);
+    } else if (languagePatterns.some(p => tech.includes(p))) {
+      languages.add(tech);
     } else if (toolPatterns.some(p => tech.includes(p))) {
       tools.add(tech);
     } else if (libraryPatterns.some(p => tech.includes(p))) {
